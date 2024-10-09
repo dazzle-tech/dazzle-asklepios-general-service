@@ -1,0 +1,38 @@
+{
+  "tableName": "service",
+  "columns": [
+    {
+      "name": "type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "name",
+      "type": "text"
+    },
+    {
+      "name": "abbreviation",
+      "type": "text"
+    },
+    {
+      "name": "code",
+      "type": "text"
+    },
+    {
+      "name": "category_lkey",
+      "type": "text"
+    },
+    {
+      "name": "price",
+      "type": "numeric(10,2)"
+    },
+    {
+      "name": "currency_lkey",
+      "type": "text"
+    },
+    {
+      "name": "type_lkey",
+      "type": "text"
+    }
+  ]
+}
+

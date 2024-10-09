@@ -1,0 +1,22 @@
+{
+  "tableName": "module",
+  "columns": [
+    {
+      "name": "name",
+      "type": "text"
+    },
+    {
+      "name": "description",
+      "type": "text"
+    },
+    {
+      "name": "icon_image_path",
+      "type": "text"
+    },
+    {
+      "name": "view_order",
+      "type": "numeric(3)"
+    }
+  ]
+}
+

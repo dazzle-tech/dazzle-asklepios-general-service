@@ -1,0 +1,26 @@
+{
+  "tableName": "active_ingredient_adverse_effect",
+  "columns": [
+    {
+      "name": "active_ingredient_key",
+      "type": "text"
+    },
+    {
+      "name": "adverse_effect_lkey",
+      "type": "text"
+    },
+    {
+      "name": "is_other",
+      "type": "boolean"
+    },
+    {
+      "name": "other_description",
+      "type": "text"
+    },
+    {
+      "name": "type_lkey",
+      "type": "text"
+    }
+  ]
+}
+

@@ -1,0 +1,1 @@
+INSERT INTO public.ap_screen_metadata (key, screen_key, metadata_key, created_by, updated_by, deleted_by, created_at, updated_at, deleted_at, is_valid) VALUES ('1', '864923139032400', '9524697120300', null, null, null, null, null, null, true);

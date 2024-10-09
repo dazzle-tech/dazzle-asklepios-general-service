@@ -1,0 +1,30 @@
+{
+  "tableName": "diagnostic_test_radiology",
+  "columns": [
+    {
+      "name": "test_key",
+      "type": "text"
+    },
+    {
+      "name": "international_coding_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "child_code_lkey",
+      "type": "text"
+    },
+    {
+      "name": "rad_category_lkey",
+      "type": "text"
+    },
+    {
+      "name": "image_duration",
+      "type": "text"
+    },
+    {
+      "name": "time_unit_lkey",
+      "type": "text"
+    }
+  ]
+}
+

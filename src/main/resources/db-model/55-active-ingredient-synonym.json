@@ -1,0 +1,14 @@
+{
+  "tableName": "active_ingredient_synonym",
+  "columns": [
+    {
+      "name": "active_ingredient_key",
+      "type": "text"
+    },
+    {
+      "name": "synonym",
+      "type": "text"
+    }
+  ]
+}
+

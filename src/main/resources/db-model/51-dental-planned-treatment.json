@@ -1,0 +1,66 @@
+{
+  "tableName": "dental_planned_treatment",
+  "columns": [
+    {
+      "name": "patient_key",
+      "type": "text"
+    },
+    {
+      "name": "encounter_key",
+      "type": "text"
+    },
+    {
+      "name": "type",
+      "type": "text"
+    },
+    {
+      "name": "visit_number",
+      "type": "numeric(2)"
+    },
+    {
+      "name": "cdt_key",
+      "type": "text"
+    },
+    {
+      "name": "tooth_key",
+      "type": "text"
+    },
+    {
+      "name": "note",
+      "type": "text"
+    },
+    {
+      "name": "surface_lkey",
+      "type": "text"
+    },
+    {
+      "name": "billing_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "fees",
+      "type": "numeric(7,2)"
+    },
+    {
+      "name": "insurance",
+      "type": "numeric(7,2)"
+    },
+    {
+      "name": "discount",
+      "type": "numeric(7,2)"
+    },
+    {
+      "name": "status_lkey",
+      "type": "text"
+    },
+    {
+      "name": "source",
+      "type": "text"
+    },
+    {
+      "name": "source_key",
+      "type": "text"
+    }
+  ]
+}
+

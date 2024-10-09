@@ -1,0 +1,38 @@
+{
+  "tableName": "encounter_applied_service",
+  "columns": [
+    {
+      "name": "encounter_key",
+      "type": "text"
+    },
+    {
+      "name": "service_key",
+      "type": "text"
+    },
+    {
+      "name": "service_key",
+      "type": "text"
+    },
+    {
+      "name": "category_lkey",
+      "type": "text"
+    },
+    {
+      "name": "source",
+      "type": "text"
+    },
+    {
+      "name": "source_key",
+      "type": "text"
+    },
+    {
+      "name": "extra_details",
+      "type": "text"
+    },
+    {
+      "name": "price",
+      "type": "numeric(7,2)"
+    }
+  ]
+}
+

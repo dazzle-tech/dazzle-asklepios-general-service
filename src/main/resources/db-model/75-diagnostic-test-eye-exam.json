@@ -1,0 +1,14 @@
+{
+  "tableName": "diagnostic_test_eye_exam",
+  "columns": [
+    {
+      "name": "test_key",
+      "type": "text"
+    },
+    {
+      "name": "eye_exam_category_lkey",
+      "type": "text"
+    }
+  ]
+}
+

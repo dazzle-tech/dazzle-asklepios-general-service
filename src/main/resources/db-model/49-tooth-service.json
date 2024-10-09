@@ -1,0 +1,26 @@
+{
+  "tableName": "tooth_service",
+  "columns": [
+    {
+      "name": "tooth_key",
+      "type": "text"
+    },
+    {
+      "name": "service_key",
+      "type": "text"
+    },
+    {
+      "name": "source",
+      "type": "text"
+    },
+    {
+      "name": "source_key",
+      "type": "text"
+    },
+    {
+      "name": "price",
+      "type": "numeric(7,2)"
+    }
+  ]
+}
+

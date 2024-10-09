@@ -1,0 +1,306 @@
+{
+  "tableName": "patient",
+  "columns": [
+    {
+      "name": "patient_mrn",
+      "type": "text"
+    },
+    {
+      "name": "name_prefix",
+      "type": "text"
+    },
+    {
+      "name": "name_suffix",
+      "type": "text"
+    },
+    {
+      "name": "patient_alias",
+      "type": "text"
+    },
+    {
+      "name": "first_name",
+      "type": "text"
+    },
+    {
+      "name": "second_name",
+      "type": "text"
+    },
+    {
+      "name": "third_name",
+      "type": "text"
+    },
+    {
+      "name": "last_name",
+      "type": "text"
+    },
+    {
+      "name": "full_name",
+      "type": "text"
+    },
+    {
+      "name": "second_name_other_lang",
+      "type": "text"
+    },
+    {
+      "name": "first_name_other_lang",
+      "type": "text"
+    },
+    {
+      "name": "third_name_other_lang",
+      "type": "text"
+    },
+    {
+      "name": "last_name_other_lang",
+      "type": "text"
+    },
+    {
+      "name": "full_name_other_lang",
+      "type": "text"
+    },
+    {
+      "name": "document_country_lkey",
+      "type": "text"
+    },
+    {
+      "name": "document_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Document_no",
+      "type": "text"
+    },
+    {
+      "name": "no_document",
+      "type": "boolean"
+    },
+    {
+      "name": "special_courtesy_lkey",
+      "type": "text"
+    },
+    {
+      "name": "unknown",
+      "type": "text"
+    },
+    {
+      "name": "gender_lkey",
+      "type": "text"
+    },
+    {
+      "name": "phone_number",
+      "type": "text"
+    },
+    {
+      "name": "mobile_number",
+      "type": "text"
+    },
+    {
+      "name": "email",
+      "type": "text"
+    },
+    {
+      "name": "marital_status_lkey",
+      "type": "text"
+    },
+    {
+      "name": "nationality_lkey",
+      "type": "text"
+    },
+    {
+      "name": "primary_language_lkey",
+      "type": "text"
+    },
+    {
+      "name": "religion_lkey",
+      "type": "text"
+    },
+    {
+      "name": "ethnicity_lkey",
+      "type": "text"
+    },
+    {
+      "name": "occupation_lkey",
+      "type": "text"
+    },
+    {
+      "name": "emergency_contact_name",
+      "type": "text"
+    },
+    {
+      "name": "emergency_contact_relation_lkey",
+      "type": "text"
+    },
+    {
+      "name": "emergency_contact_phone",
+      "type": "text"
+    },
+    {
+      "name": "street_address_line1",
+      "type": "text"
+    },
+    {
+      "name": "street_address_line2",
+      "type": "text"
+    },
+    {
+      "name": "country_lkey",
+      "type": "text"
+    },
+    {
+      "name": "state_province_region_lkey",
+      "type": "text"
+    },
+    {
+      "name": "city_lkey",
+      "type": "text"
+    },
+    {
+      "name": "postal_code",
+      "type": "text"
+    },
+    {
+      "name": "additional_info",
+      "type": "text"
+    },
+    {
+      "name": "latitude",
+      "type": "numeric"
+    },
+    {
+      "name": "longitude",
+      "type": "text"
+    },
+    {
+      "name": "is_active",
+      "type": "text"
+    },
+    {
+      "name": "death_datetime",
+      "type": "date"
+    },
+    {
+      "name": "DOB",
+      "type": "date"
+    },
+    {
+      "name": "multiple_birth ",
+      "type": "boolean"
+    },
+    {
+      "name": "birth_order ",
+      "type": "numeric"
+    },
+    {
+      "name": "num_siblings ",
+      "type": "numeric"
+    },
+    {
+      "name": "access_level ",
+      "type": "numeric"
+    },
+    {
+      "name": "facility_key ",
+      "type": "text"
+    },
+    {
+      "name": "patient_class_lkey",
+      "type": "text"
+    },
+    {
+      "name": "private_patient",
+      "type": "boolean"
+    },
+    {
+      "name": "verification_otp",
+      "type": "text"
+    },
+    {
+      "name": "security_access_level_lkey",
+      "type": "text"
+    },
+    {
+      "name": "social_security_number",
+      "type": "text"
+    },
+    {
+      "name": "notice_of_privacy_practice",
+      "type": "boolean"
+    },
+    {
+      "name": "notice_of_privacy_practice_date",
+      "type": "date"
+    },
+    {
+      "name": "privacy_authorization",
+      "type": "boolean"
+    },
+    {
+      "name": "privacy_authorization_date",
+      "type": "date"
+    },
+    {
+      "name": "consent",
+      "type": "boolean"
+    },
+    {
+      "name": "consent_date",
+      "type": "date"
+    },
+    {
+      "name": "verified",
+      "type": "boolean"
+    },
+    {
+      "name": "responsible_party_lkey",
+      "type": "text"
+    },
+    {
+      "name": "educational_level_lkey",
+      "type": "text"
+    },
+    {
+      "name": "previous_id",
+      "type": "text"
+    },
+    {
+      "name": "archiving_number",
+      "type": "text"
+    },
+    {
+      "name": "receive_sms",
+      "type": "boolean"
+    },
+    {
+      "name": "receive_email",
+      "type": "boolean"
+    },
+    {
+      "name": "home_phone",
+      "type": "text"
+    },
+    {
+      "name": "work_phone",
+      "type": "text"
+    },
+    {
+      "name": "preferred_contact_lkey",
+      "type": "text"
+    },
+    {
+      "name": "unknown_patient",
+      "type": "boolean"
+    },
+    {
+      "name": "incomplete_patient",
+      "type": "boolean"
+    },
+    {
+      "name": "extra_Details",
+      "type": "text"
+    },
+    {
+      "name": "secondary_mobile_number",
+      "type": "text"
+    }
+  ]
+}
+

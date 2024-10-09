@@ -1,0 +1,26 @@
+{
+  "tableName": "translation",
+  "columns": [
+    {
+      "name": "language_key",
+      "type": "text"
+    },
+    {
+      "name": "translation_for",
+      "type": "text"
+    },
+    {
+      "name": "word_key",
+      "type": "text"
+    },
+    {
+      "name": "original_text",
+      "type": "text"
+    },
+    {
+      "name": "translation_text",
+      "type": "text"
+    }
+  ]
+}
+

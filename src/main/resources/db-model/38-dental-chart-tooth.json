@@ -1,0 +1,22 @@
+{
+  "tableName": "dental_chart_tooth",
+  "columns": [
+    {
+      "name": "chart_key",
+      "type": "text"
+    },
+    {
+      "name": "tooth_number",
+      "type": "text"
+    },
+    {
+      "name": "missing",
+      "type": "boolean"
+    },
+    {
+      "name": "tooth_number_numeric",
+      "type": "numeric(2)"
+    }
+  ]
+}
+

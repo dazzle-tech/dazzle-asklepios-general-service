@@ -1,0 +1,58 @@
+{
+  "tableName": "addresses",
+  "columns": [
+    {
+      "name": "entity_id",
+      "type": "text"
+    },
+    {
+      "name": "entity_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "address_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "street_address_line1",
+      "type": "text"
+    },
+    {
+      "name": "street_address_line2",
+      "type": "text"
+    },
+    {
+      "name": "country_lkey",
+      "type": "text"
+    },
+    {
+      "name": "state_province_region_lkey",
+      "type": "text"
+    },
+    {
+      "name": "city_lkey",
+      "type": "text"
+    },
+    {
+      "name": "postal_code",
+      "type": "text"
+    },
+    {
+      "name": "additional_info",
+      "type": "text"
+    },
+    {
+      "name": "latitude",
+      "type": "text"
+    },
+    {
+      "name": "longitude",
+      "type": "text"
+    },
+    {
+      "name": "is_active",
+      "type": "text"
+    }
+  ]
+}
+

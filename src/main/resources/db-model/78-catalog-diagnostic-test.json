@@ -1,0 +1,14 @@
+{
+  "tableName": "catalog_diagnostic_test",
+  "columns": [
+    {
+      "name": "test_key",
+      "type": "text"
+    },
+    {
+      "name": "catalog_key",
+      "type": "text"
+    }
+  ]
+}
+

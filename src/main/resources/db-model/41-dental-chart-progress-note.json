@@ -1,0 +1,14 @@
+{
+  "tableName": "dental_chart_progress_note",
+  "columns": [
+    {
+      "name": "chart_key",
+      "type": "text"
+    },
+    {
+      "name": "note",
+      "type": "text"
+    }
+  ]
+}
+

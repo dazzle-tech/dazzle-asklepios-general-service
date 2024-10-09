@@ -1,0 +1,18 @@
+{
+  "tableName": "patient_relation",
+  "columns": [
+    {
+      "name": "patient_key",
+      "type": "text"
+    },
+    {
+      "name": "relative_patient_key",
+      "type": "text"
+    },
+    {
+      "name": "relation_type_lkey",
+      "type": "text"
+    }
+  ]
+}
+

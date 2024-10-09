@@ -1,0 +1,21 @@
+{
+  "tableName": "patient_insurance_coverage",
+  "columns": [
+    {
+      "name": "patient_insurance_key",
+      "type": "text"
+    },
+    {
+      "name": "type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "coverage_type_lkey",
+      "type": "text"
+    }, {
+      "name": "covered_amount",
+      "type": "numeric(7,2)"
+    }
+  ]
+}
+

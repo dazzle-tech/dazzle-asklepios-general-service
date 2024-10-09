@@ -1,0 +1,26 @@
+{
+  "tableName": "access_role_screen",
+  "columns": [
+    {
+      "name": "access_role_key",
+      "type": "text"
+    },
+    {
+      "name": "screen_key",
+      "type": "text"
+    },
+    {
+      "name": "can_read",
+      "type": "boolean"
+    },
+    {
+      "name": "can_write",
+      "type": "boolean"
+    },
+    {
+      "name": "can_delete",
+      "type": "boolean"
+    }
+  ]
+}
+

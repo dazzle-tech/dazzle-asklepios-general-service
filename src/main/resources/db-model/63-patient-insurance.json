@@ -1,0 +1,66 @@
+{
+  "tableName": "patient_insurance",
+  "columns": [
+    {
+      "name": "patient_key",
+      "type": "text"
+    },
+    {
+      "name": "insurance_provider_lkey",
+      "type": "text"
+    },
+    {
+      "name": "primary_insurance",
+      "type": "boolean"
+    },
+    {
+      "name": "insurance_policy_number",
+      "type": "text"
+    },
+    {
+      "name": "group_number",
+      "type": "text"
+    },
+    {
+      "name": "insurance_plan_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "authorization_numbers",
+      "type": "text"
+    },
+    {
+      "name": "expiration_date",
+      "type": "date"
+    },
+    {
+      "name": "co_payment",
+      "type": "boolean"
+    },
+    {
+      "name": "co_payment_value",
+      "type": "numeric(7,2)"
+    },
+    {
+      "name": "co_insurance",
+      "type": "boolean"
+    },
+    {
+      "name": "co_insurance_value",
+      "type": "numeric(7,2)"
+    },
+    {
+      "name": "deductibles",
+      "type": "boolean"
+    },
+    {
+      "name": "deductibles_value",
+      "type": "numeric(7,2)"
+    },
+    {
+      "name": "policy_holder",
+      "type": "text"
+    }
+  ]
+}
+

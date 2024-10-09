@@ -1,0 +1,37 @@
+{
+  "tableName": "diagnostic_test_genetics",
+  "columns": [
+    {
+      "name": "test_key",
+      "type": "text"
+    },
+    {
+      "name": "international_coding_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "child_code_lkey",
+      "type": "text"
+    },
+    {
+      "name": "pathology_category_lkey",
+      "type": "text"
+    },
+    {
+      "name": "specimen_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "methodology_lkey",
+      "type": "text"
+    },{
+      "name": "turnaround_time",
+      "type": "text"
+    },
+    {
+      "name": "time_unit_lkey",
+      "type": "text"
+    }
+  ]
+}
+

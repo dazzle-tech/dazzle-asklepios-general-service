@@ -1,0 +1,26 @@
+{
+  "tableName": "metadata_field",
+  "columns": [
+    {
+      "name": "field_name",
+      "type": "text"
+    },
+    {
+      "name": "db_field_name",
+      "type": "text"
+    },
+    {
+      "name": "metadata_key",
+      "type": "text"
+    },
+    {
+      "name": "db_object_name",
+      "type": "text"
+    },
+    {
+      "name": "data_type",
+      "type": "text"
+    }
+  ]
+}
+

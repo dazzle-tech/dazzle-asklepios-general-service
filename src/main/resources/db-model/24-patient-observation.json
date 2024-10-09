@@ -1,0 +1,75 @@
+{
+  "tableName": "patient_observation",
+  "columns": [
+    {
+      "name": "patient_key",
+      "type": "text"
+    },
+
+    {
+      "name": "visit_key",
+      "type": "text"
+    },
+    {
+      "name": "Observation_Date",
+      "type": "date"
+    },
+    {
+      "name": "Observation_Type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Value",
+      "type": "text"
+    },
+    {
+      "name": "Value2",
+      "type": "text"
+    },
+    {
+      "name": "UnitOf_Measure_lkey",
+      "type": "text"
+    },
+    {
+      "name": "ReferenceRange_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Status_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Method_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Position_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Site_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Equipment_Used_lkey",
+      "type": "text"
+    },
+    {
+      "name": "comments",
+      "type": "text"
+    },
+    {
+      "name": "source_record_key",
+      "type": "text"
+    },
+    {
+      "name": "Provider_key",
+      "type": "text"
+    },
+    {
+      "name": "Provider_name",
+      "type": "text"
+    }
+  ]
+}
+

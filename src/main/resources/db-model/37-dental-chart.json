@@ -1,0 +1,33 @@
+{
+  "tableName": "dental_chart",
+  "columns": [
+    {
+      "name": "encounter_key",
+      "type": "text"
+    },
+    {
+      "name": "patient_key",
+      "type": "text"
+    },
+    {
+      "name": "chart_date",
+      "type": "date"
+    },{
+      "name": "type",
+      "type": "text"
+    },
+    {
+      "name": "chart_sequence",
+      "type": "numeric(3)"
+    },
+    {
+      "name": "status",
+      "type": "text"
+    },
+    {
+      "name": "treatment_plan",
+      "type": "text"
+    }
+  ]
+}
+

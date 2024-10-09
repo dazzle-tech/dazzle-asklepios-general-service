@@ -1,0 +1,15 @@
+{
+  "tableName": "languages",
+  "columns": [
+    {
+      "name": "language_code",
+      "type": "text"
+    },
+    {
+      "name": "language_name",
+      "type": "text"
+    }
+
+  ]
+}
+

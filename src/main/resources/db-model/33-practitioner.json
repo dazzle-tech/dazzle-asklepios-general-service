@@ -1,0 +1,22 @@
+{
+  "tableName": "practitioner",
+  "columns": [
+    {
+      "name": "primary_facility_key",
+      "type": "text"
+    },
+    {
+      "name": "practitioner_full_name",
+      "type": "text"
+    },
+    {
+      "name": "gender_lkey",
+      "type": "text"
+    },
+    {
+      "name": "department_key",
+      "type": "text"
+    }
+  ]
+}
+

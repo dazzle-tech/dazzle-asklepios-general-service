@@ -1,0 +1,18 @@
+{
+  "tableName": "patient_ids",
+  "columns": [
+    {
+      "name": "patient_key",
+      "type": "text"
+    },
+    {
+      "name": "identifier_type_lov_key",
+      "type": "text"
+    },
+    {
+      "name": "identifier_code",
+      "type": "text"
+    }
+  ]
+}
+

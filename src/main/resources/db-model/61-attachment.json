@@ -1,0 +1,30 @@
+{
+  "tableName": "attachment",
+  "columns": [
+    {
+      "name": "attachment_type",
+      "type": "text"
+    },
+    {
+      "name": "reference_object_key",
+      "type": "text"
+    },
+    {
+      "name": "extra_details",
+      "type": "text"
+    },
+    {
+      "name": "file_name",
+      "type": "text"
+    },
+    {
+      "name": "content_type",
+      "type": "text"
+    },
+    {
+      "name": "file_content",
+      "type": "bytea"
+    }
+  ]
+}
+

@@ -1,0 +1,66 @@
+{
+  "tableName": "clinical_documentation",
+  "columns": [
+    {
+      "name": "patient_key",
+      "type": "text"
+    },
+    {
+      "name": "encounter_key",
+      "type": "text"
+    },
+    {
+      "name": "doc_type_lkey",
+      "type": "text"
+    }  ,
+    {
+      "name": "doc_category_lkey",
+      "type": "text"
+    },
+    {
+      "name": "doc_content",
+      "type": "text"
+    },
+    {
+      "name": "user_key",
+      "type": "text"
+    },
+    {
+      "name": "user_role_lkey",
+      "type": "text"
+    },
+    {
+      "name": "facility_key",
+      "type": "text"
+    },
+    {
+      "name": "doc_status_lkey",
+      "type": "text"
+    },
+    {
+      "name": "doc_form_type_key",
+      "type": "text"
+    },
+    {
+      "name": "doc_form_key",
+      "type": "text"
+    },
+    {
+      "name": "created_datetime",
+      "type": "date"
+    },
+    {
+      "name": "approved_datetime",
+      "type": "date"
+    },
+    {
+      "name": "approved_by_user_key",
+      "type": "text"
+    },
+    {
+      "name": "approved_by_user_role_lkey",
+      "type": "text"
+    }
+  ]
+}
+

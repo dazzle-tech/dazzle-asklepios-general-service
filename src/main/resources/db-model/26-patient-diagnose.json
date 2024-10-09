@@ -1,0 +1,66 @@
+{
+  "tableName": "patient_diagnose",
+  "columns": [
+    {
+      "name": "patient_key",
+      "type": "text"
+    },
+    {
+      "name": "visit_key",
+      "type": "text"
+    },
+    {
+      "name": "diagnose_code",
+      "type": "text"
+    },
+    {
+      "name": "Description",
+      "type": "text"
+    },
+    {
+      "name": "diagnose_Coding_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Date_Diagnosed",
+      "type": "date"
+    },
+    {
+      "name": "onset_date",
+      "type": "date"
+    },
+    {
+      "name": "diagnose_Status_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Diagnose_Type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "diagnose_site_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Provider_Type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Provider_lkey",
+      "type": "text"
+    },
+    {
+      "name": "provider_user_name",
+      "type": "text"
+    },
+    {
+      "name": "Provider_Role_lkey",
+      "type": "text"
+    },
+    {
+      "name": "notes",
+      "type": "text"
+    }
+  ]
+}
+

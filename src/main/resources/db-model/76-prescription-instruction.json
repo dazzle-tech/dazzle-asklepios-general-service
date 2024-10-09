@@ -1,0 +1,26 @@
+{
+  "tableName": "prescription_instruction",
+  "columns": [
+    {
+      "name": "category_lkey",
+      "type": "text"
+    },
+    {
+      "name": "dose",
+      "type": "numeric(7,2)"
+    },
+    {
+      "name": "unit_lkey",
+      "type": "text"
+    },
+    {
+      "name": "rout_lkey",
+      "type": "text"
+    },
+    {
+      "name": "frequency_lkey",
+      "type": "text"
+    }
+  ]
+}
+

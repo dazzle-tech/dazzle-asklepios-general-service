@@ -1,0 +1,52 @@
+{
+  "tableName": "license",
+  "columns": [
+    {
+      "name": "tenant_id",
+      "type": "text"
+    },
+    {
+      "name": "license_id",
+      "type": "text"
+    }
+  ,
+    {
+      "name": "license_Key",
+      "type": "text"
+    }
+  ,
+    {
+      "name": "license_type",
+      "type": "text"
+    },
+    {
+      "name": "start_Date",
+      "type": "date"
+    }
+    ,
+    {
+      "name": "end_Date",
+      "type": "date"
+    }
+    ,
+    {
+      "name": "Activestatus",
+      "type": "boolean"
+    },
+    {
+      "name": "UUID_HW_keys",
+      "type": "text"
+    },
+
+    {
+      "name": "facility_address",
+      "type": "text"
+    },
+
+    {
+      "name": "facility_logo_file",
+      "type": "text"
+    }
+  ]
+}
+

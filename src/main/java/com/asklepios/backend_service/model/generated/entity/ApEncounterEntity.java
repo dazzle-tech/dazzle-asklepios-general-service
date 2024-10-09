@@ -1,0 +1,108 @@
+package com.asklepios.backend_service.model.generated.entity;
+
+import java.io.Serializable;
+import lombok.extern.slf4j.Slf4j;
+import lombok.Getter;
+import lombok.Setter;
+import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.math.BigDecimal;
+import com.asklepios.backend_service.model.generated.pojo.ApLovValues;
+
+@Getter
+@Setter
+@Slf4j
+public class ApEncounterEntity implements Serializable {
+
+	private String key;
+	private String patientKey;
+	private String patientFullName;
+	private String patientAge;
+	private String encounterStatusLkey;
+	private ApLovValues encounterStatusLvalue;
+	private String encounterClassLkey;
+	private ApLovValues encounterClassLvalue;
+	private String encounterPriorityLkey;
+	private ApLovValues encounterPriorityLvalue;
+	private String encounterTypeLkey;
+	private ApLovValues encounterTypeLvalue;
+	private String serviceTypeLkey;
+	private ApLovValues serviceTypeLvalue;
+	private String patientStatusLkey;
+	private ApLovValues patientStatusLvalue;
+	private String episodeCareKey;
+	private String basedOnLkey;
+	private ApLovValues basedOnLvalue;
+	private String basedOnKey;
+	private String partOfEncounterKey;
+	private String attendingPhysicianKey;
+	private String responsiblePhysicianKey;
+	private String facilityKey;
+	private String appointmentKey;
+	private Boolean virtualService = false;
+	private Date plannedStartDate = new Date();
+	private Date plannedEndDate = new Date();
+	private Date actualStartDate = new Date();
+	private Date actualEndDate = new Date();
+	private BigDecimal actualLengthHrs;
+	private String reasonLkey;
+	private ApLovValues reasonLvalue;
+	private String primaryDiagnoseKey;
+	private String dietPreferenceLkey;
+	private ApLovValues dietPreferenceLvalue;
+	private String dietPreferenceText;
+	private String valuableItemsText;
+	private String specialArrangementLkey;
+	private ApLovValues specialArrangementLvalue;
+	private String specialArrangementText;
+	private String specialCourtesyLkey;
+	private ApLovValues specialCourtesyLvalue;
+	private String admissionOrigin;
+	private String admissionSource;
+	private Boolean readmission = false;
+	private String dischargeDestination;
+	private String dischargeDisposition;
+	private String locationTypeLkey;
+	private ApLovValues locationTypeLvalue;
+	private String locationKey;
+	private String followUpEncounterKey;
+	private BigDecimal queueNumber;
+	private String billingAccountKey;
+	private String paymentTypeLkey;
+	private ApLovValues paymentTypeLvalue;
+	private String payerTypeLkey;
+	private ApLovValues payerTypeLvalue;
+	private String payerKey;
+	private String insurancePlan;
+	private String payerMemberId;
+	private String referralNumber;
+	private BigDecimal accessLevel;
+	private String createdBy;
+	private String updatedBy;
+	private String deletedBy;
+	private BigDecimal createdAt;
+	private BigDecimal updatedAt;
+	private BigDecimal deletedAt;
+	private Boolean isValid = true;
+	private String departmentKey;
+	private String dischargeTypeLkey;
+	private ApLovValues dischargeTypeLvalue;
+	private BigDecimal actualLengthMinutes;
+	private String chiefComplaint;
+	private String hpiSummery;
+	private String hpiKey;
+	private String pastMedicalHistorySummery;
+	private String pastMedicalHistoryKey;
+	private String rosSummery;
+	private String rosKey;
+	private String assessmentSummery;
+	private String assessmentKey;
+	private String physicalExamSummery;
+	private String physicalExamSummeryKey;
+	private String progressNote;
+	private String dischargeNote;
+	private String dischargeSummery;
+	private String visitId;
+	private ApEncounterEntity translatedObject;
+
+}

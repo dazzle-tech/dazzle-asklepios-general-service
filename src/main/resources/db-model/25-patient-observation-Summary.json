@@ -1,0 +1,139 @@
+{
+  "tableName": "patient_observation_Summary",
+  "columns": [
+    {
+      "name": "patient_key",
+      "type": "text"
+    },
+
+    {
+      "name": "visit_key",
+      "type": "text"
+    },
+    {
+      "name": "last_Date",
+      "type": "date"
+    },
+    {
+      "name": "LatestTemperature",
+      "type": "numeric"
+    },
+    {
+      "name": "LatestBP_systolic",
+      "type": "numeric"
+    },
+    {
+      "name": "LatestBP_diastolic",
+      "type": "numeric"
+    },
+    {
+      "name": "LatestHeartRate",
+      "type": "numeric"
+    },
+    {
+      "name": "LatestRespiratoryRate",
+      "type": "numeric"
+    },
+    {
+      "name": "LatestOxygenSaturation",
+      "type": "numeric"
+    },
+    {
+      "name": "LatestGlucoseLevel",
+      "type": "numeric"
+    },
+    {
+      "name": "LatestPainLevel",
+      "type": "numeric"
+    },
+    {
+      "name": "LatestWeight",
+      "type": "numeric"
+    },
+    {
+      "name": "LatestHeight",
+      "type": "numeric"
+    },
+    {
+      "name": "LatestHeadCircumference",
+      "type": "numeric"
+    },
+    {
+      "name": "LatestLength",
+      "type": "numeric"
+    },
+    {
+      "name": "LatestBMI",
+      "type": "numeric"
+    },
+    {
+      "name": "Age",
+      "type": "numeric"
+    },
+    {
+      "name": "prev_record_key",
+      "type": "text"
+    },
+    {
+      "name": "Plast_Date",
+      "type": "date"
+    },
+    {
+      "name": "PLatestTemperature",
+      "type": "numeric"
+    },
+    {
+      "name": "PLatestBP_systolic",
+      "type": "numeric"
+    },
+    {
+      "name": "PLatestBP_diastolic",
+      "type": "numeric"
+    },
+    {
+      "name": "PLatestHeartRate",
+      "type": "numeric"
+    },
+    {
+      "name": "PLatestRespiratoryRate",
+      "type": "numeric"
+    },
+    {
+      "name": "PLatestOxygenSaturation",
+      "type": "numeric"
+    },
+    {
+      "name": "PLatestGlucoseLevel",
+      "type": "numeric"
+    },
+    {
+      "name": "PLatestPainLevel",
+      "type": "numeric"
+    },
+    {
+      "name": "PLatestWeight",
+      "type": "numeric"
+    },
+    {
+      "name": "PLatestHeight",
+      "type": "numeric"
+    },
+    {
+      "name": "PLatestHeadCircumference",
+      "type": "numeric"
+    },
+    {
+      "name": "PLatestLength",
+      "type": "numeric"
+    },
+    {
+      "name": "PLatestBMI",
+      "type": "numeric"
+    },
+    {
+      "name": "PAge",
+      "type": "numeric"
+    }
+  ]
+}
+

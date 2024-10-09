@@ -1,0 +1,30 @@
+{
+  "tableName": "snomed_code",
+  "columns": [
+    {
+      "name": "version",
+      "type": "text"
+    },
+    {
+      "name": "code",
+      "type": "text"
+    },
+    {
+      "name": "Description",
+      "type": "text"
+    },
+    {
+      "name": "SemanticTag",
+      "type": "text"
+    },
+    {
+      "name": "hyper_link",
+      "type": "text"
+    },
+    {
+      "name": "more_specification",
+      "type": "text"
+    }
+  ]
+}
+

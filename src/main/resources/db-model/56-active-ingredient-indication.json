@@ -1,0 +1,18 @@
+{
+  "tableName": "active_ingredient_indication",
+  "columns": [
+    {
+      "name": "active_ingredient_key",
+      "type": "text"
+    },
+    {
+      "name": "indication",
+      "type": "text"
+    },
+    {
+      "name": "is_off_label",
+      "type": "boolean"
+    }
+  ]
+}
+

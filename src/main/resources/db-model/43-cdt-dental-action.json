@@ -1,0 +1,13 @@
+{
+  "tableName": "cdt_dental_action",
+  "columns": [
+    {
+      "name": "dental_action_key",
+      "type": "text"
+    },
+    {
+      "name": "cdt_key",
+      "type": "text"
+    }
+  ]
+}

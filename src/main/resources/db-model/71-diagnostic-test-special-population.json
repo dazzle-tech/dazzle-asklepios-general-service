@@ -1,0 +1,14 @@
+{
+  "tableName": "diagnostic_test_special_population",
+  "columns": [
+    {
+      "name": "test_key",
+      "type": "text"
+    },
+    {
+      "name": "special_population_lkey",
+      "type": "text"
+    }
+  ]
+}
+

@@ -1,0 +1,18 @@
+{
+  "tableName": "active_ingredient_special_population",
+  "columns": [
+    {
+      "name": "active_ingredient_key",
+      "type": "text"
+    },
+    {
+      "name": "additional_population_lkey",
+      "type": "text"
+    },
+    {
+      "name": "considerations",
+      "type": "text"
+    }
+  ]
+}
+

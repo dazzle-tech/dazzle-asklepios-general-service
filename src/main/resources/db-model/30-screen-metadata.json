@@ -1,0 +1,14 @@
+{
+  "tableName": "screen_metadata",
+  "columns": [
+    {
+      "name": "screen_key",
+      "type": "text"
+    },
+    {
+      "name": "metadata_key",
+      "type": "text"
+    }
+  ]
+}
+

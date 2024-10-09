@@ -1,0 +1,267 @@
+{
+  "tableName": "encounter",
+  "columns": [
+    {
+      "name": "patient_key",
+      "type": "text"
+    },
+    {
+      "name": "visit_id",
+      "type": "text"
+    },
+    {
+      "name": "patient_full_name",
+      "type": "text"
+    },
+    {
+      "name": "patient_age",
+      "type": "text"
+    },
+    {
+      "name": "encounter_status_lkey",
+      "type": "text"
+    },
+    {
+      "name": "encounter_class_lkey", 
+      "type": "text"
+    },
+    {
+      "name": "encounter_priority_lkey",
+      "type": "text"
+    },
+    {
+      "name": "discharge_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "encounter_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "service_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "patient_status_lkey",
+      "type": "text"
+    },
+    {
+      "name": "episode_care_key",
+      "type": "text"
+    },
+    {
+      "name": "based_on_lkey",
+      "type": "text"
+    },
+    {
+      "name": "based_on_key",
+      "type": "text"
+    },
+    {
+      "name": "part_of_encounter_key",
+      "type": "text"
+    },
+    {
+      "name": "attending_physician_key",
+      "type": "text"
+    },
+    {
+      "name": "responsible_physician_key",
+      "type": "text"
+    },
+    {
+      "name": "facility_key",
+      "type": "text"
+    },
+    {
+      "name": "appointment_key",
+      "type": "text"
+    },
+    {
+      "name": "virtual_service",
+      "type": "boolean"
+    },
+    {
+      "name": "planned_start_date",
+      "type": "date"
+    },
+    {
+      "name": "planned_end_date",
+      "type": "date"
+    },
+    {
+      "name": "actual_start_date",
+      "type": "date"
+    },
+    {
+      "name": "actual_end_date",
+      "type": "date"
+    },
+    {
+      "name": "actual_length_minutes",
+      "type": "numeric"
+    },
+    {
+      "name": "reason_lkey",
+      "type": "text"
+    },
+    {
+      "name": "primary_diagnose_key",
+      "type": "text"
+    },
+    {
+      "name": "diet_preference_lkey",
+      "type": "text"
+    },
+    {
+      "name": "diet_preference_text",
+      "type": "text"
+    },
+    {
+      "name": "valuable_items_text",
+      "type": "text"
+    },
+    {
+      "name": "special_arrangement_lkey",
+      "type": "text"
+    },
+    {
+      "name": "special_arrangement_text",
+      "type": "text"
+    },
+    {
+      "name": "special_courtesy_lkey",
+      "type": "text"
+    },
+    {
+      "name": "admission_origin",
+      "type": "text"
+    },
+    {
+      "name": "admission_source",
+      "type": "text"
+    },
+    {
+      "name": "readmission",
+      "type": "boolean"
+    },
+    {
+      "name": "discharge_destination",
+      "type": "text"
+    },
+    {
+      "name": "discharge_disposition",
+      "type": "text"
+    },
+    {
+      "name": "location_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "location_key",
+      "type": "text"
+    },
+    {
+      "name": "follow_up_encounter_key",
+      "type": "text"
+    },
+    {
+      "name": "queue_number",
+      "type": "numeric(6,0)"
+    },
+    {
+      "name": "billing_account_key",
+      "type": "text"
+    },
+    {
+      "name": "payment_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "payer_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "payer_key",
+      "type": "text"
+    },
+    {
+      "name": "insurance_plan",
+      "type": "text"
+    },
+    {
+      "name": "payer_member_id",
+      "type": "text"
+    },
+    {
+      "name": "referral_number",
+      "type": "text"
+    },
+    {
+      "name": "access_level",
+      "type": "numeric"
+    },
+    {
+      "name": "department_key",
+      "type": "text"
+    },
+    {
+      "name": "chief_complaint",
+      "type": "text"
+    },
+    {
+      "name": "HPI_summery",
+      "type": "text"
+    },
+    {
+      "name": "HPI_key",
+      "type": "text"
+    },
+    {
+      "name": "past_medical_history_summery",
+      "type": "text"
+    },
+    {
+      "name": "past_medical_history_key",
+      "type": "text"
+    },
+    {
+      "name": "ROS_summery",
+      "type": "text"
+    },
+    {
+      "name": "ROS_key",
+      "type": "text"
+    },
+    {
+      "name": "assessment_summery",
+      "type": "text"
+    },
+    {
+      "name": "assessment_key",
+      "type": "text"
+    },
+    {
+      "name": "physical_exam_summery",
+      "type": "text"
+    },
+    {
+      "name": "physical_exam_summery_key",
+      "type": "text"
+    },
+    {
+      "name": "progress_note",
+      "type": "text"
+    },
+    {
+      "name": "discharge_note",
+      "type": "text"
+    },
+    {
+      "name": "discharge_summery",
+      "type": "text"
+    }
+
+  ]
+}
+

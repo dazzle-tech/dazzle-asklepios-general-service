@@ -1,0 +1,30 @@
+{
+  "tableName": "department",
+  "columns": [
+    {
+      "name": "facility_key",
+      "type": "text"
+    },
+    {
+      "name": "name",
+      "type": "text"
+    },
+    {
+      "name": "department_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "appointable",
+      "type": "boolean"
+    },
+    {
+      "name": "has_triage",
+      "type": "boolean"
+    },
+    {
+      "name": "department_code ",
+      "type": "text"
+    }
+  ]
+}
+

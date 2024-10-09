@@ -1,0 +1,30 @@
+{
+  "tableName": "access_role",
+  "columns": [
+    {
+      "name": "name",
+      "type": "text"
+    },
+    {
+      "name": "description",
+      "type": "text"
+    },
+    {
+      "name": "access_level",
+      "type": "numeric(3)"
+    },
+    {
+      "name": "password_error_retires",
+      "type": "numeric(2)"
+    },
+    {
+      "name": "password_expires",
+      "type": "boolean"
+    },
+    {
+      "name": "password_expires_after_days",
+      "type": "numeric(3)"
+    }
+  ]
+}
+

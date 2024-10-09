@@ -1,0 +1,22 @@
+{
+  "tableName": "access_token",
+  "columns": [
+    {
+      "name": "user_key",
+      "type": "text"
+    },
+    {
+      "name": "can_expire",
+      "type": "boolean"
+    },
+    {
+      "name": "expires_at",
+      "type": "decimal(16)"
+    },
+    {
+      "name": "access_token",
+      "type": "text"
+    }
+  ]
+}
+

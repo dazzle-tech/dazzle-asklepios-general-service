@@ -1,0 +1,68 @@
+{
+  "tableName": "facility",
+  "columns": [
+    {
+      "name": "facility_id",
+      "type": "text"
+    },
+    {
+      "name": "facility_name",
+      "type": "text"
+    },
+    {
+      "name": "facility_name_other_lang",
+      "type": "text"
+    }
+  ,
+    {
+      "name": "tenant_id",
+      "type": "text"
+    },
+    {
+      "name": "facility_type_lkey",
+      "type": "text"
+    }
+    ,
+    {
+      "name": "Facility_registration_date",
+      "type": "date"
+    }
+    ,
+    {
+      "name": "facility_email_address",
+      "type": "text"
+    },
+    {
+      "name": "Facility_brief_desc",
+      "type": "text"
+    },
+
+    {
+      "name": "facility_address_id",
+      "type": "text"
+    },
+
+    {
+      "name": "facility_address_other_lang",
+      "type": "text"
+    },
+
+    {
+      "name": "facility_logo_file",
+      "type": "text"
+    },
+    {
+      "name": "facility_phone1",
+      "type": "text"
+    },
+    {
+      "name": "facility_phone2",
+      "type": "text"
+    },
+    {
+      "name": "facility_fax",
+      "type": "text"
+    }
+  ]
+}
+

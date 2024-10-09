@@ -1,0 +1,38 @@
+{
+  "tableName": "physical_exam_area",
+  "columns": [
+    {
+      "name": "patient_key",
+      "type": "text"
+    },
+    {
+      "name": "encounter_key",
+      "type": "text"
+    },
+    {
+      "name": "physical_exam_area_lkey",
+      "type": "text"
+    },
+    {
+      "name": "physical_exam_area_detail_lkey",
+      "type": "text"
+    },
+    {
+      "name": "notes",
+      "type": "text"
+    },
+    {
+      "name": "source_of_answer_lkey",
+      "type": "text"
+    },
+    {
+      "name": "pass",
+      "type": "boolean"
+    },
+    {
+      "name": "pass_reason_lkey",
+      "type": "text"
+    }
+  ]
+}
+

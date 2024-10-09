@@ -1,0 +1,62 @@
+{
+  "tableName": "dvm_rule",
+  "columns": [
+    {
+      "name": "screen_metadata_key",
+      "type": "text"
+    },
+    {
+      "name": "rule_description",
+      "type": "text"
+    },
+    {
+      "name": "field_key",
+      "type": "text"
+    },
+    {
+      "name": "field_name",
+      "type": "text"
+    },
+    {
+      "name": "field_data_type",
+      "type": "text"
+    },
+    {
+      "name": "is_field_lov",
+      "type": "boolean"
+    },
+    {
+      "name": "is_field_ref",
+      "type": "boolean"
+    },
+    {
+      "name": "rule_type",
+      "type": "text"
+    },
+    {
+      "name": "rule_value",
+      "type": "text"
+    },
+    {
+      "name": "rule_value_two",
+      "type": "text"
+    },
+    {
+      "name": "is_dependant",
+      "type": "boolean"
+    },
+    {
+      "name": "dependant_rule_check",
+      "type": "text"
+    },
+    {
+      "name": "dependant_rule_key",
+      "type": "text"
+    },
+    {
+      "name": "validation_type",
+      "type": "text"
+    }
+  ]
+}
+

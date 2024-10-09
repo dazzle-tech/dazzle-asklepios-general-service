@@ -1,0 +1,34 @@
+{
+  "tableName": "tooth_action",
+  "columns": [
+    {
+      "name": "tooth_key",
+      "type": "text"
+    },
+    {
+      "name": "action_key",
+      "type": "text"
+    },
+    {
+      "name": "note",
+      "type": "text"
+    },
+    {
+      "name": "surface_lkey",
+      "type": "text"
+    },
+    {
+      "name": "existing",
+      "type": "boolean"
+    },
+    {
+      "name": "image_name",
+      "type": "text"
+    },
+    {
+      "name": "tooth_number",
+      "type": "text"
+    }
+  ]
+}
+

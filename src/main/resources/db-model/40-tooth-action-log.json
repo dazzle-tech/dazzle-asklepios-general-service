@@ -1,0 +1,26 @@
+{
+  "tableName": "tooth_action_log",
+  "columns": [
+    {
+      "name": "tooth_key",
+      "type": "text"
+    },
+    {
+      "name": "action_key",
+      "type": "text"
+    },
+    {
+      "name": "log_type",
+      "type": "text"
+    },
+    {
+      "name": "log_time",
+      "type": "numeric(16)"
+    },
+    {
+      "name": "log_owner",
+      "type": "text"
+    }
+  ]
+}
+

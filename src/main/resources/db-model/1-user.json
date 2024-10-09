@@ -1,0 +1,88 @@
+{
+  "tableName": "user",
+  "columns": [
+    {
+      "name": "username",
+      "type": "text"
+    },
+    {
+      "name": "password",
+      "type": "text"
+    },
+    {
+      "name": "first_name",
+      "type": "text"
+    }
+  ,
+    {
+      "name": "second_name",
+      "type": "text"
+    },
+    {
+      "name": "last_name",
+      "type": "text"
+    },
+    {
+      "name": "full_name",
+      "type": "text"
+    },
+    {
+      "name": "verified",
+      "type": "text"
+    },
+    {
+      "name": "last_generated_otp",
+      "type": "text"
+    },
+    {
+      "name": "passcode",
+      "type": "text"
+    },
+    {
+      "name": "tenant_key",
+      "type": "text"
+    },
+    {
+      "name": "organization_key",
+      "type": "text"
+    },
+    {
+      "name": "access_role_key",
+      "type": "text"
+    },
+    {
+      "name": "email",
+      "type": "text"
+    },
+    {
+      "name": "phone_number",
+      "type": "numeric(15)"
+    },
+    {
+      "name": "sex_at_birth_lkey",
+      "type": "text"
+    },
+    {
+      "name": "dob",
+      "type": "date"
+    },
+    {
+      "name": "department_key",
+      "type": "text"
+    }
+  ,
+    {
+      "name": "job_role_key",
+      "type": "text"
+    },
+    {
+      "name": "job_Description",
+      "type": "text"
+    },{
+      "name": "must_change_password",
+      "type": "boolean"
+    }
+
+  ]
+}
+

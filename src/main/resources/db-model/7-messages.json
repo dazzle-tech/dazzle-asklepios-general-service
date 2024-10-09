@@ -1,0 +1,37 @@
+{
+  "tableName": "messages",
+  "columns": [
+    {
+      "name": "message_id",
+      "type": "text"
+    },
+    {
+      "name": "message_code",
+      "type": "text"
+    }
+  ,
+    {
+      "name": "message_type",
+      "type": "text"
+    },
+    {
+      "name": "message_header",
+      "type": "text"
+    }
+    ,
+    {
+      "name": "message_text",
+      "type": "text"
+    }
+    ,
+    {
+      "name": "language_code",
+      "type": "text"
+    },
+    {
+      "name": "isoriginal_message",
+      "type": "boolean"
+    }
+  ]
+}
+

@@ -1,0 +1,52 @@
+{
+  "tableName": "license_details",
+  "columns": [
+    {
+      "name": "tenant_id",
+      "type": "text"
+    },
+    {
+      "name": "license_id",
+      "type": "text"
+    }
+  ,
+    {
+      "name": "facility_Count",
+      "type": "numeric"
+    },
+    {
+      "name": "bed_Count",
+      "type": "numeric"
+    }
+    ,
+    {
+      "name": "user_Count",
+      "type": "numeric"
+    }
+    ,
+    {
+      "name": "modules",
+      "type": "text"
+    },
+    {
+      "name": "facility_Usage_Count",
+      "type": "numeric"
+    },
+
+    {
+      "name": "bed_Usage_Count",
+      "type": "numeric"
+    },
+
+    {
+      "name": "user_Usage_Count",
+      "type": "numeric"
+    },
+
+    {
+      "name": "last_usage_Date",
+      "type": "date"
+    }
+  ]
+}
+

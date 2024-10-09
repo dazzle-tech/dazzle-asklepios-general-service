@@ -1,0 +1,74 @@
+{
+  "tableName": "tenant",
+  "columns": [
+    {
+      "name": "tenant_id",
+      "type": "text"
+    },
+    {
+      "name": "tenant_name",
+      "type": "text"
+    },
+    {
+      "name": "tenant_type",
+      "type": "text"
+    }
+    ,
+    {
+      "name": "tenant_registration_date",
+      "type": "date"
+    }
+    ,
+    {
+      "name": "tenant_expiry_date",
+      "type": "date"
+    },
+    {
+      "name": "tenant_email_address",
+      "type": "text"
+    },
+    {
+      "name": "tenant_brief_desc",
+      "type": "text"
+    },
+
+    {
+      "name": "tenant_security_token",
+      "type": "text"
+    },
+    {
+      "name": "tenant_data_global",
+      "type": "boolean"
+    },
+    {
+      "name": "tenant_schema_name",
+      "type": "text"
+    },
+    {
+      "name": "tenant_DB_connstr",
+      "type": "text"
+    },
+    {
+      "name": "tenant_db_admin_user",
+      "type": "text"
+    },
+    {
+      "name": "tenant_logo_path",
+      "type": "text"
+    },
+    {
+      "name": "tenant_background_path",
+      "type": "text"
+    },
+    {
+      "name": "tenant_slogan",
+      "type": "text"
+    },
+    {
+      "name": "tenant_login_text",
+      "type": "text"
+    }
+
+  ]
+}
+

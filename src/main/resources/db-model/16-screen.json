@@ -1,0 +1,30 @@
+{
+  "tableName": "screen",
+  "columns": [
+    {
+      "name": "name",
+      "type": "text"
+    },
+    {
+      "name": "description",
+      "type": "text"
+    },
+    {
+      "name": "module_key",
+      "type": "text"
+    },
+    {
+      "name": "icon_image_path",
+      "type": "text"
+    },
+    {
+      "name": "view_order",
+      "type": "numeric(3)"
+    },
+    {
+      "name": "nav_path",
+      "type": "text"
+    }
+  ]
+}
+

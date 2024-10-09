@@ -1,0 +1,59 @@
+{
+  "tableName": "patient_Allergies",
+  "columns": [
+    {
+      "name": "patient_key",
+      "type": "text"
+    },
+
+    {
+      "name": "Allergy_key",
+      "type": "text"
+    },
+    {
+      "name": "Allergen_Type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Severity_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Reaction",
+      "type": "text"
+    },
+    {
+      "name": "Date_Diagnosed",
+      "type": "date"
+    },
+    {
+      "name": "Resolution_Status_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Date_Resolved",
+      "type": "date"
+    },
+    {
+      "name": "Treatment_Plan",
+      "type": "text"
+    },
+    {
+      "name": "Notes",
+      "type": "text"
+    },
+    {
+      "name": "source_of_info_lkey",
+      "type": "text"
+    },
+    {
+      "name": "life_threating",
+      "type": "boolean"
+    },
+    {
+      "name": "added_by_visit_key",
+      "type": "text"
+    }
+  ]
+}
+

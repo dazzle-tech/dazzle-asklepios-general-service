@@ -1,0 +1,21 @@
+{
+  "tableName": "user_medical_license",
+  "columns": [
+    {
+      "name":"user_key",
+      "type": "text"
+    }
+    ,{
+      "name": "license_name",
+      "type": "text"
+    },
+    {
+      "name": "license_number",
+      "type": "text"
+    },
+    {
+      "name": "valid_to",
+      "type": "date"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "tableName": "diagnostic_test_catalog_header",
+  "columns": [
+    {
+      "name": "description",
+      "type": "text"
+    },
+    {
+      "name": "type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "department_key",
+      "type": "text"
+    }
+  ]
+}
+

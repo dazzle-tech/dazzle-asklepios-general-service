@@ -1,0 +1,130 @@
+{
+  "tableName": "active_ingredient",
+  "columns": [
+    {
+      "name": "code",
+      "type": "text"
+    },
+    {
+      "name": "name",
+      "type": "text"
+    },
+    {
+      "name": "has_salt",
+      "type": "boolean"
+    },
+    {
+      "name": "salt_lkey",
+      "type": "text"
+    },
+    {
+      "name": "medical_category_lkey",
+      "type": "text"
+    },
+    {
+      "name": "is_controlled",
+      "type": "boolean"
+    },
+    {
+      "name": "controlled_lkey",
+      "type": "text"
+    },
+    {
+      "name": "name",
+      "type": "text"
+    },
+    {
+      "name": "has_synonyms",
+      "type": "boolean"
+    },
+    {
+      "name": "chemical_formula",
+      "type": "text"
+    },
+    {
+      "name": "drug_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "drug_class_lkey",
+      "type": "text"
+    },
+    {
+      "name": "has_black_box_warning",
+      "type": "boolean"
+    },
+    {
+      "name": "black_box_warning",
+      "type": "text"
+    },
+    {
+      "name": "mechanism_of_action",
+      "type": "text"
+    },
+    {
+      "name": "toxicity_maximum_dose",
+      "type": "text"
+    },
+    {
+      "name": "toxicity_maximum_dose_per_unit_lkey",
+      "type": "text"
+    },
+    {
+      "name": "toxicity_details",
+      "type": "text"
+    },
+    {
+      "name": "pregnancy_category_lkey",
+      "type": "text"
+    },
+    {
+      "name": "pregnancy_notes",
+      "type": "text"
+    },
+    {
+      "name": "lactation_risk_lkey",
+      "type": "text"
+    },
+    {
+      "name": "lactation_risk_notes",
+      "type": "text"
+    },
+    {
+      "name": "dose_adjustment_renal",
+      "type": "boolean"
+    },
+    {
+      "name": "dose_adjustment_hepatic",
+      "type": "boolean"
+    },
+    {
+      "name": "pharma_absorption",
+      "type": "text"
+    },
+    {
+      "name": "pharma_route_of_elimination",
+      "type": "text"
+    },
+    {
+      "name": "pharma_volume_of_distribution",
+      "type": "text"
+    },
+    {
+      "name": "pharma_half_life",
+      "type": "text"
+    },
+    {
+      "name": "pharma_protein_binding",
+      "type": "text"
+    },
+    {
+      "name": "pharma_clearance",
+      "type": "text"
+    },
+    {
+      "name": "pharma_metabolism",
+      "type": "text"
+    }
+  ]
+}
+

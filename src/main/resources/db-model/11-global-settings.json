@@ -1,0 +1,43 @@
+{
+  "tableName": "global_settings",
+  "columns": [
+
+    {
+      "name": "facility_key",
+      "type": "text"
+    },
+    {
+      "name": "setting_key",
+      "type": "text"
+    },
+    {
+      "name": "setting_value",
+      "type": "text"
+    },
+    {
+      "name": "setting_category",
+      "type": "text"
+    },
+    {
+      "name": "require_restart",
+      "type": "boolean"
+    },
+    {
+      "name": "require_passcode",
+      "type": "boolean"
+    },
+    {
+      "name": "fixed_value",
+      "type": "boolean"
+    },
+    {
+      "name": "for_admin_use",
+      "type": "boolean"
+    },
+    {
+      "name": "hidden_setting",
+      "type": "boolean"
+    }
+  ]
+}
+

@@ -1,0 +1,22 @@
+{
+  "tableName": "Allergens",
+  "columns": [
+    {
+      "name": "Allergen_code",
+      "type": "text"
+    },
+    {
+      "name": "Allergen_Name",
+      "type": "text"
+    },
+    {
+      "name": "Allergen_Type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Description",
+      "type": "text"
+    }
+  ]
+}
+

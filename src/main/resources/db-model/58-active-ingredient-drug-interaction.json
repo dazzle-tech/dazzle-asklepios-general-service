@@ -1,0 +1,22 @@
+{
+  "tableName": "active_ingredient_drug_interaction",
+  "columns": [
+    {
+      "name": "active_ingredient_key",
+      "type": "text"
+    },
+    {
+      "name": "interacted_active_ingredient_key",
+      "type": "text"
+    },
+    {
+      "name": "severity_lkey",
+      "type": "text"
+    },
+    {
+      "name": "description",
+      "type": "text"
+    }
+  ]
+}
+

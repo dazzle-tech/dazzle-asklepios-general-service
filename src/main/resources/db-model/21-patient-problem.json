@@ -1,0 +1,66 @@
+{
+  "tableName": "patient_problem",
+  "columns": [
+    {
+      "name": "patient_key",
+      "type": "text"
+    },
+    {
+      "name": "problem_code",
+      "type": "text"
+    },
+    {
+      "name": "Description",
+      "type": "text"
+    },
+    {
+      "name": "problem_Coding_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Date_Diagnosed",
+      "type": "date"
+    },
+    {
+      "name": "Problem_Status_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Severity_lkey",
+      "type": "text"
+    },
+    {
+      "name": "On_Set_Date",
+      "type": "date"
+    },
+    {
+      "name": "Provider_Type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Provider_lkey",
+      "type": "text"
+    },
+    {
+      "name": "provider_user_name",
+      "type": "text"
+    },
+    {
+      "name": "Provider_Role_lkey",
+      "type": "text"
+    },
+    {
+      "name": "resolved_date",
+      "type": "date"
+    },
+    {
+      "name": "date_added",
+      "type": "date"
+    },
+    {
+      "name": "notes",
+      "type": "text"
+    }
+  ]
+}
+

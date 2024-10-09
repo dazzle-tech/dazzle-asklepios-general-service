@@ -1,0 +1,22 @@
+{
+  "tableName": "dental_action",
+  "columns": [
+    {
+      "name": "description",
+      "type": "text"
+    },
+    {
+      "name": "type",
+      "type": "text"
+    },
+    {
+      "name": "image_name",
+      "type": "text"
+    },
+    {
+      "name": "favorite",
+      "type": "boolean"
+    }
+  ]
+}
+

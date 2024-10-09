@@ -1,0 +1,16 @@
+{
+  "tableName": "service_cdt",
+  "columns": [
+    {
+      "name": "service_key",
+      "type": "text"
+    },  {
+      "name": "cdt_key",
+      "type": "text"
+    },  {
+      "name": "description",
+      "type": "text"
+    }
+  ]
+}
+

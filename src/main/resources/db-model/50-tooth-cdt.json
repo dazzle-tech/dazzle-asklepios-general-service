@@ -1,0 +1,26 @@
+{
+  "tableName": "tooth_cdt",
+  "columns": [
+    {
+      "name": "tooth_key",
+      "type": "text"
+    },
+    {
+      "name": "cdt_key",
+      "type": "text"
+    },
+    {
+      "name": "source",
+      "type": "text"
+    },
+    {
+      "name": "source_key",
+      "type": "text"
+    },
+    {
+      "name": "surface_lkey",
+      "type": "text"
+    }
+  ]
+}
+

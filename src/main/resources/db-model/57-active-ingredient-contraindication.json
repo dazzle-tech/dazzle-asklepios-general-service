@@ -1,0 +1,14 @@
+{
+  "tableName": "active_ingredient_contraindication",
+  "columns": [
+    {
+      "name": "active_ingredient_key",
+      "type": "text"
+    },
+    {
+      "name": "contraindication",
+      "type": "text"
+    }
+  ]
+}
+

@@ -1,0 +1,106 @@
+{
+  "tableName": "icd_code",
+  "columns": [
+    {
+      "name": "icd_version",
+      "type": "text"
+    },
+    {
+      "name": "icd_code",
+      "type": "text"
+    },
+    {
+      "name": "Description",
+      "type": "text"
+    },
+    {
+      "name": "Chapter",
+      "type": "text"
+    },
+    {
+      "name": "Block",
+      "type": "text"
+    },
+    {
+      "name": "Category",
+      "type": "text"
+    },
+    {
+      "name": "Subcategory",
+      "type": "text"
+    },
+    {
+      "name": "FullDescription",
+      "type": "text"
+    },
+    {
+      "name": "Includes",
+      "type": "text"
+    },
+    {
+      "name": "Excludes1",
+      "type": "text"
+    },
+    {
+      "name": "Excludes2",
+      "type": "text"
+    },
+    {
+      "name": "UseAdditionalCode",
+      "type": "text"
+    },
+    {
+      "name": "CodeFirst",
+      "type": "text"
+    },
+    {
+      "name": "CodingGuidelines",
+      "type": "text"
+    },
+    {
+      "name": "ClinicalDescription",
+      "type": "text"
+    },
+    {
+      "name": "Severity",
+      "type": "text"
+    },
+    {
+      "name": "Synonyms",
+      "type": "text"
+    },
+    {
+      "name": "Abbreviations",
+      "type": "text"
+    },
+    {
+      "name": "Notes",
+      "type": "text"
+    },
+    {
+      "name": "Require_side",
+      "type": "text"
+    },
+    {
+      "name": "require_details",
+      "type": "text"
+    },
+    {
+      "name": "linked_with_age",
+      "type": "text"
+    },
+    {
+      "name": "linked_with_gender",
+      "type": "text"
+    },
+    {
+      "name": "linked_with_disease",
+      "type": "text"
+    },
+    {
+      "name": "more_specification",
+      "type": "text"
+    }
+  ]
+}
+

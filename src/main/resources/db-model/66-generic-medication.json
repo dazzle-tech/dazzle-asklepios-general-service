@@ -1,0 +1,57 @@
+{
+  "tableName": "generic_medication",
+  "columns": [
+    {
+      "name": "generic_name",
+      "type": "text"
+    },
+    {
+      "name": "manufacturer_lkey",
+      "type": "text"
+    },
+    {
+      "name": "usage_instructions",
+      "type": "text"
+    },
+    {
+      "name": "roa_lkey",
+      "type": "text"
+    },
+    {
+      "name": "dosage_form_lkey",
+      "type": "text"
+    },
+    {
+      "name": "expires_after_opening",
+      "type": "boolean"
+    },
+    {
+      "name": "expires_after_opening_value",
+      "type": "text"
+    },
+    {
+      "name": "single_patient_use",
+      "type": "boolean"
+    },
+    {
+      "name": "price",
+      "type": "numeric(6,2)"
+    },
+    {
+      "name": "currency_lkey",
+      "type": "text"
+    },{
+      "name": "price_list_key",
+      "type": "text"
+    },
+    {
+      "name": "cost",
+      "type": "numeric(6,2)"
+    },
+    {
+      "name": "storage_requirements",
+      "type": "text"
+    }
+  ]
+}
+

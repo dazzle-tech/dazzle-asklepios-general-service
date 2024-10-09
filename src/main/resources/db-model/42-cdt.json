@@ -1,0 +1,22 @@
+{
+  "tableName": "cdt",
+  "columns": [
+    {
+      "name": "type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "cdt_code",
+      "type": "text"
+    },
+    {
+      "name": "description",
+      "type": "text"
+    },
+    {
+      "name": "class_lkey",
+      "type": "text"
+    }
+  ]
+}
+

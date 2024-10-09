@@ -1,0 +1,18 @@
+{
+  "tableName": "metadata",
+  "columns": [
+    {
+      "name": "object_name",
+      "type": "text"
+    },
+    {
+      "name": "db_object_name",
+      "type": "text"
+    },
+    {
+      "name": "description",
+      "type": "text"
+    }
+  ]
+}
+

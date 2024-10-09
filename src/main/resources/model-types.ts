@@ -1,0 +1,474 @@
+export interface ApAccessRole { 
+	key:string;
+	name:string;
+	description:string;
+	accessLevel:number;
+	passwordErrorRetires:number;
+	passwordExpires:boolean;
+	passwordExpiresAfterDays:number;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+} 
+
+export interface ApAccessRoleAuthorization { 
+	key:string;
+	accessRoleKey:string;
+	authorizationType:string;
+	authorizationObjectKey:string;
+	authorizationLevel:number;
+	accessLevel:number;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+} 
+
+export interface ApAccessToken { 
+	key:string;
+	userKey:string;
+	canExpire:boolean;
+	expiresAt:number;
+	accessToken:string;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+} 
+
+export interface ApFacility { 
+	key:string;
+	facilityId:string;
+	facilityName:string;
+	tenantId:string;
+	facilityType:string;
+	facilityRegistrationDate:Date;
+	facilityEmailAddress:string;
+	facilityBriefDesc:string;
+	facilityAddress:string;
+	facilityLogoFile:string;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+	facilityNameOtherLang:string;
+	facilityAddressOtherLang:string;
+} 
+
+export interface ApGlobalSettings { 
+	key:string;
+	facilityKey:string;
+	settingKey:string;
+	settingValue:string;
+	settingCategory:string;
+	requireRestart:boolean;
+	requirePasscode:boolean;
+	fixedValue:boolean;
+	forAdminUse:boolean;
+	hiddenSetting:boolean;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+} 
+
+export interface ApIcdCode { 
+	key:string;
+	icdVersion:string;
+	icdCode:string;
+	description:string;
+	chapter:string;
+	block:string;
+	category:string;
+	subcategory:string;
+	fulldescription:string;
+	includes:string;
+	excludes1:string;
+	excludes2:string;
+	useadditionalcode:string;
+	codefirst:string;
+	codingguidelines:string;
+	clinicaldescription:string;
+	severity:string;
+	synonyms:string;
+	abbreviations:string;
+	notes:string;
+	requireSide:string;
+	requireDetails:string;
+	linkedWithAge:string;
+	linkedWithGender:string;
+	linkedWithDisease:string;
+	moreSpecification:string;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+} 
+
+export interface ApLanguages { 
+	key:string;
+	languageCode:string;
+	languageName:string;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+} 
+
+export interface ApLicense { 
+	key:string;
+	tenantId:string;
+	licenseId:string;
+	licenseKey:string;
+	licenseType:string;
+	startDate:Date;
+	endDate:Date;
+	activestatus:boolean;
+	uuidHwKeys:string;
+	facilityAddress:string;
+	facilityLogoFile:string;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+} 
+
+export interface ApLicenseDetails { 
+	key:string;
+	tenantId:string;
+	licenseId:string;
+	facilityCount:number;
+	bedCount:number;
+	userCount:number;
+	modules:string;
+	facilityUsageCount:number;
+	bedUsageCount:number;
+	userUsageCount:number;
+	lastUsageDate:Date;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+} 
+
+export interface ApLov { 
+	key:string;
+	lovCode:string;
+	lovName:string;
+	lovDescription:string;
+	loveCustomCode:string;
+	parentLov:string;
+	autoSelectDefault:boolean;
+	defaultValueId:string;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+} 
+
+export interface ApLovValues { 
+	key:string;
+	lovKey:string;
+	lovCode:string;
+	valueCode:string;
+	lovDisplayVale:string;
+	loveCustomCode:string;
+	valueDescription:string;
+	valueColor:number;
+	valueIcon:string;
+	valueOrder:number;
+	isdefault:boolean;
+	seededData:boolean;
+	forInternalUser:boolean;
+	specificForScreenId:string;
+	parentValueId:string;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+} 
+
+export interface ApMessages { 
+	key:string;
+	messageId:string;
+	messageCode:string;
+	messageType:string;
+	messageHeader:string;
+	messageText:string;
+	languageCode:string;
+	isoriginalMessage:boolean;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+} 
+
+export interface ApModule { 
+	key:string;
+	name:string;
+	description:string;
+	iconImagePath:string;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+	viewOrder:number;
+} 
+
+export interface ApPatient { 
+	key:string;
+	patientMrn:string;
+	namePrefix:string;
+	nameSuffix:string;
+	patientAlias:string;
+	firstName:string;
+	thirdName:string;
+	lastName:string;
+	fullName:string;
+	firstNameOtherLang:string;
+	thirdNameOtherLang:string;
+	lastNameOtherLang:string;
+	fullNameOtherLang:string;
+	documentCountryLkey:string;
+	documentTypeLkey:string;
+	documentNo:string;
+	noDocument:boolean;
+	unknown:string;
+	genderLkey:string;
+	phoneNumber:string;
+	mobileNumber:string;
+	email:string;
+	maritalStatusLkey:string;
+	nationalityLkey:string;
+	primaryLanguageLkey:string;
+	religionLkey:string;
+	ethnicityLkey:string;
+	occupationLkey:string;
+	emergencyContactName:string;
+	emergencyContactRelationLkey:string;
+	emergencyContactPhone:string;
+	streetAddressLine1:string;
+	streetAddressLine2:string;
+	countryLkey:string;
+	stateProvinceRegionLkey:string;
+	cityLkey:string;
+	postalCode:string;
+	additionalInfo:string;
+	latitude:number;
+	longitude:string;
+	isActive:string;
+	deathDatetime:Date;
+	multipleBirth:boolean;
+	birthOrder:number;
+	numSiblings:number;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+	accessLevel:number;
+	secondName:string;
+	secondNameOtherLang:string;
+} 
+
+export interface ApPatientAddresses { 
+	key:string;
+	patientKey:string;
+	addressTypeLkey:string;
+	streetAddressLine1:string;
+	streetAddressLine2:string;
+	countryLkey:string;
+	stateProvinceRegionLkey:string;
+	cityLkey:string;
+	postalCode:string;
+	additionalInfo:string;
+	latitude:number;
+	longitude:string;
+	isActive:string;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+} 
+
+export interface ApPatientIds { 
+	key:string;
+	patientKey:string;
+	identifierTypeLovKey:string;
+	identifierCode:string;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+} 
+
+export interface ApPatientProblem { 
+	key:string;
+	patientKey:string;
+	problemCode:string;
+	description:string;
+	problemCodingLkey:string;
+	dateDiagnosed:Date;
+	problemStatusLkey:string;
+	severityLkey:string;
+	onSetDate:Date;
+	providerTypeLkey:string;
+	providerLkey:string;
+	providerUserName:string;
+	providerRoleLkey:string;
+	resolvedDate:Date;
+	dateAdded:Date;
+	notes:string;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+} 
+
+export interface ApScreen { 
+	key:string;
+	name:string;
+	description:string;
+	moduleKey:string;
+	iconImagePath:string;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+	viewOrder:number;
+	navPath:string;
+} 
+
+export interface ApSnomedCode { 
+	key:string;
+	version:string;
+	code:string;
+	description:string;
+	semantictag:string;
+	hyperLink:string;
+	moreSpecification:string;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+} 
+
+export interface ApTenant { 
+	key:string;
+	tenantId:string;
+	tenantName:string;
+	tenantType:string;
+	tenantRegistrationDate:Date;
+	tenantExpiryDate:Date;
+	tenantEmailAddress:string;
+	tenantBriefDesc:string;
+	tenantSecurityToken:string;
+	tenantDataGlobal:boolean;
+	tenantSchemaName:string;
+	tenantDbConnstr:string;
+	tenantDbAdminUser:string;
+	tenantLogoPath:string;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+	tenantBackgroundPath:string;
+	tenantSlogan:string;
+	tenantLoginText:string;
+} 
+
+export interface ApTranslation { 
+	key:string;
+	languageKey:string;
+	translationFor:string;
+	wordKey:string;
+	translationText:string;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+	originalText:string;
+} 
+
+export interface ApUser { 
+	key:string;
+	username:string;
+	password:string;
+	fullName:string;
+	createdBy:string;
+	updatedBy:string;
+	deletedBy:string;
+	createdAt:number;
+	updatedAt:number;
+	deletedAt:number;
+	isValid:boolean;
+	verified:string;
+	lastGeneratedOtp:string;
+	passcode:string;
+	tenantKey:string;
+	organizationKey:string;
+} 
+

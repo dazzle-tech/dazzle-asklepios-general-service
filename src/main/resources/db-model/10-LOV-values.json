@@ -1,0 +1,63 @@
+{
+  "tableName": "lov_values",
+  "columns": [
+    {
+      "name": "lov_key",
+      "type": "text"
+    },
+    {
+      "name": "lov_code",
+      "type": "text"
+    },
+    {
+      "name": "value_code",
+      "type": "text"
+    }
+  ,
+    {
+      "name": "lov_display_vale",
+      "type": "text"
+    },
+    {
+      "name": "love_custom_code",
+      "type": "text"
+    },
+    {
+      "name": "value_description",
+      "type": "text"
+    },
+    {
+      "name": "value_color",
+      "type": "numeric"
+    },
+    {
+      "name": "value_icon",
+      "type": "text"
+    },
+    {
+      "name": "value_order",
+      "type": "numeric"
+    },
+    {
+      "name": "isDefault",
+      "type": "boolean"
+    },
+    {
+      "name": "seeded_data",
+      "type": "boolean"
+    },
+    {
+      "name": "for_internal_user",
+      "type": "boolean"
+    },
+    {
+      "name": "specific_for_screen_id",
+      "type": "text"
+    },
+    {
+      "name": "parent_value_id",
+      "type": "text"
+    }
+  ]
+}
+

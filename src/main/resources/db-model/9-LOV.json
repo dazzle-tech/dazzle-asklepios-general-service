@@ -1,0 +1,43 @@
+{
+  "tableName": "lov",
+  "columns": [
+    {
+      "name": "lov_code",
+      "type": "text"
+    },
+    {
+      "name": "lov_name",
+      "type": "text"
+    },
+    {
+      "name": "lov_description",
+      "type": "text"
+    }
+  ,
+    {
+      "name": "love_custom_code",
+      "type": "text"
+    },
+    {
+      "name": "parent_lov",
+      "type": "text"
+    },
+    {
+      "name": "lov_description",
+      "type": "text"
+    },
+    {
+      "name": "lov_description",
+      "type": "text"
+    },
+    {
+      "name": "auto_select_default",
+      "type": "boolean"
+    },
+    {
+      "name": "default_value_id",
+      "type": "text"
+    }
+  ]
+}
+

@@ -1,0 +1,22 @@
+{
+  "tableName": "diagnostic_test_age_type",
+  "columns": [
+    {
+      "name": "test_key",
+      "type": "text"
+    },
+    {
+      "name": "age_from",
+      "type": "numeric(3,0)"
+    },
+    {
+      "name": "age_to",
+      "type": "numeric(3,0)"
+    },
+    {
+      "name": "age_type_lkey",
+      "type": "text"
+    }
+  ]
+}
+

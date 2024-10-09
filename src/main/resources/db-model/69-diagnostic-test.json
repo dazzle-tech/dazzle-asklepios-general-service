@@ -1,0 +1,58 @@
+{
+  "tableName": "diagnostic_test",
+  "columns": [
+    {
+      "name": "test_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "test_name",
+      "type": "text"
+    },
+    {
+      "name": "internal_code",
+      "type": "text"
+    },
+    {
+      "name": "international_code_one",
+      "type": "text"
+    },
+    {
+      "name": "international_code_two",
+      "type": "text"
+    },
+    {
+      "name": "international_code_three",
+      "type": "text"
+    },
+    {
+      "name": "age_specific",
+      "type": "boolean"
+    },
+    {
+      "name": "gender_specific",
+      "type": "boolean"
+    },
+    {
+      "name": "gender_lkey",
+      "type": "text"
+    },
+    {
+      "name": "special_population",
+      "type": "boolean"
+    },
+    {
+      "name": "price",
+      "type": "numeric(7,2)"
+    },
+    {
+      "name": "currency_lkey",
+      "type": "text"
+    },
+    {
+      "name": "special_notes",
+      "type": "text"
+    }
+  ]
+}
+

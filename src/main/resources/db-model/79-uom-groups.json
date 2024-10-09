@@ -1,0 +1,18 @@
+{
+  "tableName": "uom_groups",
+  "columns": [
+    {
+      "name": "description",
+      "type": "text"
+    },
+    {
+      "name": "base_uom",
+      "type": "text"
+    }
+  ,
+    {
+      "name": "uom_entries",
+      "type": "numeric(7,2)"
+    }
+  ]
+}

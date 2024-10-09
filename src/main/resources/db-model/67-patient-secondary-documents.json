@@ -1,0 +1,21 @@
+{
+  "tableName": "patient_secondary_documents",
+  "columns": [
+    {
+      "name": "document_country_lkey",
+      "type": "text"
+    },
+    {
+      "name": "document_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Document_no",
+      "type": "text"
+    }, {
+      "name": "patient_key",
+      "type": "text"
+    }
+  ]
+}
+

@@ -1,0 +1,55 @@
+{
+  "tableName": "patient_alerts",
+  "columns": [
+    {
+      "name": "patient_key",
+      "type": "text"
+    },
+    {
+      "name": "Alert_Type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Alert_source_lkey",
+      "type": "text"
+    },
+    {
+      "name": "Alert_Description",
+      "type": "text"
+    },
+    {
+      "name": "Alert_Severity_lkey",
+      "type": "text"
+    },
+    {
+      "name": "is_resolved",
+      "type": "boolean"
+    },
+    {
+      "name": "Alert_Date",
+      "type": "date"
+    },
+    {
+      "name": "Date_Resolved",
+      "type": "date"
+    },
+    {
+      "name": "Notes",
+      "type": "text"
+    },
+    {
+      "name": "source_of_info_lkey",
+      "type": "text"
+    }
+  ,
+    {
+      "name": "source_key",
+      "type": "text"
+    },
+    {
+      "name": "life_threating",
+      "type": "boolean"
+    }
+  ]
+}
+

@@ -23,8 +23,8 @@ public class ModelGenerator {
     private final static String ServiceFolder = ProjectPath + "service\\";
 //    private final static String ModelTypesFilePath = "C:\\Work\\Work\\Nafiz\\asklepios-ui\\src\\types\\model-types.ts";
 //    private final static String ModelTypesConstructorFilePath = "C:\\Work\\Work\\Nafiz\\asklepios-ui\\src\\types\\model-types-constructor.ts";
-    private final static String ModelTypesFilePath = "C:\\Users\\user\\Documents\\GitHub\\asklepios-ui\\src\\types\\model-types.ts";
-    private final static String ModelTypesConstructorFilePath = "C:\\Users\\user\\Documents\\GitHub\\asklepios-ui\\src\\types\\model-types-constructor.ts";
+    private final static String ModelTypesFilePath = "C:\\Users\\user\\Documents\\GitHub\\dazzle-asklepios-ui\\src\\types\\model-types.ts";
+    private final static String ModelTypesConstructorFilePath = "C:\\Users\\user\\Documents\\GitHub\\dazzle-asklepios-ui\\src\\types\\model-types-constructor.ts";
 
     private final static String[] tablesToExclude = new String[]{
             // This matches as 'contains'

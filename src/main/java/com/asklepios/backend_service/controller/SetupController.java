@@ -53,15 +53,15 @@ public class SetupController implements Serializable {
     private final ApDiagnosticTestService apDiagnosticTestService;
     private final ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService;
     private final ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService;
-//    private final ApCatalogDiagnosticTestService apCatalogDiagnosticTestService;
     private final ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService;
     private final ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService;
     private final ApCatalogDiagnosticTestService apCatalogDiagnosticTestService;
     private final ApPatientDiagnoseService apPatientDiagnoseService;
-    private final ApUserFacilitiesService apUserFacilitiesService;
+    private final ApUserFacilitiesService apUserFacilitiesService ;
     private final ApUserMedicalLicenseService apUserMedicalLicenseService;
     private final ApAddressesService apAddressesService;
-    public SetupController(AuthService authService, ApModuleService apModuleService,ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService) {
+
+    public SetupController(ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1) {
         this.authService = authService;
         this.apModuleService = apModuleService;
         this.apScreenService = apScreenService;
@@ -83,7 +83,6 @@ public class SetupController implements Serializable {
         this.apDiagnosticTestService = apDiagnosticTestService;
         this.apDiagnosticTestSpecialPopulationService = apDiagnosticTestSpecialPopulationService;
         this.apDiagnosticTestCatalogHeaderService = apDiagnosticTestCatalogHeaderService;
-//        this.apCatalogDiagnosticTestService = apCatalogDiagnosticTestService;
         this.apDiagnosticTestRadiologyService = apDiagnosticTestRadiologyService;
         this.apDiagnosticTestGeneticsService = apDiagnosticTestGeneticsService;
         this.apCatalogDiagnosticTestService = apCatalogDiagnosticTestService;
@@ -92,6 +91,7 @@ public class SetupController implements Serializable {
         this.apUserMedicalLicenseService = apUserMedicalLicenseService;
         this.apAddressesService = apAddressesService;
         this.apUomGroupsService = apUomGroupsService;
+        this.apUserFacilitiyDepartmentsService = apUserFacilitiyDepartmentsService1;
     }
 
     @GetMapping(value = "/navigation-map", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -182,7 +182,6 @@ public class SetupController implements Serializable {
         try {
             ParentResponse<ApFacility> response = new ParentResponse<>();
 
-            // Step 1: Retrieve the address by entityId (facility.getKey())
             ApAddresses existingAddress = apAddressesService.getRecordByentityId(facility.getKey());
 
             if (existingAddress != null) {
@@ -416,6 +415,18 @@ public class SetupController implements Serializable {
                 user.set_facilitiesInput(existingFacilityKeys);
             }
 
+            for (ApUser user : users) {
+                List<ApUserFacilitiyDepartments> existingDepartment = apUserFacilitiyDepartmentsService.getList("user_key ='" + user.getKey() + "' and deleted_at is null");
+                System.out.println("user_id ='" + user.getKey() + " and deleted_at is null'");
+
+                List<String> existingFacilityKeys = existingDepartment.stream()
+                        .map(ApUserFacilitiyDepartments::getDepartmentKey)
+                        .collect(Collectors.toList());
+
+                System.out.println(existingFacilityKeys);
+                user.set_depratmentsInput(existingFacilityKeys);
+            }
+
             // Prepare the response
             response.setObject(users);
             response.setExtraNumeric(totalRecord);
@@ -428,7 +439,6 @@ public class SetupController implements Serializable {
         }
     }
 
-
     @PostMapping(value = "/save-user", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveUser(@RequestBody ApUser user,
                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -437,42 +447,64 @@ public class SetupController implements Serializable {
                                       @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApUser> response = new ParentResponse<>();
+
             user.setFullName(user.getFirstName() + " " + user.getLastName());
 
-
+            // Handle facilities
             if (user.get_facilitiesInput() != null) {
+                // Delete existing facilities
+                List<ApUserFacilities> existingFacilities = apUserFacilitiesService.getList(
+                        "deleted_at is null and user_id ='" + user.getKey() + "'");
 
+                for (ApUserFacilities facility : existingFacilities) {
+                    apUserFacilitiesService.deleteRecord(facility);
+                    System.out.println("Deleted facility: " + facility);
+                }
 
+                // Add new facilities from user input
                 for (String facility : user.get_facilitiesInput()) {
-                    List<ApUserFacilities> existingFacilities = apUserFacilitiesService.getList("deleted_at is null and  facility_id = '" + facility + "' and user_id ='" + user.getKey() + "'");
-
-                    for (ApUserFacilities facilit : existingFacilities) {
-                        apUserFacilitiesService.deleteRecord(facilit);
-                        System.out.println(facilit);
-                    }
-
-                    if (existingFacilities.isEmpty()) {
-                        ApUserFacilities apUserFacilities = new ApUserFacilities();
-                        apUserFacilities.setUserId(user.getKey());
-                        apUserFacilities.setFacilityId(facility);
-
-                        apUserFacilitiesService.saveRecord(apUserFacilities);
-
-                    }
+                    ApUserFacilities apUserFacilities = new ApUserFacilities();
+                    apUserFacilities.setUserId(user.getKey());
+                    apUserFacilities.setFacilityId(facility);
+                    apUserFacilitiesService.saveRecord(apUserFacilities);
+                    System.out.println("Added facility: " + apUserFacilities);
                 }
             }
 
+            // Handle departments
+            if (user.get_depratmentsInput() != null && user.getSelectedDepartmentsFacilityKey() != null) {
+                // Delete existing departments for the user
+                List<ApUserFacilitiyDepartments> existingDepartments = apUserFacilitiyDepartmentsService.getList(
+                        "user_key = '" + user.getKey() + "' and facilitiy_key = '" + user.getSelectedDepartmentsFacilityKey() + "' and deleted_at is null");
 
+                for (ApUserFacilitiyDepartments department : existingDepartments) {
+                    apUserFacilitiyDepartmentsService.deleteRecord(department);
+                    System.out.println("Deleted department: " + department);
+                }
+
+                // Add new departments from user input
+                for (String departmentKey : user.get_depratmentsInput()) {
+                    ApUserFacilitiyDepartments apUserFacilitieyDepartment = new ApUserFacilitiyDepartments();
+                    apUserFacilitieyDepartment.setUserKey(user.getKey());
+                    apUserFacilitieyDepartment.setDepartmentKey(departmentKey);
+                    apUserFacilitieyDepartment.setFacilitiyKey(user.getSelectedDepartmentsFacilityKey());
+                    apUserFacilitiyDepartmentsService.saveRecord(apUserFacilitieyDepartment);
+                    System.out.println("Added department: " + apUserFacilitieyDepartment);
+                }
+            }
+
+            // Save the user record
             apUserService.saveRecord(user);
+
             response.setObject(user);
             return ResponseEntity.ok(response);
+
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
             return ResponseEntity.status(500).body(e);
         }
     }
-
 
     @PostMapping(value = "/remove-user", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteUser(@RequestBody ApUser user,

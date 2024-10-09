@@ -1,0 +1,15 @@
+{
+  "tableName": "user_facilities",
+  "columns": [
+    {
+      "name":"user_id",
+      "type": "text"
+    }
+    ,{
+      "name": "facility_id",
+      "type": "text"
+    }
+  ]
+
+
+}

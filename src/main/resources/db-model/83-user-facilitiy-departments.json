@@ -1,0 +1,19 @@
+{
+  "tableName": "user_facilitiy_departments",
+  "columns": [
+    {
+      "name":"user_key",
+      "type": "text"
+    }
+    ,{
+      "name": "facilitiy_key",
+      "type": "text"
+    },
+    {
+      "name": "department_key",
+      "type": "text"
+    }
+  ]
+
+
+}

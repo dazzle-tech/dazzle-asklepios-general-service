@@ -707,7 +707,7 @@ public class MedicationsSetupController {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false);
-            List<ApActiveIngredientIndication> list = ApActiveIngredientIndicationService.getList(where);
+            List<ApActiveIngredientIndication> list = apActiveIngredientIndicationService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_active_ingredient_indication where " + whereForTotal);
             response.setObject(list);
             response.setExtraNumeric(totalRecord);

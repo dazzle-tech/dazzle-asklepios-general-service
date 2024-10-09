@@ -13,5 +13,6 @@ import com.asklepios.backend_service.model.generated.entity.ApUserEntity;
 @Slf4j
 public class ApUser extends ApUserEntity implements Serializable {
     private List<String> _facilitiesInput;
-
+    private List<String> _depratmentsInput;
+    private String selectedDepartmentsFacilityKey;
 }

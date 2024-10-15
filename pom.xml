@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.asklepios</groupId>
     <artifactId>asklepios-services</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>asklepios-services</name>
     <description>asklepios-services</description>
     <properties>

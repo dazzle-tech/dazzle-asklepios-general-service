@@ -25,7 +25,7 @@ import redis.clients.jedis.Jedis;
 
 @RestController
 @RequestMapping("/utility")
-@CrossOrigin
+//@CrossOrigin
 @Slf4j
 /*
 this class will serve as the center point service for all LOVs, Users roles fetching, lookups , and non-transactional objects

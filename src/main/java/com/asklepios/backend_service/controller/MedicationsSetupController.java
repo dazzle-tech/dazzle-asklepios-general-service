@@ -22,7 +22,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/medications")
-@CrossOrigin
+//@CrossOrigin
 @Slf4j
 public class MedicationsSetupController {
 

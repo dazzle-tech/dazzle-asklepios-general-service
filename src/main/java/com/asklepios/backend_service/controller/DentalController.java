@@ -28,7 +28,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/dental")
-@CrossOrigin
+//@CrossOrigin
 @Slf4j
 public class DentalController {
 

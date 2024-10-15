@@ -25,7 +25,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/encounter")
-@CrossOrigin
+//@CrossOrigin
 @Slf4j
 public class EncounterController {
 

@@ -24,7 +24,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/observation")
-@CrossOrigin
+//@CrossOrigin
 @Slf4j
 public class ObservationController {
 

@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 
-@CrossOrigin
+//@CrossOrigin
 @Slf4j
 @RequestMapping("/caching")
 public class RedisController {

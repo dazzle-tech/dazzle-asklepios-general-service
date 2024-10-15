@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/attachment")
-@CrossOrigin
+//@CrossOrigin
 @Slf4j
 public class AttachmentController {
 

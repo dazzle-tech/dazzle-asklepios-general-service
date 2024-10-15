@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/dvm")
-@CrossOrigin
+//@CrossOrigin
 @Slf4j
 public class DvmController implements Serializable {
 

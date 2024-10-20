@@ -12,8 +12,7 @@
     {
       "name": "first_name",
       "type": "text"
-    }
-  ,
+    },
     {
       "name": "second_name",
       "type": "text"
@@ -69,8 +68,7 @@
     {
       "name": "department_key",
       "type": "text"
-    }
-  ,
+    },
     {
       "name": "job_role_key",
       "type": "text"
@@ -78,11 +76,11 @@
     {
       "name": "job_Description",
       "type": "text"
-    },{
+    },
+    {
       "name": "must_change_password",
       "type": "boolean"
     }
-
   ]
 }
 

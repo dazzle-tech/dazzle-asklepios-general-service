@@ -9,6 +9,8 @@ import com.asklepios.backend_service.model.pojo.request.ListRequest;
 import com.asklepios.backend_service.model.pojo.response.NavigationMap;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
 import com.asklepios.backend_service.service.*;
+import com.asklepios.backend_service.util.*;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,10 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -57,12 +56,14 @@ public class SetupController implements Serializable {
     private final ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService;
     private final ApCatalogDiagnosticTestService apCatalogDiagnosticTestService;
     private final ApPatientDiagnoseService apPatientDiagnoseService;
-    private final ApUserFacilitiesService apUserFacilitiesService ;
+    private final ApUserFacilitiesService apUserFacilitiesService;
     private final ApUserMedicalLicenseService apUserMedicalLicenseService;
     private final ApAddressesService apAddressesService;
     private final ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService;
+    private final EmailService emailService;
 
-    public SetupController(ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1) {
+
+    public SetupController(EmailService emailService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1, EmailService emailService1) {
         this.authService = authService;
         this.apModuleService = apModuleService;
         this.apScreenService = apScreenService;
@@ -93,6 +94,7 @@ public class SetupController implements Serializable {
         this.apAddressesService = apAddressesService;
         this.apUomGroupsService = apUomGroupsService;
         this.apUserFacilitiyDepartmentsService = apUserFacilitiyDepartmentsService1;
+        this.emailService = emailService1;
     }
 
     @GetMapping(value = "/navigation-map", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -153,7 +155,7 @@ public class SetupController implements Serializable {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-            List<ApFacility> list = apFacilityService.getList( "deleted_at is  null and  "+where);
+            List<ApFacility> list = apFacilityService.getList("deleted_at is  null and  " + where);
 
             for (ApFacility facility : list) {
                 String entityId = facility.getKey();
@@ -231,7 +233,7 @@ public class SetupController implements Serializable {
                                             @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApFacility> response = new ParentResponse<>();
-            List<ApFacility> existingFacility = apFacilityService.getList("key = '"+facility.getKey()+"'");
+            List<ApFacility> existingFacility = apFacilityService.getList("key = '" + facility.getKey() + "'");
             if (existingFacility == null || existingFacility.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Facility not found");
             }
@@ -420,12 +422,12 @@ public class SetupController implements Serializable {
                 List<ApUserFacilitiyDepartments> existingDepartment = apUserFacilitiyDepartmentsService.getList("user_key ='" + user.getKey() + "' and deleted_at is null");
                 System.out.println("user_id ='" + user.getKey() + " and deleted_at is null'");
 
-                List<String> existingFacilityKeys = existingDepartment.stream()
+                List<String> existingDepartmentsKeys = existingDepartment.stream()
                         .map(ApUserFacilitiyDepartments::getDepartmentKey)
                         .collect(Collectors.toList());
 
-                System.out.println(existingFacilityKeys);
-                user.set_depratmentsInput(existingFacilityKeys);
+                System.out.println(existingDepartmentsKeys);
+                user.set_depratmentsInput(existingDepartmentsKeys);
             }
 
             // Prepare the response
@@ -438,6 +440,51 @@ public class SetupController implements Serializable {
             log.error(e.getMessage());
             return ResponseEntity.status(500).body(e);
         }
+    }
+
+    @PostMapping(value = "/user-password-reset", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> userPasswordReset(@RequestBody ApUser user,
+                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                               @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                               @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                               @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApUser> response = new ParentResponse<>();
+
+            ApUser existingUser = apUserService.getRecord(user.getKey());
+            if (existingUser == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+            }
+
+            String allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            Random random = new Random();
+            StringBuilder newPassword = new StringBuilder(8);
+            for (int i = 0; i < 8; i++) {
+                newPassword.append(allowedChars.charAt(random.nextInt(allowedChars.length())));
+            }
+            String body = "Dear " + existingUser.getFullName() + ",\n\n" +
+                    "We wanted to let you know that your password has been successfully reset.\n" +
+                    "You can use the following password to log in:\n\n" +
+                    "New Password: " + newPassword.toString() + "\n\n" +
+                    "For your security, we recommend that you change this password as soon as you log in.\n\n" +
+                    "If you did not request a password reset or have any issues, please contact our support team.\n\n" +
+                    "Best regards,\n" ;
+
+            emailService.sendSimpleEmail(existingUser.getEmail(), "Your Password Has Been Reset", body);
+
+
+            existingUser.setPassword(newPassword.toString());
+            existingUser.setMustChangePassword(true);
+            apUserService.updateRecord(existingUser);
+            response.setObject(user);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+
     }
 
     @PostMapping(value = "/save-user", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -557,10 +604,10 @@ public class SetupController implements Serializable {
 
     @GetMapping(value = "/uom-groups-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> uomGroupsList(@RequestParam Map<String, String> queryParams,
-                                        @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                        @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                        @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                        @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApUomGroups>> response = new ParentResponse<>();
             if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
@@ -569,9 +616,9 @@ public class SetupController implements Serializable {
             }
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
-            String whereForTotal = listRequest.buildWhereStatement(true, false, false,false);
-            System.out.println("  deleted_at is null and " +where);
-            List<ApUomGroups> list = apUomGroupsService.getList("  deleted_at is null and " +where );
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            System.out.println("  deleted_at is null and " + where);
+            List<ApUomGroups> list = apUomGroupsService.getList("  deleted_at is null and " + where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_uom_groups where " + whereForTotal);
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
@@ -583,8 +630,6 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
-
-
 
 
     @PostMapping(value = "/save-module", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -607,10 +652,10 @@ public class SetupController implements Serializable {
 
     @PostMapping(value = "/save-uom-groups", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveUomGroups(@RequestBody ApUomGroups uomGroups,
-                                        @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                        @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                        @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                        @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApUomGroups> response = new ParentResponse<>();
             apUomGroupsService.saveRecord(uomGroups);
@@ -622,6 +667,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/remove-uom-groups", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeUomGroups(@RequestBody ApUomGroups uomGroups,
                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -783,7 +829,7 @@ public class SetupController implements Serializable {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-            List<ApUserMedicalLicense> list = apUserMedicalLicenseService.getList("deleted_at is null and "+where);
+            List<ApUserMedicalLicense> list = apUserMedicalLicenseService.getList("deleted_at is null and " + where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_user_medical_license where " + whereForTotal);
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
@@ -816,7 +862,7 @@ public class SetupController implements Serializable {
 
 
     @PostMapping(value = "/remove-user-midical-license", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deleteUser(@RequestBody  ApUserMedicalLicense userLicense,
+    public ResponseEntity<?> deleteUser(@RequestBody ApUserMedicalLicense userLicense,
                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                         @jakarta.annotation.Nullable @RequestHeader String access_token,
                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -898,6 +944,36 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
+    @GetMapping(value = "/user-departments", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> userDpartments(@RequestParam Map<String, String> queryParams,
+                                            @RequestParam String key,
+                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                            @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApUserFacilitiyDepartments>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            List<ApUserFacilitiyDepartments> list = apUserFacilitiyDepartmentsService.getuserDpartmentsViewList(" user_key = '" + key + "' and " + where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_department where " + whereForTotal);
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
 
     @PostMapping(value = "/save-dental-action", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDentalAction(@RequestBody ApDentalAction dentalAction,
@@ -1349,10 +1425,10 @@ public class SetupController implements Serializable {
 
     @PostMapping(value = "/save-catalog-diagnostic-test", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveCatalogDiagnosticTest(@RequestBody List<ApCatalogDiagnosticTest> catalogDiagnosticTestRecords,
-                                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                             @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                       @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                       @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                       @jakarta.annotation.Nullable @RequestHeader String lang) {
 
         try {
             ParentResponse<List<ApCatalogDiagnosticTest>> response = new ParentResponse<>();
@@ -1373,19 +1449,19 @@ public class SetupController implements Serializable {
     @PostMapping(value = "/remove-catalog-diagnostic-test", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeCatalogDiagnosticTest(@RequestBody ApDiagnosticTest diagnosticTest,
                                                          @RequestHeader String catalogKey,
-                                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                               @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                               @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                               @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                         @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                         @jakarta.annotation.Nullable @RequestHeader String lang) {
 
         try {
             ParentResponse<ApCatalogDiagnosticTest> response = new ParentResponse<>();
-            List<ApCatalogDiagnosticTest> testList = apCatalogDiagnosticTestService.getList("catalog_key = '" + catalogKey + "' and test_key = '"+diagnosticTest.getKey()+"'");
-            if(testList.isEmpty()){
+            List<ApCatalogDiagnosticTest> testList = apCatalogDiagnosticTestService.getList("catalog_key = '" + catalogKey + "' and test_key = '" + diagnosticTest.getKey() + "'");
+            if (testList.isEmpty()) {
                 response.setObject(null);
                 return ResponseEntity.ok(response);
             }
-                apCatalogDiagnosticTestService.deleteRecord(testList.get(0));
+            apCatalogDiagnosticTestService.deleteRecord(testList.get(0));
             response.setObject(testList.get(0));
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -1397,22 +1473,22 @@ public class SetupController implements Serializable {
 
     @GetMapping(value = "/catalog-diagnostic-test-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> catalogDiagnosticTestList(@jakarta.annotation.Nullable @RequestHeader String catalogKey,
-                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                      @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                       @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                       @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                       @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApDiagnosticTest>> response = new ParentResponse<>();
 
             List<ApCatalogDiagnosticTest> testList = apCatalogDiagnosticTestService.getList("catalog_key = '" + catalogKey + "' and deleted_at is Null");
             List<String> testID = new ArrayList<>();
 
-            for (ApCatalogDiagnosticTest test : testList ) {
+            for (ApCatalogDiagnosticTest test : testList) {
                 testID.add(test.getTestKey());
             }
             List<ApDiagnosticTest> systems = apDiagnosticTestService.getList("key IN ('" + String.join("','", testID) + "')");
 
-            for(ApDiagnosticTest all : systems){
+            for (ApDiagnosticTest all : systems) {
                 apDiagnosticTestService.populateLovFields(all, lang);
             }
             response.setObject(systems);
@@ -1568,11 +1644,11 @@ public class SetupController implements Serializable {
                                                 @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<String> response = new ParentResponse<>();
-            List<ApLovValues> list = apLovValuesService.getList("key = '"+testTypeKey+"'");
-            for(ApLovValues all : list){
+            List<ApLovValues> list = apLovValuesService.getList("key = '" + testTypeKey + "'");
+            for (ApLovValues all : list) {
                 apLovValuesService.populateLovFields(all, lang);
             }
-            response.setObject(!list.isEmpty() ? list.get(0).getLovDisplayVale(): "");
+            response.setObject(!list.isEmpty() ? list.get(0).getLovDisplayVale() : "");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1593,12 +1669,12 @@ public class SetupController implements Serializable {
             List<ApCatalogDiagnosticTest> testList = apCatalogDiagnosticTestService.getList("catalog_key = '" + catalogKey + "'");
             List<String> testID = new ArrayList<>();
 
-            for (ApCatalogDiagnosticTest test : testList ) {
+            for (ApCatalogDiagnosticTest test : testList) {
                 testID.add(test.getTestKey());
             }
-            List<ApDiagnosticTest> systems = apDiagnosticTestService.getList("key Not IN ('" + String.join("','", testID) + "') and test_type_lkey = '"+type+"'");
+            List<ApDiagnosticTest> systems = apDiagnosticTestService.getList("key Not IN ('" + String.join("','", testID) + "') and test_type_lkey = '" + type + "'");
             System.out.println("please print query" + systems);
-            for(ApDiagnosticTest all : systems){
+            for (ApDiagnosticTest all : systems) {
                 apDiagnosticTestService.populateLovFields(all, lang);
             }
             response.setObject(systems);

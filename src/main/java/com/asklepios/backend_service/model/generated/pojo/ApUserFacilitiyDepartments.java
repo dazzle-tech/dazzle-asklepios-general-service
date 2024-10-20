@@ -10,6 +10,7 @@ import com.asklepios.backend_service.model.generated.entity.ApUserFacilitiyDepar
 @Setter
 @Slf4j
 public class ApUserFacilitiyDepartments extends ApUserFacilitiyDepartmentsEntity implements Serializable {
-
+    private String facilityName;
+    private String departmentName;
 
 }

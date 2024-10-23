@@ -519,27 +519,6 @@ public class SetupController implements Serializable {
                 }
             }
 
-            // Handle departments
-            if (user.get_depratmentsInput() != null && user.getSelectedDepartmentsFacilityKey() != null) {
-                // Delete existing departments for the user
-                List<ApUserFacilitiyDepartments> existingDepartments = apUserFacilitiyDepartmentsService.getList(
-                        "user_key = '" + user.getKey() + "' and facilitiy_key = '" + user.getSelectedDepartmentsFacilityKey() + "' and deleted_at is null");
-
-                for (ApUserFacilitiyDepartments department : existingDepartments) {
-                    apUserFacilitiyDepartmentsService.deleteRecord(department);
-                    System.out.println("Deleted department: " + department);
-                }
-
-                // Add new departments from user input
-                for (String departmentKey : user.get_depratmentsInput()) {
-                    ApUserFacilitiyDepartments apUserFacilitieyDepartment = new ApUserFacilitiyDepartments();
-                    apUserFacilitieyDepartment.setUserKey(user.getKey());
-                    apUserFacilitieyDepartment.setDepartmentKey(departmentKey);
-                    apUserFacilitieyDepartment.setFacilitiyKey(user.getSelectedDepartmentsFacilityKey());
-                    apUserFacilitiyDepartmentsService.saveRecord(apUserFacilitieyDepartment);
-                    System.out.println("Added department: " + apUserFacilitieyDepartment);
-                }
-            }
 
             // Save the user record
             apUserService.saveRecord(user);
@@ -553,6 +532,56 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
+
+    @PostMapping(value = "/save-facility-department", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveUserFacilityDepartment(@RequestBody ApUserFacilitiyDepartments apUserFacilitiyDepartments,
+                                                        @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                        @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                        @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                        @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApUserFacilitiyDepartments> response = new ParentResponse<>();
+
+            List<ApUserFacilitiyDepartments> existingDepartments = apUserFacilitiyDepartmentsService.getList(
+                    "user_key = '" + apUserFacilitiyDepartments.getUserKey() + "' AND facilitiy_key = '" + apUserFacilitiyDepartments.getFacilitiyKey() + "' AND department_Key = '" + apUserFacilitiyDepartments.getFacilitiyKey() + "' AND deleted_at IS NULL");
+
+            if (!existingDepartments.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Department association already exists for this user and facility.");
+            }
+
+            // Save the new department association
+            apUserFacilitiyDepartmentsService.saveRecord(apUserFacilitiyDepartments);
+            System.out.println("Added new department association: " + apUserFacilitiyDepartments);
+
+            response.setObject(apUserFacilitiyDepartments);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/remove-user-facility-department", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteUser(@RequestBody ApUserFacilitiyDepartments department,
+                                        @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                        @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                        @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                        @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApUserFacilitiyDepartments> response = new ParentResponse<>();
+            apUserFacilitiyDepartmentsService.deleteRecord(department);
+            response.setObject(department);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
 
     @PostMapping(value = "/remove-user", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteUser(@RequestBody ApUser user,
@@ -961,7 +990,7 @@ public class SetupController implements Serializable {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-            List<ApUserFacilitiyDepartments> list = apUserFacilitiyDepartmentsService.getuserDpartmentsViewList(" user_key = '" + key + "' and " + where);
+            List<ApUserFacilitiyDepartments> list = apUserFacilitiyDepartmentsService.getuserDpartmentsViewList(" user_key = '" + key + "' and  " + where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_department where " + whereForTotal);
             response.setObject(list);
             response.setExtraNumeric(totalRecord);

@@ -30,3 +30,20 @@ jobs:
 
       - name: Logout of DigitalOcean Container Registry
         run: docker logout ${{ secrets.DOCR_REGISTRY_URL }}
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DOCR_ACCESS_TOKEN }}
+        
+      - name: Save DigitalOcean kubeconfig with short-lived credentials
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 k8s-1-31-1-do-3-fra1-1730027205220
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Update Kubernetes Deployment with New Image
+        run: |
+          kubectl set image deployment/asklepios-api-service asklepios-api-service=${{ secrets.DOCR_REGISTRY_URL }}/asklepios-api-service:${{ github.sha }} -n asklepios-sandbox

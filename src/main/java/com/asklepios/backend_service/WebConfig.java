@@ -17,7 +17,7 @@ public class WebConfig {
                 registry.addMapping("/**")
                         .allowedOrigins("*") // Frontend's origin
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("access_token", "Content-Type", "Authorization", "X-Requested-With", "Accept")
+                        .allowedHeaders("*")
                         .allowCredentials(false);
             }
         };

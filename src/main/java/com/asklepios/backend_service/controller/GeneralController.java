@@ -44,10 +44,10 @@ public class GeneralController {
     }
 
     @GetMapping(value = "/get-tenant", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getTenant(@RequestParam String tenantId, @RequestHeader String access_token) {
+    public ResponseEntity getTenant(@RequestParam String tenantId, @RequestHeader(value = "access_token", required = true) String accessToken) {
         ParentResponse<ApTenant> response = new ParentResponse<>();
         try {
-            if (!authService.validateTenantToken(access_token, tenantId)) {
+            if (!authService.validateTenantToken(accessToken, tenantId)) {
                 return ResponseEntity.status(401).build();
             }
             ApTenant tenant = apTenantService.getRecord(tenantId);

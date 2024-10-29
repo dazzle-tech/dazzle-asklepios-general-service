@@ -15,10 +15,10 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://asklepios.nereuscloud.de") // Frontend's origin
+                        .allowedOrigins("*") // Frontend's origin
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("access_token", "Content-Type", "Authorization", "X-Requested-With", "Accept")
-                        .allowCredentials(true);
+                        .allowCredentials(false);
             }
         };
     }

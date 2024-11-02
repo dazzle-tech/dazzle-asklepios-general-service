@@ -24,8 +24,6 @@ public class ApUserFacilitiesEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
-	private String userKey;
-	private String facilityKey;
 	private ApUserFacilitiesEntity translatedObject;
 
 }

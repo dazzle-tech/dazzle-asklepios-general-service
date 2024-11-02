@@ -41,7 +41,6 @@ public class ApAttachmentService extends ApAttachmentDAO implements Serializable
                 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
                 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
                 record.setIsValid(rs.getBoolean("is_valid"));
-                record.setDetails(rs.getString("details"));
                 list.add(record);
             }
             return list;

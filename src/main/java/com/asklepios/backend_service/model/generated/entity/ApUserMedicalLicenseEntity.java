@@ -15,6 +15,7 @@ import com.asklepios.backend_service.model.generated.pojo.ApLovValues;
 public class ApUserMedicalLicenseEntity implements Serializable {
 
 	private String key;
+	private String userKey;
 	private String licenseName;
 	private String licenseNumber;
 	private Date validTo = new Date();
@@ -25,7 +26,6 @@ public class ApUserMedicalLicenseEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
-	private String userKey;
 	private ApUserMedicalLicenseEntity translatedObject;
 
 }

@@ -36,8 +36,6 @@ public class ApUserFacilitiesService extends ApUserFacilitiesDAO implements Seri
                 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
                 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
                 record.setIsValid(rs.getBoolean("is_valid"));
-                record.setUserKey(rs.getString("user_key"));
-                record.setFacilityKey(rs.getString("facility_key"));
                 list.add(record);
             }
             return list;

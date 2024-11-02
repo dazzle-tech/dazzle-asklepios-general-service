@@ -16,15 +16,29 @@ public class ApDiagnosticTestRadiologyEntity implements Serializable {
 
 	private String key;
 	private String testKey;
+	private String labCatalogLkey;
+	private ApLovValues labCatalogLvalue;
 	private String internationalCodingTypeLkey;
 	private ApLovValues internationalCodingTypeLvalue;
 	private String childCodeLkey;
 	private ApLovValues childCodeLvalue;
-	private String radCategoryLkey;
-	private ApLovValues radCategoryLvalue;
-	private String imageDuration;
+	private String propertyLkey;
+	private ApLovValues propertyLvalue;
+	private String systemLkey;
+	private ApLovValues systemLvalue;
+	private String scaleLkey;
+	private ApLovValues scaleLvalue;
+	private String reagentsLkey;
+	private ApLovValues reagentsLvalue;
+	private String methodLkey;
+	private ApLovValues methodLvalue;
+	private String timingLkey;
+	private ApLovValues timingLvalue;
 	private String timeUnitLkey;
 	private ApLovValues timeUnitLvalue;
+	private String resultType;
+	private String resultUnitLkey;
+	private ApLovValues resultUnitLvalue;
 	private String createdBy;
 	private String updatedBy;
 	private String deletedBy;
@@ -32,6 +46,9 @@ public class ApDiagnosticTestRadiologyEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private String radCategoryLkey;
+	private ApLovValues radCategoryLvalue;
+	private String imageDuration;
 	private ApDiagnosticTestRadiologyEntity translatedObject;
 
 }

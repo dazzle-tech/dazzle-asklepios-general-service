@@ -28,7 +28,6 @@ public class ApAttachmentEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
-	private String details;
 	private ApAttachmentEntity translatedObject;
 
 }

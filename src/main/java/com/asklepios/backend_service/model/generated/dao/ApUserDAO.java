@@ -59,12 +59,11 @@ record.setDepartmentKey(rs.getString("department_key"));
 record.setFirstName(rs.getString("first_name"));
 record.setSecondName(rs.getString("second_name"));
 record.setLastName(rs.getString("last_name"));
-record.setDob(rs.getDate("dob"));
-record.setSexAtBirthLkey(rs.getString("sex_at_birth_lkey"));
 record.setPhoneNumber(rs.getBigDecimal("phone_number"));
-record.setJobDescription(rs.getString("job_description"));
-record.setJobRoleLkey(rs.getString("job_role_lkey"));
+record.setSexAtBirthLkey(rs.getString("sex_at_birth_lkey"));
+record.setDob(rs.getDate("dob"));
 record.setJobRoleKey(rs.getString("job_role_key"));
+record.setJobDescription(rs.getString("job_description"));
 record.setMustChangePassword(rs.getBoolean("must_change_password"));
 } else { record = null; }
 return record;
@@ -73,7 +72,7 @@ return record;
 public void updateRecord(ApUser record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_user set key = ?, username = ?, password = ?, full_name = ?, verified = ?, last_generated_otp = ?, passcode = ?, tenant_key = ?, organization_key = ?, access_role_key = ?, email = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, department_key = ?, first_name = ?, second_name = ?, last_name = ?, dob = ?, sex_at_birth_lkey = ?, phone_number = ?, job_description = ?, job_role_lkey = ?, job_role_key = ?, must_change_password = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_user set key = ?, username = ?, password = ?, full_name = ?, verified = ?, last_generated_otp = ?, passcode = ?, tenant_key = ?, organization_key = ?, access_role_key = ?, email = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, department_key = ?, first_name = ?, second_name = ?, last_name = ?, phone_number = ?, sex_at_birth_lkey = ?, dob = ?, job_role_key = ?, job_description = ?, must_change_password = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -98,15 +97,14 @@ ps.setString(19, record.getDepartmentKey());
 ps.setString(20, record.getFirstName());
 ps.setString(21, record.getSecondName());
 ps.setString(22, record.getLastName());
-if (record.getDob() != null) ps.setDate(23, new java.sql.Date(record.getDob().getTime()));
-else ps.setDate(23, null); 
+ps.setBigDecimal(23, record.getPhoneNumber());
 ps.setString(24, record.getSexAtBirthLkey());
-ps.setBigDecimal(25, record.getPhoneNumber());
-ps.setString(26, record.getJobDescription());
-ps.setString(27, record.getJobRoleLkey());
-ps.setString(28, record.getJobRoleKey());
-ps.setBoolean(29, record.getMustChangePassword());
-ps.setString(30, record.getKey());
+if (record.getDob() != null) ps.setDate(25, new java.sql.Date(record.getDob().getTime()));
+else ps.setDate(25, null); 
+ps.setString(26, record.getJobRoleKey());
+ps.setString(27, record.getJobDescription());
+ps.setBoolean(28, record.getMustChangePassword());
+ps.setString(29, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -150,12 +148,11 @@ record.setDepartmentKey(rs.getString("department_key"));
 record.setFirstName(rs.getString("first_name"));
 record.setSecondName(rs.getString("second_name"));
 record.setLastName(rs.getString("last_name"));
-record.setDob(rs.getDate("dob"));
-record.setSexAtBirthLkey(rs.getString("sex_at_birth_lkey"));
 record.setPhoneNumber(rs.getBigDecimal("phone_number"));
-record.setJobDescription(rs.getString("job_description"));
-record.setJobRoleLkey(rs.getString("job_role_lkey"));
+record.setSexAtBirthLkey(rs.getString("sex_at_birth_lkey"));
+record.setDob(rs.getDate("dob"));
 record.setJobRoleKey(rs.getString("job_role_key"));
+record.setJobDescription(rs.getString("job_description"));
 record.setMustChangePassword(rs.getBoolean("must_change_password"));
 list.add(record);
 }
@@ -165,7 +162,7 @@ return list;
 public String saveRecord(ApUser record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_user values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_user values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -194,14 +191,13 @@ ps.setString(19, record.getDepartmentKey());
 ps.setString(20, record.getFirstName());
 ps.setString(21, record.getSecondName());
 ps.setString(22, record.getLastName());
-if (record.getDob() != null) ps.setDate(23, new java.sql.Date(record.getDob().getTime()));
-else ps.setDate(23, null); 
+ps.setBigDecimal(23, record.getPhoneNumber());
 ps.setString(24, record.getSexAtBirthLkey());
-ps.setBigDecimal(25, record.getPhoneNumber());
-ps.setString(26, record.getJobDescription());
-ps.setString(27, record.getJobRoleLkey());
-ps.setString(28, record.getJobRoleKey());
-ps.setBoolean(29, record.getMustChangePassword());
+if (record.getDob() != null) ps.setDate(25, new java.sql.Date(record.getDob().getTime()));
+else ps.setDate(25, null); 
+ps.setString(26, record.getJobRoleKey());
+ps.setString(27, record.getJobDescription());
+ps.setBoolean(28, record.getMustChangePassword());
 ps.executeUpdate();
 return key;
 }

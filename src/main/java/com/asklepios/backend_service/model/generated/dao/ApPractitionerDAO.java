@@ -49,6 +49,22 @@ record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setDepartmentKey(rs.getString("department_key"));
+record.setPractitionerFirstName(rs.getString("practitioner_first_name"));
+record.setPractitionerLastName(rs.getString("practitioner_last_name"));
+record.setPractitionerEmail(rs.getString("practitioner_email"));
+record.setPractitionerPhoneNumber(rs.getString("practitioner_phone_number"));
+record.setDob(rs.getDate("dob"));
+record.setJobRole(rs.getString("job_role"));
+record.setSpecialtyLkey(rs.getString("specialty_lkey"));
+record.setSubSpecialtyLkey(rs.getString("sub_specialty_lkey"));
+record.setDefaultMedicalLicense(rs.getString("default_medical_license"));
+record.setDefaultLicenseValidUntil(rs.getDate("default_license_valid_until"));
+record.setSecondaryMedicalLicense(rs.getString("secondary_medical_license"));
+record.setSecondaryLicenseValidUntil(rs.getDate("secondary_license_valid_until"));
+record.setEducationalLevelLkey(rs.getString("educational_level_lkey"));
+record.setProfessionalMembershipAndCertification(rs.getString("professional_membership_and_certification"));
+record.setAppointable(rs.getBoolean("appointable"));
+record.setLinkedUser(rs.getString("linked_user"));
 } else { record = null; }
 return record;
 }
@@ -56,7 +72,7 @@ return record;
 public void updateRecord(ApPractitioner record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_practitioner set key = ?, primary_facility_key = ?, practitioner_full_name = ?, gender_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, department_key = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_practitioner set key = ?, primary_facility_key = ?, practitioner_full_name = ?, gender_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, department_key = ?, practitioner_first_name = ?, practitioner_last_name = ?, practitioner_email = ?, practitioner_phone_number = ?, dob = ?, job_role = ?, specialty_lkey = ?, sub_specialty_lkey = ?, default_medical_license = ?, default_license_valid_until = ?, secondary_medical_license = ?, secondary_license_valid_until = ?, educational_level_lkey = ?, professional_membership_and_certification = ?, appointable = ?, linked_user = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -71,7 +87,26 @@ ps.setBigDecimal(9, record.getUpdatedAt());
 ps.setBigDecimal(10, record.getDeletedAt());
 ps.setBoolean(11, record.getIsValid());
 ps.setString(12, record.getDepartmentKey());
-ps.setString(13, record.getKey());
+ps.setString(13, record.getPractitionerFirstName());
+ps.setString(14, record.getPractitionerLastName());
+ps.setString(15, record.getPractitionerEmail());
+ps.setString(16, record.getPractitionerPhoneNumber());
+if (record.getDob() != null) ps.setDate(17, new java.sql.Date(record.getDob().getTime()));
+else ps.setDate(17, null); 
+ps.setString(18, record.getJobRole());
+ps.setString(19, record.getSpecialtyLkey());
+ps.setString(20, record.getSubSpecialtyLkey());
+ps.setString(21, record.getDefaultMedicalLicense());
+if (record.getDefaultLicenseValidUntil() != null) ps.setDate(22, new java.sql.Date(record.getDefaultLicenseValidUntil().getTime()));
+else ps.setDate(22, null); 
+ps.setString(23, record.getSecondaryMedicalLicense());
+if (record.getSecondaryLicenseValidUntil() != null) ps.setDate(24, new java.sql.Date(record.getSecondaryLicenseValidUntil().getTime()));
+else ps.setDate(24, null); 
+ps.setString(25, record.getEducationalLevelLkey());
+ps.setString(26, record.getProfessionalMembershipAndCertification());
+ps.setBoolean(27, record.getAppointable());
+ps.setString(28, record.getLinkedUser());
+ps.setString(29, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -105,6 +140,22 @@ record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setDepartmentKey(rs.getString("department_key"));
+record.setPractitionerFirstName(rs.getString("practitioner_first_name"));
+record.setPractitionerLastName(rs.getString("practitioner_last_name"));
+record.setPractitionerEmail(rs.getString("practitioner_email"));
+record.setPractitionerPhoneNumber(rs.getString("practitioner_phone_number"));
+record.setDob(rs.getDate("dob"));
+record.setJobRole(rs.getString("job_role"));
+record.setSpecialtyLkey(rs.getString("specialty_lkey"));
+record.setSubSpecialtyLkey(rs.getString("sub_specialty_lkey"));
+record.setDefaultMedicalLicense(rs.getString("default_medical_license"));
+record.setDefaultLicenseValidUntil(rs.getDate("default_license_valid_until"));
+record.setSecondaryMedicalLicense(rs.getString("secondary_medical_license"));
+record.setSecondaryLicenseValidUntil(rs.getDate("secondary_license_valid_until"));
+record.setEducationalLevelLkey(rs.getString("educational_level_lkey"));
+record.setProfessionalMembershipAndCertification(rs.getString("professional_membership_and_certification"));
+record.setAppointable(rs.getBoolean("appointable"));
+record.setLinkedUser(rs.getString("linked_user"));
 list.add(record);
 }
 return list;
@@ -113,7 +164,7 @@ return list;
 public String saveRecord(ApPractitioner record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_practitioner values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_practitioner values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -132,6 +183,25 @@ ps.setBigDecimal(9, record.getUpdatedAt());
 ps.setBigDecimal(10, record.getDeletedAt());
 ps.setBoolean(11, record.getIsValid());
 ps.setString(12, record.getDepartmentKey());
+ps.setString(13, record.getPractitionerFirstName());
+ps.setString(14, record.getPractitionerLastName());
+ps.setString(15, record.getPractitionerEmail());
+ps.setString(16, record.getPractitionerPhoneNumber());
+if (record.getDob() != null) ps.setDate(17, new java.sql.Date(record.getDob().getTime()));
+else ps.setDate(17, null); 
+ps.setString(18, record.getJobRole());
+ps.setString(19, record.getSpecialtyLkey());
+ps.setString(20, record.getSubSpecialtyLkey());
+ps.setString(21, record.getDefaultMedicalLicense());
+if (record.getDefaultLicenseValidUntil() != null) ps.setDate(22, new java.sql.Date(record.getDefaultLicenseValidUntil().getTime()));
+else ps.setDate(22, null); 
+ps.setString(23, record.getSecondaryMedicalLicense());
+if (record.getSecondaryLicenseValidUntil() != null) ps.setDate(24, new java.sql.Date(record.getSecondaryLicenseValidUntil().getTime()));
+else ps.setDate(24, null); 
+ps.setString(25, record.getEducationalLevelLkey());
+ps.setString(26, record.getProfessionalMembershipAndCertification());
+ps.setBoolean(27, record.getAppointable());
+ps.setString(28, record.getLinkedUser());
 ps.executeUpdate();
 return key;
 }

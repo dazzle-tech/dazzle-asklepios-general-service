@@ -6,7 +6,35 @@
       "type": "text"
     },
     {
+      "name": "practitioner_first_name",
+      "type": "text"
+    },
+    {
+      "name": "practitioner_last_name",
+      "type": "text"
+    },
+    {
       "name": "practitioner_full_name",
+      "type": "text"
+    },
+    {
+      "name": "practitioner_email",
+      "type": "text"
+    },
+    {
+      "name": "practitioner_phone_number",
+      "type": "text"
+    },
+    {
+      "name": "practitioner_phone_number",
+      "type": "text"
+    },
+    {
+      "name": "dob",
+      "type": "date"
+    },
+    {
+      "name": "job_role",
       "type": "text"
     },
     {
@@ -16,7 +44,48 @@
     {
       "name": "department_key",
       "type": "text"
+    },
+    {
+      "name": "specialty_lkey",
+      "type": "text"
+    },
+    {
+      "name": "sub_specialty_lkey",
+      "type": "text"
+    },
+    {
+      "name": "default_medical_license",
+      "type": "text"
+    },
+    {
+      "name": "default_license_valid_until ",
+      "type": "date"
+    },
+    {
+      "name": "secondary_medical_license",
+      "type": "text"
+    },
+    {
+      "name": "secondary_license_valid_until ",
+      "type": "date"
+    },
+    {
+      "name": "educational_level_lkey",
+      "type": "text"
+    },
+    {
+      "name": "professional_membership_and_certification",
+      "type": "text"
+    },
+    {
+      "name": "appointable",
+      "type": "boolean"
+    },
+    {
+      "name": "linked_user",
+      "type": "text"
     }
+
   ]
 }
 

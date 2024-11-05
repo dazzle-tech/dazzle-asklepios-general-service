@@ -47,6 +47,8 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setUserKey(rs.getString("user_key"));
+record.setFacilityKey(rs.getString("facility_key"));
 } else { record = null; }
 return record;
 }
@@ -54,7 +56,7 @@ return record;
 public void updateRecord(ApUserFacilities record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_user_facilities set key = ?, user_id = ?, facility_id = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_user_facilities set key = ?, user_id = ?, facility_id = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, user_key = ?, facility_key = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -67,7 +69,9 @@ ps.setBigDecimal(7, record.getCreatedAt());
 ps.setBigDecimal(8, record.getUpdatedAt());
 ps.setBigDecimal(9, record.getDeletedAt());
 ps.setBoolean(10, record.getIsValid());
-ps.setString(11, record.getKey());
+ps.setString(11, record.getUserKey());
+ps.setString(12, record.getFacilityKey());
+ps.setString(13, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -99,6 +103,8 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setUserKey(rs.getString("user_key"));
+record.setFacilityKey(rs.getString("facility_key"));
 list.add(record);
 }
 return list;
@@ -107,7 +113,7 @@ return list;
 public String saveRecord(ApUserFacilities record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_user_facilities values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_user_facilities values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -124,6 +130,8 @@ ps.setBigDecimal(7, record.getCreatedAt());
 ps.setBigDecimal(8, record.getUpdatedAt());
 ps.setBigDecimal(9, record.getDeletedAt());
 ps.setBoolean(10, record.getIsValid());
+ps.setString(11, record.getUserKey());
+ps.setString(12, record.getFacilityKey());
 ps.executeUpdate();
 return key;
 }

@@ -36,12 +36,14 @@ public class ApUserEntity implements Serializable {
 	private String firstName;
 	private String secondName;
 	private String lastName;
-	private BigDecimal phoneNumber;
+	private Date dob = new Date();
 	private String sexAtBirthLkey;
 	private ApLovValues sexAtBirthLvalue;
-	private Date dob = new Date();
-	private String jobRoleKey;
+	private BigDecimal phoneNumber;
 	private String jobDescription;
+	private String jobRoleLkey;
+	private ApLovValues jobRoleLvalue;
+	private String jobRoleKey;
 	private Boolean mustChangePassword = false;
 	private ApUserEntity translatedObject;
 

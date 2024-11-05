@@ -80,22 +80,43 @@ public class ObservationController {
 
 
     @PostMapping(value = "/save-observation-summary", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveObservationSummary( @RequestBody ApPatientObservationSummary observationSummary,
-                                                      @Nullable @RequestHeader String facility_id,
-                                                      @Nullable @RequestHeader String access_token,
-                                                      @Nullable @RequestHeader Integer access_level,
-                                                      @Nullable @RequestHeader String lang) {
+    public ResponseEntity<?> saveObservationSummary(@RequestBody ApPatientObservationSummary observationSummary,
+                                                    @RequestParam Map<String, String> queryParams,
+                                                    @Nullable @RequestHeader String facility_id,
+                                                    @Nullable @RequestHeader String access_token,
+                                                    @Nullable @RequestHeader Integer access_level,
+                                                    @Nullable @RequestHeader String lang) {
+        ParentResponse<List<ApPatientObservationSummary>> response = new ParentResponse<>();
         try {
-            ParentResponse<ApPatientObservationSummary> response = new ParentResponse<>();
-            apPatientObservationSummaryService.saveRecord(observationSummary);
-            response.setObject(observationSummary);
+
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApPatientObservationSummary> list = apPatientObservationSummaryService.getList(where);
+
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_patient_observation_summary WHERE " + whereForTotal);
+             System.out.println(totalRecord);
+            System.out.println(list);
+            if (totalRecord.compareTo(BigDecimal.ONE) == 0) {
+                apPatientObservationSummaryService.updateRecord(observationSummary);
+            } else {
+                apPatientObservationSummaryService.saveRecord(observationSummary);
+            }
+                response.setObject(list );
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
-            log.error(e.getMessage());
-            return ResponseEntity.status(500).body(e);
+            log.error("Error saving observation summary: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
 
     @PostMapping(value = "/remove-observation-summary", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeObservationSummary( @RequestBody ApPatientObservationSummary observationSummary,
@@ -114,5 +135,6 @@ public class ObservationController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
 
 }

@@ -78,15 +78,17 @@ public class ObservationController {
         }
     }
 
-
     @PostMapping(value = "/save-observation-summary", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveObservationSummary(@RequestBody ApPatientObservationSummary observationSummary,
-                                                    @RequestParam Map<String, String> queryParams,
-                                                    @Nullable @RequestHeader String facility_id,
-                                                    @Nullable @RequestHeader String access_token,
-                                                    @Nullable @RequestHeader Integer access_level,
-                                                    @Nullable @RequestHeader String lang) {
+    public ResponseEntity<?> saveObservationSummary(
+            @RequestBody ApPatientObservationSummary observationSummary,
+            @RequestParam Map<String, String> queryParams,
+            @Nullable @RequestHeader String facility_id,
+            @Nullable @RequestHeader String access_token,
+            @Nullable @RequestHeader Integer access_level,
+            @Nullable @RequestHeader String lang) {
+
         ParentResponse<List<ApPatientObservationSummary>> response = new ParentResponse<>();
+
         try {
 
             if ("true".equals(queryParams.get("ignore"))) {
@@ -94,26 +96,24 @@ public class ObservationController {
                 return ResponseEntity.ok(response);
             }
 
+
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
 
             List<ApPatientObservationSummary> list = apPatientObservationSummaryService.getList(where);
 
-            BigDecimal totalRecord = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_patient_observation_summary WHERE " + whereForTotal);
-             System.out.println(totalRecord);
-            System.out.println(list);
-            if (totalRecord.compareTo(BigDecimal.ONE) == 0) {
-                apPatientObservationSummaryService.updateRecord(observationSummary);
-            } else {
+
+
                 apPatientObservationSummaryService.saveRecord(observationSummary);
-            }
-                response.setObject(list );
+
+
+            response.setObject(list);
             return ResponseEntity.ok(response);
+
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("Error saving observation summary: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            log.error("Error saving observation summary: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing the observation summary.");
         }
     }
 

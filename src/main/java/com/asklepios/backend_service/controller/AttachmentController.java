@@ -106,6 +106,7 @@ public class AttachmentController {
             return ResponseEntity.status(500).body(e);
         }
     }
+    //addAccess_Type
     @PostMapping(value = "/upload", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file,
                                     @RequestHeader("type") String type,

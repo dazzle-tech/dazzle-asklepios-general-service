@@ -12,15 +12,19 @@ import com.asklepios.backend_service.model.generated.pojo.ApLovValues;
 @Getter
 @Setter
 @Slf4j
-public class ApAttachmentEntity implements Serializable {
+public class ApPatientAdministrativeWarningsEntity implements Serializable {
 
 	private String key;
-	private String attachmentType;
-	private String referenceObjectKey;
-	private String extraDetails;
-	private String fileName;
-	private String contentType;
-	private byte[] fileContent;
+	private String patientKey;
+	private String warningTypeLkey;
+	private ApLovValues warningTypeLvalue;
+	private String description;
+	private String resolutionStatusLkey;
+	private ApLovValues resolutionStatusLvalue;
+	private Date dateResolved = new Date();
+	private String resolvedBy;
+	private Date resolutionUndoDate = new Date();
+	private String resolvedUndoBy;
 	private String createdBy;
 	private String updatedBy;
 	private String deletedBy;
@@ -28,9 +32,6 @@ public class ApAttachmentEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
-	private String details;
-	private String accessTypeLkey;
-	private ApLovValues accessTypeLvalue;
-	private ApAttachmentEntity translatedObject;
+	private ApPatientAdministrativeWarningsEntity translatedObject;
 
 }

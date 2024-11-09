@@ -51,6 +51,15 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setLabCatalogLkey(rs.getString("lab_catalog_lkey"));
+record.setPropertyLkey(rs.getString("property_lkey"));
+record.setSystemLkey(rs.getString("system_lkey"));
+record.setScaleLkey(rs.getString("scale_lkey"));
+record.setReagentsLkey(rs.getString("reagents_lkey"));
+record.setMethodLkey(rs.getString("method_lkey"));
+record.setTimingLkey(rs.getString("timing_lkey"));
+record.setResultType(rs.getString("result_type"));
+record.setResultUnitLkey(rs.getString("result_unit_lkey"));
 } else { record = null; }
 return record;
 }
@@ -58,7 +67,7 @@ return record;
 public void updateRecord(ApDiagnosticTestRadiology record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_diagnostic_test_radiology set key = ?, test_key = ?, international_coding_type_lkey = ?, child_code_lkey = ?, rad_category_lkey = ?, image_duration = ?, time_unit_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_diagnostic_test_radiology set key = ?, test_key = ?, international_coding_type_lkey = ?, child_code_lkey = ?, rad_category_lkey = ?, image_duration = ?, time_unit_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, lab_catalog_lkey = ?, property_lkey = ?, system_lkey = ?, scale_lkey = ?, reagents_lkey = ?, method_lkey = ?, timing_lkey = ?, result_type = ?, result_unit_lkey = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -75,7 +84,16 @@ ps.setBigDecimal(11, record.getCreatedAt());
 ps.setBigDecimal(12, record.getUpdatedAt());
 ps.setBigDecimal(13, record.getDeletedAt());
 ps.setBoolean(14, record.getIsValid());
-ps.setString(15, record.getKey());
+ps.setString(15, record.getLabCatalogLkey());
+ps.setString(16, record.getPropertyLkey());
+ps.setString(17, record.getSystemLkey());
+ps.setString(18, record.getScaleLkey());
+ps.setString(19, record.getReagentsLkey());
+ps.setString(20, record.getMethodLkey());
+ps.setString(21, record.getTimingLkey());
+ps.setString(22, record.getResultType());
+ps.setString(23, record.getResultUnitLkey());
+ps.setString(24, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -111,6 +129,15 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setLabCatalogLkey(rs.getString("lab_catalog_lkey"));
+record.setPropertyLkey(rs.getString("property_lkey"));
+record.setSystemLkey(rs.getString("system_lkey"));
+record.setScaleLkey(rs.getString("scale_lkey"));
+record.setReagentsLkey(rs.getString("reagents_lkey"));
+record.setMethodLkey(rs.getString("method_lkey"));
+record.setTimingLkey(rs.getString("timing_lkey"));
+record.setResultType(rs.getString("result_type"));
+record.setResultUnitLkey(rs.getString("result_unit_lkey"));
 list.add(record);
 }
 return list;
@@ -119,7 +146,7 @@ return list;
 public String saveRecord(ApDiagnosticTestRadiology record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_test_radiology values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_test_radiology values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -140,6 +167,15 @@ ps.setBigDecimal(11, record.getCreatedAt());
 ps.setBigDecimal(12, record.getUpdatedAt());
 ps.setBigDecimal(13, record.getDeletedAt());
 ps.setBoolean(14, record.getIsValid());
+ps.setString(15, record.getLabCatalogLkey());
+ps.setString(16, record.getPropertyLkey());
+ps.setString(17, record.getSystemLkey());
+ps.setString(18, record.getScaleLkey());
+ps.setString(19, record.getReagentsLkey());
+ps.setString(20, record.getMethodLkey());
+ps.setString(21, record.getTimingLkey());
+ps.setString(22, record.getResultType());
+ps.setString(23, record.getResultUnitLkey());
 ps.executeUpdate();
 return key;
 }

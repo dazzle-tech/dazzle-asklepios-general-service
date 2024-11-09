@@ -387,6 +387,34 @@ public class SetupController implements Serializable {
         }
     }
 
+    @GetMapping(value = "/get-user-record", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUserRecord(
+            @jakarta.annotation.Nullable @RequestHeader String userId,
+            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+            @jakarta.annotation.Nullable @RequestHeader String access_token,
+            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+            @jakarta.annotation.Nullable @RequestHeader String lang,
+            @jakarta.annotation.Nullable @RequestHeader String screenKey
+    ) {
+        try {
+            ParentResponse<ApUser> response = new ParentResponse<>();
+            ApUser user = apUserService.getRecord(userId);
+
+            if (user == null) {
+                response.addGeneralError("user not found");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+
+            response.setObject(user);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
     @GetMapping(value = "/user-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> userList(@RequestParam Map<String, String> queryParams,
                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -405,6 +433,7 @@ public class SetupController implements Serializable {
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApUser> users = apUserService.getList("deleted_at is null and " + where);
+            System.out.println("deleted_at is null and " + where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_user where " + whereForTotal);
             for (ApUser user : users) {
                 List<ApUserFacilities> existingFacilities = apUserFacilitiesService.getList("user_id ='" + user.getKey() + "' and deleted_at is null");
@@ -830,12 +859,72 @@ public class SetupController implements Serializable {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-            List<ApPractitioner> list = apPractitionerService.getList(where);
+            List<ApPractitioner> list = apPractitionerService.getList(" deleted_at is null and "+where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_practitioner where " + whereForTotal);
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-practitioner", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> savePractitioner(@RequestBody ApPractitioner practitioner,
+                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                      @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApPractitioner> response = new ParentResponse<>();
+            practitioner.setPractitionerFullName(practitioner.getPractitionerFirstName() + " " + practitioner.getPractitionerLastName());
+
+
+            apPractitionerService.saveRecord(practitioner);
+
+            response.setObject(practitioner);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
+    @PostMapping(value = "/deactive-avtice-practitioner", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deactive_avtice_Record(@RequestBody ApPractitioner practitioner,
+                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                    @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                    @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApPractitioner> response = new ParentResponse<>();
+            apPractitionerService.deactive_avtice_Record(practitioner);
+            response.setObject(practitioner);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/remove-practitioner", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> remove_practitioner(@RequestBody ApPractitioner practitioner,
+                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                    @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                    @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApPractitioner> response = new ParentResponse<>();
+            apPractitionerService.deleteRecord(practitioner);
+            response.setObject(practitioner);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
@@ -872,7 +961,7 @@ public class SetupController implements Serializable {
     }
 
     @PostMapping(value = "/save-user-midical-license", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> savePractitioner(@RequestBody ApUserMedicalLicense userLicense,
+    public ResponseEntity<?> saveMedicalLicense(@RequestBody ApUserMedicalLicense userLicense,
                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                               @jakarta.annotation.Nullable @RequestHeader String access_token,
                                               @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -909,23 +998,23 @@ public class SetupController implements Serializable {
     }
 
 
-    @PostMapping(value = "/save-practitioner", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> savePractitioner(@RequestBody ApPractitioner practitioner,
-                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                              @jakarta.annotation.Nullable @RequestHeader String lang) {
-        try {
-            ParentResponse<ApPractitioner> response = new ParentResponse<>();
-            apPractitionerService.saveRecord(practitioner);
-            response.setObject(practitioner);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-            return ResponseEntity.status(500).body(e);
-        }
-    }
+//    @PostMapping(value = "/save-practitioner", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<?> savePractitioner(@RequestBody ApPractitioner practitioner,
+//                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
+//                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+//                                              @jakarta.annotation.Nullable @RequestHeader String lang) {
+//        try {
+//            ParentResponse<ApPractitioner> response = new ParentResponse<>();
+//            apPractitionerService.saveRecord(practitioner);
+//            response.setObject(practitioner);
+//            return ResponseEntity.ok(response);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            log.error(e.getMessage());
+//            return ResponseEntity.status(500).body(e);
+//        }
+//    }
 
 
     @PostMapping(value = "/save-department", produces = MediaType.APPLICATION_JSON_VALUE)

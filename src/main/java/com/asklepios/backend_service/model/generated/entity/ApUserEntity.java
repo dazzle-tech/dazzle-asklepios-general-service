@@ -47,5 +47,4 @@ public class ApUserEntity implements Serializable {
 	private Boolean mustChangePassword = false;
 	private ApUserEntity translatedObject;
 
-
 }

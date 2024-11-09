@@ -27,6 +27,25 @@ public class ApPractitionerEntity implements Serializable {
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
 	private String departmentKey;
+	private String practitionerFirstName;
+	private String practitionerLastName;
+	private String practitionerEmail;
+	private String practitionerPhoneNumber;
+	private String jobRole;
+	private String specialtyLkey;
+	private ApLovValues specialtyLvalue;
+	private String subSpecialtyLkey;
+	private ApLovValues subSpecialtyLvalue;
+	private String defaultMedicalLicense;
+	private String secondaryMedicalLicense;
+	private String educationalLevelLkey;
+	private ApLovValues educationalLevelLvalue;
+	private String professionalMembershipAndCertification;
+	private Boolean appointable = false;
+	private String linkedUser;
+	private Date defaultLicenseValidUntil = new Date();
+	private Date secondaryLicenseValidUntil = new Date();
+	private Date dob = new Date();
 	private ApPractitionerEntity translatedObject;
 
 }

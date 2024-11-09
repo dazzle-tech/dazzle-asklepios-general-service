@@ -463,12 +463,12 @@ public class SetupController implements Serializable {
                 newPassword.append(allowedChars.charAt(random.nextInt(allowedChars.length())));
             }
             String body = "Dear " + existingUser.getFullName() + ",\n\n" +
-                    "We wanted to let you know that your password has been successfully reset.\n" +
-                    "You can use the following password to log in:\n\n" +
-                    "New Password: " + newPassword.toString() + "\n\n" +
-                    "For your security, we recommend that you change this password as soon as you log in.\n\n" +
-                    "If you did not request a password reset or have any issues, please contact our support team.\n\n" +
-                    "Best regards,\n" ;
+                    "A request to reset your password has been processed.\n\n"+
+                    "For security reasons," +
+                    " we’ve generated a temporary password for you to use to access your account." +
+                    " Please use this password to log in and remember to update it immediately to secure your account.\n\n"+
+                    " Temporary Password : " + newPassword.toString()  +" \n\n"+
+                    "Please contact our support team immediately if you didn’t request this change, or have any issues.";
 
             emailService.sendSimpleEmail(existingUser.getEmail(), "Your Password Has Been Reset", body);
 

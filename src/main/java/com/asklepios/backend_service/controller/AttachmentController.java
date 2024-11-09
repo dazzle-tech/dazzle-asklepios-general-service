@@ -106,15 +106,18 @@ public class AttachmentController {
             return ResponseEntity.status(500).body(e);
         }
     }
+    //add Access_Type_filed
     @PostMapping(value = "/upload", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file,
                                     @RequestHeader("type") String type,
                                     @RequestHeader("ref_key") String refKey,
                                     @Nullable @RequestHeader("details") String details,
+                                    @Nullable @RequestHeader("access_type") String accessType,
                                     @Nullable @RequestHeader String facility_id,
                                     @Nullable @RequestHeader String access_token,
                                     @Nullable @RequestHeader Integer access_level,
                                     @Nullable @RequestHeader String lang) {
+        System.out.println("access_type"+accessType);
         try {
             ParentResponse<ApAttachment> response = new ParentResponse<>();
             ApAttachment attachment = new ApAttachment();
@@ -131,11 +134,13 @@ public class AttachmentController {
                 } else {
                     attachment.setAttachmentType(type);
                     attachment.setReferenceObjectKey(refKey);
+                    attachment.setAccessTypeLkey(accessType);
                 }
             } else {
                 // Always create a new attachment for other types
                 attachment.setAttachmentType(type);
                 attachment.setReferenceObjectKey(refKey);
+                attachment.setAccessTypeLkey(accessType);
             }
             attachment.setFileName(file.getOriginalFilename());
             attachment.setContentType(file.getContentType());

@@ -26,7 +26,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/pas")
-//@CrossOrigin
+@CrossOrigin
 @Slf4j
 public class PatientController {
 
@@ -39,9 +39,9 @@ public class PatientController {
     private final ApPatientInsuranceService apPatientInsuranceService;
     private final ApPatientSecondaryDocumentsService apPatientSecondaryDocumentsService;
     private final ApPatientInsuranceCoverageService apPatientInsuranceCoverageService;
+    private final ApPatientAdministrativeWarningsService apPatientAdministrativeWarningsService;
 
-
-    public PatientController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApPatientAllergiesService apPatientAllergiesService, ApAllergensService apAllergensService, ApPatientRelationService apPatientRelationService, ApPatientInsuranceService apPatientInsuranceService, ApPatientSecondaryDocumentsService apPatientSecondaryDocumentsService, ApPatientInsuranceCoverageService apPatientInsuranceCoverageService) {
+    public PatientController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApPatientAllergiesService apPatientAllergiesService, ApAllergensService apAllergensService, ApPatientRelationService apPatientRelationService, ApPatientInsuranceService apPatientInsuranceService, ApPatientSecondaryDocumentsService apPatientSecondaryDocumentsService, ApPatientInsuranceCoverageService apPatientInsuranceCoverageService, ApPatientAdministrativeWarningsService apPatientAdministrativeWarningsService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -51,6 +51,7 @@ public class PatientController {
         this.apPatientInsuranceService = apPatientInsuranceService;
         this.apPatientSecondaryDocumentsService = apPatientSecondaryDocumentsService;
         this.apPatientInsuranceCoverageService = apPatientInsuranceCoverageService;
+        this.apPatientAdministrativeWarningsService = apPatientAdministrativeWarningsService;
     }
 
     @PostMapping(value = "/get-patient", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -111,9 +112,9 @@ public class PatientController {
                 where = where.replace("lower(dob) like", "TO_CHAR(dob, 'YYYY-MM-DD') like");
                 whereForTotal = whereForTotal.replace("lower(dob) like", "TO_CHAR(dob, 'YYYY-MM-DD') like");
 
-            }else if ("document_no".equals(fieldName)){
-                where = where.replace("lower("+fieldName+") like '%"+value+"%'","lower(ap_patient."+fieldName+") like'%"+value+"%' or lower(ap_patient.key) like   (select patient_key from apv_patient_secondary_documents where lower("+fieldName+") like '%"+value+"%' )");
-                whereForTotal = whereForTotal.replace("lower("+fieldName+") like '%"+value+"%'","lower(ap_patient."+fieldName+") like'%"+value+"%' or lower(ap_patient.key) like   (select patient_key from apv_patient_secondary_documents where lower("+fieldName+") like '%"+value+"%' )");
+            } else if ("document_no".equals(fieldName)) {
+                where = where.replace("lower(" + fieldName + ") like '%" + value + "%'", "lower(ap_patient." + fieldName + ") like'%" + value + "%' or lower(ap_patient.key) like   (select patient_key from apv_patient_secondary_documents where lower(" + fieldName + ") like '%" + value + "%' )");
+                whereForTotal = whereForTotal.replace("lower(" + fieldName + ") like '%" + value + "%'", "lower(ap_patient." + fieldName + ") like'%" + value + "%' or lower(ap_patient.key) like   (select patient_key from apv_patient_secondary_documents where lower(" + fieldName + ") like '%" + value + "%' )");
 
             }
             System.out.println(fieldName);
@@ -765,5 +766,112 @@ public class PatientController {
         }
     }
 
+    @PostMapping(value = "/save-patient-administrative-warnings", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> savePatientAdministrativeWarnings(
+            @RequestBody ApPatientAdministrativeWarnings administrativeWarnings,
+            @Nullable @RequestHeader String facility_id,
+            @Nullable @RequestHeader String access_token,
+            @Nullable @RequestHeader Integer access_level,
+            @Nullable @RequestHeader String lang) {
+
+        try {
+            ParentResponse<ApPatientAdministrativeWarnings> response = new ParentResponse<>();
+
+            String key = apPatientAdministrativeWarningsService.saveRecord(administrativeWarnings);
+            administrativeWarnings.setKey(key);
+            response.setObject(administrativeWarnings);
+
+            // Populate LOV fields if language is specified
+            apPatientAdministrativeWarningsService.populateLovFields(administrativeWarnings, lang);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(value = "/fetch-patient-administrative-warnings", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> fetchPatientAdministrativeWarnings(
+            @RequestParam Map<String, String> queryParams,
+            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+            @jakarta.annotation.Nullable @RequestHeader String access_token,
+            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+            @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+
+            ParentResponse<List<ApPatientAdministrativeWarnings>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+
+            List<ApPatientAdministrativeWarnings> list= apPatientAdministrativeWarningsService.getList(where);
+
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_patient_administrative_warnings where " + whereForTotal);
+
+            for (ApPatientAdministrativeWarnings all : list) {
+                apPatientAdministrativeWarningsService.populateLovFields(all, lang);
+            }
+
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Error fetching patient administrative warnings: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    @PostMapping(value = "/update-patient-administrative-warning", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updatePatientAdministrativeWarning(
+            @RequestBody ApPatientAdministrativeWarnings administrativeWarning,
+            @Nullable @RequestHeader String lang) {
+
+        try {
+            ParentResponse<ApPatientAdministrativeWarnings> response = new ParentResponse<>();
+
+
+            apPatientAdministrativeWarningsService.updateRecord(administrativeWarning);
+
+
+            response.setObject(administrativeWarning);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Error updating patient administrative warning: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    @PostMapping(value = "/delete-patient-administrative-warning", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deletePatientAdministrativeWarning(
+            @RequestBody ApPatientAdministrativeWarnings administrativeWarning,
+            @Nullable @RequestHeader String lang) {
+
+        try {
+            ParentResponse<ApPatientAdministrativeWarnings> response = new ParentResponse<>();
+
+
+            apPatientAdministrativeWarningsService.deleteRecord(administrativeWarning);
+
+
+            response.setObject(administrativeWarning);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Error updating patient administrative warning: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
 }

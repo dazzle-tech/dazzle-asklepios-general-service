@@ -71,12 +71,12 @@ public class ListRequest {
 
         System.out.println("FILTER LOGIC: " + filterLogic);
         StringBuilder where = new StringBuilder("1=1 ");
-
         // build filters
         if (doFilter && filters != null && !filters.isEmpty()) {
             where.append(" and ");
             int index = 0;
             for (ListRequestFilter filter : filters) {
+
                 switch (filter.getOperator()) {
                     case "isNull":
                         where.append(filter.getFieldName()).append(" is null ");
@@ -94,13 +94,13 @@ public class ListRequest {
                         where.append(filter.getFieldName()).append(" like '%").append(filter.getValue()).append("%'");
                         break;
                     case "startsWithIgnoreCase":
-                        where.append("lower(").append(filter.getFieldName()).append(")").append(" like '").append(filter.getValue().toLowerCase()).append("%'");
+                        where.append("lower(").append("CAST("+filter.getFieldName()+" AS TEXT)").append(")").append(" like '").append(filter.getValue().toLowerCase()).append("%'");
                         break;
                     case "endsWithIgnoreCase":
-                        where.append("lower(").append(filter.getFieldName()).append(")").append(" like '%").append(filter.getValue().toLowerCase()).append("'");
+                        where.append("lower(").append("CAST("+filter.getFieldName()+" AS TEXT)").append(")").append(" like '%").append(filter.getValue().toLowerCase()).append("'");
                         break;
                     case "containsIgnoreCase":
-                        where.append("lower(").append(filter.getFieldName()).append(")").append(" like '%").append(filter.getValue().toLowerCase()).append("%'");
+                        where.append("lower(").append("CAST("+filter.getFieldName()+" AS TEXT)").append(")").append(" like '%").append(filter.getValue().toLowerCase()).append("%'");
                         break;
                     case "gt":
                         where.append(filter.getFieldName()).append(" > '").append(filter.getValue()).append("'");

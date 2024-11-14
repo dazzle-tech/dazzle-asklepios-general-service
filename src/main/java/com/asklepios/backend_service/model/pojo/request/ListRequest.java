@@ -56,7 +56,7 @@ public class ListRequest {
             }
         }
     }
-
+//Fixed
     public String buildWhereStatement() {
         return buildWhereStatement(true, true, true);
     }

@@ -26,8 +26,6 @@ public class ApPatientRelationEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
-	private String categoryTypeLkey;
-	private ApLovValues categoryTypeLvalue;
 	private ApPatientRelationEntity translatedObject;
 
 }

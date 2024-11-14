@@ -38,6 +38,7 @@ ResultSet rs = st.executeQuery("select * from ap_user_medical_license where key 
 ApUserMedicalLicense record = new ApUserMedicalLicense();
 if(rs.next()){
 record.setKey(rs.getString("key"));
+record.setUserKey(rs.getString("user_key"));
 record.setLicenseName(rs.getString("license_name"));
 record.setLicenseNumber(rs.getString("license_number"));
 record.setValidTo(rs.getDate("valid_to"));
@@ -48,7 +49,6 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
-record.setUserKey(rs.getString("user_key"));
 } else { record = null; }
 return record;
 }
@@ -56,22 +56,22 @@ return record;
 public void updateRecord(ApUserMedicalLicense record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_user_medical_license set key = ?, license_name = ?, license_number = ?, valid_to = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, user_key = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_user_medical_license set key = ?, user_key = ?, license_name = ?, license_number = ?, valid_to = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
-ps.setString(2, record.getLicenseName());
-ps.setString(3, record.getLicenseNumber());
-if (record.getValidTo() != null) ps.setDate(4, new java.sql.Date(record.getValidTo().getTime()));
-else ps.setDate(4, null); 
-ps.setString(5, record.getCreatedBy());
-ps.setString(6, record.getUpdatedBy());
-ps.setString(7, record.getDeletedBy());
-ps.setBigDecimal(8, record.getCreatedAt());
-ps.setBigDecimal(9, record.getUpdatedAt());
-ps.setBigDecimal(10, record.getDeletedAt());
-ps.setBoolean(11, record.getIsValid());
-ps.setString(12, record.getUserKey());
+ps.setString(2, record.getUserKey());
+ps.setString(3, record.getLicenseName());
+ps.setString(4, record.getLicenseNumber());
+if (record.getValidTo() != null) ps.setDate(5, new java.sql.Date(record.getValidTo().getTime()));
+else ps.setDate(5, null); 
+ps.setString(6, record.getCreatedBy());
+ps.setString(7, record.getUpdatedBy());
+ps.setString(8, record.getDeletedBy());
+ps.setBigDecimal(9, record.getCreatedAt());
+ps.setBigDecimal(10, record.getUpdatedAt());
+ps.setBigDecimal(11, record.getDeletedAt());
+ps.setBoolean(12, record.getIsValid());
 ps.setString(13, record.getKey());
 ps.executeUpdate();
 }
@@ -95,6 +95,7 @@ List<ApUserMedicalLicense> list = new ArrayList<ApUserMedicalLicense>();
 while(rs.next()){
 ApUserMedicalLicense record = new ApUserMedicalLicense();
 record.setKey(rs.getString("key"));
+record.setUserKey(rs.getString("user_key"));
 record.setLicenseName(rs.getString("license_name"));
 record.setLicenseNumber(rs.getString("license_number"));
 record.setValidTo(rs.getDate("valid_to"));
@@ -105,7 +106,6 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
-record.setUserKey(rs.getString("user_key"));
 list.add(record);
 }
 return list;
@@ -122,18 +122,18 @@ String key = "" + System.nanoTime();
 record.setKey(key);
 
 ps.setString(1, key);
-ps.setString(2, record.getLicenseName());
-ps.setString(3, record.getLicenseNumber());
-if (record.getValidTo() != null) ps.setDate(4, new java.sql.Date(record.getValidTo().getTime()));
-else ps.setDate(4, null); 
-ps.setString(5, record.getCreatedBy());
-ps.setString(6, record.getUpdatedBy());
-ps.setString(7, record.getDeletedBy());
-ps.setBigDecimal(8, record.getCreatedAt());
-ps.setBigDecimal(9, record.getUpdatedAt());
-ps.setBigDecimal(10, record.getDeletedAt());
-ps.setBoolean(11, record.getIsValid());
-ps.setString(12, record.getUserKey());
+ps.setString(2, record.getUserKey());
+ps.setString(3, record.getLicenseName());
+ps.setString(4, record.getLicenseNumber());
+if (record.getValidTo() != null) ps.setDate(5, new java.sql.Date(record.getValidTo().getTime()));
+else ps.setDate(5, null); 
+ps.setString(6, record.getCreatedBy());
+ps.setString(7, record.getUpdatedBy());
+ps.setString(8, record.getDeletedBy());
+ps.setBigDecimal(9, record.getCreatedAt());
+ps.setBigDecimal(10, record.getUpdatedAt());
+ps.setBigDecimal(11, record.getDeletedAt());
+ps.setBoolean(12, record.getIsValid());
 ps.executeUpdate();
 return key;
 }

@@ -48,7 +48,6 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
-record.setCategoryTypeLkey(rs.getString("category_type_lkey"));
 } else { record = null; }
 return record;
 }
@@ -56,7 +55,7 @@ return record;
 public void updateRecord(ApPatientRelation record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_patient_relation set key = ?, patient_key = ?, relative_patient_key = ?, relation_type_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, category_type_lkey = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_patient_relation set key = ?, patient_key = ?, relative_patient_key = ?, relation_type_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -70,8 +69,7 @@ ps.setBigDecimal(8, record.getCreatedAt());
 ps.setBigDecimal(9, record.getUpdatedAt());
 ps.setBigDecimal(10, record.getDeletedAt());
 ps.setBoolean(11, record.getIsValid());
-ps.setString(12, record.getCategoryTypeLkey());
-ps.setString(13, record.getKey());
+ps.setString(12, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -104,7 +102,6 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
-record.setCategoryTypeLkey(rs.getString("category_type_lkey"));
 list.add(record);
 }
 return list;
@@ -113,7 +110,7 @@ return list;
 public String saveRecord(ApPatientRelation record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_patient_relation values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_patient_relation values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -131,7 +128,6 @@ ps.setBigDecimal(8, record.getCreatedAt());
 ps.setBigDecimal(9, record.getUpdatedAt());
 ps.setBigDecimal(10, record.getDeletedAt());
 ps.setBoolean(11, record.getIsValid());
-ps.setString(12, record.getCategoryTypeLkey());
 ps.executeUpdate();
 return key;
 }

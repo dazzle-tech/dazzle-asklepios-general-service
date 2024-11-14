@@ -60,13 +60,6 @@ public class ApActiveIngredientEntity implements Serializable {
 	private String pharmaProteinBinding;
 	private String pharmaClearance;
 	private String pharmaMetabolism;
-	private String doseAdjPugA;
-	private String doseAdjPugB;
-	private String doseAdjPugC;
-	private String doseAdjRenalOne;
-	private String doseAdjRenalTwo;
-	private String doseAdjRenalThree;
-	private String doseAdjRenalFour;
 	private ApActiveIngredientEntity translatedObject;
 
 }

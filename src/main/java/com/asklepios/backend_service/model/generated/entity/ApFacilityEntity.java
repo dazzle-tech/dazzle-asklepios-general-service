@@ -19,9 +19,11 @@ public class ApFacilityEntity implements Serializable {
 	private String facilityName;
 	private String facilityNameOtherLang;
 	private String tenantId;
+	private String facilityType;
 	private Date facilityRegistrationDate = new Date();
 	private String facilityEmailAddress;
 	private String facilityBriefDesc;
+	private String facilityAddress;
 	private String facilityAddressOtherLang;
 	private String facilityLogoFile;
 	private String createdBy;
@@ -31,14 +33,12 @@ public class ApFacilityEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private String facilityTypeLkey;
+	private ApLovValues facilityTypeLvalue;
+	private String facilityAddressId;
 	private String facilityPhone1;
 	private String facilityPhone2;
 	private String facilityFax;
-	private String facilityAddressId;
-	private String facilityTypeLkey;
-	private ApLovValues facilityTypeLvalue;
-	private String facilityType;
-	private String facilityAddress;
 	private ApFacilityEntity translatedObject;
 
 }

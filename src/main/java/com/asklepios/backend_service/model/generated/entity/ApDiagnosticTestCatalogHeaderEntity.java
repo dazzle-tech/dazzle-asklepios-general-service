@@ -26,8 +26,6 @@ public class ApDiagnosticTestCatalogHeaderEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
-	private String testKey;
-	private String catalogKey;
 	private ApDiagnosticTestCatalogHeaderEntity translatedObject;
 
 }

@@ -48,8 +48,6 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
-record.setTestKey(rs.getString("test_key"));
-record.setCatalogKey(rs.getString("catalog_key"));
 } else { record = null; }
 return record;
 }
@@ -57,7 +55,7 @@ return record;
 public void updateRecord(ApDiagnosticTestCatalogHeader record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_diagnostic_test_catalog_header set key = ?, description = ?, type_lkey = ?, department_key = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, test_key = ?, catalog_key = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_diagnostic_test_catalog_header set key = ?, description = ?, type_lkey = ?, department_key = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -71,9 +69,7 @@ ps.setBigDecimal(8, record.getCreatedAt());
 ps.setBigDecimal(9, record.getUpdatedAt());
 ps.setBigDecimal(10, record.getDeletedAt());
 ps.setBoolean(11, record.getIsValid());
-ps.setString(12, record.getTestKey());
-ps.setString(13, record.getCatalogKey());
-ps.setString(14, record.getKey());
+ps.setString(12, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -106,8 +102,6 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
-record.setTestKey(rs.getString("test_key"));
-record.setCatalogKey(rs.getString("catalog_key"));
 list.add(record);
 }
 return list;
@@ -116,7 +110,7 @@ return list;
 public String saveRecord(ApDiagnosticTestCatalogHeader record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_test_catalog_header values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_test_catalog_header values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -134,8 +128,6 @@ ps.setBigDecimal(8, record.getCreatedAt());
 ps.setBigDecimal(9, record.getUpdatedAt());
 ps.setBigDecimal(10, record.getDeletedAt());
 ps.setBoolean(11, record.getIsValid());
-ps.setString(12, record.getTestKey());
-ps.setString(13, record.getCatalogKey());
 ps.executeUpdate();
 return key;
 }

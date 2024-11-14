@@ -48,7 +48,7 @@ record.setLatestheartrate(rs.getBigDecimal("latestheartrate"));
 record.setLatestrespiratoryrate(rs.getBigDecimal("latestrespiratoryrate"));
 record.setLatestoxygensaturation(rs.getBigDecimal("latestoxygensaturation"));
 record.setLatestglucoselevel(rs.getBigDecimal("latestglucoselevel"));
-record.setLatestpainlevelLkey(rs.getString("latestpainlevel_lkey"));
+record.setLatestpainlevel(rs.getBigDecimal("latestpainlevel"));
 record.setLatestweight(rs.getBigDecimal("latestweight"));
 record.setLatestheight(rs.getBigDecimal("latestheight"));
 record.setLatestheadcircumference(rs.getBigDecimal("latestheadcircumference"));
@@ -64,7 +64,7 @@ record.setPlatestheartrate(rs.getBigDecimal("platestheartrate"));
 record.setPlatestrespiratoryrate(rs.getBigDecimal("platestrespiratoryrate"));
 record.setPlatestoxygensaturation(rs.getBigDecimal("platestoxygensaturation"));
 record.setPlatestglucoselevel(rs.getBigDecimal("platestglucoselevel"));
-record.setPlatestpainlevelLkey(rs.getString("platestpainlevel_lkey"));
+record.setPlatestpainlevel(rs.getBigDecimal("platestpainlevel"));
 record.setPlatestweight(rs.getBigDecimal("platestweight"));
 record.setPlatestheight(rs.getBigDecimal("platestheight"));
 record.setPlatestheadcircumference(rs.getBigDecimal("platestheadcircumference"));
@@ -78,10 +78,6 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
-record.setLatestnotes(rs.getString("latestnotes"));
-record.setPlatestnotes(rs.getString("platestnotes"));
-record.setLatestpaindescription(rs.getString("latestpaindescription"));
-record.setPlatestpaindescription(rs.getString("platestpaindescription"));
 } else { record = null; }
 return record;
 }
@@ -89,7 +85,7 @@ return record;
 public void updateRecord(ApPatientObservationSummary record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_patient_observation_summary set key = ?, patient_key = ?, visit_key = ?, last_date = ?, latesttemperature = ?, latestbp_systolic = ?, latestbp_diastolic = ?, latestheartrate = ?, latestrespiratoryrate = ?, latestoxygensaturation = ?, latestglucoselevel = ?, latestpainlevel_lkey = ?, latestweight = ?, latestheight = ?, latestheadcircumference = ?, latestlength = ?, latestbmi = ?, age = ?, prev_record_key = ?, plast_date = ?, platesttemperature = ?, platestbp_systolic = ?, platestbp_diastolic = ?, platestheartrate = ?, platestrespiratoryrate = ?, platestoxygensaturation = ?, platestglucoselevel = ?, platestpainlevel_lkey = ?, platestweight = ?, platestheight = ?, platestheadcircumference = ?, platestlength = ?, platestbmi = ?, page = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, latestnotes = ?, platestnotes = ?, latestpaindescription = ?, platestpaindescription = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_patient_observation_summary set key = ?, patient_key = ?, visit_key = ?, last_date = ?, latesttemperature = ?, latestbp_systolic = ?, latestbp_diastolic = ?, latestheartrate = ?, latestrespiratoryrate = ?, latestoxygensaturation = ?, latestglucoselevel = ?, latestpainlevel = ?, latestweight = ?, latestheight = ?, latestheadcircumference = ?, latestlength = ?, latestbmi = ?, age = ?, prev_record_key = ?, plast_date = ?, platesttemperature = ?, platestbp_systolic = ?, platestbp_diastolic = ?, platestheartrate = ?, platestrespiratoryrate = ?, platestoxygensaturation = ?, platestglucoselevel = ?, platestpainlevel = ?, platestweight = ?, platestheight = ?, platestheadcircumference = ?, platestlength = ?, platestbmi = ?, page = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -104,7 +100,7 @@ ps.setBigDecimal(8, record.getLatestheartrate());
 ps.setBigDecimal(9, record.getLatestrespiratoryrate());
 ps.setBigDecimal(10, record.getLatestoxygensaturation());
 ps.setBigDecimal(11, record.getLatestglucoselevel());
-ps.setString(12, record.getLatestpainlevelLkey());
+ps.setBigDecimal(12, record.getLatestpainlevel());
 ps.setBigDecimal(13, record.getLatestweight());
 ps.setBigDecimal(14, record.getLatestheight());
 ps.setBigDecimal(15, record.getLatestheadcircumference());
@@ -121,7 +117,7 @@ ps.setBigDecimal(24, record.getPlatestheartrate());
 ps.setBigDecimal(25, record.getPlatestrespiratoryrate());
 ps.setBigDecimal(26, record.getPlatestoxygensaturation());
 ps.setBigDecimal(27, record.getPlatestglucoselevel());
-ps.setString(28, record.getPlatestpainlevelLkey());
+ps.setBigDecimal(28, record.getPlatestpainlevel());
 ps.setBigDecimal(29, record.getPlatestweight());
 ps.setBigDecimal(30, record.getPlatestheight());
 ps.setBigDecimal(31, record.getPlatestheadcircumference());
@@ -135,11 +131,7 @@ ps.setBigDecimal(38, record.getCreatedAt());
 ps.setBigDecimal(39, record.getUpdatedAt());
 ps.setBigDecimal(40, record.getDeletedAt());
 ps.setBoolean(41, record.getIsValid());
-ps.setString(42, record.getLatestnotes());
-ps.setString(43, record.getPlatestnotes());
-ps.setString(44, record.getLatestpaindescription());
-ps.setString(45, record.getPlatestpaindescription());
-ps.setString(46, record.getKey());
+ps.setString(42, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -172,7 +164,7 @@ record.setLatestheartrate(rs.getBigDecimal("latestheartrate"));
 record.setLatestrespiratoryrate(rs.getBigDecimal("latestrespiratoryrate"));
 record.setLatestoxygensaturation(rs.getBigDecimal("latestoxygensaturation"));
 record.setLatestglucoselevel(rs.getBigDecimal("latestglucoselevel"));
-record.setLatestpainlevelLkey(rs.getString("latestpainlevel_lkey"));
+record.setLatestpainlevel(rs.getBigDecimal("latestpainlevel"));
 record.setLatestweight(rs.getBigDecimal("latestweight"));
 record.setLatestheight(rs.getBigDecimal("latestheight"));
 record.setLatestheadcircumference(rs.getBigDecimal("latestheadcircumference"));
@@ -188,7 +180,7 @@ record.setPlatestheartrate(rs.getBigDecimal("platestheartrate"));
 record.setPlatestrespiratoryrate(rs.getBigDecimal("platestrespiratoryrate"));
 record.setPlatestoxygensaturation(rs.getBigDecimal("platestoxygensaturation"));
 record.setPlatestglucoselevel(rs.getBigDecimal("platestglucoselevel"));
-record.setPlatestpainlevelLkey(rs.getString("platestpainlevel_lkey"));
+record.setPlatestpainlevel(rs.getBigDecimal("platestpainlevel"));
 record.setPlatestweight(rs.getBigDecimal("platestweight"));
 record.setPlatestheight(rs.getBigDecimal("platestheight"));
 record.setPlatestheadcircumference(rs.getBigDecimal("platestheadcircumference"));
@@ -202,10 +194,6 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
-record.setLatestnotes(rs.getString("latestnotes"));
-record.setPlatestnotes(rs.getString("platestnotes"));
-record.setLatestpaindescription(rs.getString("latestpaindescription"));
-record.setPlatestpaindescription(rs.getString("platestpaindescription"));
 list.add(record);
 }
 return list;
@@ -214,7 +202,7 @@ return list;
 public String saveRecord(ApPatientObservationSummary record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_patient_observation_summary values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_patient_observation_summary values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -233,7 +221,7 @@ ps.setBigDecimal(8, record.getLatestheartrate());
 ps.setBigDecimal(9, record.getLatestrespiratoryrate());
 ps.setBigDecimal(10, record.getLatestoxygensaturation());
 ps.setBigDecimal(11, record.getLatestglucoselevel());
-ps.setString(12, record.getLatestpainlevelLkey());
+ps.setBigDecimal(12, record.getLatestpainlevel());
 ps.setBigDecimal(13, record.getLatestweight());
 ps.setBigDecimal(14, record.getLatestheight());
 ps.setBigDecimal(15, record.getLatestheadcircumference());
@@ -250,7 +238,7 @@ ps.setBigDecimal(24, record.getPlatestheartrate());
 ps.setBigDecimal(25, record.getPlatestrespiratoryrate());
 ps.setBigDecimal(26, record.getPlatestoxygensaturation());
 ps.setBigDecimal(27, record.getPlatestglucoselevel());
-ps.setString(28, record.getPlatestpainlevelLkey());
+ps.setBigDecimal(28, record.getPlatestpainlevel());
 ps.setBigDecimal(29, record.getPlatestweight());
 ps.setBigDecimal(30, record.getPlatestheight());
 ps.setBigDecimal(31, record.getPlatestheadcircumference());
@@ -264,10 +252,6 @@ ps.setBigDecimal(38, record.getCreatedAt());
 ps.setBigDecimal(39, record.getUpdatedAt());
 ps.setBigDecimal(40, record.getDeletedAt());
 ps.setBoolean(41, record.getIsValid());
-ps.setString(42, record.getLatestnotes());
-ps.setString(43, record.getPlatestnotes());
-ps.setString(44, record.getLatestpaindescription());
-ps.setString(45, record.getPlatestpaindescription());
 ps.executeUpdate();
 return key;
 }

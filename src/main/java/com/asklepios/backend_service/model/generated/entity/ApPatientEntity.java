@@ -86,6 +86,8 @@ public class ApPatientEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private String districtLkey;
+	private ApLovValues districtLvalue;
 	private String patientClassLkey;
 	private ApLovValues patientClassLvalue;
 	private Boolean privatePatient = false;

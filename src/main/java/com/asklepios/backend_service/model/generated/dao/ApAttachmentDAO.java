@@ -51,8 +51,6 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
-record.setDetails(rs.getString("details"));
-record.setAccessTypeLkey(rs.getString("access_type_lkey"));
 } else { record = null; }
 return record;
 }
@@ -60,7 +58,7 @@ return record;
 public void updateRecord(ApAttachment record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_attachment set key = ?, attachment_type = ?, reference_object_key = ?, extra_details = ?, file_name = ?, content_type = ?, file_content = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, details = ?, access_type_lkey = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_attachment set key = ?, attachment_type = ?, reference_object_key = ?, extra_details = ?, file_name = ?, content_type = ?, file_content = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -77,9 +75,7 @@ ps.setBigDecimal(11, record.getCreatedAt());
 ps.setBigDecimal(12, record.getUpdatedAt());
 ps.setBigDecimal(13, record.getDeletedAt());
 ps.setBoolean(14, record.getIsValid());
-ps.setString(15, record.getDetails());
-ps.setString(16, record.getAccessTypeLkey());
-ps.setString(17, record.getKey());
+ps.setString(15, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -115,8 +111,6 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
-record.setDetails(rs.getString("details"));
-record.setAccessTypeLkey(rs.getString("access_type_lkey"));
 list.add(record);
 }
 return list;
@@ -125,7 +119,7 @@ return list;
 public String saveRecord(ApAttachment record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_attachment values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_attachment values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -146,8 +140,6 @@ ps.setBigDecimal(11, record.getCreatedAt());
 ps.setBigDecimal(12, record.getUpdatedAt());
 ps.setBigDecimal(13, record.getDeletedAt());
 ps.setBoolean(14, record.getIsValid());
-ps.setString(15, record.getDetails());
-ps.setString(16, record.getAccessTypeLkey());
 ps.executeUpdate();
 return key;
 }

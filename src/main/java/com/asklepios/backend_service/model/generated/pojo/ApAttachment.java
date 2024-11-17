@@ -12,4 +12,5 @@ import com.asklepios.backend_service.model.generated.entity.ApAttachmentEntity;
 public class ApAttachment extends ApAttachmentEntity implements Serializable {
 
 
+
 }

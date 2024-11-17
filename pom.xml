@@ -33,7 +33,11 @@
             <version>2.0.0</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>5.0.1</version> <!-- Use the latest stable version -->
+        </dependency>
 
         <!-- Spring Data Redis -->
         <dependency>

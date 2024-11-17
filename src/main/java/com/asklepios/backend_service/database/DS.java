@@ -1,64 +1,70 @@
 package com.asklepios.backend_service.database;
 
 import com.asklepios.backend_service.util.Utilities;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Properties;
 
 @Component
 public class DS {
 
-    private static Properties props;
+    private static HikariDataSource dataSource;
 
     static {
         try {
-            props = new Properties();
+            Properties props = new Properties();
             props.load(new Utilities().loadResource("datasource.properties"));
-            // Load the PostgreSQL driver
-            Class.forName("org.postgresql.Driver");
+
+            // HikariCP configuration
+            HikariConfig config = new HikariConfig();
+            config.setJdbcUrl(props.getProperty("db.jdbcUrl"));
+            config.setUsername(props.getProperty("db.user"));
+            config.setPassword(props.getProperty("db.password"));
+            config.setMaximumPoolSize(10); // Adjust pool size as needed
+            config.setMinimumIdle(5);
+            config.setIdleTimeout(30000);
+            config.setMaxLifetime(1800000);
+
+            dataSource = new HikariDataSource(config);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException("Failed to initialize HikariCP connection pool", e);
         }
     }
 
     private DS() {
     }
 
-    // Use DriverManager to get a connection directly
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(
-                props.getProperty("db.jdbcUrl"),
-                props.getProperty("db.user"),
-                props.getProperty("db.password"));
+        return dataSource.getConnection();
     }
 
-    public static synchronized int executeQuery(String query) throws SQLException {
-        int res = 0;
+    public static int executeQuery(String query) throws SQLException {
         try (Connection conn = getConnection();
-                Statement st = conn.createStatement()) {
+             PreparedStatement ps = conn.prepareStatement(query)) {
             System.out.println(query);
-            res = st.executeUpdate(query);
+            return ps.executeUpdate();
         }
-        return res;
     }
 
-    public static synchronized BigDecimal executeDecimalResultQuery(String query) throws SQLException {
-        BigDecimal res = BigDecimal.ZERO;
+    public static BigDecimal executeDecimalResultQuery(String query) throws SQLException {
+        BigDecimal result = BigDecimal.ZERO;
         try (Connection conn = getConnection();
-                Statement st = conn.createStatement()) {
+             PreparedStatement ps = conn.prepareStatement(query)) {
             System.out.println(query);
-            try (ResultSet rs = st.executeQuery(query);) {
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    res = rs.getBigDecimal(1);
+                    result = rs.getBigDecimal(1);
                 }
             }
         }
-        return res;
+        return result;
     }
 }

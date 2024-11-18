@@ -44,6 +44,8 @@ public class ApPatientDiagnoseEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private Boolean isMajor = false;
+	private Boolean isSuspected = false;
 	private ApPatientDiagnoseEntity translatedObject;
 
 }

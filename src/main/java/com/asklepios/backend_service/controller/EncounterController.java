@@ -39,9 +39,10 @@ public class EncounterController {
     private final ApPhysicalExamAreaService apPhysicalExamAreaService;
     private final ApIcdCodeService apIcdCodeService;
     private final ApPatientDiagnoseService apPatientDiagnoseService;
+    private final ApPatientPlanService apPatientPlanService;
 
 
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService) {
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -52,6 +53,7 @@ public class EncounterController {
         this.apPhysicalExamAreaService = apPhysicalExamAreaService;
         this.apIcdCodeService = apIcdCodeService;
         this.apPatientDiagnoseService = apPatientDiagnoseService;
+        this.apPatientPlanService=apPatientPlanService ;
     }
 
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -502,8 +504,7 @@ public class EncounterController {
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false,false);
             List<ApPatientDiagnose> patientDiagnoseList = apPatientDiagnoseService.getList(where);
-            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_patient_allergies where " + whereForTotal);
-
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_patient_diagnose where " + whereForTotal);
 
             for (ApPatientDiagnose pdiag : patientDiagnoseList) {
                 apPatientDiagnoseService.populateLovFields(pdiag, lang);
@@ -561,6 +562,65 @@ public class EncounterController {
 
             response.setObject(request);
             return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/save-patient-plan", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> savePatientPlan(@RequestBody ApPatientPlan request,
+                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                 @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+            ParentResponse<ApPatientPlan> response = new ParentResponse<>();
+            apPatientPlanService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/patient-plan-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPatientPlanList(@RequestParam Map<String, String> queryParams,
+                                                @Nullable @RequestHeader String facility_id,
+                                                @Nullable @RequestHeader String access_token,
+                                                @Nullable @RequestHeader Integer access_level,
+                                                @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApPatientPlan>> response = new ParentResponse<>();
+
+            // إذا كانت المعايير تحتوي على "ignore=true"، أعد قائمة فارغة
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            // بناء معايير البحث من queryParams
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            // استرداد خطط المرضى بناءً على المعايير
+            List<ApPatientPlan> patientPlans = apPatientPlanService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_patient_plan where " + whereForTotal);
+
+            // معالجة كل خطة (إضافة أي معالجات ضرورية)
+            for (ApPatientPlan plan : patientPlans) {
+                apPatientPlanService.populateLovFields(plan, lang); // افترض أن هذه الطريقة تضيف البيانات المساعدة
+            }
+
+            // إعداد الاستجابة النهائية
+            response.setObject(patientPlans);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());

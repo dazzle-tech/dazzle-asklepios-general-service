@@ -154,6 +154,10 @@
       "type": "text"
     },
     {
+      "name": "district_lkey",
+      "type": "text"
+    },
+    {
       "name": "postal_code",
       "type": "text"
     },

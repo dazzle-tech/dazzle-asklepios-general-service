@@ -117,17 +117,10 @@ public class PatientController {
                 whereForTotal = whereForTotal.replace("lower(" + fieldName + ") like '%" + value + "%'", "lower(ap_patient." + fieldName + ") like'%" + value + "%' or lower(ap_patient.key) like   (select patient_key from apv_patient_secondary_documents where lower(" + fieldName + ") like '%" + value + "%' )");
 
             }
-            System.out.println(fieldName);
 
-            System.out.println(operator);
-            System.out.println(value);
-
-
-            System.out.println("used : " + where);
             List<ApPatient> patients = apPatientService.getList(where);
 
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_patient where " + whereForTotal);
-
 
             for (ApPatient patient : patients) {
                 apPatientService.populateLovFields(patient, lang);

@@ -60,6 +60,8 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setIsMajor(rs.getBoolean("is_major"));
+record.setIsSuspected(rs.getBoolean("is_suspected"));
 } else { record = null; }
 return record;
 }
@@ -67,7 +69,7 @@ return record;
 public void updateRecord(ApPatientDiagnose record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_patient_diagnose set key = ?, patient_key = ?, visit_key = ?, diagnose_code = ?, description = ?, diagnose_coding_lkey = ?, date_diagnosed = ?, onset_date = ?, diagnose_status_lkey = ?, diagnose_type_lkey = ?, diagnose_site_lkey = ?, provider_type_lkey = ?, provider_lkey = ?, provider_user_name = ?, provider_role_lkey = ?, notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_patient_diagnose set key = ?, patient_key = ?, visit_key = ?, diagnose_code = ?, description = ?, diagnose_coding_lkey = ?, date_diagnosed = ?, onset_date = ?, diagnose_status_lkey = ?, diagnose_type_lkey = ?, diagnose_site_lkey = ?, provider_type_lkey = ?, provider_lkey = ?, provider_user_name = ?, provider_role_lkey = ?, notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, is_major = ?, is_suspected = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -95,7 +97,9 @@ ps.setBigDecimal(20, record.getCreatedAt());
 ps.setBigDecimal(21, record.getUpdatedAt());
 ps.setBigDecimal(22, record.getDeletedAt());
 ps.setBoolean(23, record.getIsValid());
-ps.setString(24, record.getKey());
+ps.setBoolean(24, record.getIsMajor());
+ps.setBoolean(25, record.getIsSuspected());
+ps.setString(26, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -140,6 +144,8 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setIsMajor(rs.getBoolean("is_major"));
+record.setIsSuspected(rs.getBoolean("is_suspected"));
 list.add(record);
 }
 return list;
@@ -148,7 +154,7 @@ return list;
 public String saveRecord(ApPatientDiagnose record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_patient_diagnose values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_patient_diagnose values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -180,6 +186,8 @@ ps.setBigDecimal(20, record.getCreatedAt());
 ps.setBigDecimal(21, record.getUpdatedAt());
 ps.setBigDecimal(22, record.getDeletedAt());
 ps.setBoolean(23, record.getIsValid());
+ps.setBoolean(24, record.getIsMajor());
+ps.setBoolean(25, record.getIsSuspected());
 ps.executeUpdate();
 return key;
 }

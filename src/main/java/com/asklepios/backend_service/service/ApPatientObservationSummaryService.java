@@ -42,6 +42,28 @@ public class ApPatientObservationSummaryService extends ApPatientObservationSumm
 
         return sRecord; // Return the record (could be null if not found)
     }
+    public ApPatientObservationSummary getRecordByVisit(String visitKey) {
+        String specificKeyQuery = "SELECT key FROM ap_patient_observation_summary WHERE visit_key = ?";
+        ApPatientObservationSummary sRecord = null;
+        try (Connection conn = DS.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(specificKeyQuery)) {
+             stmt.setString(1, visitKey);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    String key = rs.getString("key");
+                    System.out.println("Key found: " + key);
+                    sRecord = getRecord(key);
+                } else {
+                    System.out.println("No record found with the specified visit_key.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return sRecord;
+    }
 
 
 }

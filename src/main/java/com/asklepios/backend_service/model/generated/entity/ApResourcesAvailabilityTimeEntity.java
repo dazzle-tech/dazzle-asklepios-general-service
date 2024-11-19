@@ -12,12 +12,19 @@ import com.asklepios.backend_service.model.generated.pojo.ApLovValues;
 @Getter
 @Setter
 @Slf4j
-public class ApUserMedicalLicenseEntity implements Serializable {
+public class ApResourcesAvailabilityTimeEntity implements Serializable {
 
 	private String key;
-	private String licenseName;
-	private String licenseNumber;
-	private Date validTo = new Date();
+	private String resourceKey;
+	private String facilityKey;
+	private String departmentKey;
+	private String dayLkey;
+	private ApLovValues dayLvalue;
+	private BigDecimal startTime;
+	private BigDecimal endTime;
+	private Boolean isHasBreak = false;
+	private BigDecimal breakFrom;
+	private BigDecimal breakTo;
 	private String createdBy;
 	private String updatedBy;
 	private String deletedBy;
@@ -25,7 +32,6 @@ public class ApUserMedicalLicenseEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
-	private String userKey;
-	private ApUserMedicalLicenseEntity translatedObject;
+	private ApResourcesAvailabilityTimeEntity translatedObject;
 
 }

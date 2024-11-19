@@ -25,7 +25,8 @@ public class ApPatientObservationSummaryEntity implements Serializable {
 	private BigDecimal latestrespiratoryrate;
 	private BigDecimal latestoxygensaturation;
 	private BigDecimal latestglucoselevel;
-	private BigDecimal latestpainlevel;
+	private String latestpainlevelLkey;
+	private ApLovValues latestpainlevelLvalue;
 	private BigDecimal latestweight;
 	private BigDecimal latestheight;
 	private BigDecimal latestheadcircumference;
@@ -41,7 +42,8 @@ public class ApPatientObservationSummaryEntity implements Serializable {
 	private BigDecimal platestrespiratoryrate;
 	private BigDecimal platestoxygensaturation;
 	private BigDecimal platestglucoselevel;
-	private BigDecimal platestpainlevel;
+	private String platestpainlevelLkey;
+	private ApLovValues platestpainlevelLvalue;
 	private BigDecimal platestweight;
 	private BigDecimal platestheight;
 	private BigDecimal platestheadcircumference;
@@ -55,6 +57,12 @@ public class ApPatientObservationSummaryEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private String latestnotes;
+	private String platestnotes;
+	private String latestpaindescription;
+	private String platestpaindescription;
+	private BigDecimal latestpainlevel;
+	private BigDecimal platestpainlevel;
 	private ApPatientObservationSummaryEntity translatedObject;
 
 }

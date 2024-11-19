@@ -86,8 +86,6 @@ public class ApPatientEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
-	private String districtLkey;
-	private ApLovValues districtLvalue;
 	private String patientClassLkey;
 	private ApLovValues patientClassLvalue;
 	private Boolean privatePatient = false;
@@ -118,6 +116,8 @@ public class ApPatientEntity implements Serializable {
 	private Boolean incompletePatient = false;
 	private String extraDetails;
 	private String secondaryMobileNumber;
+	private String districtLkey;
+	private ApLovValues districtLvalue;
 	private ApPatientEntity translatedObject;
 
 }

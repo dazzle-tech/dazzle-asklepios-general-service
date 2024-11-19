@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import com.asklepios.backend_service.database.DS;
 import com.asklepios.backend_service.model.generated.pojo.ApEncounter;
+import com.asklepios.backend_service.model.generated.pojo.ApPatient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import com.asklepios.backend_service.model.generated.dao.ApEncounterDAO;
@@ -132,6 +133,16 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
         else
             queue = queue.add(BigDecimal.ONE);
         return queue;
+    }
+    public void processPatientObservationStatus(List<ApEncounter> encounters) throws SQLException {
+        if (encounters == null || encounters.isEmpty()) {
+            return;
+        }
+        ApPatientObservationSummaryService observationService = new ApPatientObservationSummaryService();
+        for (ApEncounter encounter : encounters) {
+            boolean isObserved = (observationService.getRecordByVisit(encounter.getKey())!=null);
+             encounter.setObservations(isObserved);
+        }
     }
 
 }

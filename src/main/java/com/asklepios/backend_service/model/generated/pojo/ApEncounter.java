@@ -13,7 +13,7 @@ import com.asklepios.backend_service.model.generated.entity.ApEncounterEntity;
 public class ApEncounter extends ApEncounterEntity implements Serializable {
     private String departmentName;
     ApPatient patientObject;
-
+    private boolean isObservations;
     public boolean isEditable() {
         if (getEncounterStatusLkey() == null) {
             return false;

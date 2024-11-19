@@ -82,6 +82,7 @@ public class EncounterController {
                 apPatientService.populateLovFields(patient, lang);
                 encounter.setPatientObject(patient);
             }
+            apEncounterService.processPatientObservationStatus(encounters);
             response.setObject(encounters);
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);

@@ -103,6 +103,9 @@ public class ApEncounterEntity implements Serializable {
 	private String dischargeNote;
 	private String dischargeSummery;
 	private String visitId;
+	private String encounterNotes;
+	private String sourceName;
+	private String physicalExamNote;
 	private ApEncounterEntity translatedObject;
 
 }

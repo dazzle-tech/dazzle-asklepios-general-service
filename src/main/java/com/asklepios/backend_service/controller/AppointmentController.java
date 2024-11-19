@@ -1,11 +1,13 @@
 package com.asklepios.backend_service.controller;
 
 import com.asklepios.backend_service.database.DS;
+import com.asklepios.backend_service.model.generated.pojo.ApAppointment;
 import com.asklepios.backend_service.model.generated.pojo.ApDepartment;
 import com.asklepios.backend_service.model.generated.pojo.ApPractitioner;
 import com.asklepios.backend_service.model.generated.pojo.ApResources;
 import com.asklepios.backend_service.model.pojo.request.ListRequest;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
+import com.asklepios.backend_service.service.ApAppointmentService;
 import com.asklepios.backend_service.service.ApDepartmentService;
 import com.asklepios.backend_service.service.ApPractitionerService;
 import com.asklepios.backend_service.service.ApResourcesService;
@@ -28,11 +30,13 @@ public class AppointmentController
     private final ApResourcesService apResourcesService;
     private final ApPractitionerService apPractitionerService;
     private final ApDepartmentService apDepartmentService;
+    private final ApAppointmentService apAppointmentService;
 
-    public AppointmentController(ApResourcesService apResourcesService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService) {
+    public AppointmentController(ApResourcesService apResourcesService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApAppointmentService apAppointmentService) {
         this.apResourcesService = apResourcesService;
         this.apPractitionerService = apPractitionerService;
         this.apDepartmentService = apDepartmentService;
+        this.apAppointmentService = apAppointmentService;
     }
 
     @GetMapping(value = "/resources-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -78,6 +82,23 @@ public class AppointmentController
             ParentResponse<ApResources> response = new ParentResponse<>();
             apResourcesService.saveRecord(resources);
             response.setObject(resources);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/save-appointment", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveAppointment(@RequestBody ApAppointment appointment,
+                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                             @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApAppointment> response = new ParentResponse<>();
+            apAppointmentService.saveRecord(appointment);
+            response.setObject(appointment);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();

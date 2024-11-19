@@ -1,0 +1,57 @@
+{
+  "tableName": "appointment",
+  "columns": [
+    {
+      "name": "patient_key",
+      "type": "text"
+    }
+  ,{
+      "name": "facility_key",
+      "type": "text"
+    },
+    {
+      "name": "resource_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "resource_lkey",
+      "type": "text"
+    },
+    {
+      "name": "appointment_start",
+      "type": "text"
+    },{
+      "name": "Instructions_lkey",
+      "type": "text"
+    },{
+      "name": "notes",
+      "type": "text"
+    },{
+      "name": "priority_lkey",
+      "type": "text"
+    },{
+      "name": "is_reminder",
+      "type": "text"
+    },{
+      "name": "reminder_lkey",
+      "type": "text"
+    },{
+      "name": "consent_form",
+      "type": "text"
+    },{
+      "name": "refering_physician_lkey",
+      "type": "text"
+    },{
+      "name": "external_physician",
+      "type": "text"
+    },{
+      "name": "pricedure_level_lkey",
+      "type": "text"
+    },{
+      "name": "visit_type_lkey",
+      "type": "text"
+    }
+  ]
+
+
+}

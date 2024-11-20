@@ -22,8 +22,7 @@ public class ApAppointmentEntity implements Serializable {
 	private String resourceLkey;
 	private ApLovValues resourceLvalue;
 	private String appointmentStart;
-	private String instructionsLkey;
-	private ApLovValues instructionsLvalue;
+	private String instructions;
 	private String notes;
 	private String priorityLkey;
 	private ApLovValues priorityLvalue;

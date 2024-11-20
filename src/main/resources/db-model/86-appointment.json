@@ -21,7 +21,7 @@
       "name": "appointment_start",
       "type": "text"
     },{
-      "name": "Instructions_lkey",
+      "name": "Instructions",
       "type": "text"
     },{
       "name": "notes",

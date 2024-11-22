@@ -16,6 +16,12 @@
     {
       "name": "resource_lkey",
       "type": "text"
+    },{
+      "name": "visit_type_lkey",
+      "type": "text"
+    },{
+      "name": "duration_lkey",
+      "type": "text"
     },
     {
       "name": "appointment_start",
@@ -45,10 +51,7 @@
       "name": "external_physician",
       "type": "text"
     },{
-      "name": "pricedure_level_lkey",
-      "type": "text"
-    },{
-      "name": "visit_type_lkey",
+      "name": "procedure_level_lkey",
       "type": "text"
     }
   ]

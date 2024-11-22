@@ -21,6 +21,10 @@ public class ApAppointmentEntity implements Serializable {
 	private ApLovValues resourceTypeLvalue;
 	private String resourceLkey;
 	private ApLovValues resourceLvalue;
+	private String visitTypeLkey;
+	private ApLovValues visitTypeLvalue;
+	private String durationLkey;
+	private ApLovValues durationLvalue;
 	private String appointmentStart;
 	private String instructionsLkey;
 	private ApLovValues instructionsLvalue;
@@ -34,10 +38,8 @@ public class ApAppointmentEntity implements Serializable {
 	private String referingPhysicianLkey;
 	private ApLovValues referingPhysicianLvalue;
 	private String externalPhysician;
-	private String pricedureLevelLkey;
-	private ApLovValues pricedureLevelLvalue;
-	private String visitTypeLkey;
-	private ApLovValues visitTypeLvalue;
+	private String procedureLevelLkey;
+	private ApLovValues procedureLevelLvalue;
 	private String createdBy;
 	private String updatedBy;
 	private String deletedBy;

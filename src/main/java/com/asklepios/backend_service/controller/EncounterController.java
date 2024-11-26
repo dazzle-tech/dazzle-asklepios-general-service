@@ -40,9 +40,9 @@ public class EncounterController {
     private final ApIcdCodeService apIcdCodeService;
     private final ApPatientDiagnoseService apPatientDiagnoseService;
     private final ApPatientPlanService apPatientPlanService;
+    private final ApPatientEncounterOrderService apPatientEncounterOrderService;
 
-
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService) {
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -54,6 +54,7 @@ public class EncounterController {
         this.apIcdCodeService = apIcdCodeService;
         this.apPatientDiagnoseService = apPatientDiagnoseService;
         this.apPatientPlanService=apPatientPlanService ;
+        this.apPatientEncounterOrderService = apPatientEncounterOrderService;
     }
 
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -628,6 +629,86 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @PostMapping(value = "/save-patient-encounter-order", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> savePatientEncounterOrder(@RequestBody ApPatientEncounterOrder request,
+                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                             @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+            ParentResponse<ApPatientEncounterOrder> response = new ParentResponse<>();
+            apPatientEncounterOrderService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(value = "/patient-encounter-order-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPatientEncounterOrderList(@RequestParam Map<String, String> queryParams,
+                                                @Nullable @RequestHeader String facility_id,
+                                                @Nullable @RequestHeader String access_token,
+                                                @Nullable @RequestHeader Integer access_level,
+                                                @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApPatientEncounterOrder>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApPatientEncounterOrder> patientEncounterOrders = apPatientEncounterOrderService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_patient_encounter_order where " + whereForTotal);
+
+            for (ApPatientEncounterOrder order : patientEncounterOrders) {
+                order.setTestName(apPatientEncounterOrderService.getTest(order.getTestKey()).getTestName()) ;
+                order.setInternalCode(apPatientEncounterOrderService.getTest(order.getTestKey()).getInternalCode());
+                order.setOrderTypeLkey(apPatientEncounterOrderService.getTest(order.getTestKey()).getTestTypeLkey());
+                order.setInternationalCodeOne(apPatientEncounterOrderService.getTest(order.getTestKey()).getInternationalCodeOne());
+                order.setInternationalCodeTwo(apPatientEncounterOrderService.getTest(order.getTestKey()).getInternationalCodeTwo());
+                order.setInternationalCodeThree(apPatientEncounterOrderService.getTest(order.getTestKey()).getInternationalCodeThree()); ;
+                apPatientEncounterOrderService.populateLovFields(order, lang);
+            }
+
+            response.setObject(patientEncounterOrders);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/remove-encounter-order", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteOrder(@RequestBody ApPatientEncounterOrder Order,
+                                        @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                        @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                        @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                        @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApPatientEncounterOrder> response = new ParentResponse<>();
+            apPatientEncounterOrderService.deleteRecord(Order);
+            response.setObject(Order);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
 
 
 }

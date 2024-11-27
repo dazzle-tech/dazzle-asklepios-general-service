@@ -282,8 +282,11 @@ public class EncounterController {
                 response.addGeneralError("Invalid Visit");
                 return ResponseEntity.status(400).body(response);
             }
-
             List<ApReviewOfSystem> systems = apReviewOfSystemService.getList("encounter_key = '" + encounterKey + "'");
+            for (ApReviewOfSystem all : systems) {
+                apReviewOfSystemService.populateLovFields(all, lang);
+            }
+
             response.setObject(systems);
             return ResponseEntity.ok(response);
         } catch (Exception e) {

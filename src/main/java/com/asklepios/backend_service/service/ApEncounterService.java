@@ -1,19 +1,19 @@
 package com.asklepios.backend_service.service;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import com.asklepios.backend_service.database.DS;
+import com.asklepios.backend_service.model.generated.pojo.ApDiagnosticTest;
 import com.asklepios.backend_service.model.generated.pojo.ApEncounter;
+import com.asklepios.backend_service.model.generated.pojo.ApPatientDiagnose;
 import com.asklepios.backend_service.model.generated.pojo.ApPatient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import com.asklepios.backend_service.model.generated.dao.ApEncounterDAO;
-import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.lang.reflect.Field;
 
@@ -24,6 +24,61 @@ import java.lang.reflect.Field;
 @Service
 @Slf4j
 public class ApEncounterService extends ApEncounterDAO implements Serializable {
+
+    public String getDiagnosis(String visitKey) throws SQLException {
+        String result = "";
+        String query = "SELECT diagnose_code, description FROM ap_patient_diagnose WHERE visit_key = ?";
+
+        try (
+                Connection con = DS.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)
+        ) {
+            ps.setString(1, visitKey);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String diagnoseCode = rs.getString("diagnose_code");
+                    String description = rs.getString("description");
+                    result = diagnoseCode + "," + description;
+                } else {
+
+                    result = " ";
+                }
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            throw e;
+        }
+        return result;
+    }
+    public boolean getHasOrder(String visitKey) throws SQLException {
+        String query = "SELECT COUNT(visit_key) AS count FROM ap_patient_encounter_order WHERE visit_key = ?";
+
+        try (
+                Connection con = DS.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)
+        ) {
+            ps.setString(1, visitKey);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt("count");
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            throw e;
+        }
+        return false;
+    }
+
+
+
+
+
+
+
 
 
     public List<ApEncounter> getListWithDepartmentName(String where) throws SQLException {

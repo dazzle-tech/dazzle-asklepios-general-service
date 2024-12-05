@@ -84,6 +84,9 @@ public class ListRequest {
                     case "match":
                         where.append(filter.getFieldName()).append(" = '").append(filter.getValue()).append("'");
                         break;
+                    case "notMatch":
+                        where.append(filter.getFieldName()).append(" != '").append(filter.getValue()).append("'");
+                        break;
                     case "startsWith":
                         where.append(filter.getFieldName()).append(" like '").append(filter.getValue()).append("%'");
                         break;

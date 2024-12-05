@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,8 +42,11 @@ public class EncounterController {
     private final ApPatientDiagnoseService apPatientDiagnoseService;
     private final ApPatientPlanService apPatientPlanService;
     private final ApPatientEncounterOrderService apPatientEncounterOrderService;
-
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService) {
+    private final ApPrescriptionService apPrescriptionService;
+    private final ApPrescriptionInstructionService apPrescriptionInstructionService;
+    private final ApCustomeInstructionsService apCustomeInstructionsService ;
+    private final ApPrescriptionMedicationsService apPrescriptionMedicationsService ;
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -55,6 +59,10 @@ public class EncounterController {
         this.apPatientDiagnoseService = apPatientDiagnoseService;
         this.apPatientPlanService=apPatientPlanService ;
         this.apPatientEncounterOrderService = apPatientEncounterOrderService;
+        this.apPrescriptionService = apPrescriptionService;
+        this.apPrescriptionInstructionService = apPrescriptionInstructionService;
+        this.apCustomeInstructionsService = apCustomeInstructionsService;
+        this.apPrescriptionMedicationsService = apPrescriptionMedicationsService;
     }
 
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -603,27 +611,27 @@ public class EncounterController {
         try {
             ParentResponse<List<ApPatientPlan>> response = new ParentResponse<>();
 
-            // إذا كانت المعايير تحتوي على "ignore=true"، أعد قائمة فارغة
+
             if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
                 response.setObject(new ArrayList<>());
                 return ResponseEntity.ok(response);
             }
 
-            // بناء معايير البحث من queryParams
+
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
 
-            // استرداد خطط المرضى بناءً على المعايير
+
             List<ApPatientPlan> patientPlans = apPatientPlanService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_patient_plan where " + whereForTotal);
 
-            // معالجة كل خطة (إضافة أي معالجات ضرورية)
+
             for (ApPatientPlan plan : patientPlans) {
-                apPatientPlanService.populateLovFields(plan, lang); // افترض أن هذه الطريقة تضيف البيانات المساعدة
+                apPatientPlanService.populateLovFields(plan, lang);
             }
 
-            // إعداد الاستجابة النهائية
+
             response.setObject(patientPlans);
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);
@@ -715,5 +723,220 @@ public class EncounterController {
     }
 
 
+    @GetMapping(value = "/prescription-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPrescriptionList(@RequestParam Map<String, String> queryParams,
+                                                          @Nullable @RequestHeader String facility_id,
+                                                          @Nullable @RequestHeader String access_token,
+                                                          @Nullable @RequestHeader Integer access_level,
+                                                          @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApPrescription>> response = new ParentResponse<>();
 
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApPrescription> prescriptions = apPrescriptionService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_prescription where " + whereForTotal);
+
+            for (ApPrescription pre : prescriptions) {
+
+                apPrescriptionService.populateLovFields(pre, lang);
+            }
+
+            response.setObject(prescriptions);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/save-prescription", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> savePrescription(@RequestBody ApPrescription request,
+                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                              @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) throws SQLException {
+        List<ApPrescription> prescriptions = apPrescriptionService.getList(
+                "visit_key = '" + request.getVisitKey() + "' and patient_key = '" + request.getPatientKey() + "'"
+        );
+
+        if (prescriptions != null && !prescriptions.isEmpty()) {
+            ApPrescription pres = prescriptions.get(0); // Get the first element safely
+            request.setKey(pres.getKey());
+            // Proceed with setting the key
+        }
+        else{
+            request.setStatusLkey("1804427038369874");
+        }
+
+            try {
+            ParentResponse<ApPrescription> response = new ParentResponse<>();
+            apPrescriptionService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/prescription-medic-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPrescriptionMedicationList(@RequestParam Map<String, String> queryParams,
+                                                 @Nullable @RequestHeader String facility_id,
+                                                 @Nullable @RequestHeader String access_token,
+                                                 @Nullable @RequestHeader Integer access_level,
+                                                 @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApPrescriptionMedications>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApPrescriptionMedications> prescriptionMedications =  apPrescriptionMedicationsService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_prescription_medications where " + whereForTotal);
+
+            for (ApPrescriptionMedications medic: prescriptionMedications) {
+
+                apPrescriptionMedicationsService.populateLovFields(medic, lang);
+            }
+
+            response.setObject(prescriptionMedications);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/save-prescription-medication", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> savePrescriptionMedication(@RequestBody ApPrescriptionMedications request,
+                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                              @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+            ParentResponse<ApPrescriptionMedications> response = new ParentResponse<>();
+            apPrescriptionMedicationsService.saveRecord(request);
+            response.setObject(request);
+
+            System.out.println("========================>"+response.getObject().getKey());
+            System.out.println("========================>"+response.getObject().getInstructionsTypeLkey());
+            if(request.getInstructionsTypeLkey().equals("3010606785535008")  ){
+                System.out.println("========================>iii");
+
+
+                ApCustomeInstructions customeInstructions = new ApCustomeInstructions();
+                customeInstructions.setPrescriptionMedicationsKey(response.getObject().getKey());
+                customeInstructions.setFrequencyLkey(request.getFrequencyLkey());
+                customeInstructions.setDose(request.getDose());
+                customeInstructions.setUnitLkey(request.getUnitLkey());
+                customeInstructions.setRoaLkey(request.getRoaLkey());
+                saveCustomeInstructions(customeInstructions,facility_id,access_token,access_level,lang);
+            }
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            log.error(e.getMessage());
+
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/custome-instructions-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getCustomeInstructionsList(@RequestParam Map<String, String> queryParams,
+                                                            @Nullable @RequestHeader String facility_id,
+                                                            @Nullable @RequestHeader String access_token,
+                                                            @Nullable @RequestHeader Integer access_level,
+                                                            @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApCustomeInstructions>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApCustomeInstructions> customeInstructions = apCustomeInstructionsService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_custome_instructions where " + whereForTotal);
+
+            for (ApCustomeInstructions ci : customeInstructions) {
+
+                apCustomeInstructionsService.populateLovFields(ci, lang);
+            }
+
+            response.setObject(customeInstructions);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/save-custome-instructions", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveCustomeInstructions(@RequestBody ApCustomeInstructions request,
+                                                        @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                        @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                        @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                      @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+            ParentResponse<ApCustomeInstructions> response = new ParentResponse<>();
+            apCustomeInstructionsService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/remove-prescription-medication", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deletePrescriptionMedication(@RequestBody ApPrescriptionMedications prescriptionMedications,
+                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                         @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                         @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApPrescriptionMedications> response = new ParentResponse<>();
+            prescriptionMedications.setIsValid(false);
+             prescriptionMedications.setStatusLkey("1804447528780744");
+             System.out.println("+++++++++++++++++++++++++"+prescriptionMedications.getStatusLkey());
+            apPrescriptionMedicationsService.deleteRecord(prescriptionMedications);
+            response.setObject(prescriptionMedications);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 }

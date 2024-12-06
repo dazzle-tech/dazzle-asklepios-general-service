@@ -53,6 +53,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setSubmitDate(rs.getBigDecimal("submit_date"));
 } else { record = null; }
 return record;
 }
@@ -60,7 +61,7 @@ return record;
 public void updateRecord(ApPatientEncounterOrder record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_patient_encounter_order set key = ?, patient_key = ?, visit_key = ?, test_key = ?, status_lkey = ?, received_lab_lkey = ?, reason_lkey = ?, priority_lkey = ?, notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_patient_encounter_order set key = ?, patient_key = ?, visit_key = ?, test_key = ?, status_lkey = ?, received_lab_lkey = ?, reason_lkey = ?, priority_lkey = ?, notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, submit_date = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -79,7 +80,8 @@ ps.setBigDecimal(13, record.getCreatedAt());
 ps.setBigDecimal(14, record.getUpdatedAt());
 ps.setBigDecimal(15, record.getDeletedAt());
 ps.setBoolean(16, record.getIsValid());
-ps.setString(17, record.getKey());
+ps.setBigDecimal(17, record.getSubmitDate());
+ps.setString(18, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -117,6 +119,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setSubmitDate(rs.getBigDecimal("submit_date"));
 list.add(record);
 }
 return list;
@@ -125,7 +128,7 @@ return list;
 public String saveRecord(ApPatientEncounterOrder record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_patient_encounter_order values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_patient_encounter_order values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -148,6 +151,7 @@ ps.setBigDecimal(13, record.getCreatedAt());
 ps.setBigDecimal(14, record.getUpdatedAt());
 ps.setBigDecimal(15, record.getDeletedAt());
 ps.setBoolean(16, record.getIsValid());
+ps.setBigDecimal(17, record.getSubmitDate());
 ps.executeUpdate();
 return key;
 }

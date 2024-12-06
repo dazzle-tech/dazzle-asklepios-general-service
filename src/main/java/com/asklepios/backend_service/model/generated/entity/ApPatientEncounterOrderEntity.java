@@ -34,6 +34,7 @@ public class ApPatientEncounterOrderEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private BigDecimal submitDate;
 	private ApPatientEncounterOrderEntity translatedObject;
 
 }

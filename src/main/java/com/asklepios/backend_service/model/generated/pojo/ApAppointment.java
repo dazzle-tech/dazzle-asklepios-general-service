@@ -11,5 +11,5 @@ import com.asklepios.backend_service.model.generated.entity.ApAppointmentEntity;
 @Slf4j
 public class ApAppointment extends ApAppointmentEntity implements Serializable {
 
-
+    private ApPatient patient;
 }

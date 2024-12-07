@@ -652,6 +652,9 @@ public class EncounterController {
     ) {
         try {
             ParentResponse<ApPatientEncounterOrder> response = new ParentResponse<>();
+            if(request.getStatusLkey().equals("1804482322306061")){
+                request.setSubmitDate(new BigDecimal(System.currentTimeMillis()));
+            }
             apPatientEncounterOrderService.saveRecord(request);
             response.setObject(request);
             return ResponseEntity.ok(response);
@@ -687,6 +690,7 @@ public class EncounterController {
                 order.setTestName(apPatientEncounterOrderService.getTest(order.getTestKey()).getTestName()) ;
                 order.setInternalCode(apPatientEncounterOrderService.getTest(order.getTestKey()).getInternalCode());
                 order.setOrderTypeLkey(apPatientEncounterOrderService.getTest(order.getTestKey()).getTestTypeLkey());
+
                 order.setInternationalCodeOne(apPatientEncounterOrderService.getTest(order.getTestKey()).getInternationalCodeOne());
                 order.setInternationalCodeTwo(apPatientEncounterOrderService.getTest(order.getTestKey()).getInternationalCodeTwo());
                 order.setInternationalCodeThree(apPatientEncounterOrderService.getTest(order.getTestKey()).getInternationalCodeThree()); ;

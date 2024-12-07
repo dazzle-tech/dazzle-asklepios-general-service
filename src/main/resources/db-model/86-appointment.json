@@ -14,7 +14,7 @@
       "type": "text"
     },
     {
-      "name": "resource_lkey",
+      "name": "resource_key",
       "type": "text"
     },{
       "name": "visit_type_lkey",
@@ -26,8 +26,13 @@
     {
       "name": "appointment_start",
       "type": "text"
-    },{
-      "name": "Instructions_lkey",
+    },
+    {
+      "name": "appointment_end",
+      "type": "text"
+    }
+  ,{
+      "name": "Instructions",
       "type": "text"
     },{
       "name": "notes",
@@ -52,6 +57,10 @@
       "type": "text"
     },{
       "name": "procedure_level_lkey",
+      "type": "text"
+    }
+  ,{
+      "name": "appointment_status",
       "type": "text"
     }
   ]

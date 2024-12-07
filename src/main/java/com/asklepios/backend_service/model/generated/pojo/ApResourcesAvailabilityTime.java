@@ -11,5 +11,5 @@ import com.asklepios.backend_service.model.generated.entity.ApResourcesAvailabil
 @Slf4j
 public class ApResourcesAvailabilityTime extends ApResourcesAvailabilityTimeEntity implements Serializable {
 
-
+    ApService serviceObject;
 }

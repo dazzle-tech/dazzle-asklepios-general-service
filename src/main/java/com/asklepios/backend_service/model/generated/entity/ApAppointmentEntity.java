@@ -19,15 +19,14 @@ public class ApAppointmentEntity implements Serializable {
 	private String facilityKey;
 	private String resourceTypeLkey;
 	private ApLovValues resourceTypeLvalue;
-	private String resourceLkey;
-	private ApLovValues resourceLvalue;
+	private String resourceKey;
 	private String visitTypeLkey;
 	private ApLovValues visitTypeLvalue;
 	private String durationLkey;
 	private ApLovValues durationLvalue;
 	private String appointmentStart;
-	private String instructionsLkey;
-	private ApLovValues instructionsLvalue;
+	private String appointmentEnd;
+	private String instructions;
 	private String notes;
 	private String priorityLkey;
 	private ApLovValues priorityLvalue;
@@ -47,6 +46,11 @@ public class ApAppointmentEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private String resourceLkey;
+	private ApLovValues resourceLvalue;
+	private String instructionsLkey;
+	private ApLovValues instructionsLvalue;
+	private String appointmentStatus;
 	private ApAppointmentEntity translatedObject;
 
 }

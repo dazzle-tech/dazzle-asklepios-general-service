@@ -1,16 +1,10 @@
 package com.asklepios.backend_service.controller;
 
 import com.asklepios.backend_service.database.DS;
-import com.asklepios.backend_service.model.generated.pojo.ApAppointment;
-import com.asklepios.backend_service.model.generated.pojo.ApDepartment;
-import com.asklepios.backend_service.model.generated.pojo.ApPractitioner;
-import com.asklepios.backend_service.model.generated.pojo.ApResources;
+import com.asklepios.backend_service.model.generated.pojo.*;
 import com.asklepios.backend_service.model.pojo.request.ListRequest;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
-import com.asklepios.backend_service.service.ApAppointmentService;
-import com.asklepios.backend_service.service.ApDepartmentService;
-import com.asklepios.backend_service.service.ApPractitionerService;
-import com.asklepios.backend_service.service.ApResourcesService;
+import com.asklepios.backend_service.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/appointment")
@@ -31,12 +26,15 @@ public class AppointmentController
     private final ApPractitionerService apPractitionerService;
     private final ApDepartmentService apDepartmentService;
     private final ApAppointmentService apAppointmentService;
-
-    public AppointmentController(ApResourcesService apResourcesService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApAppointmentService apAppointmentService) {
+    private final ApResourcesAvailabilityTimeService apResourcesAvailabilityTimeService;
+    private final ApPatientService apPatientService;
+    public AppointmentController(ApResourcesService apResourcesService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApAppointmentService apAppointmentService, ApResourcesAvailabilityTimeService apResourcesAvailabilityTimeService) {
         this.apResourcesService = apResourcesService;
         this.apPractitionerService = apPractitionerService;
         this.apDepartmentService = apDepartmentService;
         this.apAppointmentService = apAppointmentService;
+        this.apResourcesAvailabilityTimeService = apResourcesAvailabilityTimeService;
+        this.apPatientService = new ApPatientService();
     }
 
     @GetMapping(value = "/resources-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -107,6 +105,24 @@ public class AppointmentController
         }
     }
 
+    @PostMapping(value = "/change-appointment-status", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> changeAppointmentStatus(@RequestBody ApAppointment appointment,
+                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                             @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApAppointment> response = new ParentResponse<>();
+            apAppointmentService.saveRecord(appointment);
+            response.setObject(appointment);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
     @GetMapping(value = "/resource-type-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> resourceTypeList(@RequestHeader String resource_type,
                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -144,5 +160,88 @@ public class AppointmentController
         }
     }
 
+    @GetMapping(value = "/appointments-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAppointments(
+            @RequestParam String resource_type,
+            @RequestParam String facility_id,
+            @RequestParam List<String> resources,
+            @RequestHeader(required = false) String access_token,
+            @RequestHeader(required = false) String lang) {
+        try {
+            log.info("Fetching appointments for resource_type: {}, facility_id: {}, resources: {}",
+                    resource_type, facility_id, resources);
+
+            // Build the WHERE Based on Provided Params
+            String baseCondition = "1=1";
+            String resourceTypeCondition = (resource_type != null && !resource_type.equals("null") && !resource_type.isEmpty())
+                    ? "resource_type_lkey = '" + resource_type + "'" : "1=1";
+            String facilityCondition = (facility_id != null && !facility_id.equals("null") && !facility_id.isEmpty())
+                    ? "facility_key = '" + facility_id + "'" : "1=1";
+            String resourceKeyCondition = (!resources.isEmpty()
+                    && resources.stream().anyMatch(r -> !r.equals("null") && !r.equals("undefined")))
+                    ? "resource_key IN (" + resources.stream()
+                    .filter(r -> !r.equals("null") && !r.equals("undefined"))
+                    .map(r -> "'" + r + "'")
+                    .collect(Collectors.joining(", ")) + ")" : "1=1";
+            String where = String.join(" AND ", baseCondition, resourceTypeCondition, facilityCondition, resourceKeyCondition);
+
+            log.info("WHERE clause: {}", where);
+
+             List<ApAppointment> appointments = apAppointmentService.getList(where);
+
+             for (ApAppointment appointment : appointments) {
+                if (appointment.getPatientKey() != null) {
+                    ApPatient patient = apPatientService.getRecord(appointment.getPatientKey());
+                    appointment.setPatient(patient);
+                }
+
+
+            }
+
+             ParentResponse<List<ApAppointment>> response = new ParentResponse<>();
+            response.setObject(appointments);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            log.error("Error fetching appointments", e);
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
+
+
+    @GetMapping(value = "/resources-availability-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> resourcesAvailabilityList(
+            @RequestParam String resource_key,
+            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+            @jakarta.annotation.Nullable @RequestHeader String access_token,
+            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+            @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApResourcesAvailabilityTime>> response = new ParentResponse<>();
+
+
+
+
+            String where = "resource_key = '" + resource_key + "'";
+            System.out.println("=========================>" + where);
+
+            List<ApResourcesAvailabilityTime> availabilityTimeList = apResourcesAvailabilityTimeService.getList(where);
+
+            for (ApResourcesAvailabilityTime apResourcesAvailabilityTime : availabilityTimeList) {
+                apResourcesAvailabilityTimeService.populateLovFields(apResourcesAvailabilityTime, lang);
+            }
+
+            response.setObject(availabilityTimeList);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 
 }

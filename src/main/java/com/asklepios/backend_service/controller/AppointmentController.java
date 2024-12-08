@@ -107,15 +107,17 @@ public class AppointmentController
 
     @PostMapping(value = "/change-appointment-status", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changeAppointmentStatus(@RequestBody ApAppointment appointment,
-                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                              @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApAppointment> response = new ParentResponse<>();
-            apAppointmentService.saveRecord(appointment);
+            apAppointmentService.updateRecord(appointment);
             response.setObject(appointment);
             return ResponseEntity.ok(response);
+
+
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());

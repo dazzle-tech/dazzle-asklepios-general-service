@@ -744,7 +744,7 @@ public class EncounterController {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-
+            System.out.println("=============>iam in get prescription");
             List<ApPrescription> prescriptions = apPrescriptionService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_prescription where " + whereForTotal);
 
@@ -781,7 +781,7 @@ public class EncounterController {
             // Proceed with setting the key
         }
         else{
-            request.setStatusLkey("1804427038369874");
+            request.setStatusLkey("164797574082125");
         }
 
             try {

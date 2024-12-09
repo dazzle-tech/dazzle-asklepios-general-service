@@ -62,6 +62,12 @@
   ,{
       "name": "appointment_status",
       "type": "text"
+    },{
+      "name": "no_show_reason_lkey",
+      "type": "text"
+    },{
+      "name": "no_show_reason_value",
+      "type": "text"
     }
   ]
 

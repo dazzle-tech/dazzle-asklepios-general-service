@@ -38,7 +38,7 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
                 if (rs.next()) {
                     String diagnoseCode = rs.getString("diagnose_code");
                     String description = rs.getString("description");
-                    result = diagnoseCode + "," + description;
+                    result = diagnoseCode;
                 } else {
 
                     result = " ";
@@ -53,6 +53,27 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
     }
     public boolean getHasOrder(String visitKey) throws SQLException {
         String query = "SELECT COUNT(visit_key) AS count FROM ap_patient_encounter_order WHERE visit_key = ?";
+
+        try (
+                Connection con = DS.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)
+        ) {
+            ps.setString(1, visitKey);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt("count");
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            throw e;
+        }
+        return false;
+    }
+    public boolean getHasPrescription(String visitKey) throws SQLException {
+        String query = "SELECT COUNT(visit_key) AS count FROM ap_prescription_medications WHERE visit_key = ?";
 
         try (
                 Connection con = DS.getConnection();

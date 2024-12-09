@@ -92,6 +92,7 @@ public class EncounterController {
                 encounter.setPatientObject(patient);
                 encounter.setDiagnosis(apEncounterService.getDiagnosis(encounter.getKey()));
                 encounter.setHasOrder(apEncounterService.getHasOrder(encounter.getKey()));
+                encounter.setHasPrescription(apEncounterService.getHasPrescription(encounter.getKey()));
             }
             apEncounterService.processPatientObservationStatus(encounters);
             response.setObject(encounters);
@@ -199,7 +200,7 @@ public class EncounterController {
             ParentResponse<ApEncounter> response = new ParentResponse<>();
             if (apEncounter.getEncounterStatusLkey().equals("91063195286200")) { // TODO replace with redis by lov code (ENC_STATUS/NEW)
                 // update status to in-progress when encounter is new
-                apEncounter.setEncounterStatusLkey("91073223480100"); // TODO replace with redis by lov code (ENC_STATUS/IN_PROGRESS)
+                apEncounter.setEncounterStatusLkey("91084250213000"); // TODO replace with redis by lov code (ENC_STATUS/IN_PROGRESS)
 
 
 //                BigDecimal isExistingVisit = DS.executeDecimalResultQuery("select count(0) from ap_encounter where key ='" + apEncounter.getKey() + "'");

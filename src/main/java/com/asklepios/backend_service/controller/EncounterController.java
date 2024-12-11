@@ -46,7 +46,8 @@ public class EncounterController {
     private final ApPrescriptionInstructionService apPrescriptionInstructionService;
     private final ApCustomeInstructionsService apCustomeInstructionsService ;
     private final ApPrescriptionMedicationsService apPrescriptionMedicationsService ;
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService) {
+    private final ApConsultationOrderService apConsultationOrderService ;
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -63,6 +64,7 @@ public class EncounterController {
         this.apPrescriptionInstructionService = apPrescriptionInstructionService;
         this.apCustomeInstructionsService = apCustomeInstructionsService;
         this.apPrescriptionMedicationsService = apPrescriptionMedicationsService;
+        this.apConsultationOrderService = apConsultationOrderService;
     }
 
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -938,6 +940,61 @@ public class EncounterController {
             apPrescriptionMedicationsService.deleteRecord(prescriptionMedications);
             response.setObject(prescriptionMedications);
             return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/save-consultation-orders", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveConsultationOrders(@RequestBody ApConsultationOrder request,
+                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                     @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+            ParentResponse<ApConsultationOrder> response = new ParentResponse<>();
+            apConsultationOrderService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/consultation-orders-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getConsultationOrdersList(@RequestParam Map<String, String> queryParams,
+                                                        @Nullable @RequestHeader String facility_id,
+                                                        @Nullable @RequestHeader String access_token,
+                                                        @Nullable @RequestHeader Integer access_level,
+                                                        @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApConsultationOrder>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApConsultationOrder> consultationOrders = apConsultationOrderService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_consultation_order where " + whereForTotal);
+
+            for (ApConsultationOrder co : consultationOrders) {
+
+                apConsultationOrderService.populateLovFields(co, lang);
+            }
+
+            response.setObject(consultationOrders);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());

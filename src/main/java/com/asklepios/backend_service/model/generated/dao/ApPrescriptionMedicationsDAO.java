@@ -63,6 +63,8 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setRefillIntervalValue(rs.getBigDecimal("refill_interval_value"));
+record.setRefillIntervalUnitLkey(rs.getString("refill_interval_unit_lkey"));
 } else { record = null; }
 return record;
 }
@@ -70,7 +72,7 @@ return record;
 public void updateRecord(ApPrescriptionMedications record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_prescription_medications set key = ?, patient_key = ?, visit_key = ?, prescription_key = ?, generic_medications_key = ?, number_of_refills = ?, refill_interval = ?, instructions_type_lkey = ?, instructions = ?, notes = ?, parameters_to_monitor = ?, valid_util = ?, maximum_dose = ?, generic_substitute = ?, chronic_medication = ?, administration_instructions = ?, duration = ?, duration_type_lkey = ?, status_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_prescription_medications set key = ?, patient_key = ?, visit_key = ?, prescription_key = ?, generic_medications_key = ?, number_of_refills = ?, refill_interval = ?, instructions_type_lkey = ?, instructions = ?, notes = ?, parameters_to_monitor = ?, valid_util = ?, maximum_dose = ?, generic_substitute = ?, chronic_medication = ?, administration_instructions = ?, duration = ?, duration_type_lkey = ?, status_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, refill_interval_value = ?, refill_interval_unit_lkey = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -100,7 +102,9 @@ ps.setBigDecimal(23, record.getCreatedAt());
 ps.setBigDecimal(24, record.getUpdatedAt());
 ps.setBigDecimal(25, record.getDeletedAt());
 ps.setBoolean(26, record.getIsValid());
-ps.setString(27, record.getKey());
+ps.setBigDecimal(27, record.getRefillIntervalValue());
+ps.setString(28, record.getRefillIntervalUnitLkey());
+ps.setString(29, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -148,6 +152,8 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setRefillIntervalValue(rs.getBigDecimal("refill_interval_value"));
+record.setRefillIntervalUnitLkey(rs.getString("refill_interval_unit_lkey"));
 list.add(record);
 }
 return list;
@@ -156,7 +162,7 @@ return list;
 public String saveRecord(ApPrescriptionMedications record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_prescription_medications values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_prescription_medications values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -190,6 +196,8 @@ ps.setBigDecimal(23, record.getCreatedAt());
 ps.setBigDecimal(24, record.getUpdatedAt());
 ps.setBigDecimal(25, record.getDeletedAt());
 ps.setBoolean(26, record.getIsValid());
+ps.setBigDecimal(27, record.getRefillIntervalValue());
+ps.setString(28, record.getRefillIntervalUnitLkey());
 ps.executeUpdate();
 return key;
 }

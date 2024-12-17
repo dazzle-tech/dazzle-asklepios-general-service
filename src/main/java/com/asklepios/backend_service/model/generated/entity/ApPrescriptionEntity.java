@@ -26,6 +26,7 @@ public class ApPrescriptionEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private String prescriptionId;
 	private ApPrescriptionEntity translatedObject;
 
 }

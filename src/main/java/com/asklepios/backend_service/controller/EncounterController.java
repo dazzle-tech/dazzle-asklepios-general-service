@@ -766,38 +766,8 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
-    @PostMapping(value = "/save-prescription", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> savePrescription(@RequestBody ApPrescription request,
-                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                              @jakarta.annotation.Nullable @RequestHeader String lang
 
-    ) throws SQLException {
-        List<ApPrescription> prescriptions = apPrescriptionService.getList(
-                "visit_key = '" + request.getVisitKey() + "' and patient_key = '" + request.getPatientKey() + "'"
-        );
 
-        if (prescriptions != null && !prescriptions.isEmpty()) {
-            ApPrescription pres = prescriptions.get(0); // Get the first element safely
-            request.setKey(pres.getKey());
-            // Proceed with setting the key
-        }
-        else{
-            request.setStatusLkey("164797574082125");
-        }
-
-            try {
-            ParentResponse<ApPrescription> response = new ParentResponse<>();
-            apPrescriptionService.saveRecord(request);
-            response.setObject(request);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-            return ResponseEntity.status(500).body(e);
-        }
-    }
     @GetMapping(value = "/prescription-medic-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPrescriptionMedicationList(@RequestParam Map<String, String> queryParams,
                                                  @Nullable @RequestHeader String facility_id,
@@ -995,6 +965,39 @@ public class EncounterController {
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-prescription", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> savePrescription(@RequestBody ApPrescription request,
+                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                              @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+            BigDecimal lastpreId = DS.executeDecimalResultQuery("select max(prescription_id) from ap_prescription");
+
+            BigDecimal newpreId;
+            System.out.println("lastVisitId"+lastpreId);
+            if (lastpreId == null) {
+                newpreId= BigDecimal.valueOf(100);
+            } else {
+                newpreId = lastpreId.add(BigDecimal.ONE);
+            }
+            System.out.println("newVisitId"+newpreId);
+
+            request.setPrescriptionId(newpreId.toString());
+            ParentResponse<ApPrescription> response = new ParentResponse<>();
+            apPrescriptionService.saveRecord(request);
+            response.setObject(request);
+            System.out.println("prescription key+++++++++++++++++++++++"+response.getObject().getKey());
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());

@@ -19,8 +19,6 @@ public class ApGenericMedicationEntity implements Serializable {
 	private String manufacturerLkey;
 	private ApLovValues manufacturerLvalue;
 	private String usageInstructions;
-	private String roaLkey;
-	private ApLovValues roaLvalue;
 	private String dosageFormLkey;
 	private ApLovValues dosageFormLvalue;
 	private Boolean expiresAfterOpening = false;
@@ -39,6 +37,7 @@ public class ApGenericMedicationEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private String code;
 	private ApGenericMedicationEntity translatedObject;
 
 }

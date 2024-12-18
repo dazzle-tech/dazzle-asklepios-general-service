@@ -37,8 +37,10 @@ public class MedicationsSetupController {
     private final ApActiveIngredientSpecialPopulationService apActiveIngredientSpecialPopulationService;
     private final ApPrescriptionInstructionService apPrescriptionInstructionService;
     private final ApGenericMedicationService apGenericMedicationService;
+    private final ApGenericMedicationActiveIngredientService apGenericMedicationActiveIngredientService;
+    private final ApGenericMedicationRoaService apGenericMedicationRoaService;
 
-    public MedicationsSetupController(ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApActiveIngredientRecommendedDosageService apActiveIngredientRecommendedDosageService, ApActiveIngredientSpecialPopulationService apActiveIngredientSpecialPopulationService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApGenericMedicationService apGenericMedicationService) {
+    public MedicationsSetupController(ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApActiveIngredientRecommendedDosageService apActiveIngredientRecommendedDosageService, ApActiveIngredientSpecialPopulationService apActiveIngredientSpecialPopulationService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApGenericMedicationService apGenericMedicationService, ApGenericMedicationActiveIngredientService apGenericMedicationActiveIngredientService, ApGenericMedicationRoaService apGenericMedicationRoaService) {
         this.apActiveIngredientService = apActiveIngredientService;
         this.apActiveIngredientIndicationService = apActiveIngredientIndicationService;
         this.apActiveIngredientContraindicationService = apActiveIngredientContraindicationService;
@@ -50,6 +52,8 @@ public class MedicationsSetupController {
         this.apActiveIngredientSpecialPopulationService = apActiveIngredientSpecialPopulationService;
         this.apPrescriptionInstructionService = apPrescriptionInstructionService;
         this.apGenericMedicationService = apGenericMedicationService;
+        this.apGenericMedicationActiveIngredientService = apGenericMedicationActiveIngredientService;
+        this.apGenericMedicationRoaService = apGenericMedicationRoaService;
     }
 
     @PostMapping(value = "/save-generic-medication", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -62,6 +66,7 @@ public class MedicationsSetupController {
             ParentResponse<ApGenericMedication> response = new ParentResponse<>();
             apGenericMedicationService.saveRecord(genericMedication);
             response.setObject(genericMedication);
+            apGenericMedicationRoaService.saveROA(genericMedication.getRoaList(), genericMedication.getKey());
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,7 +83,14 @@ public class MedicationsSetupController {
                                                            @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApGenericMedication> response = new ParentResponse<>();
+            if(genericMedication.getDeletedAt() != null){
+                genericMedication.setDeletedAt(null);
+                genericMedication.setDeletedBy(null);
+              apGenericMedicationService.saveRecord(genericMedication);
+            }
+            else{
             apGenericMedicationService.deleteRecord(genericMedication);
+            }
             response.setObject(genericMedication);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -107,6 +119,12 @@ public class MedicationsSetupController {
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_generic_medication where " + whereForTotal);
             for(ApGenericMedication all : list){
                 apGenericMedicationService.populateLovFields(all, lang);
+                List<ApGenericMedicationRoa> roaList = new ApGenericMedicationRoaService().getList("generic_medication_key = '" + all.getKey() + "' and deleted_at is null");
+                if(!roaList.isEmpty()){
+                    List<String> roaIds = new ArrayList<>();
+                    roaList.forEach(roa -> roaIds.add(roa.getRoaLkey()));
+                    all.setRoaList(roaIds);
+                }
             }
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
@@ -119,6 +137,70 @@ public class MedicationsSetupController {
         }
     }
 
+    @PostMapping(value = "/save-generic-medication-active-ingredient", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveGenericMedicationActiveIngredient(@RequestBody ApGenericMedicationActiveIngredient genericMedicationActiveIngredient,
+                                                   @Nullable @RequestHeader String facility_id,
+                                                   @Nullable @RequestHeader String access_token,
+                                                   @Nullable @RequestHeader Integer access_level,
+                                                   @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApGenericMedicationActiveIngredient> response = new ParentResponse<>();
+            apGenericMedicationActiveIngredientService.saveRecord(genericMedicationActiveIngredient);
+            response.setObject(genericMedicationActiveIngredient);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/remove-generic-medication-active-ingredient", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeGenericMedicationActiveIngredient(@RequestBody ApGenericMedicationActiveIngredient genericMedicationActiveIngredient,
+                                                     @Nullable @RequestHeader String facility_id,
+                                                     @Nullable @RequestHeader String access_token,
+                                                     @Nullable @RequestHeader Integer access_level,
+                                                     @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApGenericMedicationActiveIngredient> response = new ParentResponse<>();
+            apGenericMedicationActiveIngredientService.deleteRecord(genericMedicationActiveIngredient);
+            response.setObject(genericMedicationActiveIngredient);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/generic-medication-active-ingredient-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> genericMedicationActiveIngredientList(@RequestParam Map<String, String> queryParams,
+                                                   @Nullable @RequestHeader String facility_id,
+                                                   @Nullable @RequestHeader String access_token,
+                                                   @Nullable @RequestHeader Integer access_level,
+                                                   @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApGenericMedicationActiveIngredient>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApGenericMedicationActiveIngredient> list = apGenericMedicationActiveIngredientService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_generic_medication_active_ingredient where " + whereForTotal);
+            for(ApGenericMedicationActiveIngredient all : list){
+                apGenericMedicationActiveIngredientService.populateLovFields(all, lang);
+            }
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
     @PostMapping(value = "/save-prescription-instruction", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePrescriptionInstruction(@RequestBody ApPrescriptionInstruction prescriptionInstruction,
                                                                    @Nullable @RequestHeader String facility_id,

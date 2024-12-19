@@ -26,7 +26,7 @@ public class ApActiveIngredientEntity implements Serializable {
 	private String controlledLkey;
 	private ApLovValues controlledLvalue;
 	private Boolean hasSynonyms = false;
-	private String chemicalFormula;
+	private String atcCode;
 	private String drugTypeLkey;
 	private ApLovValues drugTypeLvalue;
 	private String drugClassLkey;

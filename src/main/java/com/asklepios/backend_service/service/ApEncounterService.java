@@ -94,6 +94,28 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
         return false;
     }
 
+    public boolean getHasAllergy(String visitKey) throws SQLException {
+        String query = "SELECT COUNT(visit_key) AS count FROM ap_visit_allergies WHERE visit_key = ?";
+
+        try (
+                Connection con = DS.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)
+        ) {
+            ps.setString(1, visitKey);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt("count");
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            throw e;
+        }
+        return false;
+    }
+
 
 
 

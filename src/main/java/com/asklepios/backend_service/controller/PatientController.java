@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,8 +41,9 @@ public class PatientController {
     private final ApPatientSecondaryDocumentsService apPatientSecondaryDocumentsService;
     private final ApPatientInsuranceCoverageService apPatientInsuranceCoverageService;
     private final ApPatientAdministrativeWarningsService apPatientAdministrativeWarningsService;
-
-    public PatientController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApPatientAllergiesService apPatientAllergiesService, ApAllergensService apAllergensService, ApPatientRelationService apPatientRelationService, ApPatientInsuranceService apPatientInsuranceService, ApPatientSecondaryDocumentsService apPatientSecondaryDocumentsService, ApPatientInsuranceCoverageService apPatientInsuranceCoverageService, ApPatientAdministrativeWarningsService apPatientAdministrativeWarningsService) {
+    private final ApAgeGroupService apAgeGroupService;
+    private final ApLovValuesService apLovValuesService;
+    public PatientController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApPatientAllergiesService apPatientAllergiesService, ApAllergensService apAllergensService, ApPatientRelationService apPatientRelationService, ApPatientInsuranceService apPatientInsuranceService, ApPatientSecondaryDocumentsService apPatientSecondaryDocumentsService, ApPatientInsuranceCoverageService apPatientInsuranceCoverageService, ApPatientAdministrativeWarningsService apPatientAdministrativeWarningsService, ApAgeGroupService apAgeGroupService, ApLovValuesService apLovValuesService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -52,6 +54,8 @@ public class PatientController {
         this.apPatientSecondaryDocumentsService = apPatientSecondaryDocumentsService;
         this.apPatientInsuranceCoverageService = apPatientInsuranceCoverageService;
         this.apPatientAdministrativeWarningsService = apPatientAdministrativeWarningsService;
+        this.apAgeGroupService = apAgeGroupService;
+        this.apLovValuesService = apLovValuesService;
     }
 
     @PostMapping(value = "/get-patient", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -867,4 +871,29 @@ public class PatientController {
         }
     }
 
+    @GetMapping(value ="/age-group-value", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAgeGroupDate(@Nullable @RequestHeader("dob") String date,
+                                             @Nullable @RequestHeader String facility_id,
+                                             @Nullable @RequestHeader String access_token,
+                                             @Nullable @RequestHeader Integer access_level,
+                                             @Nullable @RequestHeader String lang){
+        try {
+            ParentResponse<ApLovValues> response = new ParentResponse<>();
+            String ageGroupLKey = apAgeGroupService.getAgeGroupLKey(date);
+            System.out.println("Age Group LKey: " + ageGroupLKey);
+            apLovValuesService.getRecord(ageGroupLKey);
+
+            response.setObject(apLovValuesService.getRecord(ageGroupLKey));
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }}
+
 }
+
+
+
+
+

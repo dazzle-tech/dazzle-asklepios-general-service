@@ -15,6 +15,7 @@ public class ApEncounter extends ApEncounterEntity implements Serializable {
     ApPatient patientObject;
     private String diagnosis;
     private boolean hasOrder;
+    private boolean hasAllergy;
     private boolean hasPrescription;
     private boolean isObservations;
     public boolean isEditable() {

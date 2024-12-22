@@ -98,6 +98,9 @@ public class EncounterController {
                 encounter.setDiagnosis(apEncounterService.getDiagnosis(encounter.getKey()));
                 encounter.setHasOrder(apEncounterService.getHasOrder(encounter.getKey()));
                 encounter.setHasPrescription(apEncounterService.getHasPrescription(encounter.getKey()));
+                encounter.setHasAllergy(apEncounterService.getHasAllergy(encounter.getKey()));
+
+
             }
             apEncounterService.processPatientObservationStatus(encounters);
             response.setObject(encounters);

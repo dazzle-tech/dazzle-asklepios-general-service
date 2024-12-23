@@ -1435,10 +1435,18 @@ public class SetupController implements Serializable {
                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                            @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
+            System.out.println("iam in age group save");
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_age_group where  age_group_lkey='" + ageGroup.getAgeGroupLkey()+"'");
+            if (totalRecord != null && totalRecord.intValue() > 0 ) {
+                System.out.println("total age _______________________________"+totalRecord);
+
+                return ResponseEntity.status(200).body(Collections.singletonMap("message", "this category already exists"));
+            }
+            else{
             ParentResponse<ApAgeGroup> response = new ParentResponse<>();
             apAgeGroupService.saveRecord(ageGroup);
             response.setObject(ageGroup);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(response);}
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());

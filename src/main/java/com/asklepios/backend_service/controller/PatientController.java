@@ -127,7 +127,9 @@ public class PatientController {
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_patient where " + whereForTotal);
 
             for (ApPatient patient : patients) {
+
                 apPatientService.populateLovFields(patient, lang);
+                patient.setHasAllergy(apPatientService.getHasAllergy(patient.getKey()));
             }
             response.setObject(patients);
             response.setExtraNumeric(totalRecord);

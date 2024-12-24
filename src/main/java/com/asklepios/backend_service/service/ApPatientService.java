@@ -1,8 +1,12 @@
 package com.asklepios.backend_service.service;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.asklepios.backend_service.database.DS;
 import com.asklepios.backend_service.model.generated.pojo.ApPatient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -49,5 +53,26 @@ public class ApPatientService extends ApPatientDAO implements Serializable {
 
         return super.saveRecord((record));
     }
+    public boolean getHasAllergy(String patientKey) throws SQLException {
+        String query = "SELECT COUNT(patient_key) AS count FROM ap_visit_allergies WHERE patient_key= ?";
 
+        try (
+                Connection con = DS.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)
+        ) {
+            ps.setString(1, patientKey);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt("count");
+
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            throw e;
+        }
+        return false;
+    }
 }

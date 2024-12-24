@@ -15,5 +15,6 @@ import org.springframework.context.annotation.Bean;
 @Slf4j
 public class ApPatient extends ApPatientEntity implements Serializable {
     boolean skipValidation = false;
+    private boolean hasAllergy;
 
 }

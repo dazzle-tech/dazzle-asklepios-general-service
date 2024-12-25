@@ -60,6 +60,9 @@ record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setSeverityLkey(rs.getString("severity_lkey"));
+record.setTypeOfPropensityLkey(rs.getString("type_of_propensity_lkey"));
+record.setCriticalityLkey(rs.getString("criticality_lkey"));
+record.setCertainty(rs.getString("certainty"));
 } else { record = null; }
 return record;
 }
@@ -67,7 +70,7 @@ return record;
 public void updateRecord(ApVisitAllergies record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_visit_allergies set key = ?, patient_key = ?, visit_key = ?, status_lkey = ?, allergy_type_lkey = ?, allergen_key = ?, onset_lkey = ?, onset_date = ?, treatment_strategy_lkey = ?, source_of_information_lkey = ?, reaction_description = ?, notes = ?, cancellation_reason = ?, resolved_by = ?, created_by = ?, updated_by = ?, deleted_by = ?, resolved_at = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, severity_lkey = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_visit_allergies set key = ?, patient_key = ?, visit_key = ?, status_lkey = ?, allergy_type_lkey = ?, allergen_key = ?, onset_lkey = ?, onset_date = ?, treatment_strategy_lkey = ?, source_of_information_lkey = ?, reaction_description = ?, notes = ?, cancellation_reason = ?, resolved_by = ?, created_by = ?, updated_by = ?, deleted_by = ?, resolved_at = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, severity_lkey = ?, type_of_propensity_lkey = ?, criticality_lkey = ?, certainty = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -93,7 +96,10 @@ ps.setBigDecimal(20, record.getUpdatedAt());
 ps.setBigDecimal(21, record.getDeletedAt());
 ps.setBoolean(22, record.getIsValid());
 ps.setString(23, record.getSeverityLkey());
-ps.setString(24, record.getKey());
+ps.setString(24, record.getTypeOfPropensityLkey());
+ps.setString(25, record.getCriticalityLkey());
+ps.setString(26, record.getCertainty());
+ps.setString(27, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -138,6 +144,9 @@ record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setSeverityLkey(rs.getString("severity_lkey"));
+record.setTypeOfPropensityLkey(rs.getString("type_of_propensity_lkey"));
+record.setCriticalityLkey(rs.getString("criticality_lkey"));
+record.setCertainty(rs.getString("certainty"));
 list.add(record);
 }
 return list;
@@ -146,7 +155,7 @@ return list;
 public String saveRecord(ApVisitAllergies record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_visit_allergies values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_visit_allergies values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -176,6 +185,9 @@ ps.setBigDecimal(20, record.getUpdatedAt());
 ps.setBigDecimal(21, record.getDeletedAt());
 ps.setBoolean(22, record.getIsValid());
 ps.setString(23, record.getSeverityLkey());
+ps.setString(24, record.getTypeOfPropensityLkey());
+ps.setString(25, record.getCriticalityLkey());
+ps.setString(26, record.getCertainty());
 ps.executeUpdate();
 return key;
 }

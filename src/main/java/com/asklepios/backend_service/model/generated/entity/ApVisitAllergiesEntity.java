@@ -43,6 +43,11 @@ public class ApVisitAllergiesEntity implements Serializable {
 	private Boolean isValid = true;
 	private String severityLkey;
 	private ApLovValues severityLvalue;
+	private String typeOfPropensityLkey;
+	private ApLovValues typeOfPropensityLvalue;
+	private String criticalityLkey;
+	private ApLovValues criticalityLvalue;
+	private String certainty;
 	private ApVisitAllergiesEntity translatedObject;
 
 }

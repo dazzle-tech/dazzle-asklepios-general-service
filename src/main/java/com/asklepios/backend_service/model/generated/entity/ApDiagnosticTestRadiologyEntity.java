@@ -32,6 +32,12 @@ public class ApDiagnosticTestRadiologyEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private String testDescription;
+	private String medicalIndications;
+	private String turnaroundTimeUnitLkey;
+	private ApLovValues turnaroundTimeUnitLvalue;
+	private BigDecimal turnaroundTime;
+	private String associatedRisks;
 	private String labCatalogLkey;
 	private ApLovValues labCatalogLvalue;
 	private String propertyLkey;

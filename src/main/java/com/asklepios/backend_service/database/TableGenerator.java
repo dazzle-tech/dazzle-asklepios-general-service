@@ -30,8 +30,8 @@ public class TableGenerator {
                     continue;
 
 
-                if (   !file.getName().contains("86-"))
-                    continue;
+//                if (   !file.getName().contains("86-"))
+//                    continue;
 
                 try {
                     String actual = Files.readString(file.toPath());

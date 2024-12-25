@@ -51,6 +51,11 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setTestDescription(rs.getString("test_description"));
+record.setMedicalIndications(rs.getString("medical_indications"));
+record.setTurnaroundTimeUnitLkey(rs.getString("turnaround_time_unit_lkey"));
+record.setTurnaroundTime(rs.getBigDecimal("turnaround_time"));
+record.setAssociatedRisks(rs.getString("associated_risks"));
 record.setLabCatalogLkey(rs.getString("lab_catalog_lkey"));
 record.setPropertyLkey(rs.getString("property_lkey"));
 record.setSystemLkey(rs.getString("system_lkey"));
@@ -67,7 +72,7 @@ return record;
 public void updateRecord(ApDiagnosticTestRadiology record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_diagnostic_test_radiology set key = ?, test_key = ?, international_coding_type_lkey = ?, child_code_lkey = ?, rad_category_lkey = ?, image_duration = ?, time_unit_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, lab_catalog_lkey = ?, property_lkey = ?, system_lkey = ?, scale_lkey = ?, reagents_lkey = ?, method_lkey = ?, timing_lkey = ?, result_type = ?, result_unit_lkey = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_diagnostic_test_radiology set key = ?, test_key = ?, international_coding_type_lkey = ?, child_code_lkey = ?, rad_category_lkey = ?, image_duration = ?, time_unit_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, test_description = ?, medical_indications = ?, turnaround_time_unit_lkey = ?, turnaround_time = ?, associated_risks = ?, lab_catalog_lkey = ?, property_lkey = ?, system_lkey = ?, scale_lkey = ?, reagents_lkey = ?, method_lkey = ?, timing_lkey = ?, result_type = ?, result_unit_lkey = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -84,16 +89,21 @@ ps.setBigDecimal(11, record.getCreatedAt());
 ps.setBigDecimal(12, record.getUpdatedAt());
 ps.setBigDecimal(13, record.getDeletedAt());
 ps.setBoolean(14, record.getIsValid());
-ps.setString(15, record.getLabCatalogLkey());
-ps.setString(16, record.getPropertyLkey());
-ps.setString(17, record.getSystemLkey());
-ps.setString(18, record.getScaleLkey());
-ps.setString(19, record.getReagentsLkey());
-ps.setString(20, record.getMethodLkey());
-ps.setString(21, record.getTimingLkey());
-ps.setString(22, record.getResultType());
-ps.setString(23, record.getResultUnitLkey());
-ps.setString(24, record.getKey());
+ps.setString(15, record.getTestDescription());
+ps.setString(16, record.getMedicalIndications());
+ps.setString(17, record.getTurnaroundTimeUnitLkey());
+ps.setBigDecimal(18, record.getTurnaroundTime());
+ps.setString(19, record.getAssociatedRisks());
+ps.setString(20, record.getLabCatalogLkey());
+ps.setString(21, record.getPropertyLkey());
+ps.setString(22, record.getSystemLkey());
+ps.setString(23, record.getScaleLkey());
+ps.setString(24, record.getReagentsLkey());
+ps.setString(25, record.getMethodLkey());
+ps.setString(26, record.getTimingLkey());
+ps.setString(27, record.getResultType());
+ps.setString(28, record.getResultUnitLkey());
+ps.setString(29, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -129,6 +139,11 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setTestDescription(rs.getString("test_description"));
+record.setMedicalIndications(rs.getString("medical_indications"));
+record.setTurnaroundTimeUnitLkey(rs.getString("turnaround_time_unit_lkey"));
+record.setTurnaroundTime(rs.getBigDecimal("turnaround_time"));
+record.setAssociatedRisks(rs.getString("associated_risks"));
 record.setLabCatalogLkey(rs.getString("lab_catalog_lkey"));
 record.setPropertyLkey(rs.getString("property_lkey"));
 record.setSystemLkey(rs.getString("system_lkey"));
@@ -146,7 +161,7 @@ return list;
 public String saveRecord(ApDiagnosticTestRadiology record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_test_radiology values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_test_radiology values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -167,15 +182,20 @@ ps.setBigDecimal(11, record.getCreatedAt());
 ps.setBigDecimal(12, record.getUpdatedAt());
 ps.setBigDecimal(13, record.getDeletedAt());
 ps.setBoolean(14, record.getIsValid());
-ps.setString(15, record.getLabCatalogLkey());
-ps.setString(16, record.getPropertyLkey());
-ps.setString(17, record.getSystemLkey());
-ps.setString(18, record.getScaleLkey());
-ps.setString(19, record.getReagentsLkey());
-ps.setString(20, record.getMethodLkey());
-ps.setString(21, record.getTimingLkey());
-ps.setString(22, record.getResultType());
-ps.setString(23, record.getResultUnitLkey());
+ps.setString(15, record.getTestDescription());
+ps.setString(16, record.getMedicalIndications());
+ps.setString(17, record.getTurnaroundTimeUnitLkey());
+ps.setBigDecimal(18, record.getTurnaroundTime());
+ps.setString(19, record.getAssociatedRisks());
+ps.setString(20, record.getLabCatalogLkey());
+ps.setString(21, record.getPropertyLkey());
+ps.setString(22, record.getSystemLkey());
+ps.setString(23, record.getScaleLkey());
+ps.setString(24, record.getReagentsLkey());
+ps.setString(25, record.getMethodLkey());
+ps.setString(26, record.getTimingLkey());
+ps.setString(27, record.getResultType());
+ps.setString(28, record.getResultUnitLkey());
 ps.executeUpdate();
 return key;
 }

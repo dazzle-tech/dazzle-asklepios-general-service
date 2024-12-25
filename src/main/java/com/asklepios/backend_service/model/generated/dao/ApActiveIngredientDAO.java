@@ -82,6 +82,7 @@ record.setDoseAdjRenalOne(rs.getString("dose_adj_renal_one"));
 record.setDoseAdjRenalTwo(rs.getString("dose_adj_renal_two"));
 record.setDoseAdjRenalThree(rs.getString("dose_adj_renal_three"));
 record.setDoseAdjRenalFour(rs.getString("dose_adj_renal_four"));
+record.setChemicalFormula(rs.getString("chemical_formula"));
 } else { record = null; }
 return record;
 }
@@ -89,7 +90,7 @@ return record;
 public void updateRecord(ApActiveIngredient record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_active_ingredient set key = ?, code = ?, name = ?, has_salt = ?, salt_lkey = ?, medical_category_lkey = ?, is_controlled = ?, controlled_lkey = ?, has_synonyms = ?, atc_code = ?, drug_type_lkey = ?, drug_class_lkey = ?, has_black_box_warning = ?, black_box_warning = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, mechanism_of_action = ?, toxicity_maximum_dose = ?, toxicity_maximum_dose_per_unit_lkey = ?, toxicity_details = ?, pregnancy_category_lkey = ?, pregnancy_notes = ?, lactation_risk_lkey = ?, lactation_risk_notes = ?, dose_adjustment_renal = ?, dose_adjustment_hepatic = ?, pharma_absorption = ?, pharma_route_of_elimination = ?, pharma_volume_of_distribution = ?, pharma_half_life = ?, pharma_protein_binding = ?, pharma_clearance = ?, pharma_metabolism = ?, dose_adj_pug_a = ?, dose_adj_pug_b = ?, dose_adj_pug_c = ?, dose_adj_renal_one = ?, dose_adj_renal_two = ?, dose_adj_renal_three = ?, dose_adj_renal_four = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_active_ingredient set key = ?, code = ?, name = ?, has_salt = ?, salt_lkey = ?, medical_category_lkey = ?, is_controlled = ?, controlled_lkey = ?, has_synonyms = ?, atc_code = ?, drug_type_lkey = ?, drug_class_lkey = ?, has_black_box_warning = ?, black_box_warning = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, mechanism_of_action = ?, toxicity_maximum_dose = ?, toxicity_maximum_dose_per_unit_lkey = ?, toxicity_details = ?, pregnancy_category_lkey = ?, pregnancy_notes = ?, lactation_risk_lkey = ?, lactation_risk_notes = ?, dose_adjustment_renal = ?, dose_adjustment_hepatic = ?, pharma_absorption = ?, pharma_route_of_elimination = ?, pharma_volume_of_distribution = ?, pharma_half_life = ?, pharma_protein_binding = ?, pharma_clearance = ?, pharma_metabolism = ?, dose_adj_pug_a = ?, dose_adj_pug_b = ?, dose_adj_pug_c = ?, dose_adj_renal_one = ?, dose_adj_renal_two = ?, dose_adj_renal_three = ?, dose_adj_renal_four = ?, chemical_formula = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -137,7 +138,8 @@ ps.setString(42, record.getDoseAdjRenalOne());
 ps.setString(43, record.getDoseAdjRenalTwo());
 ps.setString(44, record.getDoseAdjRenalThree());
 ps.setString(45, record.getDoseAdjRenalFour());
-ps.setString(46, record.getKey());
+ps.setString(46, record.getChemicalFormula());
+ps.setString(47, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -204,6 +206,7 @@ record.setDoseAdjRenalOne(rs.getString("dose_adj_renal_one"));
 record.setDoseAdjRenalTwo(rs.getString("dose_adj_renal_two"));
 record.setDoseAdjRenalThree(rs.getString("dose_adj_renal_three"));
 record.setDoseAdjRenalFour(rs.getString("dose_adj_renal_four"));
+record.setChemicalFormula(rs.getString("chemical_formula"));
 list.add(record);
 }
 return list;
@@ -212,7 +215,7 @@ return list;
 public String saveRecord(ApActiveIngredient record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_active_ingredient values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_active_ingredient values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -264,6 +267,7 @@ ps.setString(42, record.getDoseAdjRenalOne());
 ps.setString(43, record.getDoseAdjRenalTwo());
 ps.setString(44, record.getDoseAdjRenalThree());
 ps.setString(45, record.getDoseAdjRenalFour());
+ps.setString(46, record.getChemicalFormula());
 ps.executeUpdate();
 return key;
 }

@@ -36,6 +36,13 @@ public class ApDiagnosticTestPathologyEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private String testDescription;
+	private String sampleHandling;
+	private String medicalLndications;
+	private String criticalValues;
+	private String preparationRequirements;
+	private String associatedRisks;
+	private String pathCatalogKey;
 	private ApDiagnosticTestPathologyEntity translatedObject;
 
 }

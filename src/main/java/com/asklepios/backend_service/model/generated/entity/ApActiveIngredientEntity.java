@@ -67,6 +67,7 @@ public class ApActiveIngredientEntity implements Serializable {
 	private String doseAdjRenalTwo;
 	private String doseAdjRenalThree;
 	private String doseAdjRenalFour;
+	private String chemicalFormula;
 	private ApActiveIngredientEntity translatedObject;
 
 }

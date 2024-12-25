@@ -53,6 +53,13 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setTestDescription(rs.getString("test_description"));
+record.setSampleHandling(rs.getString("sample_handling"));
+record.setMedicalLndications(rs.getString("medical_lndications"));
+record.setCriticalValues(rs.getString("critical_values"));
+record.setPreparationRequirements(rs.getString("preparation_requirements"));
+record.setAssociatedRisks(rs.getString("associated_risks"));
+record.setPathCatalogKey(rs.getString("path_catalog_key"));
 } else { record = null; }
 return record;
 }
@@ -60,7 +67,7 @@ return record;
 public void updateRecord(ApDiagnosticTestPathology record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_diagnostic_test_pathology set key = ?, test_key = ?, international_coding_type_lkey = ?, child_code_lkey = ?, pathology_category_lkey = ?, specimen_type_lkey = ?, analysis_procedure_lkey = ?, turnaround_time = ?, time_unit_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_diagnostic_test_pathology set key = ?, test_key = ?, international_coding_type_lkey = ?, child_code_lkey = ?, pathology_category_lkey = ?, specimen_type_lkey = ?, analysis_procedure_lkey = ?, turnaround_time = ?, time_unit_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, test_description = ?, sample_handling = ?, medical_lndications = ?, critical_values = ?, preparation_requirements = ?, associated_risks = ?, path_catalog_key = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -79,7 +86,14 @@ ps.setBigDecimal(13, record.getCreatedAt());
 ps.setBigDecimal(14, record.getUpdatedAt());
 ps.setBigDecimal(15, record.getDeletedAt());
 ps.setBoolean(16, record.getIsValid());
-ps.setString(17, record.getKey());
+ps.setString(17, record.getTestDescription());
+ps.setString(18, record.getSampleHandling());
+ps.setString(19, record.getMedicalLndications());
+ps.setString(20, record.getCriticalValues());
+ps.setString(21, record.getPreparationRequirements());
+ps.setString(22, record.getAssociatedRisks());
+ps.setString(23, record.getPathCatalogKey());
+ps.setString(24, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -117,6 +131,13 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setTestDescription(rs.getString("test_description"));
+record.setSampleHandling(rs.getString("sample_handling"));
+record.setMedicalLndications(rs.getString("medical_lndications"));
+record.setCriticalValues(rs.getString("critical_values"));
+record.setPreparationRequirements(rs.getString("preparation_requirements"));
+record.setAssociatedRisks(rs.getString("associated_risks"));
+record.setPathCatalogKey(rs.getString("path_catalog_key"));
 list.add(record);
 }
 return list;
@@ -125,7 +146,7 @@ return list;
 public String saveRecord(ApDiagnosticTestPathology record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_test_pathology values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_test_pathology values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -148,6 +169,13 @@ ps.setBigDecimal(13, record.getCreatedAt());
 ps.setBigDecimal(14, record.getUpdatedAt());
 ps.setBigDecimal(15, record.getDeletedAt());
 ps.setBoolean(16, record.getIsValid());
+ps.setString(17, record.getTestDescription());
+ps.setString(18, record.getSampleHandling());
+ps.setString(19, record.getMedicalLndications());
+ps.setString(20, record.getCriticalValues());
+ps.setString(21, record.getPreparationRequirements());
+ps.setString(22, record.getAssociatedRisks());
+ps.setString(23, record.getPathCatalogKey());
 ps.executeUpdate();
 return key;
 }

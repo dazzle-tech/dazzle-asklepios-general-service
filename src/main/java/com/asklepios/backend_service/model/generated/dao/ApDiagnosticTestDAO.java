@@ -58,6 +58,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setAppointable(rs.getBoolean("appointable"));
 } else { record = null; }
 return record;
 }
@@ -65,7 +66,7 @@ return record;
 public void updateRecord(ApDiagnosticTest record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_diagnostic_test set key = ?, test_type_lkey = ?, test_name = ?, internal_code = ?, international_code_one = ?, international_code_two = ?, international_code_three = ?, age_specific = ?, gender_specific = ?, gender_lkey = ?, special_population = ?, price = ?, currency_lkey = ?, special_notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_diagnostic_test set key = ?, test_type_lkey = ?, test_name = ?, internal_code = ?, international_code_one = ?, international_code_two = ?, international_code_three = ?, age_specific = ?, gender_specific = ?, gender_lkey = ?, special_population = ?, price = ?, currency_lkey = ?, special_notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, appointable = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -89,7 +90,8 @@ ps.setBigDecimal(18, record.getCreatedAt());
 ps.setBigDecimal(19, record.getUpdatedAt());
 ps.setBigDecimal(20, record.getDeletedAt());
 ps.setBoolean(21, record.getIsValid());
-ps.setString(22, record.getKey());
+ps.setBoolean(22, record.getAppointable());
+ps.setString(23, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -132,6 +134,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setAppointable(rs.getBoolean("appointable"));
 list.add(record);
 }
 return list;
@@ -140,7 +143,7 @@ return list;
 public String saveRecord(ApDiagnosticTest record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_test values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_test values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -168,6 +171,7 @@ ps.setBigDecimal(18, record.getCreatedAt());
 ps.setBigDecimal(19, record.getUpdatedAt());
 ps.setBigDecimal(20, record.getDeletedAt());
 ps.setBoolean(21, record.getIsValid());
+ps.setBoolean(22, record.getAppointable());
 ps.executeUpdate();
 return key;
 }

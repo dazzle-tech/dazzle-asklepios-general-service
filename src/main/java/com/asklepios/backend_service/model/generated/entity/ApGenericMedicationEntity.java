@@ -38,6 +38,8 @@ public class ApGenericMedicationEntity implements Serializable {
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
 	private String code;
+	private String roaLkey;
+	private ApLovValues roaLvalue;
 	private ApGenericMedicationEntity translatedObject;
 
 }

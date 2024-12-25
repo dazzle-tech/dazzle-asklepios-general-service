@@ -58,6 +58,7 @@ record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setCode(rs.getString("code"));
+record.setRoaLkey(rs.getString("roa_lkey"));
 } else { record = null; }
 return record;
 }
@@ -65,7 +66,7 @@ return record;
 public void updateRecord(ApGenericMedication record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_generic_medication set key = ?, generic_name = ?, manufacturer_lkey = ?, usage_instructions = ?, dosage_form_lkey = ?, expires_after_opening = ?, expires_after_opening_value = ?, single_patient_use = ?, price = ?, currency_lkey = ?, price_list_key = ?, cost = ?, storage_requirements = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, code = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_generic_medication set key = ?, generic_name = ?, manufacturer_lkey = ?, usage_instructions = ?, dosage_form_lkey = ?, expires_after_opening = ?, expires_after_opening_value = ?, single_patient_use = ?, price = ?, currency_lkey = ?, price_list_key = ?, cost = ?, storage_requirements = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, code = ?, roa_lkey = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -89,7 +90,8 @@ ps.setBigDecimal(18, record.getUpdatedAt());
 ps.setBigDecimal(19, record.getDeletedAt());
 ps.setBoolean(20, record.getIsValid());
 ps.setString(21, record.getCode());
-ps.setString(22, record.getKey());
+ps.setString(22, record.getRoaLkey());
+ps.setString(23, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -132,6 +134,7 @@ record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setCode(rs.getString("code"));
+record.setRoaLkey(rs.getString("roa_lkey"));
 list.add(record);
 }
 return list;
@@ -140,7 +143,7 @@ return list;
 public String saveRecord(ApGenericMedication record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_generic_medication values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_generic_medication values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -168,6 +171,7 @@ ps.setBigDecimal(18, record.getUpdatedAt());
 ps.setBigDecimal(19, record.getDeletedAt());
 ps.setBoolean(20, record.getIsValid());
 ps.setString(21, record.getCode());
+ps.setString(22, record.getRoaLkey());
 ps.executeUpdate();
 return key;
 }

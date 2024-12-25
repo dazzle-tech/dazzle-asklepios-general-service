@@ -20,14 +20,14 @@ import java.util.stream.Collectors;
 @RequestMapping("/appointment")
 //@CrossOrigin
 @Slf4j
-public class AppointmentController
-{
+public class AppointmentController {
     private final ApResourcesService apResourcesService;
     private final ApPractitionerService apPractitionerService;
     private final ApDepartmentService apDepartmentService;
     private final ApAppointmentService apAppointmentService;
     private final ApResourcesAvailabilityTimeService apResourcesAvailabilityTimeService;
     private final ApPatientService apPatientService;
+
     public AppointmentController(ApResourcesService apResourcesService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApAppointmentService apAppointmentService, ApResourcesAvailabilityTimeService apResourcesAvailabilityTimeService) {
         this.apResourcesService = apResourcesService;
         this.apPractitionerService = apPractitionerService;
@@ -55,7 +55,7 @@ public class AppointmentController
             List<ApResources> list = apResourcesService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_resources where " + whereForTotal);
             for (ApResources all : list) {
-                all.setResourceName(apResourcesService.getResourceName(all.getResourceTypeLkey(), all.getResourceKey())) ;
+                all.setResourceName(apResourcesService.getResourceName(all.getResourceTypeLkey(), all.getResourceKey()));
                 apResourcesService.populateLovFields(all, lang);
             }
 
@@ -87,6 +87,7 @@ public class AppointmentController
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-appointment", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveAppointment(@RequestBody ApAppointment appointment,
                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -108,9 +109,9 @@ public class AppointmentController
     @PostMapping(value = "/change-appointment-status", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changeAppointmentStatus(@RequestBody ApAppointment appointment,
                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                             @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                     @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApAppointment> response = new ParentResponse<>();
             apAppointmentService.updateRecord(appointment);
@@ -127,24 +128,24 @@ public class AppointmentController
 
     @GetMapping(value = "/resource-type-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> resourceTypeList(@RequestHeader String resource_type,
-                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                              @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApResources>> response = new ParentResponse<>();
             System.out.println(resource_type);
             // TODO update status to be a LOV value
-           if(resource_type.equals("2039534205961578")) //Practitioner
-           {
-               ParentResponse<List<ApPractitioner>> responsePra = new ParentResponse<>();
-               List<ApPractitioner> listPra = apPractitionerService.getList("appointable = true");
-               responsePra.setObject(listPra);
-               return ResponseEntity.ok(responsePra);
+            if (resource_type.equals("2039534205961578")) //Practitioner
+            {
+                ParentResponse<List<ApPractitioner>> responsePra = new ParentResponse<>();
+                List<ApPractitioner> listPra = apPractitionerService.getList("appointable = true");
+                responsePra.setObject(listPra);
+                return ResponseEntity.ok(responsePra);
 
-           }
+            }
             // TODO update status to be a LOV value
-           else if(resource_type.equals("2039516279378421")) //Department
+            else if (resource_type.equals("2039516279378421")) //Department
             {
                 ParentResponse<List<ApDepartment>> responseDep = new ParentResponse<>();
                 List<ApDepartment> listDep = apDepartmentService.getList("appointable = true");
@@ -189,9 +190,9 @@ public class AppointmentController
 
             log.info("WHERE clause: {}", where);
 
-             List<ApAppointment> appointments = apAppointmentService.getList(where);
+            List<ApAppointment> appointments = apAppointmentService.getList(where);
 
-             for (ApAppointment appointment : appointments) {
+            for (ApAppointment appointment : appointments) {
                 if (appointment.getPatientKey() != null) {
                     ApPatient patient = apPatientService.getRecord(appointment.getPatientKey());
                     appointment.setPatient(patient);
@@ -200,7 +201,7 @@ public class AppointmentController
 
             }
 
-             ParentResponse<List<ApAppointment>> response = new ParentResponse<>();
+            ParentResponse<List<ApAppointment>> response = new ParentResponse<>();
             response.setObject(appointments);
 
             return ResponseEntity.ok(response);
@@ -212,8 +213,6 @@ public class AppointmentController
     }
 
 
-
-
     @GetMapping(value = "/resources-availability-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> resourcesAvailabilityList(
             @RequestParam String resource_key,
@@ -223,8 +222,6 @@ public class AppointmentController
             @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApResourcesAvailabilityTime>> response = new ParentResponse<>();
-
-
 
 
             String where = "resource_key = '" + resource_key + "'";

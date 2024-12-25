@@ -68,6 +68,9 @@
     },{
       "name": "no_show_reason_value",
       "type": "text"
+    },{
+      "name": "no_show_other_reason",
+      "type": "text"
     }
   ]
 

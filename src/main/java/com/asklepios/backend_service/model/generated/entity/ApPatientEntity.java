@@ -118,6 +118,8 @@ public class ApPatientEntity implements Serializable {
 	private String secondaryMobileNumber;
 	private String roleLkey;
 	private ApLovValues roleLvalue;
+	private String districtLkey;
+	private ApLovValues districtLvalue;
 	private ApPatientEntity translatedObject;
 
 }

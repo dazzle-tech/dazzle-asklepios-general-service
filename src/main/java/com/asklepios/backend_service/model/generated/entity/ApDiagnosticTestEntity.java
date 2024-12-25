@@ -38,6 +38,7 @@ public class ApDiagnosticTestEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private Boolean appointable = false;
 	private ApDiagnosticTestEntity translatedObject;
 
 }

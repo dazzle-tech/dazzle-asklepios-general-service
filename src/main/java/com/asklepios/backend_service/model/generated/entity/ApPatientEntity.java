@@ -116,8 +116,8 @@ public class ApPatientEntity implements Serializable {
 	private Boolean incompletePatient = false;
 	private String extraDetails;
 	private String secondaryMobileNumber;
-	private String districtLkey;
-	private ApLovValues districtLvalue;
+	private String roleLkey;
+	private ApLovValues roleLvalue;
 	private ApPatientEntity translatedObject;
 
 }

@@ -231,4 +231,36 @@ public class UtilityController implements Serializable {
         }
     }
 
+    @GetMapping(value = "/get-lov-value-default", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> lovValuedefault(@RequestParam String code, @Nullable String parentValueKey,
+                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                             @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApLovValues> response = new ParentResponse<>();
+
+
+            String where = "LOV_CODE = '" + code + "' and isdefault = true";
+            if (parentValueKey != null) {
+                where += " and PARENT_VALUE_ID = '" + parentValueKey + "'";
+            }
+
+            System.out.println("++++++++++++++++++++++>>"+where);
+            List<ApLovValues> list = apLovValuesService.getList(where);
+
+
+            ApLovValues result = list.isEmpty() ? null : list.get(0);
+
+            response.setObject(result);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
 }

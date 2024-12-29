@@ -62,8 +62,10 @@ public class SetupController implements Serializable {
     private final ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService;
     private final EmailService emailService;
     private final  ApAgeGroupService apAgeGroupService;
+    private final ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService;
+    private final ApDiagnosticTestPathologyService apDiagnosticTestPathologyService;
 
-    public SetupController(EmailService emailService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1, EmailService emailService1, ApAgeGroupService apAgeGroupService) {
+    public SetupController(EmailService emailService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1, EmailService emailService1, ApAgeGroupService apAgeGroupService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestPathologyService apDiagnosticTestPathologyService) {
         this.authService = authService;
         this.apModuleService = apModuleService;
         this.apScreenService = apScreenService;
@@ -96,6 +98,8 @@ public class SetupController implements Serializable {
         this.apUserFacilitiyDepartmentsService = apUserFacilitiyDepartmentsService1;
         this.emailService = emailService1;
         this.apAgeGroupService = apAgeGroupService;
+        this.apDiagnosticTestLaboratoryService = apDiagnosticTestLaboratoryService;
+        this.apDiagnosticTestPathologyService = apDiagnosticTestPathologyService;
     }
 
     @GetMapping(value = "/navigation-map", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1800,6 +1804,126 @@ public class SetupController implements Serializable {
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_diagnostic_test where " + whereForTotal);
             for (ApDiagnosticTest all : list) {
                 apDiagnosticTestService.populateLovFields(all, lang);
+            }
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
+    @PostMapping(value = "/remove-diagnostic-test-laboratory", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeDiagnosticTestLaboratory(@RequestBody ApDiagnosticTestLaboratory diagnosticTestLaboratory,
+                                                  @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                  @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                  @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                  @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApDiagnosticTestLaboratory> response = new ParentResponse<>();
+            apDiagnosticTestLaboratoryService.deleteRecord(diagnosticTestLaboratory);
+            response.setObject(diagnosticTestLaboratory);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-diagnostic-test-laboratory", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveDiagnosticTestLaboratory(@RequestBody ApDiagnosticTestLaboratory diagnosticTestLaboratory,
+                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApDiagnosticTestLaboratory> response = new ParentResponse<>();
+            apDiagnosticTestLaboratoryService.saveRecord(diagnosticTestLaboratory);
+            response.setObject(diagnosticTestLaboratory);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
+
+    @GetMapping(value = "/diagnostic-test-laboratory-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> diagnosticTestLaboratoryList(@RequestParam Map<String, String> queryParams,
+                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApDiagnosticTestLaboratory>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApDiagnosticTestLaboratory> list = apDiagnosticTestLaboratoryService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_diagnostic_test_laboratory where " + whereForTotal);
+            for (ApDiagnosticTestLaboratory all : list) {
+                apDiagnosticTestLaboratoryService.populateLovFields(all, lang);
+            }
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
+    @PostMapping(value = "/save-diagnostic-test-pathology", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveDiagnosticTestPathology(@RequestBody ApDiagnosticTestPathology diagnosticTestPathology,
+                                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                          @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApDiagnosticTestPathology> response = new ParentResponse<>();
+            apDiagnosticTestPathologyService.saveRecord(diagnosticTestPathology);
+            response.setObject(diagnosticTestPathology);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(value = "/diagnostic-test-pathology-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> diagnosticTestPathologyList(@RequestParam Map<String, String> queryParams,
+                                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                          @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApDiagnosticTestPathology>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApDiagnosticTestPathology> list = apDiagnosticTestPathologyService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_diagnostic_test_pathology where " + whereForTotal);
+            for (ApDiagnosticTestPathology all : list) {
+                apDiagnosticTestPathologyService.populateLovFields(all, lang);
             }
             response.setObject(list);
             response.setExtraNumeric(totalRecord);

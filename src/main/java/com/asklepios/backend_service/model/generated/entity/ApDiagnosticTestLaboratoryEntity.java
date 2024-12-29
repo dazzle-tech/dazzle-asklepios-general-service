@@ -20,8 +20,7 @@ public class ApDiagnosticTestLaboratoryEntity implements Serializable {
 	private ApLovValues internationalCodingTypeLvalue;
 	private String childCodeLkey;
 	private ApLovValues childCodeLvalue;
-	private String labCatalogLkey;
-	private ApLovValues labCatalogLvalue;
+	private String labCatalogKey;
 	private String propertyLkey;
 	private ApLovValues propertyLvalue;
 	private String systemLkey;
@@ -62,8 +61,6 @@ public class ApDiagnosticTestLaboratoryEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
-	private String labCategoryLkey;
-	private ApLovValues labCategoryLvalue;
 	private ApDiagnosticTestLaboratoryEntity translatedObject;
 
 }

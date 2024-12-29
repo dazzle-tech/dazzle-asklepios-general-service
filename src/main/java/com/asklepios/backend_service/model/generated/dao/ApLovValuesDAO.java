@@ -104,7 +104,7 @@ ps.setString(1, record.getKey());
 ps.executeUpdate();
 }
 }
-public List<ApLovValues>getList(String where) throws SQLException {
+public List<ApLovValues> getList(String where) throws SQLException {
 if (where == null || where.isEmpty()) where = "1=1";
 try (
 Connection con = DS.getConnection();

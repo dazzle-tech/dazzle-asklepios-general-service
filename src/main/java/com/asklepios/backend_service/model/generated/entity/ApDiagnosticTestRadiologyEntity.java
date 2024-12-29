@@ -38,8 +38,6 @@ public class ApDiagnosticTestRadiologyEntity implements Serializable {
 	private ApLovValues turnaroundTimeUnitLvalue;
 	private BigDecimal turnaroundTime;
 	private String associatedRisks;
-	private String labCatalogLkey;
-	private ApLovValues labCatalogLvalue;
 	private String radCatalogKey;
 	private String propertyLkey;
 	private ApLovValues propertyLvalue;

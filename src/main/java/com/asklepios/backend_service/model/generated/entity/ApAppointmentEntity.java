@@ -51,10 +51,10 @@ public class ApAppointmentEntity implements Serializable {
 	private String instructionsLkey;
 	private ApLovValues instructionsLvalue;
 	private String appointmentStatus;
-	private String noShowReasonValue;
-	private String noShowReasonLkey;
-	private ApLovValues noShowReasonLvalue;
-	private String noShowOtherReason;
+	private String reasonLkey;
+	private ApLovValues reasonLvalue;
+	private String reasonValue;
+	private String otherReason;
 	private ApAppointmentEntity translatedObject;
 
 }

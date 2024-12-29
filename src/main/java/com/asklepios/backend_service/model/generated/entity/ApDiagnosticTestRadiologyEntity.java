@@ -40,6 +40,7 @@ public class ApDiagnosticTestRadiologyEntity implements Serializable {
 	private String associatedRisks;
 	private String labCatalogLkey;
 	private ApLovValues labCatalogLvalue;
+	private String radCatalogKey;
 	private String propertyLkey;
 	private ApLovValues propertyLvalue;
 	private String systemLkey;

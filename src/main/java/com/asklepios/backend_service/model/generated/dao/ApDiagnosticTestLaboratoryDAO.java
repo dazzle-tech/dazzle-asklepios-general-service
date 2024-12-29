@@ -42,6 +42,7 @@ record.setTestKey(rs.getString("test_key"));
 record.setInternationalCodingTypeLkey(rs.getString("international_coding_type_lkey"));
 record.setChildCodeLkey(rs.getString("child_code_lkey"));
 record.setLabCatalogLkey(rs.getString("lab_catalog_lkey"));
+record.setLabCatalogKey(rs.getString("lab_catalog_key"));
 record.setPropertyLkey(rs.getString("property_lkey"));
 record.setSystemLkey(rs.getString("system_lkey"));
 record.setScaleLkey(rs.getString("scale_lkey"));
@@ -80,6 +81,7 @@ public void updateRecord(ApDiagnosticTestLaboratory record) throws SQLException 
 try (
 Connection con = DS.getConnection();
 PreparedStatement ps = con.prepareStatement("update ap_diagnostic_test_laboratory set key = ?, test_key = ?, international_coding_type_lkey = ?, child_code_lkey = ?, lab_catalog_lkey = ?, property_lkey = ?, system_lkey = ?, scale_lkey = ?, reagents_lkey = ?, method_lkey = ?, test_duration_time = ?, time_unit_lkey = ?, result_type = ?, result_unit_lkey = ?, is_profile = ?, sample_container_lkey = ?, sample_volume = ?, sample_volume_unit_lkey = ?, tube_color_lkey = ?, test_description = ?, sample_handling = ?, turnaround_time = ?, turnaround_time_unit_lkey = ?, preparation_requirements = ?, medical_indications = ?, associated_risks = ?, test_instructions = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, lab_category_lkey = ? where key = ?");
+
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -87,6 +89,7 @@ ps.setString(2, record.getTestKey());
 ps.setString(3, record.getInternationalCodingTypeLkey());
 ps.setString(4, record.getChildCodeLkey());
 ps.setString(5, record.getLabCatalogLkey());
+ps.setString(5, record.getLabCatalogKey());
 ps.setString(6, record.getPropertyLkey());
 ps.setString(7, record.getSystemLkey());
 ps.setString(8, record.getScaleLkey());
@@ -118,6 +121,7 @@ ps.setBigDecimal(33, record.getDeletedAt());
 ps.setBoolean(34, record.getIsValid());
 ps.setString(35, record.getLabCategoryLkey());
 ps.setString(36, record.getKey());
+ps.setString(35, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -144,6 +148,7 @@ record.setTestKey(rs.getString("test_key"));
 record.setInternationalCodingTypeLkey(rs.getString("international_coding_type_lkey"));
 record.setChildCodeLkey(rs.getString("child_code_lkey"));
 record.setLabCatalogLkey(rs.getString("lab_catalog_lkey"));
+record.setLabCatalogKey(rs.getString("lab_catalog_key"));
 record.setPropertyLkey(rs.getString("property_lkey"));
 record.setSystemLkey(rs.getString("system_lkey"));
 record.setScaleLkey(rs.getString("scale_lkey"));
@@ -194,6 +199,7 @@ ps.setString(2, record.getTestKey());
 ps.setString(3, record.getInternationalCodingTypeLkey());
 ps.setString(4, record.getChildCodeLkey());
 ps.setString(5, record.getLabCatalogLkey());
+ps.setString(5, record.getLabCatalogKey());
 ps.setString(6, record.getPropertyLkey());
 ps.setString(7, record.getSystemLkey());
 ps.setString(8, record.getScaleLkey());

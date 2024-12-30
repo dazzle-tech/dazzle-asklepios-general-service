@@ -28,13 +28,16 @@ public class AppointmentController
     private final ApAppointmentService apAppointmentService;
     private final ApResourcesAvailabilityTimeService apResourcesAvailabilityTimeService;
     private final ApPatientService apPatientService;
-    public AppointmentController(ApResourcesService apResourcesService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApAppointmentService apAppointmentService, ApResourcesAvailabilityTimeService apResourcesAvailabilityTimeService) {
+    private final ApDiagnosticTestService apDiagnosticTestService;
+
+    public AppointmentController(ApResourcesService apResourcesService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApAppointmentService apAppointmentService, ApResourcesAvailabilityTimeService apResourcesAvailabilityTimeService, ApDiagnosticTestService apDiagnosticTestService) {
         this.apResourcesService = apResourcesService;
         this.apPractitionerService = apPractitionerService;
         this.apDepartmentService = apDepartmentService;
         this.apAppointmentService = apAppointmentService;
         this.apResourcesAvailabilityTimeService = apResourcesAvailabilityTimeService;
         this.apPatientService = new ApPatientService();
+        this.apDiagnosticTestService = apDiagnosticTestService;
     }
 
     @GetMapping(value = "/resources-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -153,6 +156,16 @@ public class AppointmentController
 
             }
 
+           // TODO update status to be a LOV value
+           else if(resource_type.equals("2039620472612029")) //Medical Test
+           {
+               ParentResponse<List<ApDiagnosticTest>> responseDia = new ParentResponse<>();
+               List<ApDiagnosticTest> listDep = apDiagnosticTestService.getList("appointable = true");
+               responseDia.setObject(listDep);
+               return ResponseEntity.ok(responseDia);
+
+           }
+
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
@@ -245,5 +258,71 @@ public class AppointmentController
             return ResponseEntity.status(500).body(e);
         }
     }
+
+    @PostMapping(value = "/remove-resource", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeResource(@RequestBody ApResources resource,
+                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                            @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApResources> response = new ParentResponse<>();
+            apResourcesService.deleteRecord(resource);
+            response.setObject(resource);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(value = "/resources-availability-time-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> resourcesAvailabilityTimeList(@RequestParam Map<String, String> queryParams,
+                                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApResourcesAvailabilityTime>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            List<ApResourcesAvailabilityTime> list = apResourcesAvailabilityTimeService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_resources_availability_time where " + whereForTotal);
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-resources-availability-time", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveResourcesAvailabilityTime(@RequestBody ApResourcesAvailabilityTime resourcesAvailabilityTime,
+                                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApResourcesAvailabilityTime> response = new ParentResponse<>();
+            apResourcesAvailabilityTimeService.saveRecord(resourcesAvailabilityTime);
+            response.setObject(resourcesAvailabilityTime);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
 
 }

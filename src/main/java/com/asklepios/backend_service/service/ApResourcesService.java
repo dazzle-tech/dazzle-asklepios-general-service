@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.asklepios.backend_service.model.generated.dao.ApDepartmentDAO;
 import com.asklepios.backend_service.model.generated.pojo.ApDepartment;
+import com.asklepios.backend_service.model.generated.pojo.ApDiagnosticTest;
 import com.asklepios.backend_service.model.generated.pojo.ApPractitioner;
 import com.asklepios.backend_service.model.generated.pojo.ApUserFacilities;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
@@ -38,6 +39,16 @@ public class ApResourcesService extends ApResourcesDAO implements Serializable {
             List<ApDepartment> listDep = new ApDepartmentService().getList("key = '"+ key +"'");
             if (listDep != null && !listDep.isEmpty()) {
                 return listDep.get(0).getName();
+            }
+
+        }
+
+        // TODO update status to be a LOV value
+        else if(resourceTypeKey.equals("2039620472612029")) //Medical Test
+        {
+            List<ApDiagnosticTest> listDia = new ApDiagnosticTestService().getList("key = '"+ key +"'");
+            if (listDia != null && !listDia.isEmpty()) {
+                return listDia.get(0).getTestName();
             }
 
         }

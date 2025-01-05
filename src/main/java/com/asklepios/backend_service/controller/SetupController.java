@@ -1427,24 +1427,37 @@ public class SetupController implements Serializable {
     }
 
 
-    //Age Group setup
     @PostMapping(value = "/save-age-group", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveAgeGroup(@RequestBody ApAgeGroup ageGroup,
-                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                          @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
-            ParentResponse<ApAgeGroup> response = new ParentResponse<>();
-            apAgeGroupService.saveRecord(ageGroup);
-            response.setObject(ageGroup);
-            return ResponseEntity.ok(response);
+            System.out.println("iam in age group save");
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_age_group where  age_group_lkey='" + ageGroup.getAgeGroupLkey() + "'");
+            if (totalRecord != null && totalRecord.intValue() > 0) {
+                System.out.println("total age _______________________________" + totalRecord);
+
+                ParentResponse<ApAgeGroup> response = new ParentResponse<>();
+                response.setObject(ageGroup);
+                response.setMsg("This category already exists");
+
+                return ResponseEntity.status(200).body(response);
+            } else {
+                ParentResponse<ApAgeGroup> response = new ParentResponse<>();
+                apAgeGroupService.saveRecord(ageGroup);
+                response.setObject(ageGroup);
+
+                return ResponseEntity.ok(response);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
             return ResponseEntity.status(500).body(e);
         }
     }
+
 
 
     @GetMapping(value = "/age-group-list", produces = MediaType.APPLICATION_JSON_VALUE)

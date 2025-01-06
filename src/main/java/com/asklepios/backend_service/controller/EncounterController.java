@@ -94,6 +94,7 @@ public class EncounterController {
                 apEncounterService.populateLovFields(encounter, lang);
                 ApPatient patient = apPatientService.getRecord(encounter.getPatientKey());
                 patient.setHasAllergy(apPatientService.getHasAllergy(encounter.getPatientKey()));
+                patient.setHasWarning(apPatientService.getHasWarning(encounter.getPatientKey()));
                 apPatientService.populateLovFields(patient, lang);
                 encounter.setPatientObject(patient);
                 encounter.setDiagnosis(apEncounterService.getDiagnosis(encounter.getKey()));

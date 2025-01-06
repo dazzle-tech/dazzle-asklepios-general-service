@@ -798,6 +798,7 @@ public class EncounterController {
             for (ApPrescriptionMedications medic: prescriptionMedications) {
 
                 apPrescriptionMedicationsService.populateLovFields(medic, lang);
+                medic.setActiveIngredientKeys(apPrescriptionMedicationsService.getActiveIngredientKeys(medic.getGenericMedicationsKey()));
             }
 
             response.setObject(prescriptionMedications);

@@ -3,6 +3,7 @@ package com.asklepios.backend_service.model.generated.pojo;
 import java.io.Serializable;
  import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
 import com.asklepios.backend_service.service.ApCustomeInstructionsService;
@@ -27,8 +28,7 @@ public class ApPrescriptionMedications extends ApPrescriptionMedicationsEntity i
     private String frequencyLvalue;
     private String unitLvalue;
     private String roaLvalue;
-
-
+    private List<String> activeIngredientKeys;
 
 
 

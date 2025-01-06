@@ -75,4 +75,26 @@ public class ApPatientService extends ApPatientDAO implements Serializable {
         }
         return false;
     }
+    public boolean getHasWarning(String patientKey) throws SQLException {
+        String query = "SELECT COUNT(patient_key) AS count FROM ap_visit_warning WHERE patient_key= ?";
+
+        try (
+                Connection con = DS.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)
+        ) {
+            ps.setString(1, patientKey);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt("count");
+
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            throw e;
+        }
+        return false;
+    }
 }

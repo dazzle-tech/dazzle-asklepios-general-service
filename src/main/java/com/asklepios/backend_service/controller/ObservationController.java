@@ -33,13 +33,16 @@ public class ObservationController {
     private final ApEncounterService apEncounterService;
     private final ApPatientObservationService apPatientObservationService;
     private final ApPatientObservationSummaryService apPatientObservationSummaryService;
-
-    public ObservationController(ApPatientService apPatientService, PublicServices publicServices, ApEncounterService apEncounterService, ApPatientObservationService apPatientObservationService, ApPatientObservationSummaryService apPatientObservationSummaryService) {
+    private final ApVisitAllergiesService apVisitAllergiesService;
+    private final  ApVisitWarningService apVisitWarningService;
+    public ObservationController(ApPatientService apPatientService, PublicServices publicServices, ApEncounterService apEncounterService, ApPatientObservationService apPatientObservationService, ApPatientObservationSummaryService apPatientObservationSummaryService, ApVisitAllergiesService apVisitAllergiesService, ApVisitWarningService apVisitWarningService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.apEncounterService = apEncounterService;
         this.apPatientObservationService = apPatientObservationService;
         this.apPatientObservationSummaryService = apPatientObservationSummaryService;
+        this.apVisitAllergiesService = apVisitAllergiesService;
+        this.apVisitWarningService = apVisitWarningService;
     }
 
 
@@ -136,5 +139,115 @@ public class ObservationController {
         }
     }
 
+    @PostMapping(value = "/save-allergies", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveVisitAllergies(@RequestBody ApVisitAllergies request,
+                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                @jakarta.annotation.Nullable @RequestHeader String lang,
+                                                @jakarta.annotation.Nullable @RequestHeader String screenKey
+    ) {
+        try {
+            ParentResponse<ApVisitAllergies> response = new ParentResponse<>();
+            apVisitAllergiesService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/allergies-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getVisitAllergies(@RequestParam Map<String, String> queryParams,
+                                               @Nullable @RequestHeader String facility_id,
+                                               @Nullable @RequestHeader String access_token,
+                                               @Nullable @RequestHeader Integer access_level,
+                                               @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApVisitAllergies>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApVisitAllergies> allergies = apVisitAllergiesService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_visit_allergies where " + whereForTotal);
+
+            for (ApVisitAllergies a : allergies) {
+
+                apVisitAllergiesService.populateLovFields(a, lang);
+            }
+
+            response.setObject(allergies);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/save-warnings", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveVisitWarninig(@RequestBody ApVisitWarning request,
+                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                @jakarta.annotation.Nullable @RequestHeader String lang,
+                                                @jakarta.annotation.Nullable @RequestHeader String screenKey
+    ) {
+        try {
+            ParentResponse<ApVisitWarning> response = new ParentResponse<>();
+            apVisitWarningService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/warnings-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getVisitWarning(@RequestParam Map<String, String> queryParams,
+                                               @Nullable @RequestHeader String facility_id,
+                                               @Nullable @RequestHeader String access_token,
+                                               @Nullable @RequestHeader Integer access_level,
+                                               @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApVisitWarning>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApVisitWarning> warnings = apVisitWarningService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_visit_warning where " + whereForTotal);
+
+            for (ApVisitWarning w : warnings) {
+
+                apVisitWarningService.populateLovFields(w, lang);
+            }
+
+            response.setObject(warnings);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 
 }

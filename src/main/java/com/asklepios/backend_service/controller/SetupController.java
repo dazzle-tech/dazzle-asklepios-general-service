@@ -64,8 +64,9 @@ public class SetupController implements Serializable {
     private final  ApAgeGroupService apAgeGroupService;
     private final ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService;
     private final ApDiagnosticTestPathologyService apDiagnosticTestPathologyService;
-
-    public SetupController(EmailService emailService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1, EmailService emailService1, ApAgeGroupService apAgeGroupService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestPathologyService apDiagnosticTestPathologyService) {
+    private final ApVaccineService apVaccineService;
+    private final ApVaccineBrandsService apVaccineBrandsService;
+    public SetupController(EmailService emailService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1, EmailService emailService1, ApAgeGroupService apAgeGroupService, ApVaccineService apVaccineService, ApVaccineBrandsService apVaccineBrandsService) {
         this.authService = authService;
         this.apModuleService = apModuleService;
         this.apScreenService = apScreenService;
@@ -100,6 +101,8 @@ public class SetupController implements Serializable {
         this.apAgeGroupService = apAgeGroupService;
         this.apDiagnosticTestLaboratoryService = apDiagnosticTestLaboratoryService;
         this.apDiagnosticTestPathologyService = apDiagnosticTestPathologyService;
+        this.apVaccineService = apVaccineService;
+        this.apVaccineBrandsService = apVaccineBrandsService;
     }
 
     @GetMapping(value = "/navigation-map", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -2066,5 +2069,153 @@ public class SetupController implements Serializable {
         }
     }
 
+    @PostMapping(value = "/save-vaccine", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveVaccine(@RequestBody ApVaccine vaccine,
+                                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                                 @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApVaccine> response = new ParentResponse<>();
+            apVaccineService.saveRecord(vaccine);
+            response.setObject(vaccine);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 
+
+    @GetMapping(value = "/vaccine-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> vaccineList(@RequestParam Map<String, String> queryParams,
+                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApVaccine>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApVaccine> list = apVaccineService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_vaccine where " + whereForTotal);
+            for (ApVaccine all : list) {
+                apVaccineService.populateLovFields(all, lang);
+            }
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/remove-vaccine", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeVaccine(@RequestBody ApVaccine apVaccine,
+                                                                   @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                                   @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                                   @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApVaccine> response = new ParentResponse<>();
+            apVaccineService.deleteRecord(apVaccine);
+            response.setObject(apVaccine);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/deactive-avtice-vaccine", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deactive_avtice_Vaccine(@RequestBody ApVaccine vaccine,
+                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                    @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                    @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApVaccine> response = new ParentResponse<>();
+            apVaccineService.deactive_avtice_Record(vaccine);
+            response.setObject(vaccine);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/save-vaccine-brands", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveVaccine(@RequestBody ApVaccineBrands vaccineBrand,
+                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                         @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                         @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApVaccineBrands> response = new ParentResponse<>();
+            apVaccineBrandsService.saveRecord(vaccineBrand);
+            response.setObject(vaccineBrand);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/vaccine-brands-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> vaccineBrandsList(@RequestParam Map<String, String> queryParams,
+                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                         @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                         @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApVaccineBrands>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApVaccineBrands> list = apVaccineBrandsService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_vaccine_brands where " + whereForTotal);
+            for (ApVaccineBrands all : list) {
+                apVaccineBrandsService.populateLovFields(all, lang);
+            }
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/deactive-avtice-vaccine-brand", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deactive_avtice_Vaccine_Brand(@RequestBody ApVaccineBrands vaccineBrand,
+                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                     @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApVaccineBrands> response = new ParentResponse<>();
+            apVaccineBrandsService.deactive_avtice_VaccineBrand(vaccineBrand);
+            response.setObject(vaccineBrand);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 }
+

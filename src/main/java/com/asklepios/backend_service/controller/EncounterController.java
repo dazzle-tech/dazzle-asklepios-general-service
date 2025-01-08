@@ -48,8 +48,10 @@ public class EncounterController {
     private final ApPrescriptionMedicationsService apPrescriptionMedicationsService ;
     private final ApConsultationOrderService apConsultationOrderService ;
     private final ApVisitAllergiesService apVisitAllergiesService;
+    private  final  ApDrugOrderService apDrugOrderService;
+    private  final  ApDrugOrderMedicationsService apDrugOrderMedicationsService;
 
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService) {
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -68,6 +70,8 @@ public class EncounterController {
         this.apPrescriptionMedicationsService = apPrescriptionMedicationsService;
         this.apConsultationOrderService = apConsultationOrderService;
         this.apVisitAllergiesService = apVisitAllergiesService;
+        this.apDrugOrderService = apDrugOrderService;
+        this.apDrugOrderMedicationsService = apDrugOrderMedicationsService;
     }
 
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -989,23 +993,19 @@ public class EncounterController {
                                               @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                               @jakarta.annotation.Nullable @RequestHeader String lang
     ) {
-        System.out.println("iam in save prescription");
         try {
             if(request.getKey()==null){
             BigDecimal lastpreId = DS.executeDecimalResultQuery("select max(prescription_id) from ap_prescription");
             BigDecimal newpreId;
-            System.out.println("lastVisitId"+lastpreId);
             if (lastpreId == null) {
                 newpreId= BigDecimal.valueOf(100);
             } else {
                 newpreId = lastpreId.add(BigDecimal.ONE);
             }
-            System.out.println("newVisitId"+newpreId);
             request.setPrescriptionId(newpreId.toString());}
             ParentResponse<ApPrescription> response = new ParentResponse<>();
             apPrescriptionService.saveRecord(request);
             response.setObject(request);
-            System.out.println("prescription key+++++++++++++++++++++++"+response.getObject().getKey());
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1013,6 +1013,123 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @PostMapping(value = "/save-drug-order", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveDrugOrder(@RequestBody ApDrugOrder request,
+                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                              @jakarta.annotation.Nullable @RequestHeader String lang
+    ) {
+        try {
+            if(request.getKey()==null){
+                BigDecimal lastpreId = DS.executeDecimalResultQuery("select max(drugorder_id) from ap_drug_order");
+                BigDecimal newpreId;
+                if (lastpreId == null) {
+                    newpreId= BigDecimal.valueOf(100);
+                } else {
+                    newpreId = lastpreId.add(BigDecimal.ONE);
+                }
+                request.setDrugorderId(newpreId.toString());}
+            ParentResponse<ApDrugOrder> response = new ParentResponse<>();
+            apDrugOrderService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/drug_order-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getDrugOrderList(@RequestParam Map<String, String> queryParams,
+                                                 @Nullable @RequestHeader String facility_id,
+                                                 @Nullable @RequestHeader String access_token,
+                                                 @Nullable @RequestHeader Integer access_level,
+                                                 @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApDrugOrder>> response = new ParentResponse<>();
 
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
 
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            List<ApDrugOrder> orders = apDrugOrderService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_drug_order where " + whereForTotal);
+
+            for (ApDrugOrder o:orders) {
+
+                apDrugOrderService.populateLovFields(o, lang);
+            }
+
+            response.setObject(orders);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(value = "/drug-order-medic-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getDrugOrderMedicationList(@RequestParam Map<String, String> queryParams,
+                                                           @Nullable @RequestHeader String facility_id,
+                                                           @Nullable @RequestHeader String access_token,
+                                                           @Nullable @RequestHeader Integer access_level,
+                                                           @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApDrugOrderMedications>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApDrugOrderMedications> orderMedications =  apDrugOrderMedicationsService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_drug_order_medications where " + whereForTotal);
+
+            for (ApDrugOrderMedications medic: orderMedications) {
+
+                apDrugOrderMedicationsService.populateLovFields(medic, lang);
+                medic.setActiveIngredientKeys(apDrugOrderMedicationsService.getActiveIngredientKeys(medic.getGenericMedicationsKey()));
+            }
+
+            response.setObject(orderMedications);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/save-drug-order-medic", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveDrugOrderMedication(@RequestBody ApDrugOrderMedications request,
+                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                     @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+            ParentResponse<ApDrugOrderMedications> response = new ParentResponse<>();
+            apDrugOrderMedicationsService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 }

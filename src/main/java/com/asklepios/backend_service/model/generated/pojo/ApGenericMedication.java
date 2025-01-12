@@ -14,5 +14,6 @@ import com.asklepios.backend_service.model.generated.entity.ApGenericMedicationE
 public class ApGenericMedication extends ApGenericMedicationEntity implements Serializable {
 
     private List<String> roaList;
+    private String activeIngredients;
 
 }

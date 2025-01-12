@@ -56,6 +56,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setSeverityLkey(rs.getString("severity_lkey"));
+record.setWarning(rs.getString("warning"));
 } else { record = null; }
 return record;
 }
@@ -63,7 +64,7 @@ return record;
 public void updateRecord(ApVisitWarning record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_visit_warning set key = ?, patient_key = ?, visit_key = ?, status_lkey = ?, warning_type_lkey = ?, first_time_recorded = ?, action_take = ?, source_of_information_lkey = ?, notes = ?, cancellation_reason = ?, resolved_by = ?, created_by = ?, updated_by = ?, deleted_by = ?, resolved_at = ?, created_at = ?, updated_at = ?, deleted_at = ?, severity_lkey = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_visit_warning set key = ?, patient_key = ?, visit_key = ?, status_lkey = ?, warning_type_lkey = ?, first_time_recorded = ?, action_take = ?, source_of_information_lkey = ?, notes = ?, cancellation_reason = ?, resolved_by = ?, created_by = ?, updated_by = ?, deleted_by = ?, resolved_at = ?, created_at = ?, updated_at = ?, deleted_at = ?, severity_lkey = ?, warning = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -85,7 +86,8 @@ ps.setBigDecimal(16, record.getCreatedAt());
 ps.setBigDecimal(17, record.getUpdatedAt());
 ps.setBigDecimal(18, record.getDeletedAt());
 ps.setString(19, record.getSeverityLkey());
-ps.setString(20, record.getKey());
+ps.setString(20, record.getWarning());
+ps.setString(21, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -126,6 +128,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setSeverityLkey(rs.getString("severity_lkey"));
+record.setWarning(rs.getString("warning"));
 list.add(record);
 }
 return list;
@@ -134,7 +137,7 @@ return list;
 public String saveRecord(ApVisitWarning record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_visit_warning values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_visit_warning values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -160,6 +163,7 @@ ps.setBigDecimal(16, record.getCreatedAt());
 ps.setBigDecimal(17, record.getUpdatedAt());
 ps.setBigDecimal(18, record.getDeletedAt());
 ps.setString(19, record.getSeverityLkey());
+ps.setString(20, record.getWarning());
 ps.executeUpdate();
 return key;
 }

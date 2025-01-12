@@ -51,6 +51,12 @@ public class ApDrugOrderMedicationsEntity implements Serializable {
 	private BigDecimal createdAt;
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
+	private String cancellationReason;
+	private String indicationUseLkey;
+	private ApLovValues indicationUseLvalue;
+	private String indicationIcd;
+	private String indicationSnomed;
+	private String indicationManually;
 	private ApDrugOrderMedicationsEntity translatedObject;
 
 }

@@ -136,6 +136,38 @@ public class MedicationsSetupController {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @GetMapping(value = "/generic-medication_act-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> genericMedicationByActiveIngredientList(@RequestHeader  String active,
+                                                   @Nullable @RequestHeader String facility_id,
+                                                   @Nullable @RequestHeader String access_token,
+                                                   @Nullable @RequestHeader Integer access_level,
+                                                   @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApGenericMedication>> response = new ParentResponse<>();
+
+
+
+            List<ApGenericMedication> list = apGenericMedicationService.getListapv(active,"");
+
+            for(ApGenericMedication all : list){
+                apGenericMedicationService.populateLovFields(all, lang);
+                List<ApGenericMedicationRoa> roaList = new ApGenericMedicationRoaService().getList("generic_medication_key = '" + all.getKey() + "' and deleted_at is null");
+                if(!roaList.isEmpty()){
+                    List<String> roaIds = new ArrayList<>();
+                    roaList.forEach(roa -> roaIds.add(roa.getRoaLkey()));
+                    all.setRoaList(roaIds);
+                }
+            }
+            response.setObject(list);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 
     @PostMapping(value = "/save-generic-medication-active-ingredient", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveGenericMedicationActiveIngredient(@RequestBody ApGenericMedicationActiveIngredient genericMedicationActiveIngredient,

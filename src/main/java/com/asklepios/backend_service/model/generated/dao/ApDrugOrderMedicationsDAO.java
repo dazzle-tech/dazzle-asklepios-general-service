@@ -68,6 +68,11 @@ record.setDeletedBy(rs.getString("deleted_by"));
 record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
+record.setCancellationReason(rs.getString("cancellation_reason"));
+record.setIndicationUseLkey(rs.getString("indication_use_lkey"));
+record.setIndicationIcd(rs.getString("indication_icd"));
+record.setIndicationSnomed(rs.getString("indication_snomed"));
+record.setIndicationManually(rs.getString("indication_manually"));
 } else { record = null; }
 return record;
 }
@@ -75,7 +80,7 @@ return record;
 public void updateRecord(ApDrugOrderMedications record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_drug_order_medications set key = ?, patient_key = ?, visit_key = ?, drug_order_key = ?, generic_medications_key = ?, drug_order_type_lkey = ?, dose_unit_lkey = ?, roa_lkey = ?, frequency = ?, priority_lkey = ?, pharmacy_department_key = ?, dose = ?, notes = ?, prn_indication = ?, special_instructions = ?, parameters_to_monitor = ?, start_date_time = ?, maximum_dose = ?, generic_substitute = ?, chronic_medication = ?, patient_own_medication = ?, administration_instructions = ?, duration = ?, duration_type_lkey = ?, status_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_drug_order_medications set key = ?, patient_key = ?, visit_key = ?, drug_order_key = ?, generic_medications_key = ?, drug_order_type_lkey = ?, dose_unit_lkey = ?, roa_lkey = ?, frequency = ?, priority_lkey = ?, pharmacy_department_key = ?, dose = ?, notes = ?, prn_indication = ?, special_instructions = ?, parameters_to_monitor = ?, start_date_time = ?, maximum_dose = ?, generic_substitute = ?, chronic_medication = ?, patient_own_medication = ?, administration_instructions = ?, duration = ?, duration_type_lkey = ?, status_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, cancellation_reason = ?, indication_use_lkey = ?, indication_icd = ?, indication_snomed = ?, indication_manually = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -109,7 +114,12 @@ ps.setString(28, record.getDeletedBy());
 ps.setBigDecimal(29, record.getCreatedAt());
 ps.setBigDecimal(30, record.getUpdatedAt());
 ps.setBigDecimal(31, record.getDeletedAt());
-ps.setString(32, record.getKey());
+ps.setString(32, record.getCancellationReason());
+ps.setString(33, record.getIndicationUseLkey());
+ps.setString(34, record.getIndicationIcd());
+ps.setString(35, record.getIndicationSnomed());
+ps.setString(36, record.getIndicationManually());
+ps.setString(37, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -162,6 +172,11 @@ record.setDeletedBy(rs.getString("deleted_by"));
 record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
+record.setCancellationReason(rs.getString("cancellation_reason"));
+record.setIndicationUseLkey(rs.getString("indication_use_lkey"));
+record.setIndicationIcd(rs.getString("indication_icd"));
+record.setIndicationSnomed(rs.getString("indication_snomed"));
+record.setIndicationManually(rs.getString("indication_manually"));
 list.add(record);
 }
 return list;
@@ -170,7 +185,7 @@ return list;
 public String saveRecord(ApDrugOrderMedications record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_drug_order_medications values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_drug_order_medications values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -208,6 +223,11 @@ ps.setString(28, record.getDeletedBy());
 ps.setBigDecimal(29, record.getCreatedAt());
 ps.setBigDecimal(30, record.getUpdatedAt());
 ps.setBigDecimal(31, record.getDeletedAt());
+ps.setString(32, record.getCancellationReason());
+ps.setString(33, record.getIndicationUseLkey());
+ps.setString(34, record.getIndicationIcd());
+ps.setString(35, record.getIndicationSnomed());
+ps.setString(36, record.getIndicationManually());
 ps.executeUpdate();
 return key;
 }

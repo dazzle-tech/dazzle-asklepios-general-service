@@ -37,6 +37,7 @@ public class ApVisitWarningEntity implements Serializable {
 	private BigDecimal deletedAt;
 	private String severityLkey;
 	private ApLovValues severityLvalue;
+	private String warning;
 	private ApVisitWarningEntity translatedObject;
 
 }

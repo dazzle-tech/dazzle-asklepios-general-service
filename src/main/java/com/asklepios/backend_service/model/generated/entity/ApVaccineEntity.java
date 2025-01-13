@@ -37,6 +37,8 @@ public class ApVaccineEntity implements Serializable {
 	private BigDecimal createdAt;
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
+	private String numberOfDosesLkey;
+	private ApLovValues numberOfDosesLvalue;
 	private ApVaccineEntity translatedObject;
 
 }

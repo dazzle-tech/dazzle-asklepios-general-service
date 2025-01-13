@@ -57,6 +57,7 @@ record.setDeletedBy(rs.getString("deleted_by"));
 record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
+record.setNumberOfDosesLkey(rs.getString("number_of_doses_lkey"));
 } else { record = null; }
 return record;
 }
@@ -64,7 +65,7 @@ return record;
 public void updateRecord(ApVaccine record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_vaccine set key = ?, vaccine_code = ?, vaccine_name = ?, atc_code = ?, type_lkey = ?, roa_lkey = ?, site_of_administration = ?, post_opening_duration = ?, duration_unit_lkey = ?, indications = ?, possible_reactions = ?, contraindications_and_precautions = ?, storage_and_handling = ?, is_valid = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_vaccine set key = ?, vaccine_code = ?, vaccine_name = ?, atc_code = ?, type_lkey = ?, roa_lkey = ?, site_of_administration = ?, post_opening_duration = ?, duration_unit_lkey = ?, indications = ?, possible_reactions = ?, contraindications_and_precautions = ?, storage_and_handling = ?, is_valid = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, number_of_doses_lkey = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -87,7 +88,8 @@ ps.setString(17, record.getDeletedBy());
 ps.setBigDecimal(18, record.getCreatedAt());
 ps.setBigDecimal(19, record.getUpdatedAt());
 ps.setBigDecimal(20, record.getDeletedAt());
-ps.setString(21, record.getKey());
+ps.setString(21, record.getNumberOfDosesLkey());
+ps.setString(22, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -129,6 +131,7 @@ record.setDeletedBy(rs.getString("deleted_by"));
 record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
+record.setNumberOfDosesLkey(rs.getString("number_of_doses_lkey"));
 list.add(record);
 }
 return list;
@@ -137,7 +140,7 @@ return list;
 public String saveRecord(ApVaccine record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_vaccine values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_vaccine values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -164,6 +167,7 @@ ps.setString(17, record.getDeletedBy());
 ps.setBigDecimal(18, record.getCreatedAt());
 ps.setBigDecimal(19, record.getUpdatedAt());
 ps.setBigDecimal(20, record.getDeletedAt());
+ps.setString(21, record.getNumberOfDosesLkey());
 ps.executeUpdate();
 return key;
 }

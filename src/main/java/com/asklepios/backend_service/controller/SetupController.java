@@ -61,14 +61,18 @@ public class SetupController implements Serializable {
     private final ApAddressesService apAddressesService;
     private final ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService;
     private final EmailService emailService;
-    private final ApAgeGroupService apAgeGroupService;
+    private final  ApAgeGroupService apAgeGroupService;
     private final ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService;
     private final ApDiagnosticTestPathologyService apDiagnosticTestPathologyService;
     private final ApVaccineService apVaccineService;
     private final ApVaccineBrandsService apVaccineBrandsService;
     private final ApVaccineDoseService apVaccineDoseService;
     private final ApVaccineDosesIntervalService apVaccineDosesIntervalService;
-    public SetupController(EmailService emailService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1, EmailService emailService1, ApAgeGroupService apAgeGroupService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestPathologyService apDiagnosticTestPathologyService, ApVaccineService apVaccineService, ApVaccineBrandsService apVaccineBrandsService, ApVaccineDoseService apVaccineDoseService, ApVaccineDosesIntervalService apVaccineDosesIntervalService) {
+    private final ApProcedureSetupService apProcedureSetupService;
+    private  final ApProcedureCodingService apProcedureCodingService;
+    private final ApProcedurePriceListService apProcedurePriceListService;
+
+    public SetupController(EmailService emailService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1, EmailService emailService1, ApAgeGroupService apAgeGroupService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestPathologyService apDiagnosticTestPathologyService, ApVaccineService apVaccineService, ApVaccineBrandsService apVaccineBrandsService, ApVaccineDoseService apVaccineDoseService, ApVaccineDosesIntervalService apVaccineDosesIntervalService, ApProcedureSetupService apProcedureSetupService, ApProcedureCodingService apProcedureCodingService, ApProcedurePriceListService apProcedurePriceListService) {
         this.authService = authService;
         this.apModuleService = apModuleService;
         this.apScreenService = apScreenService;
@@ -107,6 +111,9 @@ public class SetupController implements Serializable {
         this.apVaccineBrandsService = apVaccineBrandsService;
         this.apVaccineDoseService = apVaccineDoseService;
         this.apVaccineDosesIntervalService = apVaccineDosesIntervalService;
+        this.apProcedureSetupService = apProcedureSetupService;
+        this.apProcedureCodingService = apProcedureCodingService;
+        this.apProcedurePriceListService = apProcedurePriceListService;
     }
 
     @GetMapping(value = "/navigation-map", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -504,11 +511,11 @@ public class SetupController implements Serializable {
                 newPassword.append(allowedChars.charAt(random.nextInt(allowedChars.length())));
             }
             String body = "Dear " + existingUser.getFullName() + ",\n\n" +
-                    "A request to reset your password has been processed.\n\n" +
+                    "A request to reset your password has been processed.\n\n"+
                     "For security reasons," +
                     " we’ve generated a temporary password for you to use to access your account." +
-                    " Please use this password to log in and remember to update it immediately to secure your account.\n\n" +
-                    " Temporary Password : " + newPassword.toString() + " \n\n" +
+                    " Please use this password to log in and remember to update it immediately to secure your account.\n\n"+
+                    " Temporary Password : " + newPassword.toString()  +" \n\n"+
                     "Please contact our support team immediately if you didn’t request this change, or have any issues.";
 
             emailService.sendSimpleEmail(existingUser.getEmail(), "Your Password Has Been Reset", body);
@@ -871,7 +878,7 @@ public class SetupController implements Serializable {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-            List<ApPractitioner> list = apPractitionerService.getList(" deleted_at is null and " + where);
+            List<ApPractitioner> list = apPractitionerService.getList(" deleted_at is null and "+where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_practitioner where " + whereForTotal);
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
@@ -886,10 +893,10 @@ public class SetupController implements Serializable {
 
     @PostMapping(value = "/save-practitioner", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePractitioner(@RequestBody ApPractitioner practitioner,
-                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                              @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                      @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApPractitioner> response = new ParentResponse<>();
             practitioner.setPractitionerFullName(practitioner.getPractitionerFirstName() + " " + practitioner.getPractitionerLastName());
@@ -928,10 +935,10 @@ public class SetupController implements Serializable {
 
     @PostMapping(value = "/remove-practitioner", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> remove_practitioner(@RequestBody ApPractitioner practitioner,
-                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                 @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                    @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                    @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApPractitioner> response = new ParentResponse<>();
             apPractitionerService.deleteRecord(practitioner);
@@ -974,10 +981,10 @@ public class SetupController implements Serializable {
 
     @PostMapping(value = "/save-user-midical-license", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveMedicalLicense(@RequestBody ApUserMedicalLicense userLicense,
-                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                              @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApUserMedicalLicense> response = new ParentResponse<>();
             apUserMedicalLicenseService.saveRecord(userLicense);
@@ -1382,6 +1389,7 @@ public class SetupController implements Serializable {
     }
 
 
+
     @PostMapping(value = "/save-allergens", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveAllergens(@RequestBody ApAllergens allergens,
                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -1465,12 +1473,13 @@ public class SetupController implements Serializable {
     }
 
 
+
     @GetMapping(value = "/age-group-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> ageGroupList(@RequestParam Map<String, String> queryParams,
-                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                          @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApAgeGroup>> response = new ParentResponse<>();
             if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
@@ -1496,6 +1505,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
 
 
     @GetMapping(value = "/icd-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1836,10 +1846,10 @@ public class SetupController implements Serializable {
 
     @PostMapping(value = "/remove-diagnostic-test-laboratory", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeDiagnosticTestLaboratory(@RequestBody ApDiagnosticTestLaboratory diagnosticTestLaboratory,
-                                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                            @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                                  @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                  @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                  @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                  @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApDiagnosticTestLaboratory> response = new ParentResponse<>();
             apDiagnosticTestLaboratoryService.deleteRecord(diagnosticTestLaboratory);
@@ -1854,10 +1864,10 @@ public class SetupController implements Serializable {
 
     @PostMapping(value = "/save-diagnostic-test-laboratory", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticTestLaboratory(@RequestBody ApDiagnosticTestLaboratory diagnosticTestLaboratory,
-                                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                          @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApDiagnosticTestLaboratory> response = new ParentResponse<>();
             apDiagnosticTestLaboratoryService.saveRecord(diagnosticTestLaboratory);
@@ -1871,12 +1881,13 @@ public class SetupController implements Serializable {
     }
 
 
+
     @GetMapping(value = "/diagnostic-test-laboratory-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> diagnosticTestLaboratoryList(@RequestParam Map<String, String> queryParams,
-                                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                          @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApDiagnosticTestLaboratory>> response = new ParentResponse<>();
             if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
@@ -1905,10 +1916,10 @@ public class SetupController implements Serializable {
 
     @PostMapping(value = "/save-diagnostic-test-pathology", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticTestPathology(@RequestBody ApDiagnosticTestPathology diagnosticTestPathology,
-                                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                         @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                         @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                          @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApDiagnosticTestPathology> response = new ParentResponse<>();
             apDiagnosticTestPathologyService.saveRecord(diagnosticTestPathology);
@@ -1923,10 +1934,10 @@ public class SetupController implements Serializable {
 
     @GetMapping(value = "/diagnostic-test-pathology-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> diagnosticTestPathologyList(@RequestParam Map<String, String> queryParams,
-                                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                         @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                         @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                          @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApDiagnosticTestPathology>> response = new ParentResponse<>();
             if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
@@ -2136,7 +2147,6 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
-
     @PostMapping(value = "/deactive-avtice-vaccine", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deactive_avtice_Vaccine(@RequestBody ApVaccine vaccine,
                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -2154,13 +2164,12 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
-
     @PostMapping(value = "/save-vaccine-brands", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveVaccineBrand(@RequestBody ApVaccineBrands vaccineBrand,
-                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                              @jakarta.annotation.Nullable @RequestHeader String lang) {
+    public ResponseEntity<?> saveVaccine(@RequestBody ApVaccineBrands vaccineBrand,
+                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                         @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                         @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApVaccineBrands> response = new ParentResponse<>();
             apVaccineBrandsService.saveRecord(vaccineBrand);
@@ -2172,7 +2181,6 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
-
     @GetMapping(value = "/vaccine-brands-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> vaccineBrandsList(@RequestParam Map<String, String> queryParams,
                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -2203,7 +2211,6 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
-
     @PostMapping(value = "/deactive-avtice-vaccine-brand", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deactive_avtice_Vaccine_Brand(@RequestBody ApVaccineBrands vaccineBrand,
                                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -2384,6 +2391,205 @@ public class SetupController implements Serializable {
             ParentResponse<ApVaccineDosesInterval> response = new ParentResponse<>();
             apVaccineDosesIntervalService.deleteRecord(apVaccineDosesInterval);
             response.setObject(apVaccineDosesInterval);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(value = "/procedure-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> procedureList(@RequestParam Map<String, String> queryParams,
+                                                                  @jakarta.annotation.Nullable @RequestHeader String lang,
+                                                                  @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                                  @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                                  @jakarta.annotation.Nullable @RequestHeader Integer access_level)
+    {
+        try {
+            ParentResponse<List<ApProcedureSetup>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApProcedureSetup> list = apProcedureSetupService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) ap_procedure_setup where " + whereForTotal);
+            for (ApProcedureSetup all : list) {
+                apProcedureSetupService.populateLovFields(all, lang);
+            }
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-procedure", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveProcedure(@RequestBody ApProcedureSetup apProcedureSetup,
+                                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                                 @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApProcedureSetup > response = new ParentResponse<>();
+            apProcedureSetupService.saveRecord(apProcedureSetup);
+            response.setObject(apProcedureSetup);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/procedure-coding-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> procedureCodingList(@RequestParam Map<String, String> queryParams,
+                                           @jakarta.annotation.Nullable @RequestHeader String lang,
+                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level)
+    {
+        try {
+            ParentResponse<List<ApProcedureCoding>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApProcedureCoding> list = apProcedureCodingService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_procedure_coding where " + whereForTotal);
+            for (ApProcedureCoding all : list) {
+                apProcedureCodingService.populateLovFields(all, lang);
+            }
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/remove-procedure", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeProcedure(@RequestBody ApProcedureSetup apProcedureSetup,
+                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApProcedureSetup> response = new ParentResponse<>();
+            apProcedureSetupService.deleteRecord(apProcedureSetup);
+            response.setObject(apProcedureSetup);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-procedure-coding", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveProcedureCoding(@RequestBody ApProcedureCoding apProcedureCoding,
+                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApProcedureCoding> response = new ParentResponse<>();
+            apProcedureCodingService.saveRecord(apProcedureCoding);
+            response.setObject(apProcedureCoding);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/remove-coding", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteProcedurePriceList(@RequestBody ApProcedureCoding apProcedureCoding,
+                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                      @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApProcedureCoding> response = new ParentResponse<>();
+            apProcedureCodingService.deleteCoding(apProcedureCoding);
+            response.setObject(apProcedureCoding);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/procedure-price-list-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> procedurePriceListList(@RequestParam Map<String, String> queryParams,
+                                                 @jakarta.annotation.Nullable @RequestHeader String lang,
+                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level)
+    {
+        try {
+            ParentResponse<List<ApProcedurePriceList>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApProcedurePriceList> list = apProcedurePriceListService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_procedure_price_list where " + whereForTotal);
+            for (ApProcedurePriceList all : list) {
+                apProcedurePriceListService.populateLovFields(all, lang);
+            }
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-procedure-price-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveProcedurePriceList(@RequestBody ApProcedurePriceList apProcedurePriceList,
+                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                 @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApProcedurePriceList> response = new ParentResponse<>();
+            apProcedurePriceListService.saveRecord(apProcedurePriceList);
+            response.setObject(apProcedurePriceList);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/remove-price-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteProcedurePriceList(@RequestBody ApProcedurePriceList apProcedurePriceList,
+                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                             @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApProcedurePriceList> response = new ParentResponse<>();
+            apProcedurePriceListService.deletePriceList(apProcedurePriceList);
+            response.setObject(apProcedurePriceList);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();

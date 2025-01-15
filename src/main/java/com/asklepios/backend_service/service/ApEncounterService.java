@@ -115,6 +115,42 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
         }
         return false;
     }
+    public boolean getHasObservation(String visitKey) throws SQLException {
+        String query = "SELECT SUM(count) AS total_count " +
+                "FROM ( " +
+                "         SELECT COUNT(*) AS count " +
+                "         FROM ap_visit_allergies " +
+                "         WHERE visit_key = ? " +
+                "         UNION ALL " +
+                "         SELECT COUNT(*) AS count " +
+                "         FROM ap_visit_warning " +
+                "         WHERE visit_key = ? " +
+                "         UNION ALL " +
+                "         SELECT COUNT(*) AS count " +
+                "         FROM ap_patient_observation_summary " +
+                "         WHERE visit_key = ? " +
+                "     ) AS combined_counts";
+
+        try (
+                Connection con = DS.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)
+        ) {
+            ps.setString(1, visitKey);
+            ps.setString(2, visitKey);
+            ps.setString(3, visitKey);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt("total_count");
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return false;
+    }
 
 
 

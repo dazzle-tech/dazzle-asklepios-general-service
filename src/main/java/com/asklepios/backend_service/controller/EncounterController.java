@@ -50,8 +50,8 @@ public class EncounterController {
     private final ApVisitAllergiesService apVisitAllergiesService;
     private  final  ApDrugOrderService apDrugOrderService;
     private  final  ApDrugOrderMedicationsService apDrugOrderMedicationsService;
-
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService) {
+    private  final  ApProcedureService apProcedureService;
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -72,6 +72,7 @@ public class EncounterController {
         this.apVisitAllergiesService = apVisitAllergiesService;
         this.apDrugOrderService = apDrugOrderService;
         this.apDrugOrderMedicationsService = apDrugOrderMedicationsService;
+        this.apProcedureService = apProcedureService;
     }
 
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1125,6 +1126,73 @@ public class EncounterController {
         try {
             ParentResponse<ApDrugOrderMedications> response = new ParentResponse<>();
             apDrugOrderMedicationsService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(value = "/procedures-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getProcedureList(@RequestParam Map<String, String> queryParams,
+                                                        @Nullable @RequestHeader String facility_id,
+                                                        @Nullable @RequestHeader String access_token,
+                                                        @Nullable @RequestHeader Integer access_level,
+                                                        @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApProcedure>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApProcedure> pro =  apProcedureService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_procedure where " + whereForTotal);
+
+            for (ApProcedure all: pro) {
+
+                apProcedureService.populateLovFields(all, lang);
+                all.setProcedureName(apProcedureService.getProcedureName(all.getProcedureNameKey()));
+
+            }
+
+            response.setObject(pro);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/save-procedures", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveProcedure(@RequestBody ApProcedure request,
+                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                     @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+            if(request.getKey()==null){
+                BigDecimal lastpreId = DS.executeDecimalResultQuery("select max(procedure_id) from ap_procedure");
+                BigDecimal newpreId;
+                if (lastpreId == null) {
+                    newpreId= BigDecimal.valueOf(100);
+                } else {
+                    newpreId = lastpreId.add(BigDecimal.ONE);
+                }
+                request.setProcedureId(newpreId.toString());}
+            ParentResponse<ApProcedure> response = new ParentResponse<>();
+            apProcedureService.saveRecord(request);
             response.setObject(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {

@@ -38,6 +38,11 @@ public class ApProcedureEntity implements Serializable {
 	private String faciltyLkey;
 	private ApLovValues faciltyLvalue;
 	private String encounterKey;
+	private String bodyPartLkey;
+	private ApLovValues bodyPartLvalue;
+	private String sideLkey;
+	private ApLovValues sideLvalue;
+	private Boolean currentDepartment = false;
 	private ApProcedureEntity translatedObject;
 
 }

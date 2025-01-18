@@ -57,6 +57,9 @@ record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setFaciltyLkey(rs.getString("facilty_lkey"));
 record.setEncounterKey(rs.getString("encounter_key"));
+record.setBodyPartLkey(rs.getString("body_part_lkey"));
+record.setSideLkey(rs.getString("side_lkey"));
+record.setCurrentDepartment(rs.getBoolean("current_department"));
 } else { record = null; }
 return record;
 }
@@ -64,7 +67,7 @@ return record;
 public void updateRecord(ApProcedure record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_procedure set key = ?, procedure_name_key = ?, procedure_id = ?, procedure_level_lkey = ?, category_key = ?, indications = ?, priority_lkey = ?, status_lkey = ?, scheduled_date_time = ?, notes = ?, department_key = ?, cancellation_reason = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, facilty_lkey = ?, encounter_key = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_procedure set key = ?, procedure_name_key = ?, procedure_id = ?, procedure_level_lkey = ?, category_key = ?, indications = ?, priority_lkey = ?, status_lkey = ?, scheduled_date_time = ?, notes = ?, department_key = ?, cancellation_reason = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, facilty_lkey = ?, encounter_key = ?, body_part_lkey = ?, side_lkey = ?, current_department = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -87,7 +90,10 @@ ps.setBigDecimal(17, record.getUpdatedAt());
 ps.setBigDecimal(18, record.getDeletedAt());
 ps.setString(19, record.getFaciltyLkey());
 ps.setString(20, record.getEncounterKey());
-ps.setString(21, record.getKey());
+ps.setString(21, record.getBodyPartLkey());
+ps.setString(22, record.getSideLkey());
+ps.setBoolean(23, record.getCurrentDepartment());
+ps.setString(24, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -129,6 +135,9 @@ record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setFaciltyLkey(rs.getString("facilty_lkey"));
 record.setEncounterKey(rs.getString("encounter_key"));
+record.setBodyPartLkey(rs.getString("body_part_lkey"));
+record.setSideLkey(rs.getString("side_lkey"));
+record.setCurrentDepartment(rs.getBoolean("current_department"));
 list.add(record);
 }
 return list;
@@ -137,7 +146,7 @@ return list;
 public String saveRecord(ApProcedure record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_procedure values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_procedure values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -164,6 +173,9 @@ ps.setBigDecimal(17, record.getUpdatedAt());
 ps.setBigDecimal(18, record.getDeletedAt());
 ps.setString(19, record.getFaciltyLkey());
 ps.setString(20, record.getEncounterKey());
+ps.setString(21, record.getBodyPartLkey());
+ps.setString(22, record.getSideLkey());
+ps.setBoolean(23, record.getCurrentDepartment());
 ps.executeUpdate();
 return key;
 }

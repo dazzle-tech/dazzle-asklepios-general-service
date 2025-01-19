@@ -35,14 +35,24 @@ public class ObservationController {
     private final ApPatientObservationSummaryService apPatientObservationSummaryService;
     private final ApVisitAllergiesService apVisitAllergiesService;
     private final  ApVisitWarningService apVisitWarningService;
-    public ObservationController(ApPatientService apPatientService, PublicServices publicServices, ApEncounterService apEncounterService, ApPatientObservationService apPatientObservationService, ApPatientObservationSummaryService apPatientObservationSummaryService, ApVisitAllergiesService apVisitAllergiesService, ApVisitWarningService apVisitWarningService) {
-        this.apPatientService = apPatientService;
+    private final ApEncounterVaccinationService apEncounterVaccinationService;
+    private final ApVaccineService apVaccineService;
+    private final ApVaccineDoseService apVaccineDoseService;
+    private final ApVaccineBrandsService apVaccineBrandsService;
+    private final ApUserService apUserService;
+    public ObservationController(ApPatientService apPatientService, PublicServices publicServices, ApEncounterService apEncounterService, ApPatientObservationService apPatientObservationService, ApPatientObservationSummaryService apPatientObservationSummaryService, ApVisitAllergiesService apVisitAllergiesService, ApVisitWarningService apVisitWarningService, ApEncounterVaccinationService apEncounterVaccinationService, ApVaccineService apVaccineService, ApVaccineDoseService apVaccineDoseService, ApVaccineBrandsService apVaccineBrandsService, ApUserService apUserService) {
+        this.apPatientService  = apPatientService;
         this.publicServices = publicServices;
         this.apEncounterService = apEncounterService;
         this.apPatientObservationService = apPatientObservationService;
         this.apPatientObservationSummaryService = apPatientObservationSummaryService;
         this.apVisitAllergiesService = apVisitAllergiesService;
         this.apVisitWarningService = apVisitWarningService;
+        this.apEncounterVaccinationService = apEncounterVaccinationService;
+        this.apVaccineService = apVaccineService;
+        this.apVaccineDoseService = apVaccineDoseService;
+        this.apVaccineBrandsService = apVaccineBrandsService;
+        this.apUserService = apUserService;
     }
 
 
@@ -249,5 +259,86 @@ public class ObservationController {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @PostMapping(value = "/save-encounter-vaccine", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveEncounterVaccine(@RequestBody ApEncounterVaccination encounterVaccination,
+                                                  @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                  @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                  @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                  @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApEncounterVaccination> response = new ParentResponse<>();
+            apEncounterVaccinationService.saveRecord(encounterVaccination);
+            response.setObject(encounterVaccination);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/encounter-vaccine-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> vaccineDosesList(@RequestParam Map<String, String> queryParams,
+                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                              @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApEncounterVaccination>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApEncounterVaccination> list = apEncounterVaccinationService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_encounter_vaccination where " + whereForTotal);
+            for (ApEncounterVaccination all : list) {
+                apEncounterVaccinationService.populateLovFields(all, lang);
+                if (all.getVaccineKey() != null) {
+                    all.setVaccine(apVaccineService.getRecord(all.getVaccineKey()));
+                }
+                if (all.getVaccineDoseKey() != null) {
+                    all.setVaccineDose(apVaccineDoseService.getRecord(all.getVaccineDoseKey()));
+                }
+                if (all.getVaccineBrandKey() != null) {
+                    all.setVaccineBrands(apVaccineBrandsService.getRecord(all.getVaccineBrandKey()));
+                }
+                if (all.getCreatedBy() != null) {
+                    all.setCreateByUser(apUserService.getRecord(all.getCreatedBy()));
+                }
+                if (all.getUpdatedBy() != null) {
+                    all.setUpdateByUser(apUserService.getRecord(all.getUpdatedBy()));
+                }
+                if (all.getDeletedBy() != null) {
+                    all.setDeleteByUser(apUserService.getRecord(all.getDeletedBy()));
+                }
+                if (all.getReviewedBy() != null) {
+                    all.setReviewedByUser(apUserService.getRecord(all.getReviewedBy()));
+                }
 
+                // Populate LOV fields only if the vaccine is not null
+                if (all.getVaccine() != null) {
+                    apEncounterVaccinationService.populateLovFields(all, lang);
+                    apVaccineService.populateLovFields(all.getVaccine(), lang);
+                }
+                if (all.getVaccineDose() != null) {
+                    apVaccineDoseService.populateLovFields(all.getVaccineDose(), lang);
+                }
+                if (all.getVaccineBrands() != null) {
+                    apVaccineBrandsService.populateLovFields(all.getVaccineBrands(), lang);
+                }
+            }
+
+
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 }

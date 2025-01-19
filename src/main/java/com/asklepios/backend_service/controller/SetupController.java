@@ -2416,7 +2416,7 @@ public class SetupController implements Serializable {
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false);
             List<ApProcedureSetup> list = apProcedureSetupService.getList(where);
-            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) ap_procedure_setup where " + whereForTotal);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_procedure_setup where " + whereForTotal);
             for (ApProcedureSetup all : list) {
                 apProcedureSetupService.populateLovFields(all, lang);
             }

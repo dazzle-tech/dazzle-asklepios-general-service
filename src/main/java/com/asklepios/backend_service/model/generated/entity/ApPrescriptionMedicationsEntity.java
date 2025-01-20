@@ -46,6 +46,10 @@ public class ApPrescriptionMedicationsEntity implements Serializable {
 	private BigDecimal refillIntervalValue;
 	private String refillIntervalUnitLkey;
 	private ApLovValues refillIntervalUnitLvalue;
+	private String indicationManually;
+	private String indicationUseLkey;
+	private ApLovValues indicationUseLvalue;
+	private String indicationIcd;
 	private ApPrescriptionMedicationsEntity translatedObject;
 
 }

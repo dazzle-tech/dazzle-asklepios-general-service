@@ -65,6 +65,9 @@ record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setRefillIntervalValue(rs.getBigDecimal("refill_interval_value"));
 record.setRefillIntervalUnitLkey(rs.getString("refill_interval_unit_lkey"));
+record.setIndicationManually(rs.getString("indication_manually"));
+record.setIndicationUseLkey(rs.getString("indication_use_lkey"));
+record.setIndicationIcd(rs.getString("indication_icd"));
 } else { record = null; }
 return record;
 }
@@ -72,7 +75,7 @@ return record;
 public void updateRecord(ApPrescriptionMedications record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_prescription_medications set key = ?, patient_key = ?, visit_key = ?, prescription_key = ?, generic_medications_key = ?, number_of_refills = ?, refill_interval = ?, instructions_type_lkey = ?, instructions = ?, notes = ?, parameters_to_monitor = ?, valid_util = ?, maximum_dose = ?, generic_substitute = ?, chronic_medication = ?, administration_instructions = ?, duration = ?, duration_type_lkey = ?, status_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, refill_interval_value = ?, refill_interval_unit_lkey = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_prescription_medications set key = ?, patient_key = ?, visit_key = ?, prescription_key = ?, generic_medications_key = ?, number_of_refills = ?, refill_interval = ?, instructions_type_lkey = ?, instructions = ?, notes = ?, parameters_to_monitor = ?, valid_util = ?, maximum_dose = ?, generic_substitute = ?, chronic_medication = ?, administration_instructions = ?, duration = ?, duration_type_lkey = ?, status_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, refill_interval_value = ?, refill_interval_unit_lkey = ?, indication_manually = ?, indication_use_lkey = ?, indication_icd = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -104,7 +107,10 @@ ps.setBigDecimal(25, record.getDeletedAt());
 ps.setBoolean(26, record.getIsValid());
 ps.setBigDecimal(27, record.getRefillIntervalValue());
 ps.setString(28, record.getRefillIntervalUnitLkey());
-ps.setString(29, record.getKey());
+ps.setString(29, record.getIndicationManually());
+ps.setString(30, record.getIndicationUseLkey());
+ps.setString(31, record.getIndicationIcd());
+ps.setString(32, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -154,6 +160,9 @@ record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setRefillIntervalValue(rs.getBigDecimal("refill_interval_value"));
 record.setRefillIntervalUnitLkey(rs.getString("refill_interval_unit_lkey"));
+record.setIndicationManually(rs.getString("indication_manually"));
+record.setIndicationUseLkey(rs.getString("indication_use_lkey"));
+record.setIndicationIcd(rs.getString("indication_icd"));
 list.add(record);
 }
 return list;
@@ -162,7 +171,7 @@ return list;
 public String saveRecord(ApPrescriptionMedications record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_prescription_medications values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_prescription_medications values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -198,6 +207,9 @@ ps.setBigDecimal(25, record.getDeletedAt());
 ps.setBoolean(26, record.getIsValid());
 ps.setBigDecimal(27, record.getRefillIntervalValue());
 ps.setString(28, record.getRefillIntervalUnitLkey());
+ps.setString(29, record.getIndicationManually());
+ps.setString(30, record.getIndicationUseLkey());
+ps.setString(31, record.getIndicationIcd());
 ps.executeUpdate();
 return key;
 }

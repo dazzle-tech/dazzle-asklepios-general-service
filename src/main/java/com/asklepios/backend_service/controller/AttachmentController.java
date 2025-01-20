@@ -1,17 +1,24 @@
 package com.asklepios.backend_service.controller;
 
+import com.asklepios.backend_service.database.DS;
 import com.asklepios.backend_service.model.generated.pojo.ApAttachment;
 import com.asklepios.backend_service.model.generated.pojo.ApPatient;
+import com.asklepios.backend_service.model.generated.pojo.ApPatientSecondaryDocuments;
+import com.asklepios.backend_service.model.pojo.request.ListRequest;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
 import com.asklepios.backend_service.service.*;
 import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/attachment")
@@ -21,10 +28,12 @@ public class AttachmentController {
 
     private final ApPatientService apPatientService;
     private final ApAttachmentService apAttachmentService;
+    private final ApUserService apUserService;
     //getAttachmentsList
-    public AttachmentController(ApPatientService apPatientService, ApAttachmentService apAttachmentService) {
+    public AttachmentController(ApPatientService apPatientService, ApAttachmentService apAttachmentService, ApUserService apUserService) {
         this.apPatientService = apPatientService;
         this.apAttachmentService = apAttachmentService;
+        this.apUserService = apUserService;
     }
 
     @GetMapping(value = "/fetch-attachment", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -106,6 +115,46 @@ public class AttachmentController {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @GetMapping(value = "/patient-attachment-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> patientAttachmentList(@RequestParam Map<String, String> queryParams,
+                                                   @Nullable @RequestHeader String key,
+                                                   @Nullable @RequestHeader String access_token,
+                                                   @Nullable @RequestHeader Integer access_level,
+                                                   @Nullable @RequestHeader String lang) {
+        try {
+
+            ParentResponse<List<ApAttachment>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            System.out.println("used : " + where);
+            List<ApAttachment> attachments = apAttachmentService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_attachment where " + whereForTotal);
+
+            for (ApAttachment all : attachments) {
+                apAttachmentService.populateLovFields(all, lang);
+                if (all.getCreatedBy() != null) {
+                    all.setCreatedByUser(apUserService.getRecord(all.getCreatedBy()));
+                }
+                if (all.getUpdatedBy() != null) {
+                    all.setUpdatedByUser(apUserService.getRecord(all.getUpdatedBy()));
+                }
+            }
+            response.setObject(attachments);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+
+    }
     //add  Access_Type_filed
     @PostMapping(value = "/upload", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file,
@@ -113,6 +162,7 @@ public class AttachmentController {
                                     @RequestHeader("ref_key") String refKey,
                                     @Nullable @RequestHeader("details") String details,
                                     @Nullable @RequestHeader("access_type") String accessType,
+                                    @Nullable @RequestHeader("created_by") String createdBy,
                                     @Nullable @RequestHeader String facility_id,
                                     @Nullable @RequestHeader String access_token,
                                     @Nullable @RequestHeader Integer access_level,
@@ -135,12 +185,14 @@ public class AttachmentController {
                     attachment.setAttachmentType(type);
                     attachment.setReferenceObjectKey(refKey);
                     attachment.setAccessTypeLkey(accessType);
+                    attachment.setCreatedBy(createdBy);
                 }
             } else {
                 // Always create a new attachment for other types
                 attachment.setAttachmentType(type);
                 attachment.setReferenceObjectKey(refKey);
                 attachment.setAccessTypeLkey(accessType);
+                attachment.setCreatedBy(createdBy);
             }
             attachment.setFileName(file.getOriginalFilename());
             attachment.setContentType(file.getContentType());
@@ -188,6 +240,8 @@ public class AttachmentController {
     public ResponseEntity<?> updateAttachmentDetails(
             @RequestHeader("key") String key,
             @RequestHeader("attachmentDetails") String extraDetails,
+            @RequestHeader("updatedBy") String updatedBy,
+            @RequestHeader("accessType") String accessType,
             @Nullable @RequestHeader String facility_id,
             @Nullable @RequestHeader String access_token,
             @Nullable @RequestHeader Integer access_level,
@@ -199,6 +253,8 @@ public class AttachmentController {
             ApAttachment attachment = apAttachmentService.getRecord(key);
             if (attachment != null) {
                 attachment.setExtraDetails(extraDetails);
+                attachment.setUpdatedBy(updatedBy);
+                attachment.setAccessTypeLkey(accessType);
                 apAttachmentService.updateRecord(attachment);
                 response.setObject(attachment);
 

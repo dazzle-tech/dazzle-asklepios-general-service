@@ -12,5 +12,6 @@ import com.asklepios.backend_service.model.generated.entity.ApPatientSecondaryDo
 public class ApPatientSecondaryDocuments extends ApPatientSecondaryDocumentsEntity implements Serializable {
     private String docContry;
     private String docType;
-
+    private ApUser createdByUser;
+    private ApUser updatedByUser;
 }

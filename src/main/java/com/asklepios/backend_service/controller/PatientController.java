@@ -43,7 +43,8 @@ public class PatientController {
     private final ApPatientAdministrativeWarningsService apPatientAdministrativeWarningsService;
     private final ApAgeGroupService apAgeGroupService;
     private final ApLovValuesService apLovValuesService;
-    public PatientController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApPatientAllergiesService apPatientAllergiesService, ApAllergensService apAllergensService, ApPatientRelationService apPatientRelationService, ApPatientInsuranceService apPatientInsuranceService, ApPatientSecondaryDocumentsService apPatientSecondaryDocumentsService, ApPatientInsuranceCoverageService apPatientInsuranceCoverageService, ApPatientAdministrativeWarningsService apPatientAdministrativeWarningsService, ApAgeGroupService apAgeGroupService, ApLovValuesService apLovValuesService) {
+    private final ApUserService apUserService;
+    public PatientController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApPatientAllergiesService apPatientAllergiesService, ApAllergensService apAllergensService, ApPatientRelationService apPatientRelationService, ApPatientInsuranceService apPatientInsuranceService, ApPatientSecondaryDocumentsService apPatientSecondaryDocumentsService, ApPatientInsuranceCoverageService apPatientInsuranceCoverageService, ApPatientAdministrativeWarningsService apPatientAdministrativeWarningsService, ApAgeGroupService apAgeGroupService, ApLovValuesService apLovValuesService, ApUserService apUserService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -56,6 +57,7 @@ public class PatientController {
         this.apPatientAdministrativeWarningsService = apPatientAdministrativeWarningsService;
         this.apAgeGroupService = apAgeGroupService;
         this.apLovValuesService = apLovValuesService;
+        this.apUserService = apUserService;
     }
 
     @PostMapping(value = "/get-patient", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -463,7 +465,46 @@ public class PatientController {
             return ResponseEntity.status(500).body(e);
         }
     }
+    //This Update for Above Function
+    @GetMapping(value = "/patient-secondary_document_list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> patientSecondaryDocumentList(@RequestParam Map<String, String> queryParams,
+                                                 @Nullable @RequestHeader String key,
+                                                 @Nullable @RequestHeader String access_token,
+                                                 @Nullable @RequestHeader Integer access_level,
+                                                 @Nullable @RequestHeader String lang) {
+        try {
 
+            ParentResponse<List<ApPatientSecondaryDocuments>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            System.out.println("used : " + where);
+            List<ApPatientSecondaryDocuments> documents = apPatientSecondaryDocumentsService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_patient_secondary_documents where " + whereForTotal);
+
+            for (ApPatientSecondaryDocuments all : documents) {
+                apPatientSecondaryDocumentsService.populateLovFields(all, lang);
+                if (all.getCreatedBy() != null) {
+                    all.setCreatedByUser(apUserService.getRecord(all.getCreatedBy()));
+                }
+                if (all.getUpdatedBy() != null) {
+                    all.setUpdatedByUser(apUserService.getRecord(all.getUpdatedBy()));
+                }
+            }
+            response.setObject(documents);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
     @PostMapping(value = "/save-secondary-document", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveSecondaryDocument(
             @RequestBody ApPatientSecondaryDocuments secondaryDocumentsData,

@@ -152,6 +152,7 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
             ps.setString(1, visitKey);
             ps.setString(2, visitKey);
             ps.setString(3, visitKey);
+            ps.setString(4, visitKey);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {

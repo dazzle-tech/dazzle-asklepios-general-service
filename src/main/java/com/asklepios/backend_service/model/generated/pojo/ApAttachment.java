@@ -11,6 +11,7 @@ import com.asklepios.backend_service.model.generated.entity.ApAttachmentEntity;
 @Slf4j
 public class ApAttachment extends ApAttachmentEntity implements Serializable {
 
-
+    private ApUser createdByUser;
+    private ApUser updatedByUser;
 
 }

@@ -40,6 +40,7 @@ public class ApGenericMedicationEntity implements Serializable {
 	private String code;
 	private String roaLkey;
 	private ApLovValues roaLvalue;
+	private String marketingAuthorizationHolder;
 	private ApGenericMedicationEntity translatedObject;
 
 }

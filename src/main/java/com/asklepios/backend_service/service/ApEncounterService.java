@@ -46,12 +46,12 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
                             if (rs2.next()) {
                                 result = rs2.getString("icd_code")+","+rs2.getString("description");
                             } else {
-                                result = "No icd_code";
+                                result = " ";
                             }
                         }
                     }
                 } else {
-                    result = "No diagnose code found";
+                    result = " ";
                 }
             }
         } catch (SQLException e) {

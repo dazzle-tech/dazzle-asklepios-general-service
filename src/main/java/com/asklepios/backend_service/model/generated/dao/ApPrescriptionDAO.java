@@ -50,6 +50,8 @@ record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setPrescriptionId(rs.getString("prescription_id"));
 record.setSaveDraft(rs.getBoolean("save_draft"));
+record.setSubmittedBy(rs.getString("submitted_by"));
+record.setSubmittedAt(rs.getBigDecimal("submitted_at"));
 } else { record = null; }
 return record;
 }
@@ -57,7 +59,7 @@ return record;
 public void updateRecord(ApPrescription record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_prescription set key = ?, patient_key = ?, visit_key = ?, status_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, prescription_id = ?, save_draft = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_prescription set key = ?, patient_key = ?, visit_key = ?, status_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, prescription_id = ?, save_draft = ?, submitted_by = ?, submitted_at = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -73,7 +75,9 @@ ps.setBigDecimal(10, record.getDeletedAt());
 ps.setBoolean(11, record.getIsValid());
 ps.setString(12, record.getPrescriptionId());
 ps.setBoolean(13, record.getSaveDraft());
-ps.setString(14, record.getKey());
+ps.setString(14, record.getSubmittedBy());
+ps.setBigDecimal(15, record.getSubmittedAt());
+ps.setString(16, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -108,6 +112,8 @@ record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setPrescriptionId(rs.getString("prescription_id"));
 record.setSaveDraft(rs.getBoolean("save_draft"));
+record.setSubmittedBy(rs.getString("submitted_by"));
+record.setSubmittedAt(rs.getBigDecimal("submitted_at"));
 list.add(record);
 }
 return list;
@@ -116,7 +122,7 @@ return list;
 public String saveRecord(ApPrescription record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_prescription values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_prescription values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -136,6 +142,8 @@ ps.setBigDecimal(10, record.getDeletedAt());
 ps.setBoolean(11, record.getIsValid());
 ps.setString(12, record.getPrescriptionId());
 ps.setBoolean(13, record.getSaveDraft());
+ps.setString(14, record.getSubmittedBy());
+ps.setBigDecimal(15, record.getSubmittedAt());
 ps.executeUpdate();
 return key;
 }

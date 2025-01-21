@@ -14,4 +14,5 @@ import com.asklepios.backend_service.model.generated.entity.ApDrugOrderMedicatio
 public class ApDrugOrderMedications extends ApDrugOrderMedicationsEntity implements Serializable {
 
     private List<String> activeIngredientKeys;
+    List <ApActiveIngredient> activeIngredient;
 }

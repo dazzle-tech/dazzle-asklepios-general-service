@@ -214,7 +214,14 @@ public class AppointmentController
             }
 
              ParentResponse<List<ApAppointment>> response = new ParentResponse<>();
-            response.setObject(appointments);
+
+            for (ApAppointment a : appointments) {
+
+                apAppointmentService.populateLovFields(a, lang);
+            }
+
+
+              response.setObject(appointments);
 
             return ResponseEntity.ok(response);
 

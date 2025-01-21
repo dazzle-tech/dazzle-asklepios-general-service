@@ -28,6 +28,8 @@ public class ApDrugOrderEntity implements Serializable {
 	private Boolean isValid = true;
 	private String drugorderId;
 	private Boolean saveDraft = false;
+	private String submittedBy;
+	private BigDecimal submittedAt;
 	private ApDrugOrderEntity translatedObject;
 
 }

@@ -28,6 +28,8 @@ public class ApPrescriptionEntity implements Serializable {
 	private Boolean isValid = true;
 	private String prescriptionId;
 	private Boolean saveDraft = false;
+	private String submittedBy;
+	private BigDecimal submittedAt;
 	private ApPrescriptionEntity translatedObject;
 
 }

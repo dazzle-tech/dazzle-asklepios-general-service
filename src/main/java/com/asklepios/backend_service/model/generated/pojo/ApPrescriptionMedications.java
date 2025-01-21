@@ -29,6 +29,7 @@ public class ApPrescriptionMedications extends ApPrescriptionMedicationsEntity i
     private String unitLvalue;
     private String roaLvalue;
     private List<String> activeIngredientKeys;
+    List <ApActiveIngredient> activeIngredient;
 
 
 

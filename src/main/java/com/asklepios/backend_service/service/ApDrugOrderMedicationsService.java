@@ -40,7 +40,7 @@ public class ApDrugOrderMedicationsService extends ApDrugOrderMedicationsDAO imp
     public List<ApActiveIngredient> getListOfActiveIngredient(String key) throws SQLException {
         List<ApActiveIngredient> list = new ArrayList<>();
 
-        String query = "SELECT active_ingredient_key FROM ap_generic_medication_active_ingredient WHERE generic_medication_key = ?";
+        String query = "SELECT active_ingredient_key FROM ap_generic_medication_active_ingredient WHERE  deleted_at is null and generic_medication_key = ? ";
         String query2 = "SELECT * FROM ap_active_ingredient WHERE key = ?";
 
         try (

@@ -7,6 +7,7 @@ import com.asklepios.backend_service.model.pojo.ValidationResult;
 import com.asklepios.backend_service.model.pojo.request.ListRequest;
 import com.asklepios.backend_service.model.pojo.response.ApAllergiesResponse;
 import com.asklepios.backend_service.model.pojo.response.ApPatientSecondaryDocsResponce;
+import com.asklepios.backend_service.model.pojo.response.LoginResponse;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
 import com.asklepios.backend_service.service.*;
 import jakarta.annotation.Nullable;
@@ -44,7 +45,8 @@ public class PatientController {
     private final ApAgeGroupService apAgeGroupService;
     private final ApLovValuesService apLovValuesService;
     private final ApUserService apUserService;
-    public PatientController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApPatientAllergiesService apPatientAllergiesService, ApAllergensService apAllergensService, ApPatientRelationService apPatientRelationService, ApPatientInsuranceService apPatientInsuranceService, ApPatientSecondaryDocumentsService apPatientSecondaryDocumentsService, ApPatientInsuranceCoverageService apPatientInsuranceCoverageService, ApPatientAdministrativeWarningsService apPatientAdministrativeWarningsService, ApAgeGroupService apAgeGroupService, ApLovValuesService apLovValuesService, ApUserService apUserService) {
+    private final ApUserAccessPrivatePatientService apUserAccessPrivatePatientService;
+    public PatientController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApPatientAllergiesService apPatientAllergiesService, ApAllergensService apAllergensService, ApPatientRelationService apPatientRelationService, ApPatientInsuranceService apPatientInsuranceService, ApPatientSecondaryDocumentsService apPatientSecondaryDocumentsService, ApPatientInsuranceCoverageService apPatientInsuranceCoverageService, ApPatientAdministrativeWarningsService apPatientAdministrativeWarningsService, ApAgeGroupService apAgeGroupService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApUserAccessPrivatePatientService apUserAccessPrivatePatientService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -58,6 +60,7 @@ public class PatientController {
         this.apAgeGroupService = apAgeGroupService;
         this.apLovValuesService = apLovValuesService;
         this.apUserService = apUserService;
+        this.apUserAccessPrivatePatientService = apUserAccessPrivatePatientService;
     }
 
     @PostMapping(value = "/get-patient", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -933,6 +936,41 @@ public class PatientController {
             log.error(e.getMessage());
             return ResponseEntity.status(500).body(e);
         }}
+    @PostMapping(value = "/user-access-private-patient", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> employeePortalConfirm(@RequestBody ApUser apUser,
+                                                   @Nullable @RequestHeader("reason") String reason,
+                                                   @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                   @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                   @jakarta.annotation.Nullable @RequestHeader String lang,
+                                                   @jakarta.annotation.Nullable @RequestHeader String screenKey) {
+        ParentResponse<ApUserAccessPrivatePatient> response = new ParentResponse<>();
+        ApUserAccessPrivatePatient  userAccess = new ApUserAccessPrivatePatient();
+        try {
+
+            ParentResponse<LoginResponse> loginResponse = apPatientService.login(apUser);
+            ApUser user = loginResponse.getObject().getUser();
+            if (loginResponse.getMsg().equals("success")) {
+                 System.out.println("Login Successful"+loginResponse);
+                response.setMsg("success");
+                userAccess.setUserKey(user.getKey());
+                userAccess.setCreatedBy(user.getKey());
+                userAccess.setReason(reason);
+                apUserAccessPrivatePatientService.saveRecord(userAccess);
+                response.setObject(apUserAccessPrivatePatientService.getRecord(userAccess.getKey()));
+                return ResponseEntity.ok(response);
+            } else {
+                response.setMsg("NoMatching");
+                return ResponseEntity.ok(response);
+            }
+        } catch (Exception e) {
+            response.setMsg("failed");
+            log.error("Exception: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+
 
 }
 

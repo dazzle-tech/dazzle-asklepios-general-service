@@ -8,14 +8,19 @@ import java.sql.SQLException;
 
 import com.asklepios.backend_service.database.DS;
 import com.asklepios.backend_service.model.generated.pojo.ApPatient;
+import com.asklepios.backend_service.model.generated.pojo.ApUser;
+import com.asklepios.backend_service.model.pojo.response.LoginResponse;
+import com.asklepios.backend_service.model.pojo.response.ParentResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.asklepios.backend_service.model.generated.dao.ApPatientDAO;
 
 @Service
 @Slf4j
 public class ApPatientService extends ApPatientDAO implements Serializable {
-
+    @Autowired
+    private ApUserService userService; //
     @Override
     public String saveRecord(ApPatient record) throws SQLException {
         String fullName = "";
@@ -96,5 +101,38 @@ public class ApPatientService extends ApPatientDAO implements Serializable {
             throw e;
         }
         return false;
+    }
+
+    public ParentResponse<LoginResponse> login(ApUser request) {
+        ParentResponse<LoginResponse> response = new ParentResponse<>();
+        try (Connection connection = DS.getConnection()) {
+            String query = "SELECT key FROM ap_user WHERE username = ? AND password = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, request.getUsername());
+            statement.setString(2, request.getPassword());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                String userKey = resultSet.getString(1);
+                ApUser user = userService.getRecord(userKey);
+
+                LoginResponse loginResponse = new LoginResponse();
+                loginResponse.setUser(user);
+                response.setObject(loginResponse);
+                response.setMsg("success");
+
+                return response;
+            } else {
+                response.addGeneralError("Wrong credentials");
+                return response;
+            }
+        } catch (SQLException sqlEx) {
+            sqlEx.printStackTrace();
+            response.addGeneralError("Database error: " + sqlEx.getMessage());
+            return response;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.addGeneralError("An unexpected error occurred: " + ex.getMessage());
+            return response;
+        }
     }
 }

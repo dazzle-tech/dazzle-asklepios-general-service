@@ -56,6 +56,8 @@ public class ApPatientService extends ApPatientDAO implements Serializable {
         record.setFullNameOtherLang(fullNameOtherLang);
 
 
+        record.setCountryId(getNextCustomSequence(record.getCountryLkey()));
+
         return super.saveRecord((record));
     }
     public boolean getHasAllergy(String patientKey) throws SQLException {
@@ -102,6 +104,60 @@ public class ApPatientService extends ApPatientDAO implements Serializable {
         }
         return false;
     }
+    public String getNextCustomSequence(String cityId) throws SQLException {
+        String cityName = null;
+        int lastSequenceNumber = 1000;
+
+        // استعلام لجلب اسم المدينة باستخدام معرفها
+        String cityQuery = "SELECT value_code FROM ap_lov_values WHERE key = ?";
+
+        // استعلام لجلب آخر تسلسل خاص بالمدينة
+        String sequenceQuery = """
+        SELECT 
+            CAST(SUBSTRING(country_id, LENGTH(?) + 1) AS INTEGER) AS sequence_number
+        FROM ap_patient
+        WHERE country_lkey = ? AND country_id LIKE CONCAT(?, '%')
+        ORDER BY sequence_number DESC
+        LIMIT 1
+    """;
+
+        try (
+                Connection con = DS.getConnection();
+                PreparedStatement cityPs = con.prepareStatement(cityQuery);
+                PreparedStatement sequencePs = con.prepareStatement(sequenceQuery)
+        ) {
+            // **1. جلب اسم المدينة**
+            cityPs.setString(1, cityId);
+            try (ResultSet cityRs = cityPs.executeQuery()) {
+                if (cityRs.next()) {
+                    cityName = cityRs.getString("value_code"); // جلب اسم المدينة
+                } else {
+                    throw new SQLException("City with ID " + cityId + " not found.");
+                }
+            }
+
+            // **2. جلب آخر تسلسل خاص بالمدينة**
+            sequencePs.setString(1, cityName);
+            sequencePs.setString(2, cityId);
+            sequencePs.setString(3, cityName);
+
+            try (ResultSet sequenceRs = sequencePs.executeQuery()) {
+                if (sequenceRs.next()) {
+                    // إذا وجد تسلسل، قم بإضافة 1 إلى الرقم الأخير
+                    lastSequenceNumber = sequenceRs.getInt("sequence_number") + 1;
+                }
+            }
+
+            // **3. تكوين الرقم الجديد**
+            return cityName + String.format("%04d", lastSequenceNumber);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+
 
     public ParentResponse<LoginResponse> login(ApUser request) {
         ParentResponse<LoginResponse> response = new ParentResponse<>();

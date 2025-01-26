@@ -122,6 +122,7 @@ record.setExtraDetails(rs.getString("extra_details"));
 record.setSecondaryMobileNumber(rs.getString("secondary_mobile_number"));
 record.setRoleLkey(rs.getString("role_lkey"));
 record.setDistrictLkey(rs.getString("district_lkey"));
+record.setCountryId(rs.getString("country_id"));
 } else { record = null; }
 return record;
 }
@@ -129,7 +130,7 @@ return record;
 public void updateRecord(ApPatient record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_patient set key = ?, patient_mrn = ?, name_prefix = ?, name_suffix = ?, patient_alias = ?, first_name = ?, second_name = ?, third_name = ?, last_name = ?, full_name = ?, second_name_other_lang = ?, first_name_other_lang = ?, third_name_other_lang = ?, last_name_other_lang = ?, full_name_other_lang = ?, document_country_lkey = ?, document_type_lkey = ?, document_no = ?, no_document = ?, special_courtesy_lkey = ?, unknown = ?, gender_lkey = ?, phone_number = ?, mobile_number = ?, email = ?, marital_status_lkey = ?, nationality_lkey = ?, primary_language_lkey = ?, religion_lkey = ?, ethnicity_lkey = ?, occupation_lkey = ?, emergency_contact_name = ?, emergency_contact_relation_lkey = ?, emergency_contact_phone = ?, street_address_line1 = ?, street_address_line2 = ?, country_lkey = ?, state_province_region_lkey = ?, city_lkey = ?, postal_code = ?, additional_info = ?, latitude = ?, longitude = ?, is_active = ?, death_datetime = ?, dob = ?, multiple_birth = ?, birth_order = ?, num_siblings = ?, access_level = ?, facility_key = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, patient_class_lkey = ?, private_patient = ?, verification_otp = ?, security_access_level_lkey = ?, social_security_number = ?, notice_of_privacy_practice = ?, notice_of_privacy_practice_date = ?, privacy_authorization = ?, privacy_authorization_date = ?, consent = ?, consent_date = ?, verified = ?, responsible_party_lkey = ?, educational_level_lkey = ?, previous_id = ?, archiving_number = ?, receive_sms = ?, receive_email = ?, home_phone = ?, work_phone = ?, preferred_contact_lkey = ?, unknown_patient = ?, incomplete_patient = ?, extra_details = ?, secondary_mobile_number = ?, role_lkey = ?, district_lkey = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_patient set key = ?, patient_mrn = ?, name_prefix = ?, name_suffix = ?, patient_alias = ?, first_name = ?, second_name = ?, third_name = ?, last_name = ?, full_name = ?, second_name_other_lang = ?, first_name_other_lang = ?, third_name_other_lang = ?, last_name_other_lang = ?, full_name_other_lang = ?, document_country_lkey = ?, document_type_lkey = ?, document_no = ?, no_document = ?, special_courtesy_lkey = ?, unknown = ?, gender_lkey = ?, phone_number = ?, mobile_number = ?, email = ?, marital_status_lkey = ?, nationality_lkey = ?, primary_language_lkey = ?, religion_lkey = ?, ethnicity_lkey = ?, occupation_lkey = ?, emergency_contact_name = ?, emergency_contact_relation_lkey = ?, emergency_contact_phone = ?, street_address_line1 = ?, street_address_line2 = ?, country_lkey = ?, state_province_region_lkey = ?, city_lkey = ?, postal_code = ?, additional_info = ?, latitude = ?, longitude = ?, is_active = ?, death_datetime = ?, dob = ?, multiple_birth = ?, birth_order = ?, num_siblings = ?, access_level = ?, facility_key = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, patient_class_lkey = ?, private_patient = ?, verification_otp = ?, security_access_level_lkey = ?, social_security_number = ?, notice_of_privacy_practice = ?, notice_of_privacy_practice_date = ?, privacy_authorization = ?, privacy_authorization_date = ?, consent = ?, consent_date = ?, verified = ?, responsible_party_lkey = ?, educational_level_lkey = ?, previous_id = ?, archiving_number = ?, receive_sms = ?, receive_email = ?, home_phone = ?, work_phone = ?, preferred_contact_lkey = ?, unknown_patient = ?, incomplete_patient = ?, extra_details = ?, secondary_mobile_number = ?, role_lkey = ?, district_lkey = ?, country_id = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -222,7 +223,8 @@ ps.setString(82, record.getExtraDetails());
 ps.setString(83, record.getSecondaryMobileNumber());
 ps.setString(84, record.getRoleLkey());
 ps.setString(85, record.getDistrictLkey());
-ps.setString(86, record.getKey());
+ps.setString(86, record.getCountryId());
+ps.setString(87, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -329,6 +331,7 @@ record.setExtraDetails(rs.getString("extra_details"));
 record.setSecondaryMobileNumber(rs.getString("secondary_mobile_number"));
 record.setRoleLkey(rs.getString("role_lkey"));
 record.setDistrictLkey(rs.getString("district_lkey"));
+record.setCountryId(rs.getString("country_id"));
 list.add(record);
 }
 return list;
@@ -337,7 +340,7 @@ return list;
 public String saveRecord(ApPatient record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_patient values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_patient values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -434,6 +437,7 @@ ps.setString(82, record.getExtraDetails());
 ps.setString(83, record.getSecondaryMobileNumber());
 ps.setString(84, record.getRoleLkey());
 ps.setString(85, record.getDistrictLkey());
+ps.setString(86, record.getCountryId());
 ps.executeUpdate();
 return key;
 }

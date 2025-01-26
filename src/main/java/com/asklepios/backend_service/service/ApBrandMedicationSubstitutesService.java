@@ -1,6 +1,7 @@
 package com.asklepios.backend_service.service;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import com.asklepios.backend_service.database.DS;
 import com.asklepios.backend_service.model.generated.pojo.ApActiveIngredient;
+import com.asklepios.backend_service.model.generated.pojo.ApActiveIngredientRecommendedDosage;
 import com.asklepios.backend_service.model.generated.pojo.ApBrandMedicationSubstitutes;
 import com.asklepios.backend_service.model.generated.pojo.ApGenericMedication;
 import lombok.extern.slf4j.Slf4j;
@@ -71,7 +73,6 @@ public class ApBrandMedicationSubstitutesService extends ApBrandMedicationSubsti
                     record.setRoaLkey(rs.getString("roa_lkey"));
                     record.setMarketingAuthorizationHolder(rs.getString("marketing_authorization_holder"));
 
-
                     list.add(record);
                 }
             }
@@ -82,6 +83,29 @@ public class ApBrandMedicationSubstitutesService extends ApBrandMedicationSubsti
 
         return list;
     }
+    public void removeRecord(String key) throws SQLException {
+
+        try (Connection con = DS.getConnection();
+             PreparedStatement ps = con.prepareStatement("DELETE FROM ap_brand_medication_substitutes WHERE key = ?")
+        ) {
+
+            ps.setString(1, key);
+
+
+            int rowsAffected = ps.executeUpdate();
+
+
+            if (rowsAffected > 0) {
+                System.out.println("Record deleted successfully for key: " + key);
+            } else {
+                System.out.println("No record found to delete with key: " + key);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Error occurred while deleting record: " + e.getMessage(), e);
+        }
+    }
+
 
 
 }

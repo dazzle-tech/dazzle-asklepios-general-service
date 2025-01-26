@@ -931,6 +931,12 @@ public class MedicationsSetupController {
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_brand_medication_substitutes " );
             for(ApGenericMedication all : list){
                 apGenericMedicationService.populateLovFields(all, lang);
+                List<ApGenericMedicationRoa> roaList = new ApGenericMedicationRoaService().getList("generic_medication_key = '" + all.getKey() + "' and deleted_at is null");
+                if(!roaList.isEmpty()){
+                    List<String> roaIds = new ArrayList<>();
+                    roaList.forEach(roa -> roaIds.add(roa.getRoaLkey()));
+                    all.setRoaList(roaIds);
+                }
             }
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
@@ -942,4 +948,40 @@ public class MedicationsSetupController {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @PostMapping(value = "/delete-link-brand-medication", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteLinkedBrandMedication(
+            @RequestBody ApBrandMedicationSubstitutes request,
+            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+            @jakarta.annotation.Nullable @RequestHeader String access_token,
+            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+            @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+
+            List<ApBrandMedicationSubstitutes> exists = apBrandMedicationSubstitutesService.getList(
+                    "brand_key = '" + request.getBrandKey() + "' AND alternative_brand_key = '" + request.getAlternativeBrandKey() + "' " +
+                            " OR brand_key = '" + request.getAlternativeBrandKey() + "' AND alternative_brand_key = '" + request.getBrandKey() + "'"
+            );
+            System.out.println("exists "+exists);
+            if (exists == null || exists.isEmpty()) {
+
+                return ResponseEntity.status(404).body("No linked brand medication found with the provided keys.");
+            }
+
+
+            apBrandMedicationSubstitutesService.removeRecord(exists.get(0).getKey());
+            ParentResponse<ApBrandMedicationSubstitutes> response = new ParentResponse<>();
+            response.setObject(request);
+            response.setMsg("Linked brand medication deleted successfully.");
+
+            return ResponseEntity.status(200).body(response);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body("An error occurred while deleting the linked brand medication.");
+        }
+    }
+
+
 }

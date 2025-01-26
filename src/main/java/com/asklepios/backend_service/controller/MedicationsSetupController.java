@@ -39,8 +39,8 @@ public class MedicationsSetupController {
     private final ApGenericMedicationService apGenericMedicationService;
     private final ApGenericMedicationActiveIngredientService apGenericMedicationActiveIngredientService;
     private final ApGenericMedicationRoaService apGenericMedicationRoaService;
-
-    public MedicationsSetupController(ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApActiveIngredientRecommendedDosageService apActiveIngredientRecommendedDosageService, ApActiveIngredientSpecialPopulationService apActiveIngredientSpecialPopulationService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApGenericMedicationService apGenericMedicationService, ApGenericMedicationActiveIngredientService apGenericMedicationActiveIngredientService, ApGenericMedicationRoaService apGenericMedicationRoaService) {
+    private  final ApBrandMedicationSubstitutesService apBrandMedicationSubstitutesService;
+    public MedicationsSetupController(ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApActiveIngredientRecommendedDosageService apActiveIngredientRecommendedDosageService, ApActiveIngredientSpecialPopulationService apActiveIngredientSpecialPopulationService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApGenericMedicationService apGenericMedicationService, ApGenericMedicationActiveIngredientService apGenericMedicationActiveIngredientService, ApGenericMedicationRoaService apGenericMedicationRoaService, ApBrandMedicationSubstitutesService apBrandMedicationSubstitutesService) {
         this.apActiveIngredientService = apActiveIngredientService;
         this.apActiveIngredientIndicationService = apActiveIngredientIndicationService;
         this.apActiveIngredientContraindicationService = apActiveIngredientContraindicationService;
@@ -54,6 +54,7 @@ public class MedicationsSetupController {
         this.apGenericMedicationService = apGenericMedicationService;
         this.apGenericMedicationActiveIngredientService = apGenericMedicationActiveIngredientService;
         this.apGenericMedicationRoaService = apGenericMedicationRoaService;
+        this.apBrandMedicationSubstitutesService = apBrandMedicationSubstitutesService;
     }
 
     @PostMapping(value = "/save-generic-medication", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -872,6 +873,64 @@ public class MedicationsSetupController {
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_active_ingredient where " + whereForTotal);
             for(ApActiveIngredient all : list){
                 apActiveIngredientService.populateLovFields(all, lang);
+            }
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/save_link-brand-medication", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveLinkedBrandMedication(
+            @RequestBody ApBrandMedicationSubstitutes request,
+            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+            @jakarta.annotation.Nullable @RequestHeader String access_token,
+            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+            @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            System.out.println("iam in save brand link func>>>>>>>>>>>>");
+            ParentResponse<ApBrandMedicationSubstitutes> response = new ParentResponse<>();
+
+
+            List<ApBrandMedicationSubstitutes> exists = apBrandMedicationSubstitutesService.getList(
+                    "brand_key = '" + request.getBrandKey() + "' AND alternative_brand_key = '" + request.getAlternativeBrandKey() + "' " +
+                            "OR brand_key = '" + request.getAlternativeBrandKey() + "' AND alternative_brand_key = '" + request.getBrandKey() + "'"
+            );
+
+            if (exists != null && !exists.isEmpty()) {
+                response.addGeneralError("The medication is already linked as an alternative.");
+                return ResponseEntity.status(400).body(response);
+            }
+
+
+            apBrandMedicationSubstitutesService.saveRecord(request);
+            response.setObject(request);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(value = "/brands-linked-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> brandsLinkedsList(@RequestHeader  String key,
+                                                  @Nullable @RequestHeader String facility_id,
+                                                  @Nullable @RequestHeader String access_token,
+                                                  @Nullable @RequestHeader Integer access_level,
+                                                  @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApGenericMedication>> response = new ParentResponse<>();
+
+            List<ApGenericMedication> list = apBrandMedicationSubstitutesService.getListOfLinkedBrands(key);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_brand_medication_substitutes " );
+            for(ApGenericMedication all : list){
+                apGenericMedicationService.populateLovFields(all, lang);
             }
             response.setObject(list);
             response.setExtraNumeric(totalRecord);

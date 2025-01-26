@@ -56,6 +56,8 @@ public class ApPatientService extends ApPatientDAO implements Serializable {
         record.setFullNameOtherLang(fullNameOtherLang);
 
 
+        record.setCountryId(getNextCustomSequence(record.getCountryLkey()));
+
         return super.saveRecord((record));
     }
     public boolean getHasAllergy(String patientKey) throws SQLException {
@@ -102,6 +104,59 @@ public class ApPatientService extends ApPatientDAO implements Serializable {
         }
         return false;
     }
+    public String getNextCustomSequence(String cityId) throws SQLException {
+        String cityName = null;
+        int lastSequenceNumber = 1000;
+
+
+        String cityQuery = "SELECT value_code FROM ap_lov_values WHERE key = ?";
+
+
+        String sequenceQuery = """
+        SELECT 
+            CAST(SUBSTRING(country_id, LENGTH(?) + 1) AS INTEGER) AS sequence_number
+        FROM ap_patient
+        WHERE country_lkey = ? AND country_id LIKE CONCAT(?, '%')
+        ORDER BY sequence_number DESC
+        LIMIT 1
+    """;
+
+        try (
+                Connection con = DS.getConnection();
+                PreparedStatement cityPs = con.prepareStatement(cityQuery);
+                PreparedStatement sequencePs = con.prepareStatement(sequenceQuery)
+        ) {
+
+            cityPs.setString(1, cityId);
+            try (ResultSet cityRs = cityPs.executeQuery()) {
+                if (cityRs.next()) {
+                    cityName = cityRs.getString("value_code");
+                } else {
+                    throw new SQLException("City with ID " + cityId + " not found.");
+                }
+            }
+
+
+            sequencePs.setString(1, cityName);
+            sequencePs.setString(2, cityId);
+            sequencePs.setString(3, cityName);
+
+            try (ResultSet sequenceRs = sequencePs.executeQuery()) {
+                if (sequenceRs.next()) {
+
+                    lastSequenceNumber = sequenceRs.getInt("sequence_number") + 1;
+                }
+            }
+
+            return cityName + String.format("%04d", lastSequenceNumber);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+
 
     public ParentResponse<LoginResponse> login(ApUser request) {
         ParentResponse<LoginResponse> response = new ParentResponse<>();

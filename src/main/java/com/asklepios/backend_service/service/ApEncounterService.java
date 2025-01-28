@@ -168,13 +168,6 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
     }
 
 
-
-
-
-
-
-
-
     public List<ApEncounter> getListWithDepartmentName(String where) throws SQLException {
         if (where == null || where.isEmpty()) where = "1=1";
 

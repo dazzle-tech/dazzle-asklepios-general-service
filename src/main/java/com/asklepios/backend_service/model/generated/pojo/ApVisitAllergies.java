@@ -11,5 +11,5 @@ import com.asklepios.backend_service.model.generated.entity.ApVisitAllergiesEnti
 @Slf4j
 public class ApVisitAllergies extends ApVisitAllergiesEntity implements Serializable {
 
-
+String allergensName;
 }

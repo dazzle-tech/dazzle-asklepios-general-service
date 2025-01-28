@@ -190,8 +190,9 @@ public class ObservationController {
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_visit_allergies where " + whereForTotal);
 
             for (ApVisitAllergies a : allergies) {
-
                 apVisitAllergiesService.populateLovFields(a, lang);
+                System.out.println();
+                a.setAllergensName(apVisitAllergiesService.getAllergenName(a.getAllergenKey()));
             }
 
             response.setObject(allergies);

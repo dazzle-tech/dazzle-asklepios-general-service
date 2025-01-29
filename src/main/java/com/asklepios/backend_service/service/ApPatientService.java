@@ -55,8 +55,9 @@ public class ApPatientService extends ApPatientDAO implements Serializable {
         }
         record.setFullNameOtherLang(fullNameOtherLang);
 
-
-        record.setCountryId(getNextCustomSequence(record.getCountryLkey()));
+        if (record.getCountryLkey() != null && !record.getCountryLkey().isEmpty()) {
+            record.setCountryId(getNextCustomSequence(record.getCountryLkey()));
+        }
 
         return super.saveRecord((record));
     }

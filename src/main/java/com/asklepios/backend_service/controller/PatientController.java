@@ -46,7 +46,11 @@ public class PatientController {
     private final ApLovValuesService apLovValuesService;
     private final ApUserService apUserService;
     private final ApUserAccessPrivatePatientService apUserAccessPrivatePatientService;
-    public PatientController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApPatientAllergiesService apPatientAllergiesService, ApAllergensService apAllergensService, ApPatientRelationService apPatientRelationService, ApPatientInsuranceService apPatientInsuranceService, ApPatientSecondaryDocumentsService apPatientSecondaryDocumentsService, ApPatientInsuranceCoverageService apPatientInsuranceCoverageService, ApPatientAdministrativeWarningsService apPatientAdministrativeWarningsService, ApAgeGroupService apAgeGroupService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApUserAccessPrivatePatientService apUserAccessPrivatePatientService) {
+    private final ApPatientPreferredHealthProfessionalService apPatientPreferredHealthProfessionalService;
+    private final ApFacilityService apFacilityService;
+    private final ApPractitionerService apPractitionerService;
+
+    public PatientController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApPatientAllergiesService apPatientAllergiesService, ApAllergensService apAllergensService, ApPatientRelationService apPatientRelationService, ApPatientInsuranceService apPatientInsuranceService, ApPatientSecondaryDocumentsService apPatientSecondaryDocumentsService, ApPatientInsuranceCoverageService apPatientInsuranceCoverageService, ApPatientAdministrativeWarningsService apPatientAdministrativeWarningsService, ApAgeGroupService apAgeGroupService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApUserAccessPrivatePatientService apUserAccessPrivatePatientService, ApPatientPreferredHealthProfessionalService apPatientPreferredHealthProfessionalService, ApFacilityService apFacilityService, ApPractitionerService apPractitionerService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -61,6 +65,9 @@ public class PatientController {
         this.apLovValuesService = apLovValuesService;
         this.apUserService = apUserService;
         this.apUserAccessPrivatePatientService = apUserAccessPrivatePatientService;
+        this.apPatientPreferredHealthProfessionalService = apPatientPreferredHealthProfessionalService;
+        this.apFacilityService = apFacilityService;
+        this.apPractitionerService = apPractitionerService;
     }
 
     @PostMapping(value = "/get-patient", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -468,13 +475,14 @@ public class PatientController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     //This Update for Above Function
     @GetMapping(value = "/patient-secondary_document_list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> patientSecondaryDocumentList(@RequestParam Map<String, String> queryParams,
-                                                 @Nullable @RequestHeader String key,
-                                                 @Nullable @RequestHeader String access_token,
-                                                 @Nullable @RequestHeader Integer access_level,
-                                                 @Nullable @RequestHeader String lang) {
+                                                          @Nullable @RequestHeader String key,
+                                                          @Nullable @RequestHeader String access_token,
+                                                          @Nullable @RequestHeader Integer access_level,
+                                                          @Nullable @RequestHeader String lang) {
         try {
 
             ParentResponse<List<ApPatientSecondaryDocuments>> response = new ParentResponse<>();
@@ -508,6 +516,7 @@ public class PatientController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
     @PostMapping(value = "/save-secondary-document", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveSecondaryDocument(
             @RequestBody ApPatientSecondaryDocuments secondaryDocumentsData,
@@ -856,7 +865,7 @@ public class PatientController {
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
 
 
-            List<ApPatientAdministrativeWarnings> list= apPatientAdministrativeWarningsService.getList(where);
+            List<ApPatientAdministrativeWarnings> list = apPatientAdministrativeWarningsService.getList(where);
 
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_patient_administrative_warnings where " + whereForTotal);
 
@@ -874,6 +883,7 @@ public class PatientController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
     @PostMapping(value = "/update-patient-administrative-warning", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updatePatientAdministrativeWarning(
             @RequestBody ApPatientAdministrativeWarnings administrativeWarning,
@@ -895,6 +905,7 @@ public class PatientController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
     @PostMapping(value = "/delete-patient-administrative-warning", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deletePatientAdministrativeWarning(
             @RequestBody ApPatientAdministrativeWarnings administrativeWarning,
@@ -917,12 +928,12 @@ public class PatientController {
         }
     }
 
-    @GetMapping(value ="/age-group-value", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/age-group-value", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAgeGroupDate(@Nullable @RequestHeader("dob") String date,
                                              @Nullable @RequestHeader String facility_id,
                                              @Nullable @RequestHeader String access_token,
                                              @Nullable @RequestHeader Integer access_level,
-                                             @Nullable @RequestHeader String lang){
+                                             @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApLovValues> response = new ParentResponse<>();
             String ageGroupLKey = apAgeGroupService.getAgeGroupLKey(date);
@@ -935,7 +946,9 @@ public class PatientController {
             e.printStackTrace();
             log.error(e.getMessage());
             return ResponseEntity.status(500).body(e);
-        }}
+        }
+    }
+
     @PostMapping(value = "/user-access-private-patient", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> employeePortalConfirm(@RequestBody ApUser apUser,
                                                    @Nullable @RequestHeader("reason") String reason,
@@ -945,13 +958,13 @@ public class PatientController {
                                                    @jakarta.annotation.Nullable @RequestHeader String lang,
                                                    @jakarta.annotation.Nullable @RequestHeader String screenKey) {
         ParentResponse<ApUserAccessPrivatePatient> response = new ParentResponse<>();
-        ApUserAccessPrivatePatient  userAccess = new ApUserAccessPrivatePatient();
+        ApUserAccessPrivatePatient userAccess = new ApUserAccessPrivatePatient();
         try {
 
             ParentResponse<LoginResponse> loginResponse = apPatientService.login(apUser);
             ApUser user = loginResponse.getObject().getUser();
             if (loginResponse.getMsg().equals("success")) {
-                 System.out.println("Login Successful"+loginResponse);
+                System.out.println("Login Successful" + loginResponse);
                 response.setMsg("success");
                 userAccess.setUserKey(user.getKey());
                 userAccess.setCreatedBy(user.getKey());
@@ -971,10 +984,84 @@ public class PatientController {
     }
 
 
+    @PostMapping(value = "/save-patient-preferred-health", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> savePreferredHealthProfessional(@RequestBody ApPatientPreferredHealthProfessional patientPH,
+                                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                             @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApPatientPreferredHealthProfessional> response = new ParentResponse<>();
+            apPatientPreferredHealthProfessionalService.saveRecord(patientPH);
+            response.setObject(patientPH);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(value = "/patient-preferred-health-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> preferredHealthProfessionalList(@RequestParam Map<String, String> queryParams,
+                                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                             @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApPatientPreferredHealthProfessional>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApPatientPreferredHealthProfessional> list = apPatientPreferredHealthProfessionalService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_patient_preferred_health_professional where " + whereForTotal);
+            for (ApPatientPreferredHealthProfessional all : list) {
+                apPatientPreferredHealthProfessionalService.populateLovFields(all, lang);
+                if (all.getFacilityKey() != null) {
+                    all.setFacility(apFacilityService.getRecord(all.getFacilityKey()));
+                    apFacilityService.populateLovFields(all.getFacility(), lang);
+                }
+                if (all.getPractitionerKey() != null) {
+                    all.setPractitioner(apPractitionerService.getRecord(all.getPractitionerKey()));
+                    apPractitionerService.populateLovFields(all.getPractitioner(), lang);
+                }
+            }
+
+
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/remove-patient-preferred-health", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removePreferredHealthProfessional(@RequestBody ApPatientPreferredHealthProfessional patientPH,
+                                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                               @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                               @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                               @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApPatientPreferredHealthProfessional> response = new ParentResponse<>();
+            apPatientPreferredHealthProfessionalService.deleteRecord(patientPH);
+            response.setObject(patientPH);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
 
 }
-
-
-
 
 

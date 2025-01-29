@@ -56,11 +56,37 @@ public class ApPatientService extends ApPatientDAO implements Serializable {
         record.setFullNameOtherLang(fullNameOtherLang);
 
         if (record.getCountryLkey() != null && !record.getCountryLkey().isEmpty()) {
-            record.setCountryId(getNextCustomSequence(record.getCountryLkey()));
+
+            if (record.getCountryId() == null || record.getCountryId().isEmpty() ||
+                    !record.getCountryLkey().equals(getExistingCountryLkey(record.getKey()))) {
+
+                record.setCountryId(getNextCustomSequence(record.getCountryLkey()));
+            }
         }
+
 
         return super.saveRecord((record));
     }
+    private String getExistingCountryLkey(String patientId) throws SQLException {
+        String existingLkey = null;
+        String query = "SELECT country_lkey FROM ap_patient WHERE key = ?";
+
+        try (Connection con = DS.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, patientId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    existingLkey = rs.getString("country_lkey");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+        return existingLkey;
+    }
+
     public boolean getHasAllergy(String patientKey) throws SQLException {
         String query = "SELECT COUNT(patient_key) AS count FROM ap_visit_allergies WHERE patient_key= ?";
 

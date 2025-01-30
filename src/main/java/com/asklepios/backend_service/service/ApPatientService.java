@@ -64,6 +64,11 @@ public class ApPatientService extends ApPatientDAO implements Serializable {
             }
         }
 
+        if (!"NO_DOC".equals(record.getDocumentTypeLkey())) {
+            if (isDocumentExists(record.getDocumentTypeLkey(), record.getDocumentNo(), record.getKey())) {
+                return "faild";
+            }
+        }
 
         return super.saveRecord((record));
     }
@@ -181,9 +186,38 @@ public class ApPatientService extends ApPatientDAO implements Serializable {
             throw e;
         }
     }
+    public boolean isDocumentExists(String documentType, String documentNo, String currentRecordKey) throws SQLException {
+        String query = """
+        SELECT key FROM ap_patient 
+        WHERE document_type_lkey = ? AND document_no = ? 
+        UNION ALL
+        SELECT key FROM ap_patient_secondary_documents 
+        WHERE document_type_lkey = ? AND document_no = ? 
+    """;
 
+        try (Connection con = DS.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
 
+            ps.setString(1, documentType);
+            ps.setString(2, documentNo);
+            ps.setString(3, documentType);
+            ps.setString(4, documentNo);
 
+            try (ResultSet rs = ps.executeQuery()) {
+                int count = 0;
+                boolean isSameRecord = false;
+
+                while (rs.next()) {
+                    count++;
+                    String key = rs.getString("key");
+                    if (key != null && key.equals(currentRecordKey)) {
+                        isSameRecord = true;
+                    }
+                }
+                return count > 1 || (count == 1 && !isSameRecord);
+            }
+        }
+    }
 
     public ParentResponse<LoginResponse> login(ApUser request) {
         ParentResponse<LoginResponse> response = new ParentResponse<>();

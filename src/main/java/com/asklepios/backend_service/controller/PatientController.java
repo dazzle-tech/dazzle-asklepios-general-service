@@ -194,9 +194,17 @@ public class PatientController {
             // Validate the record
             ValidationResult validationResult = validationService.validateRecord(screenKey, "1705559108200", ApPatientEntity.class, apPatient);
             if (apPatient.isSkipValidation() || validationResult.isPass()) {
-                apPatientService.saveRecord(apPatient);
-                apPatient.setSkipValidation(false);
-                response.setObject(apPatient);
+                if(apPatientService.saveRecord(apPatient).equals("faild")){
+                    response.addGeneralError("There is an existing patient with this document.");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                }
+                else{
+
+                    apPatient.setSkipValidation(false);
+                    response.setObject(apPatient);
+
+                }
+
                 return ResponseEntity.ok(response);
 
             } else {
@@ -534,6 +542,13 @@ public class PatientController {
             if (secondaryDocumentsData.getDocumentNo() == null || secondaryDocumentsData.getDocumentNo().isBlank()) {
                 response.addGeneralError("Document number required");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+
+            if (!"NO_DOC".equals(secondaryDocumentsData.getDocumentTypeLkey())) {
+                if (apPatientSecondaryDocumentsService.isDocumentExists(secondaryDocumentsData.getDocumentTypeLkey(), secondaryDocumentsData.getDocumentNo(),secondaryDocumentsData.getPatientKey())) {
+                    response.addGeneralError("A patient with this document already exists.");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                }
             }
             // TODO change all of this validation to dynamic via DVM
             apPatientSecondaryDocumentsService.saveRecord(secondaryDocumentsData);

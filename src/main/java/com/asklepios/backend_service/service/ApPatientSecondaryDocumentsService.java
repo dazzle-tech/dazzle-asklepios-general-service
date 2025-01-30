@@ -1,10 +1,7 @@
 package com.asklepios.backend_service.service;
 
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +48,29 @@ public class ApPatientSecondaryDocumentsService extends ApPatientSecondaryDocume
                 list.add(record);
             }
             return list;
+        }
+    }
+    public boolean isDocumentExists(String documentType, String documentNo, String currentRecordKey) throws SQLException {
+        String query = """
+        SELECT key FROM ap_patient 
+        WHERE document_type_lkey = ? AND document_no = ? 
+        UNION ALL
+        SELECT key FROM ap_patient_secondary_documents 
+        WHERE document_type_lkey = ? AND document_no = ? AND key != ? 
+    """;
+
+        try (Connection con = DS.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setString(1, documentType);
+            ps.setString(2, documentNo);
+            ps.setString(3, documentType);
+            ps.setString(4, documentNo);
+            ps.setString(5, currentRecordKey);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
         }
     }
 

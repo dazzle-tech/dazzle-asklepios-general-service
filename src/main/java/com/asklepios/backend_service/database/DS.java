@@ -67,4 +67,18 @@ public class DS {
         }
         return result;
     }
+    public static String executeStringResultQuery(String query) throws SQLException {
+        String result = null;
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            System.out.println(query);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = rs.getString(1);
+                }
+            }
+        }
+        return result;
+    }
+
 }

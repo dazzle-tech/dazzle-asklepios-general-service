@@ -605,7 +605,7 @@ public class MedicationsSetupController {
 
 
     @GetMapping(value = "/active-ingredient-drug-interaction-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> activeIngredientDrugInteractionList(@RequestParam Map<String, String> queryParams,
+    public ResponseEntity<?> activeIngredientDrugInteractionList(@RequestHeader Map<String, String> queryParams,
                                                                  @Nullable @RequestHeader String facility_id,
                                                                  @Nullable @RequestHeader String access_token,
                                                                  @Nullable @RequestHeader Integer access_level,
@@ -619,13 +619,35 @@ public class MedicationsSetupController {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false);
-            List<ApActiveIngredientDrugInteraction> list = apActiveIngredientDrugInteractionService.getList(where);
-            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_active_ingredient_drug_interaction where " + whereForTotal);
+           List<ApActiveIngredientDrugInteraction> list = apActiveIngredientDrugInteractionService.getList(where);
+           BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_active_ingredient_drug_interaction where " + whereForTotal);
             for(ApActiveIngredientDrugInteraction all : list){
                 apActiveIngredientDrugInteractionService.populateLovFields(all, lang);
             }
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(value = "/active-ingredient-drug-interaction-by-key-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> activeIngredientDrugInteractionByKeyList(@RequestHeader String activeKey,
+                                                                 @Nullable @RequestHeader String facility_id,
+                                                                 @Nullable @RequestHeader String access_token,
+                                                                 @Nullable @RequestHeader Integer access_level,
+                                                                 @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApActiveIngredientDrugInteraction>> response = new ParentResponse<>();
+            List<ApActiveIngredientDrugInteraction> list = apActiveIngredientDrugInteractionService.getActiveIngredientDrug(activeKey);
+            for(ApActiveIngredientDrugInteraction all : list){
+                apActiveIngredientDrugInteractionService.populateLovFields(all, lang);
+            }
+            response.setObject(list);
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
@@ -843,8 +865,23 @@ public class MedicationsSetupController {
                                                   @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApActiveIngredient> response = new ParentResponse<>();
-            apActiveIngredientService.saveRecord(activeIngredient);
-            response.setObject(activeIngredient);
+            if(activeIngredient.getKey() == null) {
+                List <ApActiveIngredient> activeIngredients=  apActiveIngredientService.getList("code = '"+activeIngredient.getCode()+"' and name = '"+ activeIngredient.getName()+"' ");
+                if(activeIngredients.isEmpty()) {
+                    apActiveIngredientService.saveRecord(activeIngredient);
+                    response.setObject(activeIngredient);
+                    response.setMsg("The active ingredient "+activeIngredient.getName()+" is added successfully.");
+                }else{
+                    response.setObject(activeIngredient);
+                    response.setMsg("There is already an active ingredient.");
+                }
+            } else{
+
+                apActiveIngredientService.saveRecord(activeIngredient);
+                response.setObject(activeIngredient);
+                response.setMsg("The active ingredient "+activeIngredient.getName()+" is updated successfully.");
+
+                }
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();

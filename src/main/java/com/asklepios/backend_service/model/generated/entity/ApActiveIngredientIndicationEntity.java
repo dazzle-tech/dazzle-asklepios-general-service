@@ -25,6 +25,7 @@ public class ApActiveIngredientIndicationEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private String icdCodeKey;
 	private ApActiveIngredientIndicationEntity translatedObject;
 
 }

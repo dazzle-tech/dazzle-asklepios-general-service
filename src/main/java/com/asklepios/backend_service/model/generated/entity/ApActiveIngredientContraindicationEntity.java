@@ -24,6 +24,7 @@ public class ApActiveIngredientContraindicationEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private String icdCodeKey;
 	private ApActiveIngredientContraindicationEntity translatedObject;
 
 }

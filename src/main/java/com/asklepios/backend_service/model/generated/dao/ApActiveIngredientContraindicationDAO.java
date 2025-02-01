@@ -47,6 +47,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setIcdCodeKey(rs.getString("icd_code_key"));
 } else { record = null; }
 return record;
 }
@@ -54,7 +55,7 @@ return record;
 public void updateRecord(ApActiveIngredientContraindication record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_active_ingredient_contraindication set key = ?, active_ingredient_key = ?, contraindication = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_active_ingredient_contraindication set key = ?, active_ingredient_key = ?, contraindication = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, icd_code_key = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -67,7 +68,8 @@ ps.setBigDecimal(7, record.getCreatedAt());
 ps.setBigDecimal(8, record.getUpdatedAt());
 ps.setBigDecimal(9, record.getDeletedAt());
 ps.setBoolean(10, record.getIsValid());
-ps.setString(11, record.getKey());
+ps.setString(11, record.getIcdCodeKey());
+ps.setString(12, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -99,6 +101,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setIcdCodeKey(rs.getString("icd_code_key"));
 list.add(record);
 }
 return list;
@@ -107,7 +110,7 @@ return list;
 public String saveRecord(ApActiveIngredientContraindication record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_active_ingredient_contraindication values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_active_ingredient_contraindication values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -124,6 +127,7 @@ ps.setBigDecimal(7, record.getCreatedAt());
 ps.setBigDecimal(8, record.getUpdatedAt());
 ps.setBigDecimal(9, record.getDeletedAt());
 ps.setBoolean(10, record.getIsValid());
+ps.setString(11, record.getIcdCodeKey());
 ps.executeUpdate();
 return key;
 }

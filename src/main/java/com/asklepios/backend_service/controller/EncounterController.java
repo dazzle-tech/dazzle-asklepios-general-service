@@ -768,6 +768,7 @@ public class EncounterController {
             for (ApPrescription pre : prescriptions) {
 
                 apPrescriptionService.populateLovFields(pre, lang);
+                pre.setEncounter(apDrugOrderService.getEncounter(pre.getVisitKey()));
             }
 
             response.setObject(prescriptions);
@@ -1066,6 +1067,7 @@ public class EncounterController {
             for (ApDrugOrder o:orders) {
 
                 apDrugOrderService.populateLovFields(o, lang);
+                o.setEncounter(apDrugOrderService.getEncounter(o.getVisitKey()));
             }
 
             response.setObject(orders);

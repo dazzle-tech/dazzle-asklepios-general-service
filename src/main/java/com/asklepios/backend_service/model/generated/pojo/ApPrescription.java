@@ -11,5 +11,5 @@ import com.asklepios.backend_service.model.generated.entity.ApPrescriptionEntity
 @Slf4j
 public class ApPrescription extends ApPrescriptionEntity implements Serializable {
 
-
+    ApEncounter encounter;
 }

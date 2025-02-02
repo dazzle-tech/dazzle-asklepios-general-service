@@ -39,6 +39,7 @@ public class ApFacilityEntity implements Serializable {
 	private ApLovValues facilityTypeLvalue;
 	private String facilityType;
 	private String facilityAddress;
+	private String roolKey;
 	private ApFacilityEntity translatedObject;
 
 }

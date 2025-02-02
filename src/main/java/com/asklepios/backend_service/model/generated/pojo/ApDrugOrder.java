@@ -11,5 +11,5 @@ import com.asklepios.backend_service.model.generated.entity.ApDrugOrderEntity;
 @Slf4j
 public class ApDrugOrder extends ApDrugOrderEntity implements Serializable {
 
-
+ApEncounter encounter;
 }

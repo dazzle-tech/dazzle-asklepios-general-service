@@ -13,5 +13,6 @@ import com.asklepios.backend_service.model.generated.entity.ApVaccineDoseEntity;
 @Slf4j
 public class ApVaccineDose extends ApVaccineDoseEntity implements Serializable {
 List<ApLovValues> apLovValues;
-
+ApVaccineBrands apVaccineBrands;
+ApEncounterVaccination apEncounterVaccination;
 }

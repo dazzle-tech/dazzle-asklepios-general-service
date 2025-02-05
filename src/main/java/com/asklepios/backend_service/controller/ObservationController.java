@@ -342,4 +342,26 @@ public class ObservationController {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @GetMapping(value = "/patient-vaccination-record", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPatientVaccinationRecord(@RequestHeader("patient_key") String patientKey,
+                                                         @RequestHeader("is_cancelled") String isCancelled,
+                                             @Nullable @RequestHeader String facility_id,
+                                             @Nullable @RequestHeader String access_token,
+                                             @Nullable @RequestHeader Integer access_level,
+                                             @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApVaccine>>response = new ParentResponse<>();
+            String where = "patient_key = CAST(" + patientKey + " AS TEXT) AND deleted_at IS " + isCancelled ;
+
+            System.out.println("WHERE Condition: " + where);
+            List<ApVaccine> vaccines = apEncounterVaccinationService.getVaccinationRecords(where ,lang);
+            response.setObject(vaccines);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 }

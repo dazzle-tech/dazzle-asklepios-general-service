@@ -21,7 +21,7 @@ public class ApLovValuesEntity implements Serializable {
 	private String lovDisplayVale;
 	private String loveCustomCode;
 	private String valueDescription;
-	private BigDecimal valueColor;
+	private String valueColor;
 	private String valueIcon;
 	private BigDecimal valueOrder;
 	private Boolean isdefault = false;

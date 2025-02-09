@@ -37,20 +37,19 @@ public class ApEncounterVaccinationService extends ApEncounterVaccinationDAO imp
         this.apUserService = apUserService;
     }
 
-    public List<ApVaccine> getVaccinationRecords(String where ,String lang) {
+    public List<ApVaccine> getVaccinationRecords(String where, String lang) {
         List<ApVaccine> result = new ArrayList<>();
         if (where == null || where.isEmpty())
             where = "1=1";
         String sql = """
-    SELECT
-        v.vaccine_key,
-        COUNT(v.vaccine_dose_key) AS dose_count,
-        string_agg( v.key || '-' || v.vaccine_dose_key || '-' || v.vaccine_brand_key , ',') AS dose_brand_pairs
-    FROM ap_encounter_vaccination v
-    WHERE """+" " + where +" "+ """
-    GROUP BY v.vaccine_key;
-""";
-
+        SELECT
+            v.vaccine_key,
+            COUNT(v.vaccine_dose_key) AS dose_count,
+            string_agg(v.key || '-' || v.vaccine_dose_key || '-' || v.vaccine_brand_key, ',') AS dose_brand_pairs
+        FROM ap_encounter_vaccination v
+        WHERE """ + " " + where + " " + """
+        GROUP BY v.vaccine_key;
+    """;
 
         try (Connection con = DS.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
@@ -60,27 +59,33 @@ public class ApEncounterVaccinationService extends ApEncounterVaccinationDAO imp
                 String vaccineKey = rs.getString("vaccine_key");
                 int doseCount = rs.getInt("dose_count");
                 String doseBrandPairs = rs.getString("dose_brand_pairs");
-                String[] doseBrandPairsArray = doseBrandPairs.split(",");
 
                 List<ApVaccineDose> doseDetailsList = new ArrayList<>();
-                for (String doseBrandPair : doseBrandPairsArray) {
-                    String[] pair = doseBrandPair.split("-");
-                    String key = pair[0];
-                    String doseKey = pair[1];
-                    String brandKey = pair[2];
+                if (doseBrandPairs != null && !doseBrandPairs.isEmpty()) {
+                    String[] doseBrandPairsArray = doseBrandPairs.split(",");
 
-                    ApVaccineDose doseDetails = apVaccineDoseService.getRecord(doseKey);
-                    apVaccineDoseService.populateLovFields(doseDetails, lang);
-                    doseDetails.setApVaccineBrands(apVaccineBrandsService.getRecord(brandKey));
-                    apVaccineBrandsService.populateLovFields(doseDetails.getApVaccineBrands(),lang);
-                    doseDetails.setApEncounterVaccination(getRecord(key));
-                    doseDetails.getApEncounterVaccination().setCreateByUser(apUserService.getRecord(doseDetails.getApEncounterVaccination().getCreatedBy()));
-                    doseDetails.getApEncounterVaccination().setUpdateByUser(apUserService.getRecord(doseDetails.getApEncounterVaccination().getUpdatedBy()));
-                    doseDetails.getApEncounterVaccination().setDeleteByUser(apUserService.getRecord(doseDetails.getApEncounterVaccination().getDeletedBy()));
-                    doseDetails.getApEncounterVaccination().setReviewedByUser(apUserService.getRecord(doseDetails.getApEncounterVaccination().getReviewedBy()));
-                    populateLovFields(doseDetails.getApEncounterVaccination(), lang);
-                    doseDetailsList.add(doseDetails);
+                    for (String doseBrandPair : doseBrandPairsArray) {
+                        String[] pair = doseBrandPair.split("-");
+                        if (pair.length == 3) {
+                            String key = pair[0];
+                            String doseKey = pair[1];
+                            String brandKey = pair[2];
+
+                            ApVaccineDose doseDetails = apVaccineDoseService.getRecord(doseKey);
+                            apVaccineDoseService.populateLovFields(doseDetails, lang);
+                            doseDetails.setApVaccineBrands(apVaccineBrandsService.getRecord(brandKey));
+                            apVaccineBrandsService.populateLovFields(doseDetails.getApVaccineBrands(), lang);
+                            doseDetails.setApEncounterVaccination(getRecord(key));
+                            doseDetails.getApEncounterVaccination().setCreateByUser(apUserService.getRecord(doseDetails.getApEncounterVaccination().getCreatedBy()));
+                            doseDetails.getApEncounterVaccination().setUpdateByUser(apUserService.getRecord(doseDetails.getApEncounterVaccination().getUpdatedBy()));
+                            doseDetails.getApEncounterVaccination().setDeleteByUser(apUserService.getRecord(doseDetails.getApEncounterVaccination().getDeletedBy()));
+                            doseDetails.getApEncounterVaccination().setReviewedByUser(apUserService.getRecord(doseDetails.getApEncounterVaccination().getReviewedBy()));
+                            populateLovFields(doseDetails.getApEncounterVaccination(), lang);
+                            doseDetailsList.add(doseDetails);
+                        }
+                    }
                 }
+
                 ApVaccine record = apVaccineService.getRecord(vaccineKey);
                 apVaccineService.populateLovFields(record, lang);
                 record.setDoseCount(doseCount);

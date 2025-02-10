@@ -71,6 +71,8 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setCategoryLkey(rs.getString("category_lkey"));
+record.setTubeTypeLkey(rs.getString("tube_type_lkey"));
 } else { record = null; }
 return record;
 }
@@ -78,7 +80,7 @@ return record;
 public void updateRecord(ApDiagnosticTestLaboratory record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_diagnostic_test_laboratory set key = ?, test_key = ?, international_coding_type_lkey = ?, child_code_lkey = ?, lab_catalog_key = ?, property_lkey = ?, system_lkey = ?, scale_lkey = ?, reagents_lkey = ?, method_lkey = ?, test_duration_time = ?, time_unit_lkey = ?, result_type = ?, result_unit_lkey = ?, is_profile = ?, sample_container_lkey = ?, sample_volume = ?, sample_volume_unit_lkey = ?, tube_color_lkey = ?, test_description = ?, sample_handling = ?, turnaround_time = ?, turnaround_time_unit_lkey = ?, preparation_requirements = ?, medical_indications = ?, associated_risks = ?, test_instructions = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_diagnostic_test_laboratory set key = ?, test_key = ?, international_coding_type_lkey = ?, child_code_lkey = ?, lab_catalog_key = ?, property_lkey = ?, system_lkey = ?, scale_lkey = ?, reagents_lkey = ?, method_lkey = ?, test_duration_time = ?, time_unit_lkey = ?, result_type = ?, result_unit_lkey = ?, is_profile = ?, sample_container_lkey = ?, sample_volume = ?, sample_volume_unit_lkey = ?, tube_color_lkey = ?, test_description = ?, sample_handling = ?, turnaround_time = ?, turnaround_time_unit_lkey = ?, preparation_requirements = ?, medical_indications = ?, associated_risks = ?, test_instructions = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, category_lkey = ?, tube_type_lkey = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -115,7 +117,9 @@ ps.setBigDecimal(31, record.getCreatedAt());
 ps.setBigDecimal(32, record.getUpdatedAt());
 ps.setBigDecimal(33, record.getDeletedAt());
 ps.setBoolean(34, record.getIsValid());
-ps.setString(35, record.getKey());
+ps.setString(35, record.getCategoryLkey());
+ps.setString(36, record.getTubeTypeLkey());
+ps.setString(37, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -171,6 +175,8 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setCategoryLkey(rs.getString("category_lkey"));
+record.setTubeTypeLkey(rs.getString("tube_type_lkey"));
 list.add(record);
 }
 return list;
@@ -179,7 +185,7 @@ return list;
 public String saveRecord(ApDiagnosticTestLaboratory record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_test_laboratory values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_test_laboratory values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -220,6 +226,8 @@ ps.setBigDecimal(31, record.getCreatedAt());
 ps.setBigDecimal(32, record.getUpdatedAt());
 ps.setBigDecimal(33, record.getDeletedAt());
 ps.setBoolean(34, record.getIsValid());
+ps.setString(35, record.getCategoryLkey());
+ps.setString(36, record.getTubeTypeLkey());
 ps.executeUpdate();
 return key;
 }

@@ -61,6 +61,10 @@ public class ApDiagnosticTestLaboratoryEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private String categoryLkey;
+	private ApLovValues categoryLvalue;
+	private String tubeTypeLkey;
+	private ApLovValues tubeTypeLvalue;
 	private ApDiagnosticTestLaboratoryEntity translatedObject;
 
 }

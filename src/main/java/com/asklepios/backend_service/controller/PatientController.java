@@ -49,8 +49,8 @@ public class PatientController {
     private final ApPatientPreferredHealthProfessionalService apPatientPreferredHealthProfessionalService;
     private final ApFacilityService apFacilityService;
     private final ApPractitionerService apPractitionerService;
-
-    public PatientController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApPatientAllergiesService apPatientAllergiesService, ApAllergensService apAllergensService, ApPatientRelationService apPatientRelationService, ApPatientInsuranceService apPatientInsuranceService, ApPatientSecondaryDocumentsService apPatientSecondaryDocumentsService, ApPatientInsuranceCoverageService apPatientInsuranceCoverageService, ApPatientAdministrativeWarningsService apPatientAdministrativeWarningsService, ApAgeGroupService apAgeGroupService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApUserAccessPrivatePatientService apUserAccessPrivatePatientService, ApPatientPreferredHealthProfessionalService apPatientPreferredHealthProfessionalService, ApFacilityService apFacilityService, ApPractitionerService apPractitionerService) {
+    private final ApAttachmentService apAttachmentService;
+    public PatientController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApPatientAllergiesService apPatientAllergiesService, ApAllergensService apAllergensService, ApPatientRelationService apPatientRelationService, ApPatientInsuranceService apPatientInsuranceService, ApPatientSecondaryDocumentsService apPatientSecondaryDocumentsService, ApPatientInsuranceCoverageService apPatientInsuranceCoverageService, ApPatientAdministrativeWarningsService apPatientAdministrativeWarningsService, ApAgeGroupService apAgeGroupService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApUserAccessPrivatePatientService apUserAccessPrivatePatientService, ApPatientPreferredHealthProfessionalService apPatientPreferredHealthProfessionalService, ApFacilityService apFacilityService, ApPractitionerService apPractitionerService, ApAttachmentService apAttachmentService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -68,6 +68,7 @@ public class PatientController {
         this.apPatientPreferredHealthProfessionalService = apPatientPreferredHealthProfessionalService;
         this.apFacilityService = apFacilityService;
         this.apPractitionerService = apPractitionerService;
+        this.apAttachmentService = apAttachmentService;
     }
 
     @PostMapping(value = "/get-patient", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -104,7 +105,9 @@ public class PatientController {
         try {
 
             ParentResponse<List<ApPatient>> response = new ParentResponse<>();
+            ApAttachment attachment = new ApAttachment();
 
+            // check if such type and reference key exist
             if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
                 response.setObject(new ArrayList<>());
                 return ResponseEntity.ok(response);
@@ -139,7 +142,10 @@ public class PatientController {
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_patient where " + whereForTotal);
 
             for (ApPatient patient : patients) {
-
+                List<ApAttachment> exising = apAttachmentService.getList("attachment_type = 'PATIENT_PROFILE_PICTURE' and reference_object_key = '" + patient.getKey() + "' and deleted_at is null");
+                if (!exising.isEmpty()) {
+                    patient.setAttachmentProfilePicture(exising.get(0));
+                };
                 apPatientService.populateLovFields(patient, lang);
                 patient.setHasAllergy(apPatientService.getHasAllergy(patient.getKey()));
             }

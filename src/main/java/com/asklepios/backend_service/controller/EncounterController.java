@@ -51,7 +51,10 @@ public class EncounterController {
     private  final  ApDrugOrderService apDrugOrderService;
     private  final  ApDrugOrderMedicationsService apDrugOrderMedicationsService;
     private  final  ApProcedureService apProcedureService;
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService) {
+    private  final  ApDiagnosticOrdersService apDiagnosticOrdersService;
+    private final  ApDiagnosticOrderTestsService apDiagnosticOrderTestsService;
+    private final ApDiagnosticTestService apDiagnosticTestService;
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -73,6 +76,9 @@ public class EncounterController {
         this.apDrugOrderService = apDrugOrderService;
         this.apDrugOrderMedicationsService = apDrugOrderMedicationsService;
         this.apProcedureService = apProcedureService;
+        this.apDiagnosticOrdersService = apDiagnosticOrdersService;
+        this.apDiagnosticOrderTestsService = apDiagnosticOrderTestsService;
+        this.apDiagnosticTestService = apDiagnosticTestService;
     }
 
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1205,4 +1211,123 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @PostMapping(value = "/save-diagnostic-order", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveDiagnosticOrder(@RequestBody ApDiagnosticOrders request,
+                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                              @jakarta.annotation.Nullable @RequestHeader String lang
+    ) {
+        try {
+            if(request.getKey()==null){
+                BigDecimal lastpreId = DS.executeDecimalResultQuery("select max(order_id) from ap_diagnostic_orders");
+                BigDecimal newpreId;
+                if (lastpreId == null) {
+                    newpreId= BigDecimal.valueOf(100);
+                } else {
+                    newpreId = lastpreId.add(BigDecimal.ONE);
+                }
+                request.setOrderId(newpreId.toString());}
+            ParentResponse<ApDiagnosticOrders> response = new ParentResponse<>();
+            apDiagnosticOrdersService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/diagnostic-order-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getDiagnosticOrderList(@RequestParam Map<String, String> queryParams,
+                                                 @Nullable @RequestHeader String facility_id,
+                                                 @Nullable @RequestHeader String access_token,
+                                                 @Nullable @RequestHeader Integer access_level,
+                                                 @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApDiagnosticOrders>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            List<ApDiagnosticOrders> orders = apDiagnosticOrdersService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_diagnostic_orders where " + whereForTotal);
+
+            for (ApDiagnosticOrders o : orders) {
+
+                apDiagnosticOrdersService.populateLovFields(o, lang);
+
+            }
+
+            response.setObject(orders);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/save-diagnostic-order-tests", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveDiagnosticOrderTests(@RequestBody ApDiagnosticOrderTests request,
+                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                     @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+            ParentResponse<ApDiagnosticOrderTests> response = new ParentResponse<>();
+            apDiagnosticOrderTestsService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/diagnostic-order-test-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getDiagnosticOrderTestList(@RequestParam Map<String, String> queryParams,
+                                                    @Nullable @RequestHeader String facility_id,
+                                                    @Nullable @RequestHeader String access_token,
+                                                    @Nullable @RequestHeader Integer access_level,
+                                                    @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApDiagnosticOrderTests>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            List<ApDiagnosticOrderTests> orders = apDiagnosticOrderTestsService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_diagnostic_order_tests where " + whereForTotal);
+            for (ApDiagnosticOrderTests o : orders) {
+
+                 o.setTest( apDiagnosticTestService.getRecord(o.getTestKey()));
+                apDiagnosticOrderTestsService.populateLovFields(o, lang);
+                apDiagnosticTestService.populateLovFields(o.getTest(),lang);
+            }
+            response.setObject(orders);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
 }

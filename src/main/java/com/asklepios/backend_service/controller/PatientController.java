@@ -143,7 +143,9 @@ public class PatientController {
 
             for (ApPatient patient : patients) {
                 List<ApAttachment> exising = apAttachmentService.getList("attachment_type = 'PATIENT_PROFILE_PICTURE' and reference_object_key = '" + patient.getKey() + "' and deleted_at is null");
-                patient.setAttachmentProfilePicture(exising.get(0));
+                if (!exising.isEmpty()) {
+                    patient.setAttachmentProfilePicture(exising.get(0));
+                };
                 apPatientService.populateLovFields(patient, lang);
                 patient.setHasAllergy(apPatientService.getHasAllergy(patient.getKey()));
             }

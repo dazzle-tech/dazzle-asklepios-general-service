@@ -11,5 +11,6 @@ import com.asklepios.backend_service.model.generated.entity.ApActiveIngredientCo
 @Slf4j
 public class ApActiveIngredientContraindication extends ApActiveIngredientContraindicationEntity implements Serializable {
 
+    String IcdObject;
 
 }

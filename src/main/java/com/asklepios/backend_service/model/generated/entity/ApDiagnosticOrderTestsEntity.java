@@ -35,6 +35,9 @@ public class ApDiagnosticOrderTestsEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private String processingStatusLkey;
+	private ApLovValues processingStatusLvalue;
+	private BigDecimal submitDate;
 	private ApDiagnosticOrderTestsEntity translatedObject;
 
 }

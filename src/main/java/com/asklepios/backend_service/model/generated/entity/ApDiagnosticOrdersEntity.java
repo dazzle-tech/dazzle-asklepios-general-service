@@ -30,6 +30,7 @@ public class ApDiagnosticOrdersEntity implements Serializable {
 	private Boolean saveDraft = false;
 	private String submittedBy;
 	private BigDecimal submittedAt;
+	private Boolean isUrgent = false;
 	private ApDiagnosticOrdersEntity translatedObject;
 
 }

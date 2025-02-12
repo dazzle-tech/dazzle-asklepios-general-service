@@ -1316,7 +1316,7 @@ public class EncounterController {
 
                  o.setTest( apDiagnosticTestService.getRecord(o.getTestKey()));
                 apDiagnosticOrderTestsService.populateLovFields(o, lang);
-                apDiagnosticTestService.populateLovFields(o.getTest(),lang);
+                apDiagnosticTestService.populateLovFields(o.getTest(),lang );
             }
             response.setObject(orders);
             response.setExtraNumeric(totalRecord);

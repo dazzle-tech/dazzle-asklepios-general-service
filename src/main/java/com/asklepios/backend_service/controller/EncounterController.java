@@ -54,7 +54,8 @@ public class EncounterController {
     private  final  ApDiagnosticOrdersService apDiagnosticOrdersService;
     private final  ApDiagnosticOrderTestsService apDiagnosticOrderTestsService;
     private final ApDiagnosticTestService apDiagnosticTestService;
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService) {
+    private final ApPractitionerService apPractitionerService;
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -79,6 +80,7 @@ public class EncounterController {
         this.apDiagnosticOrdersService = apDiagnosticOrdersService;
         this.apDiagnosticOrderTestsService = apDiagnosticOrderTestsService;
         this.apDiagnosticTestService = apDiagnosticTestService;
+        this.apPractitionerService = apPractitionerService;
     }
 
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -99,10 +101,14 @@ public class EncounterController {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false,false);
-            List<ApEncounter> encounters = apEncounterService.getListWithDepartmentName(where);
+            List<ApEncounter> encounters = apEncounterService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_encounter where " + whereForTotal);
             for (ApEncounter encounter : encounters) {
-                apEncounterService.populateLovFields(encounter, lang);
+                encounter.setPractitionerObject(apPractitionerService.getRecord(encounter.getPhysicianKey()));
+                System.out.println("encounter.getPhysicianKey()--->"+encounter.getPhysicianKey());
+                if (encounter.getPractitionerObject() != null) {
+                    apPractitionerService.populateLovFields(encounter.getPractitionerObject(),lang);
+                }
                 ApPatient patient = apPatientService.getRecord(encounter.getPatientKey());
                 patient.setHasAllergy(apPatientService.getHasAllergy(encounter.getPatientKey()));
                 patient.setHasWarning(apPatientService.getHasWarning(encounter.getPatientKey()));
@@ -113,12 +119,13 @@ public class EncounterController {
                 encounter.setHasPrescription(apEncounterService.getHasPrescription(encounter.getKey()));
                 encounter.setHasAllergy(apEncounterService.getHasAllergy(encounter.getKey()));
                 encounter.setHasObservation(apEncounterService.getHasObservation(encounter.getKey()));
-
+                apEncounterService.populateLovFields(encounter, lang);
 
             }
             apEncounterService.processPatientObservationStatus(encounters);
             response.setObject(encounters);
             response.setExtraNumeric(totalRecord);
+
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {

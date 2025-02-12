@@ -743,6 +743,10 @@ public class MedicationsSetupController {
             String whereForTotal = listRequest.buildWhereStatement(true, false, false);
             List<ApActiveIngredientContraindication> list = apActiveIngredientContraindicationService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_active_ingredient_contraindication where " + whereForTotal);
+            for(ApActiveIngredientContraindication all : list){
+                apActiveIngredientContraindicationService.populateLovFields(all, lang);
+                all.setIcdObject(apActiveIngredientIndicationService.getICD(all.getIcdCodeKey()));
+            }
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);
@@ -846,6 +850,10 @@ public class MedicationsSetupController {
             String whereForTotal = listRequest.buildWhereStatement(true, false, false);
             List<ApActiveIngredientIndication> list = apActiveIngredientIndicationService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_active_ingredient_indication where " + whereForTotal);
+            for(ApActiveIngredientIndication all : list){
+                apActiveIngredientIndicationService.populateLovFields(all, lang);
+                all.setIcdObject(apActiveIngredientIndicationService.getICD(all.getIcdCodeKey()));
+            }
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);

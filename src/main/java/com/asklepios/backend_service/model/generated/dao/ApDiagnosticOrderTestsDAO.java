@@ -54,6 +54,9 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setProcessingStatusLkey(rs.getString("processing_status_lkey"));
+record.setSubmitDate(rs.getBigDecimal("submit_date"));
+record.setOrderTypeLkey(rs.getString("order_type_lkey"));
 } else { record = null; }
 return record;
 }
@@ -61,7 +64,7 @@ return record;
 public void updateRecord(ApDiagnosticOrderTests record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_diagnostic_order_tests set key = ?, patient_key = ?, visit_key = ?, status_lkey = ?, order_key = ?, test_key = ?, received_lab_lkey = ?, reason_lkey = ?, priority_lkey = ?, notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_diagnostic_order_tests set key = ?, patient_key = ?, visit_key = ?, status_lkey = ?, order_key = ?, test_key = ?, received_lab_lkey = ?, reason_lkey = ?, priority_lkey = ?, notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, processing_status_lkey = ?, submit_date = ?, order_type_lkey = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -81,7 +84,10 @@ ps.setBigDecimal(14, record.getCreatedAt());
 ps.setBigDecimal(15, record.getUpdatedAt());
 ps.setBigDecimal(16, record.getDeletedAt());
 ps.setBoolean(17, record.getIsValid());
-ps.setString(18, record.getKey());
+ps.setString(18, record.getProcessingStatusLkey());
+ps.setBigDecimal(19, record.getSubmitDate());
+ps.setString(20, record.getOrderTypeLkey());
+ps.setString(21, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -120,6 +126,9 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setProcessingStatusLkey(rs.getString("processing_status_lkey"));
+record.setSubmitDate(rs.getBigDecimal("submit_date"));
+record.setOrderTypeLkey(rs.getString("order_type_lkey"));
 list.add(record);
 }
 return list;
@@ -128,7 +137,7 @@ return list;
 public String saveRecord(ApDiagnosticOrderTests record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_order_tests values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_order_tests values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -152,6 +161,9 @@ ps.setBigDecimal(14, record.getCreatedAt());
 ps.setBigDecimal(15, record.getUpdatedAt());
 ps.setBigDecimal(16, record.getDeletedAt());
 ps.setBoolean(17, record.getIsValid());
+ps.setString(18, record.getProcessingStatusLkey());
+ps.setBigDecimal(19, record.getSubmitDate());
+ps.setString(20, record.getOrderTypeLkey());
 ps.executeUpdate();
 return key;
 }

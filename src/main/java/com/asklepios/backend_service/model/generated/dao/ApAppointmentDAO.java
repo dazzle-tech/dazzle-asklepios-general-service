@@ -68,6 +68,9 @@ record.setAppointmentStatus(rs.getString("appointment_status"));
 record.setReasonLkey(rs.getString("reason_lkey"));
 record.setReasonValue(rs.getString("reason_value"));
 record.setOtherReason(rs.getString("other_reason"));
+record.setNoShowReasonLkey(rs.getString("no_show_reason_lkey"));
+record.setNoShowReasonValue(rs.getString("no_show_reason_value"));
+record.setNoShowOtherReason(rs.getString("no_show_other_reason"));
 } else { record = null; }
 return record;
 }
@@ -75,7 +78,7 @@ return record;
 public void updateRecord(ApAppointment record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_appointment set key = ?, patient_key = ?, facility_key = ?, resource_type_lkey = ?, resource_key = ?, visit_type_lkey = ?, duration_lkey = ?, appointment_start = ?, appointment_end = ?, instructions = ?, notes = ?, priority_lkey = ?, is_reminder = ?, reminder_lkey = ?, consent_form = ?, refering_physician_lkey = ?, external_physician = ?, procedure_level_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, resource_lkey = ?, instructions_lkey = ?, appointment_status = ?, reason_lkey = ?, reason_value = ?, other_reason = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_appointment set key = ?, patient_key = ?, facility_key = ?, resource_type_lkey = ?, resource_key = ?, visit_type_lkey = ?, duration_lkey = ?, appointment_start = ?, appointment_end = ?, instructions = ?, notes = ?, priority_lkey = ?, is_reminder = ?, reminder_lkey = ?, consent_form = ?, refering_physician_lkey = ?, external_physician = ?, procedure_level_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, resource_lkey = ?, instructions_lkey = ?, appointment_status = ?, reason_lkey = ?, reason_value = ?, other_reason = ?, no_show_reason_lkey = ?, no_show_reason_value = ?, no_show_other_reason = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -109,7 +112,10 @@ ps.setString(28, record.getAppointmentStatus());
 ps.setString(29, record.getReasonLkey());
 ps.setString(30, record.getReasonValue());
 ps.setString(31, record.getOtherReason());
-ps.setString(32, record.getKey());
+ps.setString(32, record.getNoShowReasonLkey());
+ps.setString(33, record.getNoShowReasonValue());
+ps.setString(34, record.getNoShowOtherReason());
+ps.setString(35, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -162,6 +168,9 @@ record.setAppointmentStatus(rs.getString("appointment_status"));
 record.setReasonLkey(rs.getString("reason_lkey"));
 record.setReasonValue(rs.getString("reason_value"));
 record.setOtherReason(rs.getString("other_reason"));
+record.setNoShowReasonLkey(rs.getString("no_show_reason_lkey"));
+record.setNoShowReasonValue(rs.getString("no_show_reason_value"));
+record.setNoShowOtherReason(rs.getString("no_show_other_reason"));
 list.add(record);
 }
 return list;
@@ -170,7 +179,7 @@ return list;
 public String saveRecord(ApAppointment record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_appointment values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_appointment values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -208,6 +217,9 @@ ps.setString(28, record.getAppointmentStatus());
 ps.setString(29, record.getReasonLkey());
 ps.setString(30, record.getReasonValue());
 ps.setString(31, record.getOtherReason());
+ps.setString(32, record.getNoShowReasonLkey());
+ps.setString(33, record.getNoShowReasonValue());
+ps.setString(34, record.getNoShowOtherReason());
 ps.executeUpdate();
 return key;
 }

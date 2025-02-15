@@ -38,6 +38,8 @@ public class ApDiagnosticOrderTestsEntity implements Serializable {
 	private String processingStatusLkey;
 	private ApLovValues processingStatusLvalue;
 	private BigDecimal submitDate;
+	private String orderTypeLkey;
+	private ApLovValues orderTypeLvalue;
 	private ApDiagnosticOrderTestsEntity translatedObject;
 
 }

@@ -55,6 +55,10 @@ public class ApAppointmentEntity implements Serializable {
 	private ApLovValues reasonLvalue;
 	private String reasonValue;
 	private String otherReason;
+	private String noShowReasonLkey;
+	private ApLovValues noShowReasonLvalue;
+	private String noShowReasonValue;
+	private String noShowOtherReason;
 	private ApAppointmentEntity translatedObject;
 
 }

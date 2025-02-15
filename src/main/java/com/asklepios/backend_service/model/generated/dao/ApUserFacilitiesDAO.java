@@ -49,6 +49,8 @@ record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setUserKey(rs.getString("user_key"));
 record.setFacilityKey(rs.getString("facility_key"));
+record.setRoleInFacility(rs.getString("role_in_facility"));
+record.setIsPrimaryFacility(rs.getBoolean("is_primary_facility"));
 } else { record = null; }
 return record;
 }
@@ -56,7 +58,7 @@ return record;
 public void updateRecord(ApUserFacilities record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_user_facilities set key = ?, user_id = ?, facility_id = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, user_key = ?, facility_key = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_user_facilities set key = ?, user_id = ?, facility_id = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, user_key = ?, facility_key = ?, role_in_facility = ?, is_primary_facility = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -71,7 +73,9 @@ ps.setBigDecimal(9, record.getDeletedAt());
 ps.setBoolean(10, record.getIsValid());
 ps.setString(11, record.getUserKey());
 ps.setString(12, record.getFacilityKey());
-ps.setString(13, record.getKey());
+ps.setString(13, record.getRoleInFacility());
+ps.setBoolean(14, record.getIsPrimaryFacility());
+ps.setString(15, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -105,6 +109,8 @@ record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setUserKey(rs.getString("user_key"));
 record.setFacilityKey(rs.getString("facility_key"));
+record.setRoleInFacility(rs.getString("role_in_facility"));
+record.setIsPrimaryFacility(rs.getBoolean("is_primary_facility"));
 list.add(record);
 }
 return list;
@@ -113,7 +119,7 @@ return list;
 public String saveRecord(ApUserFacilities record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_user_facilities values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_user_facilities values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -132,6 +138,8 @@ ps.setBigDecimal(9, record.getDeletedAt());
 ps.setBoolean(10, record.getIsValid());
 ps.setString(11, record.getUserKey());
 ps.setString(12, record.getFacilityKey());
+ps.setString(13, record.getRoleInFacility());
+ps.setBoolean(14, record.getIsPrimaryFacility());
 ps.executeUpdate();
 return key;
 }

@@ -541,28 +541,35 @@ public class SetupController implements Serializable {
     }
 
     @PostMapping(value = "/save-user", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveUser(@RequestBody ApUser user,
-                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                      @jakarta.annotation.Nullable @RequestHeader String lang) {
+    public ResponseEntity<?> saveUser(
+            @RequestBody ApUser user,
+            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+            @jakarta.annotation.Nullable @RequestHeader String access_token,
+            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+            @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
+            // تهيئة الرد
             ParentResponse<ApUser> response = new ParentResponse<>();
 
+            // تعيين الاسم الكامل
             user.setFullName(user.getFirstName() + " " + user.getLastName());
 
-            // Handle facilities
-            if (user.get_facilitiesInput() != null) {
-                // Delete existing facilities
+            // حفظ المستخدم أولاً
+            apUserService.saveRecord(user);
+
+            // التحقق من وجود ID للمستخدم بعد الحفظ
+            if (user.getKey() != null && user.get_facilitiesInput() != null) {
+                // حذف الفسيلتي الحالية المرتبطة بالمستخدم
                 List<ApUserFacilities> existingFacilities = apUserFacilitiesService.getList(
-                        "deleted_at is null and user_id ='" + user.getKey() + "'");
+                        "deleted_at is null and user_id ='" + user.getKey() + "'"
+                );
 
                 for (ApUserFacilities facility : existingFacilities) {
                     apUserFacilitiesService.deleteRecord(facility);
                     System.out.println("Deleted facility: " + facility);
                 }
 
-                // Add new facilities from user input
+                // إضافة الفسيلتي الجديدة
                 for (String facility : user.get_facilitiesInput()) {
                     ApUserFacilities apUserFacilities = new ApUserFacilities();
                     apUserFacilities.setUserId(user.getKey());
@@ -572,13 +579,9 @@ public class SetupController implements Serializable {
                 }
             }
 
-
-            // Save the user record
-            apUserService.saveRecord(user);
-
+            // إعداد الرد
             response.setObject(user);
             return ResponseEntity.ok(response);
-
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());

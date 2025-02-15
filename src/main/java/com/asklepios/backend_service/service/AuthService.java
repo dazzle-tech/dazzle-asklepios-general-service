@@ -39,10 +39,11 @@ public class AuthService {
             System.out.println(request.getPassword());
             System.out.println(request.getOrgKey());
 
-            PreparedStatement statement = connection.prepareStatement("select key from ap_user where username = ? and password = ? and organization_key = ? ");
-            statement.setString(1, request.getUsername());
+            PreparedStatement statement = connection.prepareStatement("SELECT u.key  FROM ap_user u INNER JOIN ap_user_facilities uf ON u.key = uf.user_id WHERE u.username = ? AND u.password = ? AND uf.facility_id = ?  ");
+             statement.setString(1, request.getUsername());
             statement.setString(2, request.getPassword());
             statement.setString(3, request.getOrgKey());
+
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 ApUser user = userService.getRecord(resultSet.getString(1));

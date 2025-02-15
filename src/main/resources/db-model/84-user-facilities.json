@@ -8,6 +8,14 @@
     ,{
       "name": "facility_id",
       "type": "text"
+    },
+    {
+      "name": "role_in_facility",
+      "type": "text"
+    },
+    {
+      "name": "is_primary_facility",
+      "type": "boolean"
     }
   ]
 

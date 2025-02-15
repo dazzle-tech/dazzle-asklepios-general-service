@@ -52,6 +52,7 @@ record.setOrderId(rs.getString("order_id"));
 record.setSaveDraft(rs.getBoolean("save_draft"));
 record.setSubmittedBy(rs.getString("submitted_by"));
 record.setSubmittedAt(rs.getBigDecimal("submitted_at"));
+record.setIsUrgent(rs.getBoolean("is_urgent"));
 } else { record = null; }
 return record;
 }
@@ -59,7 +60,7 @@ return record;
 public void updateRecord(ApDiagnosticOrders record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_diagnostic_orders set key = ?, patient_key = ?, visit_key = ?, status_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, order_id = ?, save_draft = ?, submitted_by = ?, submitted_at = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_diagnostic_orders set key = ?, patient_key = ?, visit_key = ?, status_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, order_id = ?, save_draft = ?, submitted_by = ?, submitted_at = ?, is_urgent = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -77,7 +78,8 @@ ps.setString(12, record.getOrderId());
 ps.setBoolean(13, record.getSaveDraft());
 ps.setString(14, record.getSubmittedBy());
 ps.setBigDecimal(15, record.getSubmittedAt());
-ps.setString(16, record.getKey());
+ps.setBoolean(16, record.getIsUrgent());
+ps.setString(17, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -114,6 +116,7 @@ record.setOrderId(rs.getString("order_id"));
 record.setSaveDraft(rs.getBoolean("save_draft"));
 record.setSubmittedBy(rs.getString("submitted_by"));
 record.setSubmittedAt(rs.getBigDecimal("submitted_at"));
+record.setIsUrgent(rs.getBoolean("is_urgent"));
 list.add(record);
 }
 return list;
@@ -122,7 +125,7 @@ return list;
 public String saveRecord(ApDiagnosticOrders record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_orders values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_orders values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -144,6 +147,7 @@ ps.setString(12, record.getOrderId());
 ps.setBoolean(13, record.getSaveDraft());
 ps.setString(14, record.getSubmittedBy());
 ps.setBigDecimal(15, record.getSubmittedAt());
+ps.setBoolean(16, record.getIsUrgent());
 ps.executeUpdate();
 return key;
 }

@@ -26,6 +26,8 @@ public class ApUserFacilitiesEntity implements Serializable {
 	private Boolean isValid = true;
 	private String userKey;
 	private String facilityKey;
+	private String roleInFacility;
+	private Boolean isPrimaryFacility = false;
 	private ApUserFacilitiesEntity translatedObject;
 
 }

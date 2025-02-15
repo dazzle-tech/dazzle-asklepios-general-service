@@ -54,6 +54,8 @@ public class ApDiagnosticTestRadiologyEntity implements Serializable {
 	private String resultType;
 	private String resultUnitLkey;
 	private ApLovValues resultUnitLvalue;
+	private String labCatalogLkey;
+	private ApLovValues labCatalogLvalue;
 	private ApDiagnosticTestRadiologyEntity translatedObject;
 
 }

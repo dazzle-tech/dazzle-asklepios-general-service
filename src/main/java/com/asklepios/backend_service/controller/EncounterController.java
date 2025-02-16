@@ -19,10 +19,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/encounter")
@@ -55,7 +53,9 @@ public class EncounterController {
     private final  ApDiagnosticOrderTestsService apDiagnosticOrderTestsService;
     private final ApDiagnosticTestService apDiagnosticTestService;
     private final ApPractitionerService apPractitionerService;
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService) {
+    private  final ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService;
+    private final  ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService;
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -81,6 +81,8 @@ public class EncounterController {
         this.apDiagnosticOrderTestsService = apDiagnosticOrderTestsService;
         this.apDiagnosticTestService = apDiagnosticTestService;
         this.apPractitionerService = apPractitionerService;
+        this.apDiagnosticOrderTestsNotesService = apDiagnosticOrderTestsNotesService;
+        this.apDiagnosticOrderTestsSamplesService = apDiagnosticOrderTestsSamplesService;
     }
 
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1247,10 +1249,10 @@ public class EncounterController {
     }
     @GetMapping(value = "/diagnostic-order-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDiagnosticOrderList(@RequestParam Map<String, String> queryParams,
-                                                 @Nullable @RequestHeader String facility_id,
-                                                 @Nullable @RequestHeader String access_token,
-                                                 @Nullable @RequestHeader Integer access_level,
-                                                 @Nullable @RequestHeader String lang) {
+                                                    @Nullable @RequestHeader String facility_id,
+                                                    @Nullable @RequestHeader String access_token,
+                                                    @Nullable @RequestHeader Integer access_level,
+                                                    @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApDiagnosticOrders>> response = new ParentResponse<>();
 
@@ -1266,8 +1268,14 @@ public class EncounterController {
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_diagnostic_orders where " + whereForTotal);
 
             for (ApDiagnosticOrders o : orders) {
-
+                o.setPatient(apPatientService.getRecord(o.getPatientKey()));
+                o.setEncounter(apEncounterService.getRecord(o.getVisitKey()));
+                o.getEncounter().setDiagnosis(apEncounterService.getDiagnosis( o.getEncounter().getKey()));
+                o.getPatient().setHasAllergy(apPatientService.getHasAllergy(o.getPatient().getKey()));
+                o.getPatient().setHasWarning(apPatientService.getHasWarning(o.getPatient().getKey()));
                 apDiagnosticOrdersService.populateLovFields(o, lang);
+                apPatientService.populateLovFields(o.getPatient(), lang);
+                apEncounterService.populateLovFields(o.getEncounter(), lang);
 
             }
 
@@ -1283,15 +1291,36 @@ public class EncounterController {
     }
     @PostMapping(value = "/save-diagnostic-order-tests", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTests(@RequestBody ApDiagnosticOrderTests request,
-                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                     @jakarta.annotation.Nullable @RequestHeader String lang
+                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                      @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
             ParentResponse<ApDiagnosticOrderTests> response = new ParentResponse<>();
+
             apDiagnosticOrderTestsService.saveRecord(request);
+            List<ApDiagnosticOrderTests> tests= apDiagnosticOrderTestsService.getList("order_key ='"+request.getOrderKey()+"'");
+            boolean flag=false;
+            Set<String> statusSet = tests.stream()
+                    .map(ApDiagnosticOrderTests::getProcessingStatusLkey)
+                    .collect(Collectors.toSet());
+            if (statusSet.size() == 1) {
+
+                String value = statusSet.iterator().next();
+
+                String firstElement = statusSet.iterator().next();
+                ApDiagnosticOrders order = apDiagnosticOrdersService.getRecord(request.getOrderKey());
+                order.setLabStatusLkey(firstElement);
+                apDiagnosticOrdersService.saveRecord(order);
+            } else {
+
+                ApDiagnosticOrders order = apDiagnosticOrdersService.getRecord(request.getOrderKey());
+                order.setLabStatusLkey("6472790341892805");
+                apDiagnosticOrdersService.saveRecord(order);
+            }
+
             response.setObject(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -1336,5 +1365,101 @@ public class EncounterController {
         }
     }
 
+    @PostMapping(value = "/save-diagnostic-order-tests-notes", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveDiagnosticOrderTestsNotes(@RequestBody ApDiagnosticOrderTestsNotes request,
+                                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                           @jakarta.annotation.Nullable @RequestHeader String lang
 
+    ) {
+        try {
+            ParentResponse<ApDiagnosticOrderTestsNotes> response = new ParentResponse<>();
+            apDiagnosticOrderTestsNotesService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/diagnostic-order-test-notes-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getDiagnosticOrderTestNotesList(@RequestHeader  String testid,
+                                                             @Nullable @RequestHeader String facility_id,
+                                                             @Nullable @RequestHeader String access_token,
+                                                             @Nullable @RequestHeader Integer access_level,
+                                                             @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApDiagnosticOrderTestsNotes>> response = new ParentResponse<>();
+
+
+
+            List<ApDiagnosticOrderTestsNotes> list = apDiagnosticOrderTestsNotesService.getList(
+                    " test_key = '" + testid + "'"
+            );
+
+            for(ApDiagnosticOrderTestsNotes all : list){
+                apDiagnosticOrderTestsNotesService.populateLovFields(all, lang);
+
+            }
+            response.setObject(list);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-diagnostic-order-tests-sample", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveDiagnosticOrderTestsSample(@RequestBody ApDiagnosticOrderTestsSamples request,
+                                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                            @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+            ParentResponse<ApDiagnosticOrderTestsSamples> response = new ParentResponse<>();
+            apDiagnosticOrderTestsSamplesService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/diagnostic-order-test-samples-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getDiagnosticOrderTestSamplesList(@RequestHeader  String testid,
+                                                               @Nullable @RequestHeader String facility_id,
+                                                               @Nullable @RequestHeader String access_token,
+                                                               @Nullable @RequestHeader Integer access_level,
+                                                               @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApDiagnosticOrderTestsSamples>> response = new ParentResponse<>();
+
+
+
+            List<ApDiagnosticOrderTestsSamples> list = apDiagnosticOrderTestsSamplesService.getList(
+                    " test_key = '" + testid + "'"
+            );
+
+            for(ApDiagnosticOrderTestsSamples all : list){
+                apDiagnosticOrderTestsSamplesService.populateLovFields(all, lang);
+
+            }
+            response.setObject(list);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 }

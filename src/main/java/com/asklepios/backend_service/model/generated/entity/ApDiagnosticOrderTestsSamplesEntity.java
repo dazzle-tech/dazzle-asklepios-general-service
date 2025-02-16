@@ -12,29 +12,23 @@ import com.asklepios.backend_service.model.generated.pojo.ApLovValues;
 @Getter
 @Setter
 @Slf4j
-public class ApDiagnosticOrdersEntity implements Serializable {
+public class ApDiagnosticOrderTestsSamplesEntity implements Serializable {
 
 	private String key;
-	private String patientKey;
-	private String visitKey;
-	private String statusLkey;
-	private ApLovValues statusLvalue;
+	private String orderKey;
+	private String testKey;
+	private String notes;
+	private String unitLkey;
+	private ApLovValues unitLvalue;
+	private BigDecimal quantity;
 	private String createdBy;
 	private String updatedBy;
 	private String deletedBy;
+	private BigDecimal sampleCollectedAt;
 	private BigDecimal createdAt;
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
-	private String orderId;
-	private Boolean saveDraft = false;
-	private String submittedBy;
-	private BigDecimal submittedAt;
-	private Boolean isUrgent = false;
-	private String labStatusLkey;
-	private ApLovValues labStatusLvalue;
-	private String radStatusLkey;
-	private ApLovValues radStatusLvalue;
-	private ApDiagnosticOrdersEntity translatedObject;
+	private ApDiagnosticOrderTestsSamplesEntity translatedObject;
 
 }

@@ -10,6 +10,7 @@ import com.asklepios.backend_service.model.generated.entity.ApDiagnosticOrdersEn
 @Setter
 @Slf4j
 public class ApDiagnosticOrders extends ApDiagnosticOrdersEntity implements Serializable {
-
+ private  ApPatient patient;
+ private  ApEncounter encounter;
 
 }

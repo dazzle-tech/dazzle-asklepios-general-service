@@ -995,7 +995,7 @@ public class SetupController implements Serializable {
             }
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
-            
+
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApUserMedicalLicense> list = apUserMedicalLicenseService.getList("deleted_at is null and " + where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_user_medical_license where " + whereForTotal);

@@ -40,6 +40,11 @@ public class ApDiagnosticOrderTestsEntity implements Serializable {
 	private BigDecimal submitDate;
 	private String orderTypeLkey;
 	private ApLovValues orderTypeLvalue;
+	private BigDecimal acceptedAt;
+	private String acceptedBy;
+	private BigDecimal rejectedAt;
+	private String rejectedBy;
+	private String rejectedReason;
 	private ApDiagnosticOrderTestsEntity translatedObject;
 
 }

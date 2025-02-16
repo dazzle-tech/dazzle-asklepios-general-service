@@ -19,28 +19,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.asklepios.backend_service.controller.PublicServices;
 import java.lang.reflect.Field;
-import com.asklepios.backend_service.model.generated.pojo.ApDiagnosticOrders;
-import com.asklepios.backend_service.model.generated.entity.ApDiagnosticOrdersEntity;
+import com.asklepios.backend_service.model.generated.pojo.ApDiagnosticOrderTestsNotes;
+import com.asklepios.backend_service.model.generated.entity.ApDiagnosticOrderTestsNotesEntity;
 import com.asklepios.backend_service.database.DS;
 
 @Getter
 @Setter
 @Slf4j
 @Service
-public class ApDiagnosticOrdersDAO implements Serializable {
+public class ApDiagnosticOrderTestsNotesDAO implements Serializable {
 
 @Autowired private PublicServices publicServices;
-public ApDiagnosticOrders getRecord(String key) throws SQLException {
+public ApDiagnosticOrderTestsNotes getRecord(String key) throws SQLException {
 try (
 Connection con = DS.getConnection();
 Statement st = con.createStatement();
-ResultSet rs = st.executeQuery("select * from ap_diagnostic_orders where key = '"+key+"'");) {
-ApDiagnosticOrders record = new ApDiagnosticOrders();
+ResultSet rs = st.executeQuery("select * from ap_diagnostic_order_tests_notes where key = '"+key+"'");) {
+ApDiagnosticOrderTestsNotes record = new ApDiagnosticOrderTestsNotes();
 if(rs.next()){
 record.setKey(rs.getString("key"));
-record.setPatientKey(rs.getString("patient_key"));
-record.setVisitKey(rs.getString("visit_key"));
-record.setStatusLkey(rs.getString("status_lkey"));
+record.setOrderKey(rs.getString("order_key"));
+record.setTestKey(rs.getString("test_key"));
+record.setNotes(rs.getString("notes"));
 record.setCreatedBy(rs.getString("created_by"));
 record.setUpdatedBy(rs.getString("updated_by"));
 record.setDeletedBy(rs.getString("deleted_by"));
@@ -48,27 +48,20 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
-record.setOrderId(rs.getString("order_id"));
-record.setSaveDraft(rs.getBoolean("save_draft"));
-record.setSubmittedBy(rs.getString("submitted_by"));
-record.setSubmittedAt(rs.getBigDecimal("submitted_at"));
-record.setIsUrgent(rs.getBoolean("is_urgent"));
-record.setLabStatusLkey(rs.getString("lab_status_lkey"));
-record.setRadStatusLkey(rs.getString("rad_status_lkey"));
 } else { record = null; }
 return record;
 }
 }
-public void updateRecord(ApDiagnosticOrders record) throws SQLException {
+public void updateRecord(ApDiagnosticOrderTestsNotes record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_diagnostic_orders set key = ?, patient_key = ?, visit_key = ?, status_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, order_id = ?, save_draft = ?, submitted_by = ?, submitted_at = ?, is_urgent = ?, lab_status_lkey = ?, rad_status_lkey = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_diagnostic_order_tests_notes set key = ?, order_key = ?, test_key = ?, notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
-ps.setString(2, record.getPatientKey());
-ps.setString(3, record.getVisitKey());
-ps.setString(4, record.getStatusLkey());
+ps.setString(2, record.getOrderKey());
+ps.setString(3, record.getTestKey());
+ps.setString(4, record.getNotes());
 ps.setString(5, record.getCreatedBy());
 ps.setString(6, record.getUpdatedBy());
 ps.setString(7, record.getDeletedBy());
@@ -76,39 +69,32 @@ ps.setBigDecimal(8, record.getCreatedAt());
 ps.setBigDecimal(9, record.getUpdatedAt());
 ps.setBigDecimal(10, record.getDeletedAt());
 ps.setBoolean(11, record.getIsValid());
-ps.setString(12, record.getOrderId());
-ps.setBoolean(13, record.getSaveDraft());
-ps.setString(14, record.getSubmittedBy());
-ps.setBigDecimal(15, record.getSubmittedAt());
-ps.setBoolean(16, record.getIsUrgent());
-ps.setString(17, record.getLabStatusLkey());
-ps.setString(18, record.getRadStatusLkey());
-ps.setString(19, record.getKey());
+ps.setString(12, record.getKey());
 ps.executeUpdate();
 }
 }
-public void deleteRecord(ApDiagnosticOrders record) throws SQLException {
+public void deleteRecord(ApDiagnosticOrderTestsNotes record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_diagnostic_orders set  deleted_at = '"+System.currentTimeMillis()+"' where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_diagnostic_order_tests_notes set  deleted_at = '"+System.currentTimeMillis()+"' where key = ?");
 ) {
 ps.setString(1, record.getKey());
 ps.executeUpdate();
 }
 }
-public List<ApDiagnosticOrders> getList(String where) throws SQLException {
+public List<ApDiagnosticOrderTestsNotes> getList(String where) throws SQLException {
 if (where == null || where.isEmpty()) where = "1=1";
 try (
 Connection con = DS.getConnection();
 Statement st = con.createStatement();
-ResultSet rs = st.executeQuery("select * from ap_diagnostic_orders where "+ where);) {
-List<ApDiagnosticOrders> list = new ArrayList<ApDiagnosticOrders>();
+ResultSet rs = st.executeQuery("select * from ap_diagnostic_order_tests_notes where "+ where);) {
+List<ApDiagnosticOrderTestsNotes> list = new ArrayList<ApDiagnosticOrderTestsNotes>();
 while(rs.next()){
-ApDiagnosticOrders record = new ApDiagnosticOrders();
+ApDiagnosticOrderTestsNotes record = new ApDiagnosticOrderTestsNotes();
 record.setKey(rs.getString("key"));
-record.setPatientKey(rs.getString("patient_key"));
-record.setVisitKey(rs.getString("visit_key"));
-record.setStatusLkey(rs.getString("status_lkey"));
+record.setOrderKey(rs.getString("order_key"));
+record.setTestKey(rs.getString("test_key"));
+record.setNotes(rs.getString("notes"));
 record.setCreatedBy(rs.getString("created_by"));
 record.setUpdatedBy(rs.getString("updated_by"));
 record.setDeletedBy(rs.getString("deleted_by"));
@@ -116,22 +102,15 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
-record.setOrderId(rs.getString("order_id"));
-record.setSaveDraft(rs.getBoolean("save_draft"));
-record.setSubmittedBy(rs.getString("submitted_by"));
-record.setSubmittedAt(rs.getBigDecimal("submitted_at"));
-record.setIsUrgent(rs.getBoolean("is_urgent"));
-record.setLabStatusLkey(rs.getString("lab_status_lkey"));
-record.setRadStatusLkey(rs.getString("rad_status_lkey"));
 list.add(record);
 }
 return list;
 }
 }
-public String saveRecord(ApDiagnosticOrders record) throws SQLException {
+public String saveRecord(ApDiagnosticOrderTestsNotes record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_orders values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_order_tests_notes values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -139,9 +118,9 @@ String key = "" + System.nanoTime();
 record.setKey(key);
 
 ps.setString(1, key);
-ps.setString(2, record.getPatientKey());
-ps.setString(3, record.getVisitKey());
-ps.setString(4, record.getStatusLkey());
+ps.setString(2, record.getOrderKey());
+ps.setString(3, record.getTestKey());
+ps.setString(4, record.getNotes());
 ps.setString(5, record.getCreatedBy());
 ps.setString(6, record.getUpdatedBy());
 ps.setString(7, record.getDeletedBy());
@@ -149,19 +128,12 @@ ps.setBigDecimal(8, record.getCreatedAt());
 ps.setBigDecimal(9, record.getUpdatedAt());
 ps.setBigDecimal(10, record.getDeletedAt());
 ps.setBoolean(11, record.getIsValid());
-ps.setString(12, record.getOrderId());
-ps.setBoolean(13, record.getSaveDraft());
-ps.setString(14, record.getSubmittedBy());
-ps.setBigDecimal(15, record.getSubmittedAt());
-ps.setBoolean(16, record.getIsUrgent());
-ps.setString(17, record.getLabStatusLkey());
-ps.setString(18, record.getRadStatusLkey());
 ps.executeUpdate();
 return key;
 }
 }
-public void populateLovFields(ApDiagnosticOrdersEntity entity, String lang) {
-        Class<?> myClass = ApDiagnosticOrdersEntity.class;
+public void populateLovFields(ApDiagnosticOrderTestsNotesEntity entity, String lang) {
+        Class<?> myClass = ApDiagnosticOrderTestsNotesEntity.class;
         Field[] fields = myClass.getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
@@ -184,8 +156,8 @@ public void populateLovFields(ApDiagnosticOrdersEntity entity, String lang) {
             }
         }
     }
-public void translateObject(ApDiagnosticOrdersEntity entity, String lang) {
-        ApDiagnosticOrdersEntity translated = (ApDiagnosticOrdersEntity) publicServices.getObjectTranslation(entity.getKey(), entity, lang);
+public void translateObject(ApDiagnosticOrderTestsNotesEntity entity, String lang) {
+        ApDiagnosticOrderTestsNotesEntity translated = (ApDiagnosticOrderTestsNotesEntity) publicServices.getObjectTranslation(entity.getKey(), entity, lang);
         entity.setTranslatedObject(translated);
     }
 

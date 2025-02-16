@@ -457,6 +457,11 @@ public class SetupController implements Serializable {
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApUser> users = apUserService.getList("deleted_at is null and " + where);
+
+            for (ApUser all : users) {
+                apUserService.populateLovFields(all, lang);
+             }
+
             System.out.println("deleted_at is null and " + where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_user where " + whereForTotal);
             for (ApUser user : users) {
@@ -548,18 +553,13 @@ public class SetupController implements Serializable {
             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
             @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
-            // تهيئة الرد
             ParentResponse<ApUser> response = new ParentResponse<>();
 
-            // تعيين الاسم الكامل
             user.setFullName(user.getFirstName() + " " + user.getLastName());
 
-            // حفظ المستخدم أولاً
             apUserService.saveRecord(user);
 
-            // التحقق من وجود ID للمستخدم بعد الحفظ
             if (user.getKey() != null && user.get_facilitiesInput() != null) {
-                // حذف الفسيلتي الحالية المرتبطة بالمستخدم
                 List<ApUserFacilities> existingFacilities = apUserFacilitiesService.getList(
                         "deleted_at is null and user_id ='" + user.getKey() + "'"
                 );
@@ -569,7 +569,6 @@ public class SetupController implements Serializable {
                     System.out.println("Deleted facility: " + facility);
                 }
 
-                // إضافة الفسيلتي الجديدة
                 for (String facility : user.get_facilitiesInput()) {
                     ApUserFacilities apUserFacilities = new ApUserFacilities();
                     apUserFacilities.setUserId(user.getKey());
@@ -579,7 +578,6 @@ public class SetupController implements Serializable {
                 }
             }
 
-            // إعداد الرد
             response.setObject(user);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -654,6 +652,30 @@ public class SetupController implements Serializable {
             e.printStackTrace();
             log.error(e.getMessage());
             return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/deactivate-activate-user", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deactivateUser(@RequestBody ApUser user,
+                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                            @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApUser> response = new ParentResponse<>();
+
+            if (user == null) {
+                return ResponseEntity.status(404).body("User not found");
+            }
+
+            apUserService.saveRecord(user);
+
+            response.setObject(user);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 
@@ -973,6 +995,7 @@ public class SetupController implements Serializable {
             }
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
+
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApUserMedicalLicense> list = apUserMedicalLicenseService.getList("deleted_at is null and " + where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_user_medical_license where " + whereForTotal);

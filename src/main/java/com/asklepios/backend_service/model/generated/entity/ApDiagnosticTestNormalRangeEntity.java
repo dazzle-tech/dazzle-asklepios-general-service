@@ -34,10 +34,6 @@ public class ApDiagnosticTestNormalRangeEntity implements Serializable {
 	private ApLovValues normalRangeTypeLvalue;
 	private BigDecimal rangeFrom;
 	private BigDecimal rangeTo;
-	private String scaleLkey;
-	private ApLovValues scaleLvalue;
-	private String reagentsLkey;
-	private ApLovValues reagentsLvalue;
 	private Boolean criticalValue = false;
 	private BigDecimal criticalValueLessThan;
 	private BigDecimal criticalValueMoreThan;

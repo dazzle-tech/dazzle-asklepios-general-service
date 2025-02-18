@@ -51,8 +51,6 @@ record.setResultLovKey(rs.getString("result_lov_key"));
 record.setNormalRangeTypeLkey(rs.getString("normal_range_type_lkey"));
 record.setRangeFrom(rs.getBigDecimal("range_from"));
 record.setRangeTo(rs.getBigDecimal("range_to"));
-record.setScaleLkey(rs.getString("scale_lkey"));
-record.setReagentsLkey(rs.getString("reagents_lkey"));
 record.setCriticalValue(rs.getBoolean("critical_value"));
 record.setCriticalValueLessThan(rs.getBigDecimal("critical_value_less_than"));
 record.setCriticalValueMoreThan(rs.getBigDecimal("critical_value_more_than"));
@@ -70,7 +68,7 @@ return record;
 public void updateRecord(ApDiagnosticTestNormalRange record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_diagnostic_test_normal_range set key = ?, test_key = ?, gender_lkey = ?, age_from = ?, age_from_unit_lkey = ?, age_to = ?, age_to_unit_lkey = ?, condition_lkey = ?, result_type_lkey = ?, result_text = ?, result_lov_key = ?, normal_range_type_lkey = ?, range_from = ?, range_to = ?, scale_lkey = ?, reagents_lkey = ?, critical_value = ?, critical_value_less_than = ?, critical_value_more_than = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_diagnostic_test_normal_range set key = ?, test_key = ?, gender_lkey = ?, age_from = ?, age_from_unit_lkey = ?, age_to = ?, age_to_unit_lkey = ?, condition_lkey = ?, result_type_lkey = ?, result_text = ?, result_lov_key = ?, normal_range_type_lkey = ?, range_from = ?, range_to = ?, critical_value = ?, critical_value_less_than = ?, critical_value_more_than = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -87,19 +85,17 @@ ps.setString(11, record.getResultLovKey());
 ps.setString(12, record.getNormalRangeTypeLkey());
 ps.setBigDecimal(13, record.getRangeFrom());
 ps.setBigDecimal(14, record.getRangeTo());
-ps.setString(15, record.getScaleLkey());
-ps.setString(16, record.getReagentsLkey());
-ps.setBoolean(17, record.getCriticalValue());
-ps.setBigDecimal(18, record.getCriticalValueLessThan());
-ps.setBigDecimal(19, record.getCriticalValueMoreThan());
-ps.setString(20, record.getCreatedBy());
-ps.setString(21, record.getUpdatedBy());
-ps.setString(22, record.getDeletedBy());
-ps.setBigDecimal(23, record.getCreatedAt());
-ps.setBigDecimal(24, record.getUpdatedAt());
-ps.setBigDecimal(25, record.getDeletedAt());
-ps.setBoolean(26, record.getIsValid());
-ps.setString(27, record.getKey());
+ps.setBoolean(15, record.getCriticalValue());
+ps.setBigDecimal(16, record.getCriticalValueLessThan());
+ps.setBigDecimal(17, record.getCriticalValueMoreThan());
+ps.setString(18, record.getCreatedBy());
+ps.setString(19, record.getUpdatedBy());
+ps.setString(20, record.getDeletedBy());
+ps.setBigDecimal(21, record.getCreatedAt());
+ps.setBigDecimal(22, record.getUpdatedAt());
+ps.setBigDecimal(23, record.getDeletedAt());
+ps.setBoolean(24, record.getIsValid());
+ps.setString(25, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -135,8 +131,6 @@ record.setResultLovKey(rs.getString("result_lov_key"));
 record.setNormalRangeTypeLkey(rs.getString("normal_range_type_lkey"));
 record.setRangeFrom(rs.getBigDecimal("range_from"));
 record.setRangeTo(rs.getBigDecimal("range_to"));
-record.setScaleLkey(rs.getString("scale_lkey"));
-record.setReagentsLkey(rs.getString("reagents_lkey"));
 record.setCriticalValue(rs.getBoolean("critical_value"));
 record.setCriticalValueLessThan(rs.getBigDecimal("critical_value_less_than"));
 record.setCriticalValueMoreThan(rs.getBigDecimal("critical_value_more_than"));
@@ -155,7 +149,7 @@ return list;
 public String saveRecord(ApDiagnosticTestNormalRange record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_test_normal_range values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_test_normal_range values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -176,18 +170,16 @@ ps.setString(11, record.getResultLovKey());
 ps.setString(12, record.getNormalRangeTypeLkey());
 ps.setBigDecimal(13, record.getRangeFrom());
 ps.setBigDecimal(14, record.getRangeTo());
-ps.setString(15, record.getScaleLkey());
-ps.setString(16, record.getReagentsLkey());
-ps.setBoolean(17, record.getCriticalValue());
-ps.setBigDecimal(18, record.getCriticalValueLessThan());
-ps.setBigDecimal(19, record.getCriticalValueMoreThan());
-ps.setString(20, record.getCreatedBy());
-ps.setString(21, record.getUpdatedBy());
-ps.setString(22, record.getDeletedBy());
-ps.setBigDecimal(23, record.getCreatedAt());
-ps.setBigDecimal(24, record.getUpdatedAt());
-ps.setBigDecimal(25, record.getDeletedAt());
-ps.setBoolean(26, record.getIsValid());
+ps.setBoolean(15, record.getCriticalValue());
+ps.setBigDecimal(16, record.getCriticalValueLessThan());
+ps.setBigDecimal(17, record.getCriticalValueMoreThan());
+ps.setString(18, record.getCreatedBy());
+ps.setString(19, record.getUpdatedBy());
+ps.setString(20, record.getDeletedBy());
+ps.setBigDecimal(21, record.getCreatedAt());
+ps.setBigDecimal(22, record.getUpdatedAt());
+ps.setBigDecimal(23, record.getDeletedAt());
+ps.setBoolean(24, record.getIsValid());
 ps.executeUpdate();
 return key;
 }

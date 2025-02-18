@@ -57,7 +57,8 @@ public class EncounterController {
     private final  ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService;
     private final ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService;
     private  final  ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService;
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService) {
+    private final  ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService;
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -87,6 +88,7 @@ public class EncounterController {
         this.apDiagnosticOrderTestsSamplesService = apDiagnosticOrderTestsSamplesService;
         this.apDiagnosticOrderTestsResultService = apDiagnosticOrderTestsResultService;
         this.apDiagnosticOrderTestsResultNotesService = apDiagnosticOrderTestsResultNotesService;
+        this.apDiagnosticTestNormalRangeService = apDiagnosticTestNormalRangeService;
     }
 
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1561,6 +1563,33 @@ public class EncounterController {
 
             }
             response.setObject(list);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/get-result-normal-range", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getResultNormalRange(@RequestParam String patientKey,
+                                                  @RequestParam String testKey,
+                                                        @Nullable @RequestHeader String facility_id,
+                                                        @Nullable @RequestHeader String access_token,
+                                                        @Nullable @RequestHeader Integer access_level,
+                                                        @Nullable @RequestHeader String lang) {
+        try {
+            System.out.println("patient Key: " + patientKey +"test Key: " + testKey);
+            ParentResponse<ApDiagnosticTestNormalRange> response = new ParentResponse<>();
+
+            ApDiagnosticTestNormalRange normalRange=apDiagnosticOrderTestsResultService.getNormalRange(patientKey,testKey);
+
+
+
+                apDiagnosticTestNormalRangeService.populateLovFields(normalRange, lang);
+
+            response.setObject(normalRange);
 
             return ResponseEntity.ok(response);
 

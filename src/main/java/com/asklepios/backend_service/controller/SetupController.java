@@ -449,7 +449,8 @@ public class SetupController implements Serializable {
                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                       @jakarta.annotation.Nullable @RequestHeader String access_token,
                                       @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                      @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                      @jakarta.annotation.Nullable @RequestHeader String lang
+    ) {
         try {
             ParentResponse<List<ApUser>> response = new ParentResponse<>();
 

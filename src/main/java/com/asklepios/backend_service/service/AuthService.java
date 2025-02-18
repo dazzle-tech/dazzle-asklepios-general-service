@@ -44,9 +44,14 @@ public class AuthService {
             statement.setString(2, request.getPassword());
             statement.setString(3, request.getOrgKey());
 
+
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 ApUser user = userService.getRecord(resultSet.getString(1));
+
+                    userService.populateLovFields(user, null);
+
+                System.out.println(user.getJobRoleLvalue());
                 LoginResponse _response = new LoginResponse();
                 _response.setUser(user);
                 _response.setToken(issueToken(user.getKey(), false));
@@ -74,6 +79,8 @@ public class AuthService {
                 return ResponseEntity.status(401).body(response);
             }
             ApUser user = userService.getRecord(token.getUserKey());
+            userService.populateLovFields(user, null);
+
             if (user == null) {
                 response.addGeneralError("Token doesn't belong to user");
                 return ResponseEntity.status(401).body(response);

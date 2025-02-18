@@ -25,7 +25,7 @@ public class AuthController implements Serializable {
 
     @SneakyThrows
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity login(@RequestBody LoginRequest request) {
+    public ResponseEntity login(@RequestBody LoginRequest request ) {
         return authService.login(request);
     }
 

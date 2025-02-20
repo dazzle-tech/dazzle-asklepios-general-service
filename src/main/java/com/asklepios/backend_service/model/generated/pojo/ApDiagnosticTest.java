@@ -11,5 +11,6 @@ import com.asklepios.backend_service.model.generated.entity.ApDiagnosticTestEnti
 @Slf4j
 public class ApDiagnosticTest extends ApDiagnosticTestEntity implements Serializable {
 
+    private boolean profile;
 
 }

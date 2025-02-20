@@ -44,6 +44,8 @@ public class ApDiagnosticTestNormalRangeEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private String profileTestKey;
+	private Boolean isProfile = false;
 	private ApDiagnosticTestNormalRangeEntity translatedObject;
 
 }

@@ -44,6 +44,9 @@ public class ApDiagnosticOrderTestsResultEntity implements Serializable {
 	private BigDecimal rejectedAt;
 	private String rejectedBy;
 	private String rejectedReason;
+	private BigDecimal reviewAt;
+	private String reviewBy;
+	private String resultText;
 	private ApDiagnosticOrderTestsResultEntity translatedObject;
 
 }

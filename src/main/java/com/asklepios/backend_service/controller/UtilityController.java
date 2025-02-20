@@ -3,6 +3,7 @@ package com.asklepios.backend_service.controller;
 import com.asklepios.backend_service.database.DS;
 import com.asklepios.backend_service.model.generated.pojo.*;
 import com.asklepios.backend_service.model.pojo.request.ListRequest;
+import com.asklepios.backend_service.model.pojo.request.ListRequestAllValues;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
 import com.asklepios.backend_service.model.pojo.response.UITranslationResponse;
 import com.asklepios.backend_service.service.*;
@@ -246,13 +247,42 @@ public class UtilityController implements Serializable {
                 where += " and PARENT_VALUE_ID = '" + parentValueKey + "'";
             }
 
-            System.out.println("++++++++++++++++++++++>>"+where);
             List<ApLovValues> list = apLovValuesService.getList(where);
 
 
             ApLovValues result = list.isEmpty() ? null : list.get(0);
 
             response.setObject(result);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/get-lov-all-values", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getDiagnosticOrderTestResultList(@RequestParam Map<String, String> queryParams,
+                                                              @Nullable @RequestHeader String facility_id,
+                                                              @Nullable @RequestHeader String access_token,
+                                                              @Nullable @RequestHeader Integer access_level,
+                                                              @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApLovValues>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequestAllValues listRequest = new ListRequestAllValues(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            List<ApLovValues> results = apLovValuesService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_lov_values where " + whereForTotal);
+
+            response.setObject(results);
+            response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {

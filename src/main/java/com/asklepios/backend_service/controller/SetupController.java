@@ -76,8 +76,9 @@ public class SetupController implements Serializable {
     private final  ApLoincService apLoincService;
     private final ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService;
     private final ApDiagnosticTestNormalRangeLovService apDiagnosticTestNormalRangeLovService;
+    private final ApDiagnosticTestProfileService apDiagnosticTestProfileService;
 
-    public SetupController(EmailService emailService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1, EmailService emailService1, ApAgeGroupService apAgeGroupService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestPathologyService apDiagnosticTestPathologyService, ApVaccineService apVaccineService, ApVaccineBrandsService apVaccineBrandsService, ApVaccineDoseService apVaccineDoseService, ApVaccineDosesIntervalService apVaccineDosesIntervalService, ApProcedureSetupService apProcedureSetupService, ApProcedureCodingService apProcedureCodingService, ApProcedurePriceListService apProcedurePriceListService, ApDuplicationCandidateSetupService apDuplicationCandidateSetupService, ApCptService apCptService, ApLoincService apLoincService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestNormalRangeLovService apDiagnosticTestNormalRangeLovService) {
+    public SetupController(EmailService emailService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1, EmailService emailService1, ApAgeGroupService apAgeGroupService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestPathologyService apDiagnosticTestPathologyService, ApVaccineService apVaccineService, ApVaccineBrandsService apVaccineBrandsService, ApVaccineDoseService apVaccineDoseService, ApVaccineDosesIntervalService apVaccineDosesIntervalService, ApProcedureSetupService apProcedureSetupService, ApProcedureCodingService apProcedureCodingService, ApProcedurePriceListService apProcedurePriceListService, ApDuplicationCandidateSetupService apDuplicationCandidateSetupService, ApCptService apCptService, ApLoincService apLoincService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestNormalRangeLovService apDiagnosticTestNormalRangeLovService, ApDiagnosticTestProfileService apDiagnosticTestProfileService) {
         this.authService = authService;
         this.apModuleService = apModuleService;
         this.apScreenService = apScreenService;
@@ -124,6 +125,7 @@ public class SetupController implements Serializable {
         this.apLoincService = apLoincService;
         this.apDiagnosticTestNormalRangeService = apDiagnosticTestNormalRangeService;
         this.apDiagnosticTestNormalRangeLovService = apDiagnosticTestNormalRangeLovService;
+        this.apDiagnosticTestProfileService = apDiagnosticTestProfileService;
     }
 
     @GetMapping(value = "/navigation-map", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1830,6 +1832,23 @@ public class SetupController implements Serializable {
         }
     }
 
+    @PostMapping(value = "/remove-diagnostic-test-normal-range", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeDiagnosticTestNormalRange(@RequestBody ApDiagnosticTestNormalRange diagnosticTestNormalRange,
+                                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                         @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                         @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApDiagnosticTestNormalRange> response = new ParentResponse<>();
+            apDiagnosticTestNormalRangeService.deleteRecord(diagnosticTestNormalRange);
+            response.setObject(diagnosticTestNormalRange);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 
     @PostMapping(value = "/save-diagnostic-test-normal-range", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticTestNormalRange(@RequestBody ApDiagnosticTestNormalRange diagnosticTestNormalRange,
@@ -1887,6 +1906,73 @@ public class SetupController implements Serializable {
         }
     }
 
+    @PostMapping(value = "/remove-diagnostic-test-profile", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeDiagnosticTestProfile(@RequestBody ApDiagnosticTestProfile diagnosticTestProfile,
+                                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                            @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApDiagnosticTestProfile> response = new ParentResponse<>();
+            apDiagnosticTestProfileService.deleteRecord(diagnosticTestProfile);
+            response.setObject(diagnosticTestProfile);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-diagnostic-test-profile", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveDiagnosticTestProfile(@RequestBody ApDiagnosticTestProfile diagnosticTestProfile,
+                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApDiagnosticTestProfile> response = new ParentResponse<>();
+            apDiagnosticTestProfileService.saveRecord(diagnosticTestProfile);
+            response.setObject(diagnosticTestProfile);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(value = "/diagnostic-test-profile-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> diagnosticTestProfileList(@RequestParam Map<String, String> queryParams,
+                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApDiagnosticTestProfile>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApDiagnosticTestProfile> list = apDiagnosticTestProfileService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_diagnostic_test_profile where " + whereForTotal);
+            for (ApDiagnosticTestProfile all : list) {
+                apDiagnosticTestProfileService.populateLovFields(all, lang);
+            }
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
     @PostMapping(value = "/save-diagnostic-test", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticTest(@RequestBody ApDiagnosticTest diagnosticTest,
                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -1925,6 +2011,14 @@ public class SetupController implements Serializable {
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_diagnostic_test where " + whereForTotal);
             for (ApDiagnosticTest all : list) {
                 apDiagnosticTestService.populateLovFields(all, lang);
+                if(all.getTestTypeLkey().equals("862810597620632")){ //TODO Lab key
+                    List<ApDiagnosticTestLaboratory> listLab = apDiagnosticTestLaboratoryService.getList("test_key = '"+all.getKey()+"'");
+                    if(listLab != null && listLab.size() > 0){
+                        all.setProfile(listLab.get(0).getIsProfile());
+                    }
+                }else{
+                  all.setProfile(false);
+                }
             }
             response.setObject(list);
             response.setExtraNumeric(totalRecord);

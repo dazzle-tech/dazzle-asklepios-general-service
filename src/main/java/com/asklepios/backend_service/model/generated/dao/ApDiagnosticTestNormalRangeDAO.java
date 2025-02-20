@@ -61,6 +61,8 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setProfileTestKey(rs.getString("profile_test_key"));
+record.setIsProfile(rs.getBoolean("is_profile"));
 } else { record = null; }
 return record;
 }
@@ -68,7 +70,7 @@ return record;
 public void updateRecord(ApDiagnosticTestNormalRange record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_diagnostic_test_normal_range set key = ?, test_key = ?, gender_lkey = ?, age_from = ?, age_from_unit_lkey = ?, age_to = ?, age_to_unit_lkey = ?, condition_lkey = ?, result_type_lkey = ?, result_text = ?, result_lov_key = ?, normal_range_type_lkey = ?, range_from = ?, range_to = ?, critical_value = ?, critical_value_less_than = ?, critical_value_more_than = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_diagnostic_test_normal_range set key = ?, test_key = ?, gender_lkey = ?, age_from = ?, age_from_unit_lkey = ?, age_to = ?, age_to_unit_lkey = ?, condition_lkey = ?, result_type_lkey = ?, result_text = ?, result_lov_key = ?, normal_range_type_lkey = ?, range_from = ?, range_to = ?, critical_value = ?, critical_value_less_than = ?, critical_value_more_than = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, profile_test_key = ?, is_profile = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -95,7 +97,9 @@ ps.setBigDecimal(21, record.getCreatedAt());
 ps.setBigDecimal(22, record.getUpdatedAt());
 ps.setBigDecimal(23, record.getDeletedAt());
 ps.setBoolean(24, record.getIsValid());
-ps.setString(25, record.getKey());
+ps.setString(25, record.getProfileTestKey());
+ps.setBoolean(26, record.getIsProfile());
+ps.setString(27, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -141,6 +145,8 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setProfileTestKey(rs.getString("profile_test_key"));
+record.setIsProfile(rs.getBoolean("is_profile"));
 list.add(record);
 }
 return list;
@@ -149,7 +155,7 @@ return list;
 public String saveRecord(ApDiagnosticTestNormalRange record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_test_normal_range values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_test_normal_range values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -180,6 +186,8 @@ ps.setBigDecimal(21, record.getCreatedAt());
 ps.setBigDecimal(22, record.getUpdatedAt());
 ps.setBigDecimal(23, record.getDeletedAt());
 ps.setBoolean(24, record.getIsValid());
+ps.setString(25, record.getProfileTestKey());
+ps.setBoolean(26, record.getIsProfile());
 ps.executeUpdate();
 return key;
 }

@@ -24,6 +24,16 @@
     {
       "name": "department_code ",
       "type": "text"
+    },
+    {
+      "name": "phone_number",
+      "type": "text"
+    },{
+      "name": "email",
+      "type": "text"
+    },{
+      "name": "encounterTypeLkey",
+      "type": "text"
     }
   ]
 }

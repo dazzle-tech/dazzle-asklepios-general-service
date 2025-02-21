@@ -62,6 +62,8 @@ record.setAcceptedBy(rs.getString("accepted_by"));
 record.setRejectedAt(rs.getBigDecimal("rejected_at"));
 record.setRejectedBy(rs.getString("rejected_by"));
 record.setRejectedReason(rs.getString("rejected_reason"));
+record.setPatientArrivedAt(rs.getBigDecimal("patient_arrived_at"));
+record.setPatientArrivedNoteRad(rs.getString("patient_arrived_note_rad"));
 } else { record = null; }
 return record;
 }
@@ -69,7 +71,7 @@ return record;
 public void updateRecord(ApDiagnosticOrderTests record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_diagnostic_order_tests set key = ?, patient_key = ?, visit_key = ?, status_lkey = ?, order_key = ?, test_key = ?, received_lab_lkey = ?, reason_lkey = ?, priority_lkey = ?, notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, processing_status_lkey = ?, submit_date = ?, order_type_lkey = ?, accepted_at = ?, accepted_by = ?, rejected_at = ?, rejected_by = ?, rejected_reason = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_diagnostic_order_tests set key = ?, patient_key = ?, visit_key = ?, status_lkey = ?, order_key = ?, test_key = ?, received_lab_lkey = ?, reason_lkey = ?, priority_lkey = ?, notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, processing_status_lkey = ?, submit_date = ?, order_type_lkey = ?, accepted_at = ?, accepted_by = ?, rejected_at = ?, rejected_by = ?, rejected_reason = ?, patient_arrived_at = ?, patient_arrived_note_rad = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -97,7 +99,9 @@ ps.setString(22, record.getAcceptedBy());
 ps.setBigDecimal(23, record.getRejectedAt());
 ps.setString(24, record.getRejectedBy());
 ps.setString(25, record.getRejectedReason());
-ps.setString(26, record.getKey());
+ps.setBigDecimal(26, record.getPatientArrivedAt());
+ps.setString(27, record.getPatientArrivedNoteRad());
+ps.setString(28, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -144,6 +148,8 @@ record.setAcceptedBy(rs.getString("accepted_by"));
 record.setRejectedAt(rs.getBigDecimal("rejected_at"));
 record.setRejectedBy(rs.getString("rejected_by"));
 record.setRejectedReason(rs.getString("rejected_reason"));
+record.setPatientArrivedAt(rs.getBigDecimal("patient_arrived_at"));
+record.setPatientArrivedNoteRad(rs.getString("patient_arrived_note_rad"));
 list.add(record);
 }
 return list;
@@ -152,7 +158,7 @@ return list;
 public String saveRecord(ApDiagnosticOrderTests record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_order_tests values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_order_tests values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -184,6 +190,8 @@ ps.setString(22, record.getAcceptedBy());
 ps.setBigDecimal(23, record.getRejectedAt());
 ps.setString(24, record.getRejectedBy());
 ps.setString(25, record.getRejectedReason());
+ps.setBigDecimal(26, record.getPatientArrivedAt());
+ps.setString(27, record.getPatientArrivedNoteRad());
 ps.executeUpdate();
 return key;
 }

@@ -51,6 +51,9 @@ record.setDepartmentTypeLkey(rs.getString("department_type_lkey"));
 record.setAppointable(rs.getBoolean("appointable"));
 record.setHasTriage(rs.getBoolean("has_triage"));
 record.setDepartmentCode(rs.getString("department_code"));
+record.setPhoneNumber(rs.getString("phone_number"));
+record.setEmail(rs.getString("email"));
+record.setEncountertypelkey(rs.getString("encountertypelkey"));
 } else { record = null; }
 return record;
 }
@@ -58,7 +61,7 @@ return record;
 public void updateRecord(ApDepartment record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_department set key = ?, facility_key = ?, name = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, department_type_lkey = ?, appointable = ?, has_triage = ?, department_code = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_department set key = ?, facility_key = ?, name = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, department_type_lkey = ?, appointable = ?, has_triage = ?, department_code = ?, phone_number = ?, email = ?, encountertypelkey = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -75,7 +78,10 @@ ps.setString(11, record.getDepartmentTypeLkey());
 ps.setBoolean(12, record.getAppointable());
 ps.setBoolean(13, record.getHasTriage());
 ps.setString(14, record.getDepartmentCode());
-ps.setString(15, record.getKey());
+ps.setString(15, record.getPhoneNumber());
+ps.setString(16, record.getEmail());
+ps.setString(17, record.getEncountertypelkey());
+ps.setString(18, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -111,6 +117,9 @@ record.setDepartmentTypeLkey(rs.getString("department_type_lkey"));
 record.setAppointable(rs.getBoolean("appointable"));
 record.setHasTriage(rs.getBoolean("has_triage"));
 record.setDepartmentCode(rs.getString("department_code"));
+record.setPhoneNumber(rs.getString("phone_number"));
+record.setEmail(rs.getString("email"));
+record.setEncountertypelkey(rs.getString("encountertypelkey"));
 list.add(record);
 }
 return list;
@@ -119,7 +128,7 @@ return list;
 public String saveRecord(ApDepartment record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_department values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_department values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -140,6 +149,9 @@ ps.setString(11, record.getDepartmentTypeLkey());
 ps.setBoolean(12, record.getAppointable());
 ps.setBoolean(13, record.getHasTriage());
 ps.setString(14, record.getDepartmentCode());
+ps.setString(15, record.getPhoneNumber());
+ps.setString(16, record.getEmail());
+ps.setString(17, record.getEncountertypelkey());
 ps.executeUpdate();
 return key;
 }

@@ -12,7 +12,7 @@ import com.asklepios.backend_service.model.generated.pojo.ApLovValues;
 @Getter
 @Setter
 @Slf4j
-public class ApDiagnosticOrderTestsEntity implements Serializable {
+public class ApDiagnosticOrderTestsRadReportEntity implements Serializable {
 
 	private String key;
 	private String patientKey;
@@ -20,14 +20,9 @@ public class ApDiagnosticOrderTestsEntity implements Serializable {
 	private String statusLkey;
 	private ApLovValues statusLvalue;
 	private String orderKey;
-	private String testKey;
-	private String receivedLabLkey;
-	private ApLovValues receivedLabLvalue;
-	private String reasonLkey;
-	private ApLovValues reasonLvalue;
-	private String priorityLkey;
-	private ApLovValues priorityLvalue;
-	private String notes;
+	private String medicalTestKey;
+	private String orderTestKey;
+	private String reportValue;
 	private String createdBy;
 	private String updatedBy;
 	private String deletedBy;
@@ -35,18 +30,15 @@ public class ApDiagnosticOrderTestsEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
-	private String processingStatusLkey;
-	private ApLovValues processingStatusLvalue;
-	private BigDecimal submitDate;
 	private String orderTypeLkey;
 	private ApLovValues orderTypeLvalue;
-	private BigDecimal acceptedAt;
-	private String acceptedBy;
+	private BigDecimal approvedAt;
+	private String approvedBy;
 	private BigDecimal rejectedAt;
 	private String rejectedBy;
 	private String rejectedReason;
-	private BigDecimal patientArrivedAt;
-	private String patientArrivedNoteRad;
-	private ApDiagnosticOrderTestsEntity translatedObject;
+	private BigDecimal reviewAt;
+	private String reviewBy;
+	private ApDiagnosticOrderTestsRadReportEntity translatedObject;
 
 }

@@ -12,11 +12,13 @@ import com.asklepios.backend_service.model.generated.pojo.ApLovValues;
 @Getter
 @Setter
 @Slf4j
-public class ApDepartmentEntity implements Serializable {
+public class ApDiagnosticOrderTestsReportNotesEntity implements Serializable {
 
 	private String key;
-	private String facilityKey;
-	private String name;
+	private String orderKey;
+	private String testKey;
+	private String reportKey;
+	private String notes;
 	private String createdBy;
 	private String updatedBy;
 	private String deletedBy;
@@ -24,14 +26,6 @@ public class ApDepartmentEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
-	private String departmentTypeLkey;
-	private ApLovValues departmentTypeLvalue;
-	private Boolean appointable = false;
-	private Boolean hasTriage = false;
-	private String departmentCode;
-	private String phoneNumber;
-	private String email;
-	private String encountertypelkey;
-	private ApDepartmentEntity translatedObject;
+	private ApDiagnosticOrderTestsReportNotesEntity translatedObject;
 
 }

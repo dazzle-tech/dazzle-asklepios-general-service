@@ -39,6 +39,8 @@ public class ApPsychologicalExamEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private String cancellationReason;
+	private String statusLkey;
+	private ApLovValues statusLvalue;
 	private ApPsychologicalExamEntity translatedObject;
 
 }

@@ -10,6 +10,7 @@ import com.asklepios.backend_service.model.generated.entity.ApPsychologicalExamE
 @Setter
 @Slf4j
 public class ApPsychologicalExam extends ApPsychologicalExamEntity implements Serializable {
-
-
+    ApUser createByUser;
+    ApUser updateByUser;
+    ApUser deleteByUser;
 }

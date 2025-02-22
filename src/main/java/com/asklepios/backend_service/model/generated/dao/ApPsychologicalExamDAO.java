@@ -58,6 +58,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setCancellationReason(rs.getString("cancellation_reason"));
+record.setStatusLkey(rs.getString("status_lkey"));
 } else { record = null; }
 return record;
 }
@@ -65,7 +66,7 @@ return record;
 public void updateRecord(ApPsychologicalExam record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_psychological_exam set key = ?, patient_key = ?, encounter_key = ?, test_type_lkey = ?, reason = ?, test_duration = ?, unit_lkey = ?, score_lkey = ?, result_interpretation_lkey = ?, clinical_observations = ?, treatment_plan = ?, additional_notes = ?, require_follow_up = ?, follow_up_date = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, cancellation_reason = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_psychological_exam set key = ?, patient_key = ?, encounter_key = ?, test_type_lkey = ?, reason = ?, test_duration = ?, unit_lkey = ?, score_lkey = ?, result_interpretation_lkey = ?, clinical_observations = ?, treatment_plan = ?, additional_notes = ?, require_follow_up = ?, follow_up_date = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, cancellation_reason = ?, status_lkey = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -89,7 +90,8 @@ ps.setBigDecimal(18, record.getCreatedAt());
 ps.setBigDecimal(19, record.getUpdatedAt());
 ps.setBigDecimal(20, record.getDeletedAt());
 ps.setString(21, record.getCancellationReason());
-ps.setString(22, record.getKey());
+ps.setString(22, record.getStatusLkey());
+ps.setString(23, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -132,6 +134,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setCancellationReason(rs.getString("cancellation_reason"));
+record.setStatusLkey(rs.getString("status_lkey"));
 list.add(record);
 }
 return list;
@@ -140,7 +143,7 @@ return list;
 public String saveRecord(ApPsychologicalExam record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_psychological_exam values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_psychological_exam values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -168,6 +171,7 @@ ps.setBigDecimal(18, record.getCreatedAt());
 ps.setBigDecimal(19, record.getUpdatedAt());
 ps.setBigDecimal(20, record.getDeletedAt());
 ps.setString(21, record.getCancellationReason());
+ps.setString(22, record.getStatusLkey());
 ps.executeUpdate();
 return key;
 }

@@ -60,7 +60,8 @@ public class EncounterController {
     private final  ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService;
     private final ApPsychologicalExamService apPsychologicalExamService;
     private final ApUserService apUserService;
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService) {
+    private final ApAudiometryPuretoneService apAudiometryPuretoneService;
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -93,6 +94,7 @@ public class EncounterController {
         this.apDiagnosticTestNormalRangeService = apDiagnosticTestNormalRangeService;
         this.apPsychologicalExamService = apPsychologicalExamService;
         this.apUserService = apUserService;
+        this.apAudiometryPuretoneService = apAudiometryPuretoneService;
     }
 
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1526,6 +1528,69 @@ public class EncounterController {
             }
 
             response.setObject(psychologicalExams);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/save-audiometry-puretone", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveAudiometryPuretone(@RequestBody ApAudiometryPuretone audiometryPuretone ,
+                                                   @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                   @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                   @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+            ParentResponse<ApAudiometryPuretone> response = new ParentResponse<>();
+            apAudiometryPuretoneService.saveRecord(audiometryPuretone);
+            response.setObject(audiometryPuretone);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/audiometry-puretone-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAudiometryPuretoneList(@RequestParam Map<String, String> queryParams,
+                                                      @Nullable @RequestHeader String facility_id,
+                                                      @Nullable @RequestHeader String access_token,
+                                                      @Nullable @RequestHeader Integer access_level,
+                                                      @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApAudiometryPuretone>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApAudiometryPuretone> audiometryPuretones = apAudiometryPuretoneService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_audiometry_puretone where " + whereForTotal);
+
+            for (ApAudiometryPuretone audiometryPuretone : audiometryPuretones) {
+                if (audiometryPuretone.getCreatedBy() != null) {
+                    audiometryPuretone.setCreateByUser(apUserService.getRecord(audiometryPuretone.getCreatedBy()));
+                }
+                if (audiometryPuretone.getUpdatedBy() != null) {
+                    audiometryPuretone.setUpdateByUser(apUserService.getRecord(audiometryPuretone.getUpdatedBy()));
+                }
+                if (audiometryPuretone.getDeletedBy() != null) {
+                    audiometryPuretone.setDeleteByUser(apUserService.getRecord(audiometryPuretone.getDeletedBy()));
+                }
+                apAudiometryPuretoneService.populateLovFields(audiometryPuretone, lang);
+            }
+
+            response.setObject(audiometryPuretones);
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);
 

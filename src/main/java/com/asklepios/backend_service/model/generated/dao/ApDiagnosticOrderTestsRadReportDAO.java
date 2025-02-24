@@ -69,7 +69,6 @@ public void updateRecord(ApDiagnosticOrderTestsRadReport record) throws SQLExcep
 try (
 Connection con = DS.getConnection();
 PreparedStatement ps = con.prepareStatement("update ap_diagnostic_order_tests_rad_report set key = ?, patient_key = ?, visit_key = ?, status_lkey = ?, order_key = ?, medical_test_key = ?, order_test_key = ?, report_value = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, order_type_lkey = ?, approved_at = ?, approved_by = ?, rejected_at = ?, rejected_by = ?, rejected_reason = ?, review_at = ?, review_by = ?, severity_lkey = ? where key = ?");
-
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -95,7 +94,8 @@ ps.setString(20, record.getRejectedBy());
 ps.setString(21, record.getRejectedReason());
 ps.setBigDecimal(22, record.getReviewAt());
 ps.setString(23, record.getReviewBy());
-ps.setString(25, record.getSeverityLkey());
+ps.setString(24, record.getSeverityLkey());
+ps.setString(25, record.getKey());
 ps.executeUpdate();
 }
 }

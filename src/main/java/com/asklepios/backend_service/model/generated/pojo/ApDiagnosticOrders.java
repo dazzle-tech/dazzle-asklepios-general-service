@@ -12,5 +12,8 @@ import com.asklepios.backend_service.model.generated.entity.ApDiagnosticOrdersEn
 public class ApDiagnosticOrders extends ApDiagnosticOrdersEntity implements Serializable {
  private  ApPatient patient;
  private  ApEncounter encounter;
+ private  boolean hasLaboratory;
+ private  boolean hasRadiology;
+
 
 }

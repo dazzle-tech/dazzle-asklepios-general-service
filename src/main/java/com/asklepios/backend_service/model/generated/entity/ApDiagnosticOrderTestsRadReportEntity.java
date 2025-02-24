@@ -39,6 +39,8 @@ public class ApDiagnosticOrderTestsRadReportEntity implements Serializable {
 	private String rejectedReason;
 	private BigDecimal reviewAt;
 	private String reviewBy;
+	private String severityLkey;
+	private ApLovValues severityLvalue;
 	private ApDiagnosticOrderTestsRadReportEntity translatedObject;
 
 }

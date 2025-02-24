@@ -53,6 +53,7 @@ public class EncounterController {
     private final  ApDiagnosticOrderTestsService apDiagnosticOrderTestsService;
     private final ApDiagnosticTestService apDiagnosticTestService;
     private final ApPractitionerService apPractitionerService;
+
     private  final ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService;
     private final  ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService;
     private final ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService;
@@ -61,7 +62,9 @@ public class EncounterController {
     private final ApPsychologicalExamService apPsychologicalExamService;
     private final ApUserService apUserService;
     private final ApAudiometryPuretoneService apAudiometryPuretoneService;
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService) {
+    private final ApDiagnosticTestProfileService apDiagnosticTestProfileService;
+
+    public EncounterController(ApPatientService apPatientService, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApDiagnosticTestProfileService apDiagnosticTestProfileService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -72,7 +75,7 @@ public class EncounterController {
         this.apPhysicalExamAreaService = apPhysicalExamAreaService;
         this.apIcdCodeService = apIcdCodeService;
         this.apPatientDiagnoseService = apPatientDiagnoseService;
-        this.apPatientPlanService=apPatientPlanService ;
+        this.apPatientPlanService = apPatientPlanService;
         this.apPatientEncounterOrderService = apPatientEncounterOrderService;
         this.apPrescriptionService = apPrescriptionService;
         this.apPrescriptionInstructionService = apPrescriptionInstructionService;
@@ -95,6 +98,7 @@ public class EncounterController {
         this.apPsychologicalExamService = apPsychologicalExamService;
         this.apUserService = apUserService;
         this.apAudiometryPuretoneService = apAudiometryPuretoneService;
+        this.apDiagnosticTestProfileService = apDiagnosticTestProfileService;
     }
 
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -859,11 +863,7 @@ public class EncounterController {
             ParentResponse<ApPrescriptionMedications> response = new ParentResponse<>();
             apPrescriptionMedicationsService.saveRecord(request);
             response.setObject(request);
-
-            System.out.println("========================>"+response.getObject().getKey());
-            System.out.println("========================>"+response.getObject().getInstructionsTypeLkey());
             if(request.getInstructionsTypeLkey().equals("3010606785535008")  ){
-                System.out.println("========================>iii");
 
 
                 ApCustomeInstructions customeInstructions = new ApCustomeInstructions();
@@ -949,7 +949,6 @@ public class EncounterController {
             ParentResponse<ApPrescriptionMedications> response = new ParentResponse<>();
             prescriptionMedications.setIsValid(false);
             prescriptionMedications.setStatusLkey("1804447528780744");
-            System.out.println("+++++++++++++++++++++++++"+prescriptionMedications.getStatusLkey());
             apPrescriptionMedicationsService.deleteRecord(prescriptionMedications);
             response.setObject(prescriptionMedications);
             return ResponseEntity.ok(response);
@@ -1285,6 +1284,8 @@ public class EncounterController {
                 o.getEncounter().setDiagnosis(apEncounterService.getDiagnosis( o.getEncounter().getKey()));
                 o.getPatient().setHasAllergy(apPatientService.getHasAllergy(o.getPatient().getKey()));
                 o.getPatient().setHasWarning(apPatientService.getHasWarning(o.getPatient().getKey()));
+                o.setHasLaboratory(!apDiagnosticOrderTestsService.getList("order_type_lkey = '862810597620632' and order_key = '"+o.getKey()+"'").isEmpty());
+                o.setHasRadiology(!apDiagnosticOrderTestsService.getList("order_type_lkey = '862828331135792' and order_key = '"+o.getKey()+"'").isEmpty());
                 apDiagnosticOrdersService.populateLovFields(o, lang);
                 apPatientService.populateLovFields(o.getPatient(), lang);
                 apEncounterService.populateLovFields(o.getEncounter(), lang);
@@ -1314,13 +1315,16 @@ public class EncounterController {
 
             apDiagnosticOrderTestsService.saveRecord(request);
             List<ApDiagnosticOrderTests> tests= apDiagnosticOrderTestsService.getList("order_key ='"+request.getOrderKey()+"'");
-            boolean flag=false;
+
             Set<String> statusSet = tests.stream()
+                    .filter(test -> "862810597620632".equals(test.getOrderTypeLkey()))
+                    .map(ApDiagnosticOrderTests::getProcessingStatusLkey)
+                    .collect(Collectors.toSet());
+            Set<String> statusRadSet = tests.stream()
+                    .filter(test -> "862828331135792".equals(test.getOrderTypeLkey()))
                     .map(ApDiagnosticOrderTests::getProcessingStatusLkey)
                     .collect(Collectors.toSet());
             if (statusSet.size() == 1) {
-
-                String value = statusSet.iterator().next();
 
                 String firstElement = statusSet.iterator().next();
                 ApDiagnosticOrders order = apDiagnosticOrdersService.getRecord(request.getOrderKey());
@@ -1332,7 +1336,18 @@ public class EncounterController {
                 order.setLabStatusLkey("6472790341892805");
                 apDiagnosticOrdersService.saveRecord(order);
             }
+            if (statusRadSet.size() == 1) {
+                String value = statusRadSet.iterator().next();
+                String firstElement = statusRadSet.iterator().next();
+                ApDiagnosticOrders order = apDiagnosticOrdersService.getRecord(request.getOrderKey());
+                order.setRadStatusLkey(firstElement);
+                apDiagnosticOrdersService.saveRecord(order);
+            } else {
 
+                ApDiagnosticOrders order = apDiagnosticOrdersService.getRecord(request.getOrderKey());
+                order.setRadStatusLkey("6472790341892805");
+                apDiagnosticOrdersService.saveRecord(order);
+            }
             response.setObject(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -1363,6 +1378,7 @@ public class EncounterController {
             for (ApDiagnosticOrderTests o : orders) {
 
                  o.setTest( apDiagnosticTestService.getRecord(o.getTestKey()));
+                 o.setProfileList(apDiagnosticTestProfileService.getList("diagnostic_test_key= '"+o.getTestKey()+"'"));
                 apDiagnosticOrderTestsService.populateLovFields(o, lang);
                 apDiagnosticTestService.populateLovFields(o.getTest(),lang );
             }

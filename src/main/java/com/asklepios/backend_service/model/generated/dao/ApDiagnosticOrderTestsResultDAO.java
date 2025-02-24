@@ -66,6 +66,8 @@ record.setRejectedReason(rs.getString("rejected_reason"));
 record.setReviewAt(rs.getBigDecimal("review_at"));
 record.setReviewBy(rs.getString("review_by"));
 record.setResultText(rs.getString("result_text"));
+record.setTestProfileKey(rs.getString("test_profile_key"));
+record.setIsProfile(rs.getBoolean("is_profile"));
 } else { record = null; }
 return record;
 }
@@ -73,7 +75,7 @@ return record;
 public void updateRecord(ApDiagnosticOrderTestsResult record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_diagnostic_order_tests_result set key = ?, patient_key = ?, visit_key = ?, status_lkey = ?, order_key = ?, medical_test_key = ?, order_test_key = ?, normal_range_key = ?, result_type = ?, result_lkey = ?, result_value_number = ?, marker = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, processing_status_lkey = ?, order_type_lkey = ?, approved_at = ?, approved_by = ?, rejected_at = ?, rejected_by = ?, rejected_reason = ?, review_at = ?, review_by = ?, result_text = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_diagnostic_order_tests_result set key = ?, patient_key = ?, visit_key = ?, status_lkey = ?, order_key = ?, medical_test_key = ?, order_test_key = ?, normal_range_key = ?, result_type = ?, result_lkey = ?, result_value_number = ?, marker = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, processing_status_lkey = ?, order_type_lkey = ?, approved_at = ?, approved_by = ?, rejected_at = ?, rejected_by = ?, rejected_reason = ?, review_at = ?, review_by = ?, result_text = ?, test_profile_key = ?, is_profile = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -105,7 +107,9 @@ ps.setString(26, record.getRejectedReason());
 ps.setBigDecimal(27, record.getReviewAt());
 ps.setString(28, record.getReviewBy());
 ps.setString(29, record.getResultText());
-ps.setString(30, record.getKey());
+ps.setString(30, record.getTestProfileKey());
+ps.setBoolean(31, record.getIsProfile());
+ps.setString(32, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -156,6 +160,8 @@ record.setRejectedReason(rs.getString("rejected_reason"));
 record.setReviewAt(rs.getBigDecimal("review_at"));
 record.setReviewBy(rs.getString("review_by"));
 record.setResultText(rs.getString("result_text"));
+record.setTestProfileKey(rs.getString("test_profile_key"));
+record.setIsProfile(rs.getBoolean("is_profile"));
 list.add(record);
 }
 return list;
@@ -164,7 +170,7 @@ return list;
 public String saveRecord(ApDiagnosticOrderTestsResult record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_order_tests_result values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_diagnostic_order_tests_result values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -200,6 +206,8 @@ ps.setString(26, record.getRejectedReason());
 ps.setBigDecimal(27, record.getReviewAt());
 ps.setString(28, record.getReviewBy());
 ps.setString(29, record.getResultText());
+ps.setString(30, record.getTestProfileKey());
+ps.setBoolean(31, record.getIsProfile());
 ps.executeUpdate();
 return key;
 }

@@ -1292,6 +1292,8 @@ public class EncounterController {
                 o.getEncounter().setDiagnosis(apEncounterService.getDiagnosis( o.getEncounter().getKey()));
                 o.getPatient().setHasAllergy(apPatientService.getHasAllergy(o.getPatient().getKey()));
                 o.getPatient().setHasWarning(apPatientService.getHasWarning(o.getPatient().getKey()));
+                o.setHasLaboratory(!apDiagnosticOrderTestsService.getList("order_type_lkey = '862810597620632' and order_key = '"+o.getKey()+"'").isEmpty());
+                o.setHasRadiology(!apDiagnosticOrderTestsService.getList("order_type_lkey = '862828331135792' and order_key = '"+o.getKey()+"'").isEmpty());
                 apDiagnosticOrdersService.populateLovFields(o, lang);
                 apPatientService.populateLovFields(o.getPatient(), lang);
                 apEncounterService.populateLovFields(o.getEncounter(), lang);

@@ -53,7 +53,6 @@ public class EncounterController {
     private final  ApDiagnosticOrderTestsService apDiagnosticOrderTestsService;
     private final ApDiagnosticTestService apDiagnosticTestService;
     private final ApPractitionerService apPractitionerService;
-
     private  final ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService;
     private final  ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService;
     private final ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService;
@@ -62,9 +61,11 @@ public class EncounterController {
     private final ApPsychologicalExamService apPsychologicalExamService;
     private final ApUserService apUserService;
     private final ApAudiometryPuretoneService apAudiometryPuretoneService;
+    private final ApOptometricExamService apOptometricExamService;
+    private final ApIcdCodeService icondCodeService;
     private final ApDiagnosticTestProfileService apDiagnosticTestProfileService;
 
-    public EncounterController(ApPatientService apPatientService, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApDiagnosticTestProfileService apDiagnosticTestProfileService) {
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -75,7 +76,7 @@ public class EncounterController {
         this.apPhysicalExamAreaService = apPhysicalExamAreaService;
         this.apIcdCodeService = apIcdCodeService;
         this.apPatientDiagnoseService = apPatientDiagnoseService;
-        this.apPatientPlanService = apPatientPlanService;
+        this.apPatientPlanService=apPatientPlanService ;
         this.apPatientEncounterOrderService = apPatientEncounterOrderService;
         this.apPrescriptionService = apPrescriptionService;
         this.apPrescriptionInstructionService = apPrescriptionInstructionService;
@@ -98,6 +99,8 @@ public class EncounterController {
         this.apPsychologicalExamService = apPsychologicalExamService;
         this.apUserService = apUserService;
         this.apAudiometryPuretoneService = apAudiometryPuretoneService;
+        this.apOptometricExamService = apOptometricExamService;
+        this.icondCodeService = icondCodeService;
         this.apDiagnosticTestProfileService = apDiagnosticTestProfileService;
     }
 
@@ -863,7 +866,11 @@ public class EncounterController {
             ParentResponse<ApPrescriptionMedications> response = new ParentResponse<>();
             apPrescriptionMedicationsService.saveRecord(request);
             response.setObject(request);
+
+            System.out.println("========================>"+response.getObject().getKey());
+            System.out.println("========================>"+response.getObject().getInstructionsTypeLkey());
             if(request.getInstructionsTypeLkey().equals("3010606785535008")  ){
+                System.out.println("========================>iii");
 
 
                 ApCustomeInstructions customeInstructions = new ApCustomeInstructions();
@@ -949,6 +956,7 @@ public class EncounterController {
             ParentResponse<ApPrescriptionMedications> response = new ParentResponse<>();
             prescriptionMedications.setIsValid(false);
             prescriptionMedications.setStatusLkey("1804447528780744");
+            System.out.println("+++++++++++++++++++++++++"+prescriptionMedications.getStatusLkey());
             apPrescriptionMedicationsService.deleteRecord(prescriptionMedications);
             response.setObject(prescriptionMedications);
             return ResponseEntity.ok(response);
@@ -1284,8 +1292,6 @@ public class EncounterController {
                 o.getEncounter().setDiagnosis(apEncounterService.getDiagnosis( o.getEncounter().getKey()));
                 o.getPatient().setHasAllergy(apPatientService.getHasAllergy(o.getPatient().getKey()));
                 o.getPatient().setHasWarning(apPatientService.getHasWarning(o.getPatient().getKey()));
-                o.setHasLaboratory(!apDiagnosticOrderTestsService.getList("order_type_lkey = '862810597620632' and order_key = '"+o.getKey()+"'").isEmpty());
-                o.setHasRadiology(!apDiagnosticOrderTestsService.getList("order_type_lkey = '862828331135792' and order_key = '"+o.getKey()+"'").isEmpty());
                 apDiagnosticOrdersService.populateLovFields(o, lang);
                 apPatientService.populateLovFields(o.getPatient(), lang);
                 apEncounterService.populateLovFields(o.getEncounter(), lang);
@@ -1607,6 +1613,75 @@ public class EncounterController {
             }
 
             response.setObject(audiometryPuretones);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/save-optometric-exam", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveOptometricExam(@RequestBody ApOptometricExam optometricExam ,
+                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+            ParentResponse<ApOptometricExam> response = new ParentResponse<>();
+            apOptometricExamService.saveRecord(optometricExam);
+            response.setObject(optometricExam);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/optometric-exam-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getOptometricExamList(@RequestParam Map<String, String> queryParams,
+                                                   @Nullable @RequestHeader String facility_id,
+                                                   @Nullable @RequestHeader String access_token,
+                                                   @Nullable @RequestHeader Integer access_level,
+                                                   @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApOptometricExam>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApOptometricExam> optometricExams = apOptometricExamService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_optometric_exam where " + whereForTotal);
+
+            for (ApOptometricExam optometricExam : optometricExams) {
+                if (optometricExam.getCreatedBy() != null) {
+                    optometricExam.setCreateByUser(apUserService.getRecord(optometricExam.getCreatedBy()));
+                }
+                if (optometricExam.getUpdatedBy() != null) {
+                    optometricExam.setUpdateByUser(apUserService.getRecord(optometricExam.getUpdatedBy()));
+                }
+                if (optometricExam.getDeletedBy() != null) {
+                    optometricExam.setDeleteByUser(apUserService.getRecord(optometricExam.getDeletedBy()));
+                }
+                if(optometricExam.getVisionDiagnosis() != null) {
+                    optometricExam.setIcdCode(icondCodeService.getRecord(optometricExam.getVisionDiagnosis()));
+                }
+                if(optometricExam.getColorVisionDiagnosis() != null) {
+                    optometricExam.setIcdCode2(icondCodeService.getRecord(optometricExam.getColorVisionDiagnosis()));
+                }
+                apOptometricExamService.populateLovFields(optometricExam, lang);
+            }
+
+            response.setObject(optometricExams);
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);
 

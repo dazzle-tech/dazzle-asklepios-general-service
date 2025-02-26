@@ -42,6 +42,7 @@ public class ApMedicalSheetsEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private Boolean observation = false;
 	private ApMedicalSheetsEntity translatedObject;
 
 }

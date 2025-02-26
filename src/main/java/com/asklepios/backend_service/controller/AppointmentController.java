@@ -6,14 +6,17 @@ import com.asklepios.backend_service.model.pojo.request.ListRequest;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
 import com.asklepios.backend_service.service.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -97,16 +100,30 @@ public class AppointmentController
                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                              @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
-            ParentResponse<ApAppointment> response = new ParentResponse<>();
-            apAppointmentService.saveRecord(appointment);
+             String appointmentDate = appointment.getAppointmentStart();
+ 
+             List<ApAppointment> existingAppointment = apAppointmentService
+                    .getList(" patient_key =  '" + appointment.getPatientKey() + "' and DATE('"+appointmentDate+"') = DATE(appointment_start) " +
+                            " and (resource_type_lkey = '" + appointment.getResourceTypeLkey()+ "' and resource_key ='"+appointment.getResourceKey()+"' )");
+
+
+            if (!existingAppointment.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                        .body(Map.of("message", "The patient already has an appointment on this day."));
+            }
+
+             apAppointmentService.saveRecord(appointment);
+
+             ParentResponse<ApAppointment> response = new ParentResponse<>();
             response.setObject(appointment);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            return ResponseEntity.status(500).body(e);
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }
     }
+
 
     @PostMapping(value = "/change-appointment-status", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changeAppointmentStatus(@RequestBody ApAppointment appointment,

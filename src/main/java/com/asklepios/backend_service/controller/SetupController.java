@@ -1121,6 +1121,26 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @GetMapping(value = "/department-list-by-type", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> departmentListByType(@RequestHeader String departmentTypeKey,
+                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                            @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApDepartment>> response = new ParentResponse<>();
+            List<ApDepartment> list = apDepartmentService.getList("department_type_lkey = '"+departmentTypeKey +"'");
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_department where department_type_lkey = '"+departmentTypeKey +"'");
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 
     @GetMapping(value = "/user-departments", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> userDpartments(@RequestParam Map<String, String> queryParams,
@@ -1488,7 +1508,6 @@ public class SetupController implements Serializable {
                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
-            System.out.println("iam in age group save");
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_age_group where  age_group_lkey='" + ageGroup.getAgeGroupLkey() + "'");
             if (totalRecord != null && totalRecord.intValue() > 0) {
                 System.out.println("total age _______________________________" + totalRecord);
@@ -2929,7 +2948,6 @@ public class SetupController implements Serializable {
             @RequestHeader(required = false) String lang) {
         try {
             ParentResponse<ApMedicalSheets> response = new ParentResponse<>();
-            System.out.println(">>>>>>>>>>>>department Key"+departmentid);
             List<ApMedicalSheets> list = apMedicalSheetsService.getList(
                     " department_key = '" + departmentid + "'"
             );

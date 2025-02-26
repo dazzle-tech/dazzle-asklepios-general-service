@@ -21,8 +21,7 @@ public class ApDiagnosticOrderTestsEntity implements Serializable {
 	private ApLovValues statusLvalue;
 	private String orderKey;
 	private String testKey;
-	private String receivedLabLkey;
-	private ApLovValues receivedLabLvalue;
+	private String receivedLabKey;
 	private String reasonLkey;
 	private ApLovValues reasonLvalue;
 	private String priorityLkey;

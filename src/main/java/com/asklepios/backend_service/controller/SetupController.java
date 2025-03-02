@@ -1111,6 +1111,12 @@ public class SetupController implements Serializable {
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApDepartment> list = apDepartmentService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_department where " + whereForTotal);
+
+            for (ApDepartment d : list) {
+
+                apDepartmentService.populateLovFields(d, lang);
+            }
+
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);
@@ -1160,6 +1166,7 @@ public class SetupController implements Serializable {
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApUserFacilitiyDepartments> list = apUserFacilitiyDepartmentsService.getuserDpartmentsViewList(" user_key = '" + key + "' and  " + where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_department where " + whereForTotal);
+
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);

@@ -225,6 +225,28 @@ public class EncounterController {
 
                 apEncounter.setVisitId(newVisitId.toString());
 
+                String appointmentDate = String.valueOf(apEncounter.getPlannedStartDate());
+
+                List<ApEncounter> existingEncounter = apEncounterService
+                        .getList(" patient_key =  '" + apEncounter.getPatientKey() + "' and DATE('"+appointmentDate+"') = DATE(planned_start_date) " +
+                                " and (" +
+                                (apEncounter.getDepartmentKey() == null ? "department_key IS NULL" : "department_key = '" + apEncounter.getDepartmentKey() + "'") +
+                                " and " +
+                                (apEncounter.getPhysicianKey() == null ? "physician_key IS NULL" : "physician_key = '" + apEncounter.getPhysicianKey() + "'") +
+                                ")");
+
+                System.out.println(" patient_key =  '" + apEncounter.getPatientKey() + "' and DATE('"+appointmentDate+"') = DATE(planned_start_date) " +
+                        " and (" +
+                        (apEncounter.getDepartmentKey() == null ? "department_key IS NULL" : "department_key = '" + apEncounter.getDepartmentKey() + "'") +
+                        " and " +
+                        (apEncounter.getPhysicianKey() == null ? "physician_key IS NULL" : "physician_key = '" + apEncounter.getPhysicianKey() + "'") +
+                        ")");
+
+                if (!existingEncounter.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                            .body(Map.of("message", "Patient Already Registered on this Resource."));
+                }
+
 
                 apEncounterService.saveRecord(apEncounter);
                 response.setObject(apEncounter);

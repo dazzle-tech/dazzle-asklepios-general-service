@@ -260,6 +260,14 @@
     {
       "name": "discharge_summery",
       "type": "text"
+    },
+    {
+      "name": "resource_type_lkey",
+      "type": "text"
+    },
+    {
+      "name": "resource_key",
+      "type": "text"
     }
 
   ]

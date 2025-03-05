@@ -111,6 +111,9 @@ public class ApEncounterEntity implements Serializable {
 	private ApLovValues visitTypeLvalue;
 	private String physicianKey;
 	private String insuranceKey;
+	private String resourceTypeLkey;
+	private ApLovValues resourceTypeLvalue;
+	private String resourceKey;
 	private ApEncounterEntity translatedObject;
 
 }

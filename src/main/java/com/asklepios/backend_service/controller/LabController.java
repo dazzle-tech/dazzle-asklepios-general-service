@@ -242,7 +242,7 @@ public class LabController {
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_diagnostic_order_tests_result where " + whereForTotal);
             for (ApDiagnosticOrderTestsResult o : results) {
                  o.setNormalRange(apDiagnosticTestNormalRangeService.getRecord(o.getNormalRangeKey()));
-                
+
                 List<ApDiagnosticTestNormalRangeLov> lovList = new ApDiagnosticTestNormalRangeLovService().getList("normal_range_key = '" +  o.getNormalRangeKey()+ "' and deleted_at is null");
                 if(!lovList.isEmpty()){
                     List<String> lovIds = new ArrayList<>();

@@ -123,6 +123,23 @@ public class ListRequest {
                             where.append(" and '").append(filter.getValue().split("_")[1]).append("'");
                         }
                         break;
+                    case "in":
+                        // Assuming the values are comma-separated
+                        System.out.println("filter.getValue()"+filter.getValue());
+                        if (filter.getValue() != null && !filter.getValue().isEmpty()) {
+                            String[] values = filter.getValue().split("[\\(\\)]");
+                            where.append(filter.getFieldName()).append(" IN (");
+                            for (int i = 0; i < values.length; i++) {
+                                where.append("'").append(values[i].trim()).append("'");
+                                if (i < values.length - 1) {
+                                    where.append(", ");
+                                }
+                            }
+                            where.append(")");
+                        } else {
+                            throw new IllegalArgumentException("Operator 'in' requires a non-empty value.");
+                        }
+                        break;
                     default:
                         where.append(filter.getFieldName()).append(" = '").append(filter.getValue()).append("'");
                         break;

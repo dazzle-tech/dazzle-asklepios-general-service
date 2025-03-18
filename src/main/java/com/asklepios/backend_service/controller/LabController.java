@@ -12,6 +12,7 @@ import com.asklepios.backend_service.model.pojo.response.ParentResponse;
 import com.asklepios.backend_service.service.*;
 import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,13 +34,18 @@ public class LabController {
     private final ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService;
     private  final  ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService;
     private final  ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService;
-
-    public LabController(ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService) {
+    private final ApDiagnosticTestService apDiagnosticTestService;
+   private  final  ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService;
+   private final ApDiagnosticTestProfileService apDiagnosticTestProfileService;
+    public LabController(ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestProfileService apDiagnosticTestProfileService) {
         this.apDiagnosticOrderTestsNotesService = apDiagnosticOrderTestsNotesService;
         this.apDiagnosticOrderTestsSamplesService = apDiagnosticOrderTestsSamplesService;
         this.apDiagnosticOrderTestsResultService = apDiagnosticOrderTestsResultService;
         this.apDiagnosticOrderTestsResultNotesService = apDiagnosticOrderTestsResultNotesService;
         this.apDiagnosticTestNormalRangeService = apDiagnosticTestNormalRangeService;
+        this.apDiagnosticTestService = apDiagnosticTestService;
+        this.apDiagnosticTestLaboratoryService = apDiagnosticTestLaboratoryService;
+        this.apDiagnosticTestProfileService = apDiagnosticTestProfileService;
     }
     @PostMapping(value = "/save-diagnostic-order-tests-notes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTestsNotes(@RequestBody ApDiagnosticOrderTestsNotes request,
@@ -159,6 +165,62 @@ public class LabController {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @PostMapping(value = "/save-diagnostic-tests-result", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveDiagnosticTestsResult(@RequestBody ApDiagnosticOrderTestsResult request,
+
+                                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                            @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+           List <ApDiagnosticTestLaboratory> lab = apDiagnosticTestLaboratoryService.getList(" test_key = '"+request.getMedicalTestKey()+"'");
+
+
+            ApDiagnosticTest test = apDiagnosticTestService.getRecord(request.getMedicalTestKey());
+            if (lab.get(0) != null) {
+                boolean isProfile = lab.get(0).getIsProfile();
+                if (isProfile) {
+                    List<ApDiagnosticTestProfile> profileList = apDiagnosticTestProfileService.getList(" diagnostic_test_key = '" + request.getMedicalTestKey() + "'");
+                    for (ApDiagnosticTestProfile profile : profileList) {
+                        ApDiagnosticOrderTestsResult response = new ApDiagnosticOrderTestsResult();
+                        BeanUtils.copyProperties(request, response);
+                        System.out.println("testKey"+test.getKey()+"testprofile Key :"+profile.getKey());
+                        response.setNormalRangeKey(apDiagnosticOrderTestsResultService.getNormalRange(request.getPatientKey(), request.getMedicalTestKey(),true, profile.getKey()).getKey());
+                        response.setIsProfile(true);
+                        response.setTestProfileKey(profile.getKey());
+                        apDiagnosticOrderTestsResultService.saveRecord(response);
+                    }
+                    ParentResponse<ApDiagnosticOrderTestsResult> response = new ParentResponse<>();
+                      response.setObject(new ApDiagnosticOrderTestsResult());
+                    return ResponseEntity.ok(response);
+                }
+                else {
+                    ParentResponse<ApDiagnosticOrderTestsResult> response = new ParentResponse<>();
+                    request.setNormalRangeKey(apDiagnosticOrderTestsResultService.getNormalRange(request.getPatientKey(),  request.getMedicalTestKey(),false, request.getTestProfileKey()).getKey());
+                    request.setIsProfile(false);
+                    apDiagnosticOrderTestsResultService.saveRecord(request);
+
+                    response.setObject(request);
+                    return ResponseEntity.ok(response);
+                }
+            }
+            else {
+                ParentResponse<ApDiagnosticOrderTestsResult> response = new ParentResponse<>();
+                request.setNormalRangeKey(apDiagnosticOrderTestsResultService.getNormalRange(request.getPatientKey(), request.getMedicalTestKey(),false, request.getTestProfileKey()).getKey());
+                request.setIsProfile(false);
+                apDiagnosticOrderTestsResultService.saveRecord(request);
+
+                response.setObject(request);
+                return ResponseEntity.ok(response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
     @GetMapping(value = "/diagnostic-order-test-result-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDiagnosticOrderTestResultList(@RequestParam Map<String, String> queryParams,
                                                               @Nullable @RequestHeader String facility_id,
@@ -179,6 +241,13 @@ public class LabController {
             List<ApDiagnosticOrderTestsResult> results = apDiagnosticOrderTestsResultService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_diagnostic_order_tests_result where " + whereForTotal);
             for (ApDiagnosticOrderTestsResult o : results) {
+                 o.setNormalRange(apDiagnosticTestNormalRangeService.getRecord(o.getNormalRangeKey()));
+                List<ApDiagnosticTestNormalRangeLov> lovList = new ApDiagnosticTestNormalRangeLovService().getList("normal_range_key = '" +  o.getNormalRangeKey()+ "' and deleted_at is null");
+                if(!lovList.isEmpty()){
+                    List<String> lovIds = new ArrayList<>();
+                    lovList.forEach(lov -> lovIds.add(lov.getLovLkey()));
+                    o.getNormalRange().setLovList(lovIds);
+                }
 
                 apDiagnosticOrderTestsResultService.populateLovFields(o, lang);
 
@@ -193,6 +262,7 @@ public class LabController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
 
     @PostMapping(value = "/save-diagnostic-order-tests-result-notes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTestsResultNotes(@RequestBody ApDiagnosticOrderTestsResultNotes request,
@@ -245,15 +315,18 @@ public class LabController {
     @GetMapping(value = "/get-result-normal-range", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getResultNormalRange(@RequestParam String patientKey,
                                                   @RequestParam String testKey,
+                                                  @RequestParam String testProfileKey,
+                                                  @RequestParam Boolean isProfile,
                                                   @Nullable @RequestHeader String facility_id,
                                                   @Nullable @RequestHeader String access_token,
                                                   @Nullable @RequestHeader Integer access_level,
                                                   @Nullable @RequestHeader String lang) {
         try {
-            System.out.println("patient Key: " + patientKey +"test Key: " + testKey);
+            ApDiagnosticTest test=apDiagnosticTestService.getRecord(testKey);
+
             ParentResponse<ApDiagnosticTestNormalRange> response = new ParentResponse<>();
 
-            ApDiagnosticTestNormalRange normalRange=apDiagnosticOrderTestsResultService.getNormalRange(patientKey,testKey);
+            ApDiagnosticTestNormalRange normalRange=apDiagnosticOrderTestsResultService.getNormalRange(patientKey,testKey,isProfile,testProfileKey);
             apDiagnosticTestNormalRangeService.populateLovFields(normalRange, lang);
 
             List<ApDiagnosticTestNormalRangeLov> lovList = new ApDiagnosticTestNormalRangeLovService().getList("normal_range_key = '" + normalRange.getKey() + "' and deleted_at is null");

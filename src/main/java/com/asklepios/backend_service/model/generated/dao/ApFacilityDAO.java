@@ -62,6 +62,7 @@ record.setFacilityTypeLkey(rs.getString("facility_type_lkey"));
 record.setFacilityType(rs.getString("facility_type"));
 record.setFacilityAddress(rs.getString("facility_address"));
 record.setRoolKey(rs.getString("rool_key"));
+record.setDefaultCurrencyLkey(rs.getString("default_currency_lkey"));
 } else { record = null; }
 return record;
 }
@@ -69,7 +70,7 @@ return record;
 public void updateRecord(ApFacility record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_facility set key = ?, facility_id = ?, facility_name = ?, facility_name_other_lang = ?, tenant_id = ?, facility_registration_date = ?, facility_email_address = ?, facility_brief_desc = ?, facility_address_other_lang = ?, facility_logo_file = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, facility_phone1 = ?, facility_phone2 = ?, facility_fax = ?, facility_address_id = ?, facility_type_lkey = ?, facility_type = ?, facility_address = ?, rool_key = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_facility set key = ?, facility_id = ?, facility_name = ?, facility_name_other_lang = ?, tenant_id = ?, facility_registration_date = ?, facility_email_address = ?, facility_brief_desc = ?, facility_address_other_lang = ?, facility_logo_file = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, facility_phone1 = ?, facility_phone2 = ?, facility_fax = ?, facility_address_id = ?, facility_type_lkey = ?, facility_type = ?, facility_address = ?, rool_key = ?, default_currency_lkey = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -98,7 +99,8 @@ ps.setString(22, record.getFacilityTypeLkey());
 ps.setString(23, record.getFacilityType());
 ps.setString(24, record.getFacilityAddress());
 ps.setString(25, record.getRoolKey());
-ps.setString(26, record.getKey());
+ps.setString(26, record.getDefaultCurrencyLkey());
+ps.setString(27, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -145,6 +147,7 @@ record.setFacilityTypeLkey(rs.getString("facility_type_lkey"));
 record.setFacilityType(rs.getString("facility_type"));
 record.setFacilityAddress(rs.getString("facility_address"));
 record.setRoolKey(rs.getString("rool_key"));
+record.setDefaultCurrencyLkey(rs.getString("default_currency_lkey"));
 list.add(record);
 }
 return list;
@@ -153,7 +156,7 @@ return list;
 public String saveRecord(ApFacility record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_facility values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_facility values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -186,6 +189,7 @@ ps.setString(22, record.getFacilityTypeLkey());
 ps.setString(23, record.getFacilityType());
 ps.setString(24, record.getFacilityAddress());
 ps.setString(25, record.getRoolKey());
+ps.setString(26, record.getDefaultCurrencyLkey());
 ps.executeUpdate();
 return key;
 }

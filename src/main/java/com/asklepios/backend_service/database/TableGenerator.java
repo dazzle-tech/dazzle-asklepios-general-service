@@ -30,7 +30,7 @@ public class TableGenerator {
                     continue;
 
 
-                if (   !file.getName().contains("35-"))
+                if (   !file.getName().contains("4-"))
                     continue;
 
                 try {

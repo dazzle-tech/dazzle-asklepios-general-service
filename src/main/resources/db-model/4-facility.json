@@ -62,6 +62,10 @@
     {
       "name": "facility_fax",
       "type": "text"
+    },
+    {
+      "name": "default_currency_lkey",
+      "type": "text"
     }
   ]
 }

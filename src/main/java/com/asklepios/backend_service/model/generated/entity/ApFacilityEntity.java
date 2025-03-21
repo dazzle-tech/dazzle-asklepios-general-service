@@ -40,6 +40,8 @@ public class ApFacilityEntity implements Serializable {
 	private String facilityType;
 	private String facilityAddress;
 	private String roolKey;
+	private String defaultCurrencyLkey;
+	private ApLovValues defaultCurrencyLvalue;
 	private ApFacilityEntity translatedObject;
 
 }

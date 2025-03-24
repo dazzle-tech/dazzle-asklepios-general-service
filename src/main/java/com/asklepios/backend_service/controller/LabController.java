@@ -153,7 +153,6 @@ public class LabController {
 
     ) {
         try {
-       
             ParentResponse<ApDiagnosticOrderTestsResult> response = new ParentResponse<>();
 
             apDiagnosticOrderTestsResultService.saveRecord(request);

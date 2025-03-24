@@ -153,6 +153,7 @@ public class LabController {
 
     ) {
         try {
+            System.out.println("request.getNormalRangeValue()"+request.getNormalRangeValue());
             ParentResponse<ApDiagnosticOrderTestsResult> response = new ParentResponse<>();
 
             apDiagnosticOrderTestsResultService.saveRecord(request);

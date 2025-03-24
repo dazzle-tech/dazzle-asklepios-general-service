@@ -49,6 +49,7 @@ public class ApDiagnosticOrderTestsResultEntity implements Serializable {
 	private String resultText;
 	private String testProfileKey;
 	private Boolean isProfile = false;
+	private String normalRangeValue;
 	private ApDiagnosticOrderTestsResultEntity translatedObject;
 
 }

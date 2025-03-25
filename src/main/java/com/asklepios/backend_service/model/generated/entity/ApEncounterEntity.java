@@ -106,7 +106,8 @@ public class ApEncounterEntity implements Serializable {
 	private String encounterNotes;
 	private String sourceName;
 	private String physicalExamNote;
-	private String planInstructions;
+	private String planInstructionsLkey;
+	private ApLovValues planInstructionsLvalue;
 	private String visitTypeLkey;
 	private ApLovValues visitTypeLvalue;
 	private String physicianKey;
@@ -114,6 +115,7 @@ public class ApEncounterEntity implements Serializable {
 	private String resourceTypeLkey;
 	private ApLovValues resourceTypeLvalue;
 	private String resourceKey;
+	private String planInstructionsNote;
 	private ApEncounterEntity translatedObject;
 
 }

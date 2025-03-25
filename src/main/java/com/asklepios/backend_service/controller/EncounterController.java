@@ -822,14 +822,14 @@ public class EncounterController {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-            System.out.println("=============>iam in get prescription");
+
             List<ApPrescription> prescriptions = apPrescriptionService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_prescription where " + whereForTotal);
 
             for (ApPrescription pre : prescriptions) {
 
                 apPrescriptionService.populateLovFields(pre, lang);
-                pre.setEncounter(apDrugOrderService.getEncounter(pre.getVisitKey()));
+                pre.setEncounter(apEncounterService.getRecord(pre.getVisitKey()));
             }
 
             response.setObject(prescriptions);
@@ -983,7 +983,7 @@ public class EncounterController {
             ParentResponse<ApPrescriptionMedications> response = new ParentResponse<>();
             prescriptionMedications.setIsValid(false);
             prescriptionMedications.setStatusLkey("1804447528780744");
-            System.out.println("+++++++++++++++++++++++++"+prescriptionMedications.getStatusLkey());
+           
             apPrescriptionMedicationsService.deleteRecord(prescriptionMedications);
             response.setObject(prescriptionMedications);
             return ResponseEntity.ok(response);
@@ -1128,7 +1128,7 @@ public class EncounterController {
             for (ApDrugOrder o:orders) {
 
                 apDrugOrderService.populateLovFields(o, lang);
-                o.setEncounter(apDrugOrderService.getEncounter(o.getVisitKey()));
+                o.setEncounter(apEncounterService.getRecord(o.getVisitKey()));
             }
 
             response.setObject(orders);

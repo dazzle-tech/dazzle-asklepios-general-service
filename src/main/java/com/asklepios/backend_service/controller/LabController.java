@@ -186,7 +186,7 @@ public class LabController {
                     for (ApDiagnosticTestProfile profile : profileList) {
                         ApDiagnosticOrderTestsResult response = new ApDiagnosticOrderTestsResult();
                         BeanUtils.copyProperties(request, response);
-                        System.out.println("testKey"+test.getKey()+"testprofile Key :"+profile.getKey());
+
                         response.setNormalRangeKey(apDiagnosticOrderTestsResultService.getNormalRange(request.getPatientKey(), request.getMedicalTestKey(),true, profile.getKey()).getKey());
                         response.setIsProfile(true);
                         response.setTestProfileKey(profile.getKey());

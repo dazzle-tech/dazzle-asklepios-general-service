@@ -232,16 +232,16 @@ public class EncounterController {
                 List<ApEncounter> existingEncounter = apEncounterService
                         .getList(" patient_key =  '" + apEncounter.getPatientKey() + "' and DATE('"+appointmentDate+"') = DATE(planned_start_date) " +
                                 " and (" +
-                                (apEncounter.getDepartmentKey() == null ? "department_key IS NULL" : "department_key = '" + apEncounter.getDepartmentKey() + "'") +
+                                (apEncounter.getResourceTypeLkey() == null ? "department_key IS NULL" : "department_key = '" + apEncounter.getResourceTypeLkey() + "'") +
                                 " and " +
-                                (apEncounter.getPhysicianKey() == null ? "physician_key IS NULL" : "physician_key = '" + apEncounter.getPhysicianKey() + "'") +
+                                (apEncounter.getResourceKey() == null ? "physician_key IS NULL" : "physician_key = '" + apEncounter.getResourceKey() + "'") +
                                 ")");
 
                 System.out.println(" patient_key =  '" + apEncounter.getPatientKey() + "' and DATE('"+appointmentDate+"') = DATE(planned_start_date) " +
                         " and (" +
-                        (apEncounter.getDepartmentKey() == null ? "department_key IS NULL" : "department_key = '" + apEncounter.getDepartmentKey() + "'") +
+                        (apEncounter.getResourceTypeLkey() == null ? "department_key IS NULL" : "department_key = '" + apEncounter.getResourceTypeLkey() + "'") +
                         " and " +
-                        (apEncounter.getPhysicianKey() == null ? "physician_key IS NULL" : "physician_key = '" + apEncounter.getPhysicianKey() + "'") +
+                        (apEncounter.getResourceKey() == null ? "physician_key IS NULL" : "physician_key = '" + apEncounter.getResourceKey() + "'") +
                         ")");
 
                 if (!existingEncounter.isEmpty()) {

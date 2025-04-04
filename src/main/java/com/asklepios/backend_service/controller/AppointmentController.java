@@ -317,6 +317,11 @@ public class AppointmentController
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApResourcesAvailabilityTime> list = apResourcesAvailabilityTimeService.getList(where);
+
+            for (ApResourcesAvailabilityTime apResourcesAvailabilityTime : list) {
+                apResourcesAvailabilityTimeService.populateLovFields(apResourcesAvailabilityTime, lang);
+            }
+
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_resources_availability_time where " + whereForTotal);
             response.setObject(list);
             response.setExtraNumeric(totalRecord);

@@ -37,7 +37,8 @@ public class LabController {
     private final ApDiagnosticTestService apDiagnosticTestService;
    private  final  ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService;
    private final ApDiagnosticTestProfileService apDiagnosticTestProfileService;
-    public LabController(ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestProfileService apDiagnosticTestProfileService) {
+   private final ApLabResultLogService apLabResultLogService;
+    public LabController(ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApLabResultLogService apLabResultLogService) {
         this.apDiagnosticOrderTestsNotesService = apDiagnosticOrderTestsNotesService;
         this.apDiagnosticOrderTestsSamplesService = apDiagnosticOrderTestsSamplesService;
         this.apDiagnosticOrderTestsResultService = apDiagnosticOrderTestsResultService;
@@ -46,6 +47,7 @@ public class LabController {
         this.apDiagnosticTestService = apDiagnosticTestService;
         this.apDiagnosticTestLaboratoryService = apDiagnosticTestLaboratoryService;
         this.apDiagnosticTestProfileService = apDiagnosticTestProfileService;
+        this.apLabResultLogService = apLabResultLogService;
     }
     @PostMapping(value = "/save-diagnostic-order-tests-notes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTestsNotes(@RequestBody ApDiagnosticOrderTestsNotes request,
@@ -339,6 +341,65 @@ public class LabController {
 
             response.setObject(normalRange);
 
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/save-lab-result-log", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveLabResultLog(@RequestBody ApLabResultLog request,
+                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                              @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+            ParentResponse<ApLabResultLog> response = new ParentResponse<>();
+            ApDiagnosticOrderTestsResult result=apDiagnosticOrderTestsResultService.getRecord(request.getResultKey());
+
+            System.out.println(request.getResultValue());
+            apLabResultLogService.saveRecord(request);
+
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
+    @GetMapping(value = "/lab-order-test-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getLabResultLogList(@RequestParam Map<String, String> queryParams,
+                                                 @Nullable @RequestHeader String facility_id,
+                                                 @Nullable @RequestHeader String access_token,
+                                                 @Nullable @RequestHeader Integer access_level,
+                                                 @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApLabResultLog>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            List<ApLabResultLog> log = apLabResultLogService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_lab_result_log where " + whereForTotal);
+
+            for (ApLabResultLog all : log) {
+
+                apLabResultLogService.populateLovFields(all,lang );
+            }
+            response.setObject(log);
+            response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {

@@ -1517,9 +1517,16 @@ public class SetupController implements Serializable {
                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
+            if(ageGroup.getKey()!=null){
+                ParentResponse<ApAgeGroup> response = new ParentResponse<>();
+                apAgeGroupService.saveRecord(ageGroup);
+                response.setObject(ageGroup);
+                response.setMsg("Edit Successfully");
+                return ResponseEntity.ok(response);
+            }
+            else{
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_age_group where  age_group_lkey='" + ageGroup.getAgeGroupLkey() + "'");
             if (totalRecord != null && totalRecord.intValue() > 0) {
-                System.out.println("total age _______________________________" + totalRecord);
 
                 ParentResponse<ApAgeGroup> response = new ParentResponse<>();
                 response.setObject(ageGroup);
@@ -1532,7 +1539,7 @@ public class SetupController implements Serializable {
                 response.setObject(ageGroup);
 
                 return ResponseEntity.ok(response);
-            }
+            }}
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());

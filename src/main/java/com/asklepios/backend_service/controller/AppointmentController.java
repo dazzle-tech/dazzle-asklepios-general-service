@@ -76,6 +76,38 @@ public class AppointmentController
         }
     }
 
+
+    @GetMapping(value = "/resource-by-key", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getResourceByKey(
+            @RequestParam String resourceKey,
+            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+            @jakarta.annotation.Nullable @RequestHeader String access_token,
+            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+            @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApResources> response = new ParentResponse<>();
+
+            String where = "key = '" + resourceKey + "'";
+            System.out.println("++++++++++++>>>>>>>>>>>"+where);
+            List<ApResources> list = apResourcesService.getList(where);
+            if (list.isEmpty()) {
+                return ResponseEntity.status(404).body("Resource not found");
+            }
+
+            ApResources resource = list.get(0);
+            resource.setResourceName(apResourcesService.getResourceName(resource.getResourceTypeLkey(), resource.getResourceKey()));
+            apResourcesService.populateLovFields(resource, lang);
+
+            response.setObject(resource);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
     @PostMapping(value = "/save-resources", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveResources(@RequestBody ApResources resources,
                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,

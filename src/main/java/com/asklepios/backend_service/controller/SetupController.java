@@ -2967,7 +2967,7 @@ public class SetupController implements Serializable {
             List<ApMedicalSheets> list = apMedicalSheetsService.getList(
                     " department_key = '" + departmentid + "'"
             );
-
+            System.out.println("=============================> department_key = '" + departmentid + "'");
             ApMedicalSheets result;
             if (list.isEmpty()) {
 

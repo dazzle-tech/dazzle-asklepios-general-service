@@ -232,17 +232,9 @@ public class EncounterController {
                 List<ApEncounter> existingEncounter = apEncounterService
                         .getList(" patient_key =  '" + apEncounter.getPatientKey() + "' and DATE('"+appointmentDate+"') = DATE(planned_start_date) " +
                                 " and (" +
-                                (apEncounter.getResourceTypeLkey() == null ? "department_key IS NULL" : "department_key = '" + apEncounter.getResourceTypeLkey() + "'") +
-                                " and " +
-                                (apEncounter.getResourceKey() == null ? "physician_key IS NULL" : "physician_key = '" + apEncounter.getResourceKey() + "'") +
+                                (apEncounter.getResourceKey() == null ? "resource_key IS NULL" : "resource_key = '" + apEncounter.getResourceKey() + "'") +
                                 ")");
-
-                System.out.println(" patient_key =  '" + apEncounter.getPatientKey() + "' and DATE('"+appointmentDate+"') = DATE(planned_start_date) " +
-                        " and (" +
-                        (apEncounter.getResourceTypeLkey() == null ? "department_key IS NULL" : "department_key = '" + apEncounter.getResourceTypeLkey() + "'") +
-                        " and " +
-                        (apEncounter.getResourceKey() == null ? "physician_key IS NULL" : "physician_key = '" + apEncounter.getResourceKey() + "'") +
-                        ")");
+                
 
                 if (!existingEncounter.isEmpty()) {
                     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)

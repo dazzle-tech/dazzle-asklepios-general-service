@@ -138,7 +138,6 @@ public class AppointmentController
                     .getList(" patient_key =  '" + appointment.getPatientKey() + "' and DATE('"+appointmentDate+"') = DATE(appointment_start) " +
                             " and (resource_type_lkey = '" + appointment.getResourceTypeLkey()+ "' and resource_key ='"+appointment.getResourceKey()+"' )");
 
-
             if (!existingAppointment.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                         .body(Map.of("message", "The patient already has an appointment on this day."));

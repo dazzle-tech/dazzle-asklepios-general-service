@@ -199,6 +199,7 @@ public class PatientController {
 
             // Validate the record
             ValidationResult validationResult = validationService.validateRecord(screenKey, "1705559108200", ApPatientEntity.class, apPatient);
+            System.out.println("validationResult: " + validationResult.isPass());
             if (apPatient.isSkipValidation() || validationResult.isPass()) {
                 if(apPatientService.saveRecord(apPatient).equals("faild")){
                     response.addGeneralError("There is an existing patient with this document.");
@@ -208,17 +209,13 @@ public class PatientController {
 
                     apPatient.setSkipValidation(false);
                     response.setObject(apPatient);
-
                 }
-
                 return ResponseEntity.ok(response);
-
-            } else {
+            }
+            else {
                 response.addGeneralError("Validation error");
                 response.setValidationResult(validationResult);
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
-
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -241,14 +238,11 @@ public class PatientController {
                 response.setObject(new ArrayList<>());
                 return ResponseEntity.ok(response);
             }
-
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApPatientAllergies> allergies = apPatientAllergiesService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_patient_allergies where " + whereForTotal);
-
-
             for (ApPatientAllergies allergy : allergies) {
                 apPatientAllergiesService.populateLovFields(allergy, lang);
                 allergy.setAllergyObject(apAllergensService.getRecord(allergy.getAllergyKey()));
@@ -539,10 +533,6 @@ public class PatientController {
             ParentResponse<ApPatientSecondaryDocuments> response = new ParentResponse<>();
             if (secondaryDocumentsData.getDocumentCountryLkey() == null || secondaryDocumentsData.getDocumentCountryLkey().isBlank()) {
                 response.addGeneralError("Document country required");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-            }
-            if (secondaryDocumentsData.getDocumentTypeLkey() == null || secondaryDocumentsData.getDocumentTypeLkey().isBlank()) {
-                response.addGeneralError("Document type required");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
             if (secondaryDocumentsData.getDocumentNo() == null || secondaryDocumentsData.getDocumentNo().isBlank()) {

@@ -539,7 +539,10 @@ public class PatientController {
                 response.addGeneralError("Document number required");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
-
+            if (secondaryDocumentsData.getDocumentTypeLkey() == null || secondaryDocumentsData.getDocumentTypeLkey().isBlank()) {
+                response.addGeneralError("Document type required");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
             if (!"NO_DOC".equals(secondaryDocumentsData.getDocumentTypeLkey())) {
                 if (apPatientSecondaryDocumentsService.isDocumentExists(secondaryDocumentsData.getDocumentTypeLkey(), secondaryDocumentsData.getDocumentNo(),secondaryDocumentsData.getPatientKey())) {
                     response.addGeneralError("A patient with this document already exists.");

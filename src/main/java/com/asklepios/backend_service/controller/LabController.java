@@ -232,7 +232,7 @@ public class LabController {
         try {
             ParentResponse<List<ApDiagnosticOrderTestsResult>> response = new ParentResponse<>();
 
-            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+            if (queryParams.containsKey("ignore") && "true".equals(queryParams.get("ignore"))) {
                 response.setObject(new ArrayList<>());
                 return ResponseEntity.ok(response);
             }
@@ -240,31 +240,102 @@ public class LabController {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
             List<ApDiagnosticOrderTestsResult> results = apDiagnosticOrderTestsResultService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_diagnostic_order_tests_result where " + whereForTotal);
-            for (ApDiagnosticOrderTestsResult o : results) {
-                 o.setNormalRange(apDiagnosticTestNormalRangeService.getRecord(o.getNormalRangeKey()));
 
-                List<ApDiagnosticTestNormalRangeLov> lovList = new ApDiagnosticTestNormalRangeLovService().getList("normal_range_key = '" +  o.getNormalRangeKey()+ "' and deleted_at is null");
-                if(!lovList.isEmpty()){
-                    List<String> lovIds = new ArrayList<>();
-                    lovList.forEach(lov -> lovIds.add(lov.getLovLkey()));
-                    o.getNormalRange().setLovList(lovIds);
+            ApDiagnosticTestNormalRangeLovService lovService = new ApDiagnosticTestNormalRangeLovService();
+
+            results.forEach(o -> {
+
+                ApDiagnosticTestNormalRange normalRange = null;
+                try {
+                    normalRange = apDiagnosticTestNormalRangeService.getRecord(o.getNormalRangeKey());
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                o.setNormalRange(normalRange);
+
+                if (normalRange != null) {
+
+                    List<ApDiagnosticTestNormalRangeLov> lovList = null;
+                    try {
+                        lovList = lovService.getList(
+                                "normal_range_key = '" + o.getNormalRangeKey() + "' and deleted_at is null"
+                        );
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    if (!lovList.isEmpty()) {
+                        normalRange.setLovList(
+                                lovList.stream()
+                                        .map(ApDiagnosticTestNormalRangeLov::getLovLkey)
+                                        .collect(Collectors.toList())
+                        );
+                    }
+                } else {
+                    System.out.println("==============> No Normal Range found for key: " + o.getNormalRangeKey());
                 }
 
                 apDiagnosticOrderTestsResultService.populateLovFields(o, lang);
+            });
 
-            }
             response.setObject(results);
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("Error in getDiagnosticOrderTestResultList", e);
             return ResponseEntity.status(500).body(e);
         }
     }
+
+//    @GetMapping(value = "/diagnostic-order-test-result-list", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<?> getDiagnosticOrderTestResultList(@RequestParam Map<String, String> queryParams,
+//                                                              @Nullable @RequestHeader String facility_id,
+//                                                              @Nullable @RequestHeader String access_token,
+//                                                              @Nullable @RequestHeader Integer access_level,
+//                                                              @Nullable @RequestHeader String lang) {
+//        try {
+//            ParentResponse<List<ApDiagnosticOrderTestsResult>> response = new ParentResponse<>();
+//
+//            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+//                response.setObject(new ArrayList<>());
+//                return ResponseEntity.ok(response);
+//            }
+//
+//            ListRequest listRequest = new ListRequest(queryParams);
+//            String where = listRequest.buildWhereStatement();
+//            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+//            List<ApDiagnosticOrderTestsResult> results = apDiagnosticOrderTestsResultService.getList(where);
+//            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_diagnostic_order_tests_result where " + whereForTotal);
+//            for (ApDiagnosticOrderTestsResult o : results) {
+//                System.out.println("=============> key:"+o.getKey() );
+//                System.out.println("==============> normal :"+o.getNormalRangeKey() );
+//                 o.setNormalRange(apDiagnosticTestNormalRangeService.getRecord(o.getNormalRangeKey()));
+//                System.out.println("==============> "+o.getNormalRange().getGenderLkey() );
+//                List<ApDiagnosticTestNormalRangeLov> lovList = new ApDiagnosticTestNormalRangeLovService().getList("normal_range_key = '" +  o.getNormalRangeKey()+ "' and deleted_at is null");
+//                System.out.println("List:"+lovList);
+//                if(!lovList.isEmpty()){
+//                    List<String> lovIds = new ArrayList<>();
+//                    lovList.forEach(lov -> lovIds.add(lov.getLovLkey()));
+//                    o.getNormalRange().setLovList(lovIds);
+//                }
+//
+//                apDiagnosticOrderTestsResultService.populateLovFields(o, lang);
+//
+//            }
+//            response.setObject(results);
+//            response.setExtraNumeric(totalRecord);
+//            return ResponseEntity.ok(response);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            log.error(e.getMessage());
+//            return ResponseEntity.status(500).body(e);
+//        }
+//    }
 
 
     @PostMapping(value = "/save-diagnostic-order-tests-result-notes", produces = MediaType.APPLICATION_JSON_VALUE)

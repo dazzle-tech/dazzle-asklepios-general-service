@@ -5,6 +5,7 @@ import com.asklepios.backend_service.model.generated.entity.ApPatientEntity;
 import com.asklepios.backend_service.model.generated.pojo.*;
 import com.asklepios.backend_service.model.pojo.ValidationResult;
 import com.asklepios.backend_service.model.pojo.request.ListRequest;
+import com.asklepios.backend_service.model.pojo.request.ListRequestAllValues;
 import com.asklepios.backend_service.model.pojo.request.PhysicalExamAreaRequest;
 import com.asklepios.backend_service.model.pojo.request.ReviewOfSystemRequest;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
@@ -886,11 +887,7 @@ public class EncounterController {
             apPrescriptionMedicationsService.saveRecord(request);
             response.setObject(request);
 
-            System.out.println("========================>"+response.getObject().getKey());
-            System.out.println("========================>"+response.getObject().getInstructionsTypeLkey());
             if(request.getInstructionsTypeLkey().equals("3010606785535008")  ){
-                System.out.println("========================>iii");
-
 
                 ApCustomeInstructions customeInstructions = new ApCustomeInstructions();
                 customeInstructions.setPrescriptionMedicationsKey(response.getObject().getKey());
@@ -924,7 +921,7 @@ public class EncounterController {
                 return ResponseEntity.ok(response);
             }
 
-            ListRequest listRequest = new ListRequest(queryParams);
+            ListRequestAllValues listRequest = new ListRequestAllValues(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
 

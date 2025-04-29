@@ -218,24 +218,29 @@ public class EncounterController {
                 BigDecimal lastVisitId = DS.executeDecimalResultQuery("select max(visit_id) from ap_encounter");
 
                 BigDecimal newVisitId;
-                System.out.println("lastVisitId"+lastVisitId);
-                if (lastVisitId == null) {
+                 if (lastVisitId == null) {
                     newVisitId = BigDecimal.valueOf(100);
                 } else {
                     newVisitId = lastVisitId.add(BigDecimal.ONE);
                 }
-                System.out.println("newVisitId"+newVisitId);
 
                 apEncounter.setVisitId(newVisitId.toString());
 
                 String appointmentDate = String.valueOf(apEncounter.getPlannedStartDate());
 
+                String query = "patient_key =  '" + apEncounter.getPatientKey() + "'" +
+                        " and DATE('" + appointmentDate + "') = DATE(planned_start_date)" +
+                        " and (" + (apEncounter.getResourceKey() == null
+                        ? "resource_key IS NULL"
+                        : "resource_key = '" + apEncounter.getResourceKey() + "'") + ")";
+
+                if (apEncounter.getKey() != null && !apEncounter.getKey().equals("null")) {
+                    query += " and encounter_key <> '" + apEncounter.getKey() + "'";
+                }
+
                 List<ApEncounter> existingEncounter = apEncounterService
-                        .getList(" patient_key =  '" + apEncounter.getPatientKey() + "' and DATE('"+appointmentDate+"') = DATE(planned_start_date) " +
-                                " and (" +
-                                (apEncounter.getResourceKey() == null ? "resource_key IS NULL" : "resource_key = '" + apEncounter.getResourceKey() + "'") +
-                                ")");
-                
+                        .getList(query);
+
 
                 if (!existingEncounter.isEmpty()) {
                     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)

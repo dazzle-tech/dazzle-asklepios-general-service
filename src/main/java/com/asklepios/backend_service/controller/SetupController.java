@@ -1115,7 +1115,7 @@ public class SetupController implements Serializable {
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_department where " + whereForTotal);
 
             for (ApDepartment d : list) {
-
+                d.setFacility(apFacilityService.getRecord(d.getFacilityKey()));
                 apDepartmentService.populateLovFields(d, lang);
             }
 

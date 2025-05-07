@@ -25,7 +25,7 @@ import javax.management.Query;
 public class ApEncounterVaccinationService extends ApEncounterVaccinationDAO implements Serializable {
 
 
-    private final ApVaccineDoseService apVaccineDoseService;
+  private final ApVaccineDoseService apVaccineDoseService;
   private final ApVaccineService apVaccineService;
   private final ApVaccineBrandsService apVaccineBrandsService;
  private final  ApUserService apUserService;
@@ -33,7 +33,6 @@ public class ApEncounterVaccinationService extends ApEncounterVaccinationDAO imp
         this.apVaccineDoseService = apVaccineDoseService;
         this.apVaccineService = apVaccineService;
         this.apVaccineBrandsService = apVaccineBrandsService;
-
         this.apUserService = apUserService;
     }
 
@@ -41,6 +40,7 @@ public class ApEncounterVaccinationService extends ApEncounterVaccinationDAO imp
         List<ApVaccine> result = new ArrayList<>();
         if (where == null || where.isEmpty())
             where = "1=1";
+
         String sql = """
         SELECT
             v.vaccine_key,
@@ -87,20 +87,21 @@ public class ApEncounterVaccinationService extends ApEncounterVaccinationDAO imp
                 }
 
                 ApVaccine record = apVaccineService.getRecord(vaccineKey);
-                apVaccineService.populateLovFields(record, lang);
-                record.setDoseCount(doseCount);
-                record.setDoseDetailsList(doseDetailsList);
-                result.add(record);
+                if (record != null) {
+                    apVaccineService.populateLovFields(record, lang);
+                    record.setDoseCount(doseCount);
+                    record.setDoseDetailsList(doseDetailsList);
+                    result.add(record);
+                } else {
+                    log.warn("Error: {}", vaccineKey);
+                }
             }
 
         } catch (SQLException e) {
             log.error("Error executing vaccination query: {}", e.getMessage(), e);
             throw new RuntimeException(e);
         }
-
         return result;
     }
-
-
 }
 

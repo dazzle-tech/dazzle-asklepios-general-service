@@ -57,7 +57,8 @@ public class ApEncounterEntity implements Serializable {
 	private String specialArrangementText;
 	private String specialCourtesyLkey;
 	private ApLovValues specialCourtesyLvalue;
-	private String admissionOrigin;
+	private String originLkey;
+	private ApLovValues originLvalue;
 	private String admissionSource;
 	private Boolean readmission = false;
 	private String dischargeDestination;

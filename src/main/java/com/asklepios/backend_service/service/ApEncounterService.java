@@ -216,7 +216,7 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
                 record.setSpecialArrangementLkey(rs.getString("special_arrangement_lkey"));
                 record.setSpecialArrangementText(rs.getString("special_arrangement_text"));
                 record.setSpecialCourtesyLkey(rs.getString("special_courtesy_lkey"));
-                record.setAdmissionOrigin(rs.getString("admission_origin"));
+                record.setOriginLkey(rs.getString("origin_lkey"));
                 record.setAdmissionSource(rs.getString("admission_source"));
                 record.setReadmission(rs.getBoolean("readmission"));
                 record.setDischargeDestination(rs.getString("discharge_destination"));

@@ -41,6 +41,7 @@ public class ApConsultationOrderEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private String cancellationReason;
 	private ApConsultationOrderEntity translatedObject;
 
 }

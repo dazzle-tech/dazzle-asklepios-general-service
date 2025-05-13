@@ -48,6 +48,7 @@ public class ApDiagnosticOrderTestsEntity implements Serializable {
 	private String patientArrivedNoteRad;
 	private BigDecimal readyAt;
 	private BigDecimal approvedAt;
+	private String cancellationReason;
 	private ApDiagnosticOrderTestsEntity translatedObject;
 
 }

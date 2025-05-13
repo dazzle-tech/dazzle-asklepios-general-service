@@ -62,8 +62,7 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
 
     }
     public boolean getHasOrder(String visitKey) throws SQLException {
-        String query = "SELECT COUNT(visit_key) AS count FROM ap_patient_encounter_order WHERE visit_key = ?";
-
+        String query = "SELECT COUNT(visit_key) AS count FROM ap_diagnostic_orders WHERE visit_key = ?";
         try (
                 Connection con = DS.getConnection();
                 PreparedStatement ps = con.prepareStatement(query)

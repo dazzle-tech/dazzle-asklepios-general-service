@@ -603,6 +603,7 @@ public class PatientController {
             }
 
             apPatientRelationService.saveRecord(relation);
+            apPatientRelationService.patientRelations(relation.getPatientKey(),relation.getRelativePatientKey(),relation.getRelationTypeLkey(),lang);
             apPatientRelationService.populateLovFields(relation, lang);
             relation.setRelativePatientObject(apPatientService.getRecord(relation.getRelativePatientKey()));
             response.setObject(relation);

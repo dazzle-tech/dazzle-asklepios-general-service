@@ -29,6 +29,7 @@ public class ApProcedureSetupEntity implements Serializable {
 	private BigDecimal createdAt;
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
+	private Boolean isAppointable = false;
 	private ApProcedureSetupEntity translatedObject;
 
 }

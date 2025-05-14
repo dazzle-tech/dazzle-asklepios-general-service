@@ -51,6 +51,7 @@ record.setDeletedBy(rs.getString("deleted_by"));
 record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
+record.setIsAppointable(rs.getBoolean("is_appointable"));
 } else { record = null; }
 return record;
 }
@@ -58,7 +59,7 @@ return record;
 public void updateRecord(ApProcedureSetup record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_procedure_setup set key = ?, name = ?, code = ?, category_lkey = ?, indications = ?, contraindications = ?, preparation_instructions = ?, recovery_notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_procedure_setup set key = ?, name = ?, code = ?, category_lkey = ?, indications = ?, contraindications = ?, preparation_instructions = ?, recovery_notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_appointable = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -75,7 +76,8 @@ ps.setString(11, record.getDeletedBy());
 ps.setBigDecimal(12, record.getCreatedAt());
 ps.setBigDecimal(13, record.getUpdatedAt());
 ps.setBigDecimal(14, record.getDeletedAt());
-ps.setString(15, record.getKey());
+ps.setBoolean(15, record.getIsAppointable());
+ps.setString(16, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -111,6 +113,7 @@ record.setDeletedBy(rs.getString("deleted_by"));
 record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
+record.setIsAppointable(rs.getBoolean("is_appointable"));
 list.add(record);
 }
 return list;
@@ -119,7 +122,7 @@ return list;
 public String saveRecord(ApProcedureSetup record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_procedure_setup values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_procedure_setup values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -140,6 +143,7 @@ ps.setString(11, record.getDeletedBy());
 ps.setBigDecimal(12, record.getCreatedAt());
 ps.setBigDecimal(13, record.getUpdatedAt());
 ps.setBigDecimal(14, record.getDeletedAt());
+ps.setBoolean(15, record.getIsAppointable());
 ps.executeUpdate();
 return key;
 }

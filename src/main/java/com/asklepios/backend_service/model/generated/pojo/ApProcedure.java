@@ -11,6 +11,7 @@ import com.asklepios.backend_service.model.generated.entity.ApProcedureEntity;
 @Slf4j
 public class ApProcedure extends ApProcedureEntity implements Serializable {
      private  String procedureName;
-
+     private  ApFacility facility;
+     private ApDepartment department;
 
 }

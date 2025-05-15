@@ -35,8 +35,7 @@ public class ApProcedureEntity implements Serializable {
 	private BigDecimal createdAt;
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
-	private String faciltyLkey;
-	private ApLovValues faciltyLvalue;
+	private String facilityKey;
 	private String encounterKey;
 	private String bodyPartLkey;
 	private ApLovValues bodyPartLvalue;

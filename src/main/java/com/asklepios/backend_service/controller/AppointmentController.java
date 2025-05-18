@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -134,17 +134,14 @@ public class AppointmentController {
             String appointmentDate = appointment.getAppointmentStart();
 
             if (appointment.getKey() == null) {
-
                 String condition = "patient_key = '" + appointment.getPatientKey() + "'" +
-                        " and DATE('" + appointmentDate + "') = DATE(appointment_start)" +
+                        " and DATE('" + appointmentDate + "'::timestamp) = DATE(appointment_start)" +
                         " and (resource_type_lkey = '" + appointment.getResourceTypeLkey() + "'" +
                         " and resource_key = '" + appointment.getResourceKey() + "')";
 
-
-                 if (appointment.getKey() != null) {
+                if (appointment.getKey() != null) {
                     condition += " and key <> '" + appointment.getKey() + "'";
                 }
-
 
                 List<ApAppointment> existingAppointment = apAppointmentService.getList(condition);
 
@@ -152,8 +149,18 @@ public class AppointmentController {
                     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                             .body(Map.of("message", "The patient already has an appointment on this day."));
                 }
-
             }
+
+            OffsetDateTime localStart = OffsetDateTime.parse(appointment.getAppointmentStart())
+                    .withOffsetSameInstant(ZoneOffset.of("+03:00"));
+            OffsetDateTime localEnd = OffsetDateTime.parse(appointment.getAppointmentEnd())
+                    .withOffsetSameInstant(ZoneOffset.of("+03:00"));
+
+            System.out.println(localStart);
+            System.out.println(localEnd);
+
+            appointment.setAppointmentStart(localStart.toString());
+            appointment.setAppointmentEnd(localEnd.toString());
 
             apAppointmentService.saveRecord(appointment);
 
@@ -166,6 +173,7 @@ public class AppointmentController {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }
     }
+
 
 
     @PostMapping(value = "/change-appointment-status", produces = MediaType.APPLICATION_JSON_VALUE)

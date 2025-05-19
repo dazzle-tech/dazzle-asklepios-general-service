@@ -5,10 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.asklepios.backend_service.model.generated.dao.ApDepartmentDAO;
-import com.asklepios.backend_service.model.generated.pojo.ApDepartment;
-import com.asklepios.backend_service.model.generated.pojo.ApDiagnosticTest;
-import com.asklepios.backend_service.model.generated.pojo.ApPractitioner;
-import com.asklepios.backend_service.model.generated.pojo.ApUserFacilities;
+import com.asklepios.backend_service.model.generated.pojo.*;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +49,15 @@ public class ApResourcesService extends ApResourcesDAO implements Serializable {
             }
 
         }
+        // TODO update status to be a LOV value
+        else if(resourceTypeKey.equals("2039548173192779")) //Procedure
+        {
+            List<ApProcedureSetup> listDia = new ApProcedureSetupService().getList("key = '"+ key +"'");
+            if (listDia != null && !listDia.isEmpty()) {
+                return listDia.get(0).getName();
+            }
 
+        }
         return null ;
     }
     }

@@ -31,13 +31,14 @@ public class AppointmentController {
     private final ApResourcesAvailabilityTimeService apResourcesAvailabilityTimeService;
     private final ApPatientService apPatientService;
     private final ApDiagnosticTestService apDiagnosticTestService;
-
-    public AppointmentController(ApResourcesService apResourcesService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApAppointmentService apAppointmentService, ApResourcesAvailabilityTimeService apResourcesAvailabilityTimeService, ApDiagnosticTestService apDiagnosticTestService) {
+    private final ApProcedureSetupService apProcedureSetupService;
+    public AppointmentController(ApResourcesService apResourcesService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApAppointmentService apAppointmentService, ApResourcesAvailabilityTimeService apResourcesAvailabilityTimeService, ApDiagnosticTestService apDiagnosticTestService, ApProcedureService apProcedureService, ApProcedureSetupService apProcedureSetupService) {
         this.apResourcesService = apResourcesService;
         this.apPractitionerService = apPractitionerService;
         this.apDepartmentService = apDepartmentService;
         this.apAppointmentService = apAppointmentService;
         this.apResourcesAvailabilityTimeService = apResourcesAvailabilityTimeService;
+        this.apProcedureSetupService = apProcedureSetupService;
         this.apPatientService = new ApPatientService();
         this.apDiagnosticTestService = apDiagnosticTestService;
     }
@@ -232,7 +233,15 @@ public class AppointmentController {
                 return ResponseEntity.ok(responseDia);
 
             }
+            // TODO update status to be a LOV value
+            else if (resource_type.equals("2039548173192779")) //Procedure
+            {
+                ParentResponse<List<ApProcedureSetup>> responseDia = new ParentResponse<>();
+                List<ApProcedureSetup> listDep = apProcedureSetupService.getList("is_appointable = true");
+                responseDia.setObject(listDep);
+                return ResponseEntity.ok(responseDia);
 
+            }
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {

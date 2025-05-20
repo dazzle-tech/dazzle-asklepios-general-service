@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/attachment")
@@ -59,6 +60,30 @@ public class AttachmentController {
                 response.setObject(new ApAttachment());
                 return ResponseEntity.ok(response);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/fetch-attachments-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> fetchAttachmentsList(
+            @RequestHeader("type") String type,
+            @RequestBody List<String> refKeys,
+            @Nullable @RequestHeader String facility_id,
+            @Nullable @RequestHeader String access_token,
+            @Nullable @RequestHeader Integer access_level,
+            @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApAttachment>> response = new ParentResponse<>();
+
+            List<ApAttachment> attachments = apAttachmentService.getList("attachment_type = '" + type
+                    + "' and reference_object_key IN (" + refKeys.stream()
+                    .map(k -> "'" + k + "'").collect(Collectors.joining(",")) + ") and deleted_at is null");
+
+            response.setObject(attachments);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());

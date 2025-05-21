@@ -1351,6 +1351,18 @@ public class EncounterController {
             for (ApDiagnosticOrders o : orders) {
                 o.setPatient(apPatientService.getRecord(o.getPatientKey()));
                 o.setEncounter(apEncounterService.getRecord(o.getVisitKey()));
+                List<ApDiagnosticOrderTestsResult> results = apDiagnosticTestResultsService
+                        .getList("patient_key = '" + o.getPatient().getKey() +
+                                "' and medical_test_key='470435488509800' and status_lkey='265089168359400' order by created_at desc");
+
+                if (!results.isEmpty()) {
+                    ApDiagnosticOrderTestsResult result = results.get(0);
+                    if (result.getResultLkey() != null) {
+                        o.getEncounter().setBloodGroup(apLovValuesService.getRecord(result.getResultLkey()).getLovDisplayVale());
+                    }
+                }
+
+
                 if(o.getEncounter()!=null){
                 o.getEncounter().setDiagnosis(apEncounterService.getDiagnosis( o.getEncounter().getKey()));}
                 if(o.getPatient()!=null){

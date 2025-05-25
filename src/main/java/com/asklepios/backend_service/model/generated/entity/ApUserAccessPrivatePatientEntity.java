@@ -23,6 +23,7 @@ public class ApUserAccessPrivatePatientEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private String reason;
+	private String patientKey;
 	private ApUserAccessPrivatePatientEntity translatedObject;
 
 }

@@ -967,6 +967,7 @@ public class PatientController {
     @PostMapping(value = "/user-access-private-patient", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> employeePortalConfirm(@RequestBody ApUser apUser,
                                                    @Nullable @RequestHeader("reason") String reason,
+                                                   @Nullable @RequestHeader("patientKey") String patientKey,
                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                                    @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -984,6 +985,7 @@ public class PatientController {
                 userAccess.setUserKey(user.getKey());
                 userAccess.setCreatedBy(user.getKey());
                 userAccess.setReason(reason);
+                userAccess.setPatientKey(patientKey);
                 apUserAccessPrivatePatientService.saveRecord(userAccess);
                 response.setObject(apUserAccessPrivatePatientService.getRecord(userAccess.getKey()));
                 return ResponseEntity.ok(response);

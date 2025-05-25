@@ -46,6 +46,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setReason(rs.getString("reason"));
+record.setPatientKey(rs.getString("patient_key"));
 } else { record = null; }
 return record;
 }
@@ -53,7 +54,7 @@ return record;
 public void updateRecord(ApUserAccessPrivatePatient record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_user_access_private_patient set key = ?, user_key = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, reason = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_user_access_private_patient set key = ?, user_key = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, reason = ?, patient_key = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -65,7 +66,8 @@ ps.setBigDecimal(6, record.getCreatedAt());
 ps.setBigDecimal(7, record.getUpdatedAt());
 ps.setBigDecimal(8, record.getDeletedAt());
 ps.setString(9, record.getReason());
-ps.setString(10, record.getKey());
+ps.setString(10, record.getPatientKey());
+ps.setString(11, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -96,6 +98,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setReason(rs.getString("reason"));
+record.setPatientKey(rs.getString("patient_key"));
 list.add(record);
 }
 return list;
@@ -104,7 +107,7 @@ return list;
 public String saveRecord(ApUserAccessPrivatePatient record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_user_access_private_patient values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_user_access_private_patient values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -120,6 +123,7 @@ ps.setBigDecimal(6, record.getCreatedAt());
 ps.setBigDecimal(7, record.getUpdatedAt());
 ps.setBigDecimal(8, record.getDeletedAt());
 ps.setString(9, record.getReason());
+ps.setString(10, record.getPatientKey());
 ps.executeUpdate();
 return key;
 }

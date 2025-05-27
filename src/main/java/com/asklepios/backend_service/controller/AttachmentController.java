@@ -185,6 +185,7 @@ public class AttachmentController {
     public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file,
                                     @RequestHeader("type") String type,
                                     @RequestHeader("ref_key") String refKey,
+                                    @RequestHeader("patient_key") String patientKey,
                                     @Nullable @RequestHeader("details") String details,
                                     @Nullable @RequestHeader("access_type") String accessType,
                                     @Nullable @RequestHeader("created_by") String createdBy,
@@ -192,7 +193,6 @@ public class AttachmentController {
                                     @Nullable @RequestHeader String access_token,
                                     @Nullable @RequestHeader Integer access_level,
                                     @Nullable @RequestHeader String lang) {
-        System.out.println("access_type"+accessType);
         try {
             ParentResponse<ApAttachment> response = new ParentResponse<>();
             ApAttachment attachment = new ApAttachment();
@@ -211,6 +211,7 @@ public class AttachmentController {
                     attachment.setReferenceObjectKey(refKey);
                     attachment.setAccessTypeLkey(accessType);
                     attachment.setCreatedBy(createdBy);
+                    attachment.setPatientKey(patientKey);
                 }
             } else {
                 // Always create a new attachment for other types
@@ -218,6 +219,7 @@ public class AttachmentController {
                 attachment.setReferenceObjectKey(refKey);
                 attachment.setAccessTypeLkey(accessType);
                 attachment.setCreatedBy(createdBy);
+                attachment.setPatientKey(patientKey);
             }
             attachment.setFileName(file.getOriginalFilename());
             attachment.setContentType(file.getContentType());

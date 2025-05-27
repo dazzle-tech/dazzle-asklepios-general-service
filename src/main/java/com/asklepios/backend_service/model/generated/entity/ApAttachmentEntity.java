@@ -31,6 +31,7 @@ public class ApAttachmentEntity implements Serializable {
 	private String details;
 	private String accessTypeLkey;
 	private ApLovValues accessTypeLvalue;
+	private String patientKey;
 	private ApAttachmentEntity translatedObject;
 
 }

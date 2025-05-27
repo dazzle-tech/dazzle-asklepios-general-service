@@ -210,18 +210,16 @@ public class UtilityController implements Serializable {
     }
 
     @GetMapping(value = "/get-lov-values-by-code", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> lovValueList(@RequestParam String code, @Nullable String parentValueKey,
+    public ResponseEntity<?> lovValueList(@RequestParam String code,
                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
-            ParentResponse<List<ApLovValues>> response = new ParentResponse<>();
+            ParentResponse<ApLovValues> response = new ParentResponse<>();
             String where = "LOV_CODE = '" + code + "'";
-            if (parentValueKey != null) {
-                where += " and PARENT_VALUE_ID = '" + parentValueKey + "'";
-            }
-            List<ApLovValues> list = apLovValuesService.getList(where);
+
+            ApLovValues list = apLovValuesService.getList(where).get(0);
             response.setObject(list);
             return ResponseEntity.ok(response);
 
@@ -233,7 +231,7 @@ public class UtilityController implements Serializable {
     }
 
     @GetMapping(value = "/get-lov-value-default", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> lovValuedefault(@RequestParam String code, @Nullable String parentValueKey,
+    public ResponseEntity<?> lovValuedefault(@RequestParam String code,
                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -243,9 +241,6 @@ public class UtilityController implements Serializable {
 
 
             String where = "LOV_CODE = '" + code + "' and isdefault = true";
-            if (parentValueKey != null) {
-                where += " and PARENT_VALUE_ID = '" + parentValueKey + "'";
-            }
 
             List<ApLovValues> list = apLovValuesService.getList(where);
 

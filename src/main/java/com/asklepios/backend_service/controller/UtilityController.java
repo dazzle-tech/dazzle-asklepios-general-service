@@ -232,33 +232,27 @@ public class UtilityController implements Serializable {
         }
     }
 
-    @GetMapping(value = "/get-lov-value-default", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> lovValuedefault(@RequestParam String code, @Nullable String parentValueKey,
-                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                             @jakarta.annotation.Nullable @RequestHeader String lang) {
-        try {
-            ParentResponse<ApLovValues> response = new ParentResponse<>();
+    @GetMapping(value="/get-lov-defult-value", produces = MediaType.APPLICATION_JSON_VALUE)
+     public ResponseEntity<?> getLovDefult(@RequestHeader String code,
+                                           @Nullable @RequestHeader String facility_id,
+                                           @Nullable @RequestHeader String access_token,
+                                           @Nullable @RequestHeader Integer access_level,
+                                           @Nullable @RequestHeader String lang) {
+        {
+            try{
 
-
-            String where = "LOV_CODE = '" + code + "' and isdefault = true";
-            if (parentValueKey != null) {
-                where += " and PARENT_VALUE_ID = '" + parentValueKey + "'";
+                ParentResponse<ApLovValues> response = new ParentResponse<>();
+                List<ApLovValues> resultslist = apLovValuesService.getList(" lov_code = '"+code +"' and isdefault = true ");
+                ApLovValues result = resultslist.isEmpty() ? null : resultslist.get(0);
+               
+                response.setObject(result);
+                return ResponseEntity.ok(response);
             }
-
-            List<ApLovValues> list = apLovValuesService.getList(where);
-
-
-            ApLovValues result = list.isEmpty() ? null : list.get(0);
-
-            response.setObject(result);
-            return ResponseEntity.ok(response);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-            return ResponseEntity.status(500).body(e);
+            catch (Exception e) {
+                e.printStackTrace();
+                log.error(e.getMessage());
+                return ResponseEntity.status(500).body(e);
+            }
         }
     }
     @GetMapping(value = "/get-lov-all-values", produces = MediaType.APPLICATION_JSON_VALUE)

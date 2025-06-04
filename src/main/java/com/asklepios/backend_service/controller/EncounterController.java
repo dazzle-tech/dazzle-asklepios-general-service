@@ -423,6 +423,7 @@ public class EncounterController {
                 system.setPatientKey(encounter.getPatientKey());
                 system.setNotes(request.getNotes());
                 system.setSystemDetailLkey(request.getBodySystemDetailKey());
+                system.setSystemLkey(request.getSystemLkey());
                 apReviewOfSystemService.saveRecord(system);
             } else {
                 // already here, save note

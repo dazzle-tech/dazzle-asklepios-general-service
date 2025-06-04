@@ -14,5 +14,6 @@ import com.asklepios.backend_service.model.generated.entity.ApDiagnosticOrderTes
 public class ApDiagnosticOrderTests extends ApDiagnosticOrderTestsEntity implements Serializable {
     private   ApDiagnosticTest test;
     private List<ApDiagnosticTestProfile> profileList;
+    private String orderId;
 
 }

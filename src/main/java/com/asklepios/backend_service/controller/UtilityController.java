@@ -256,7 +256,7 @@ public class UtilityController implements Serializable {
         }
     }
     @GetMapping(value = "/get-lov-all-values", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getDiagnosticOrderTestResultList(@RequestParam Map<String, String> queryParams,
+    public ResponseEntity<?> getLovAllValues(@RequestParam Map<String, String> queryParams,
                                                               @Nullable @RequestHeader String facility_id,
                                                               @Nullable @RequestHeader String access_token,
                                                               @Nullable @RequestHeader Integer access_level,

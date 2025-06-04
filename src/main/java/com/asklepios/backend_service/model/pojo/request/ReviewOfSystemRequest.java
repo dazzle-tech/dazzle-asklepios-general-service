@@ -10,4 +10,5 @@ public class ReviewOfSystemRequest {
     String encounterKey;
     String bodySystemDetailKey;
     String notes;
+    String systemLkey;
 }

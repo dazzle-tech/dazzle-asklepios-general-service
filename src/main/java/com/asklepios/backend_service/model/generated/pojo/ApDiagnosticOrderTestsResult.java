@@ -11,5 +11,5 @@ import com.asklepios.backend_service.model.generated.entity.ApDiagnosticOrderTes
 @Slf4j
 public class ApDiagnosticOrderTestsResult extends ApDiagnosticOrderTestsResultEntity implements Serializable {
  ApDiagnosticTestNormalRange normalRange;
-
+ ApDiagnosticOrderTests test;
 }

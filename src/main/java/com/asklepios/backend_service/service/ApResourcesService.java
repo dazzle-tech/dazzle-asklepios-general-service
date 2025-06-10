@@ -58,6 +58,15 @@ public class ApResourcesService extends ApResourcesDAO implements Serializable {
             }
 
         }
+        // TODO update status to be a LOV value
+        else if(resourceTypeKey.equals("4217389643435490")) //Department Inpatient Ward
+        {
+            List<ApDepartment> listDep = new ApDepartmentService().getList("key = '"+ key +"' AND department_type_lkey = '5673990729647001'");
+            if (listDep != null && !listDep.isEmpty()) {
+                return listDep.get(0).getName();
+            }
+
+        }
         return null ;
     }
     }

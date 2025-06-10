@@ -223,6 +223,15 @@ public class AppointmentController {
                 return ResponseEntity.ok(responseDep);
 
             }
+            // TODO update status to be a LOV value
+            else if (resource_type.equals("4217389643435490")) //Department InPatient Ward
+            {
+                ParentResponse<List<ApDepartment>> responseDep = new ParentResponse<>();
+                List<ApDepartment> listDep = apDepartmentService.getList("appointable = true AND department_type_lkey = '5673990729647001'");
+                responseDep.setObject(listDep);
+                return ResponseEntity.ok(responseDep);
+
+            }
 
             // TODO update status to be a LOV value
             else if (resource_type.equals("2039620472612029")) //Medical Test

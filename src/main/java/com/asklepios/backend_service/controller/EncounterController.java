@@ -182,7 +182,22 @@ public class EncounterController {
 
         }
     }
+    @GetMapping("/get-encounter-by-id")
+    public ResponseEntity<?> getEncounterById(
+            @RequestParam String key,
+            @RequestHeader(name = "lang", required = false) String lang) throws SQLException {
 
+        ApEncounter encounter = apEncounterService.getRecord(key);
+        ParentResponse<ApEncounter> response = new ParentResponse<>();
+
+        if (encounter != null && encounter.getKey() != null && !encounter.getKey().isEmpty()) {
+            response.setObject(encounter);
+            return ResponseEntity.ok(response);
+        } else {
+            response.setObject(new ApEncounter());
+            return ResponseEntity.ok(response);
+        }
+    }
     @GetMapping(value = "/encounter-service-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> encounterServiceList(@RequestParam Map<String, String> queryParams,
                                                   @Nullable @RequestHeader String facility_id,

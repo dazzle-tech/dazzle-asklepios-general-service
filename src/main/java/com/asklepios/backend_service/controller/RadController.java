@@ -12,6 +12,7 @@ import com.asklepios.backend_service.model.pojo.response.ParentResponse;
 import com.asklepios.backend_service.service.*;
 import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,11 +29,22 @@ import java.util.stream.Collectors;
 //@CrossOrigin
 @Slf4j
 public class RadController {
+    @Autowired
     private final ApDiagnosticOrderTestsRadReportService apDiagnosticOrderTestsRadReportService;
+    @Autowired
     private final ApDiagnosticOrderTestsReportNotesService apDiagnosticOrderTestsReportNotesService;
-    public RadController(ApDiagnosticOrderTestsRadReportService apDiagnosticOrderTestsRadReportService, ApDiagnosticOrderTestsReportNotesService apDiagnosticOrderTestsReportNotesService) {
+    @Autowired
+    private final ApDiagnosticOrderTestsService apDiagnosticOrderTestsService;
+    @Autowired
+    private final ApDiagnosticTestService apDiagnosticTestService;
+    @Autowired
+    private final ApDiagnosticOrdersService apDiagnosticOrdersService;
+    public RadController(ApDiagnosticOrderTestsRadReportService apDiagnosticOrderTestsRadReportService, ApDiagnosticOrderTestsReportNotesService apDiagnosticOrderTestsReportNotesService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticOrdersService apDiagnosticOrdersService) {
         this.apDiagnosticOrderTestsRadReportService = apDiagnosticOrderTestsRadReportService;
         this.apDiagnosticOrderTestsReportNotesService = apDiagnosticOrderTestsReportNotesService;
+        this.apDiagnosticOrderTestsService = apDiagnosticOrderTestsService;
+        this.apDiagnosticTestService = apDiagnosticTestService;
+        this.apDiagnosticOrdersService = apDiagnosticOrdersService;
     }
     @PostMapping(value = "/save-diagnostic-order-tests-rad-report", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTestsRadReport(@RequestBody ApDiagnosticOrderTestsRadReport request,
@@ -74,8 +86,12 @@ public class RadController {
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApDiagnosticOrderTestsRadReport > results = apDiagnosticOrderTestsRadReportService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_diagnostic_order_tests_rad_report where " + whereForTotal);
+            ApDiagnosticOrderTests test=null;
             for (ApDiagnosticOrderTestsRadReport  o : results) {
-
+                test=apDiagnosticOrderTestsService.getRecord(o.getOrderTestKey());
+                o.setTest(test);
+                o.getTest().setTest( apDiagnosticTestService.getRecord(o.getMedicalTestKey()));
+                o.getTest().setOrder(apDiagnosticOrdersService.getRecord(o.getOrderKey()));
                 apDiagnosticOrderTestsRadReportService.populateLovFields(o, lang);
 
             }

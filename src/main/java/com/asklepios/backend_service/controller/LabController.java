@@ -13,6 +13,7 @@ import com.asklepios.backend_service.service.*;
 import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,16 +30,31 @@ import java.util.stream.Collectors;
 //@CrossOrigin
 @Slf4j
 public class LabController {
+    @Autowired
     private  final ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService;
+    @Autowired
     private final  ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService;
+    @Autowired
     private final ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService;
+    @Autowired
     private  final  ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService;
+    @Autowired
     private final  ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService;
+    @Autowired
     private final ApDiagnosticTestService apDiagnosticTestService;
+    @Autowired
    private  final  ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService;
+    @Autowired
    private final ApDiagnosticTestProfileService apDiagnosticTestProfileService;
+    @Autowired
    private final ApLabResultLogService apLabResultLogService;
-    public LabController(ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApLabResultLogService apLabResultLogService) {
+    @Autowired
+    private final ApDiagnosticOrderTestsService apDiagnosticOrderTestsService;
+ @Autowired
+ private final ApDiagnosticOrdersService apDiagnosticOrdersService;
+ @Autowired
+ private  final ApUserService apUserService;
+    public LabController(ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApLabResultLogService apLabResultLogService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApUserService apUserService) {
         this.apDiagnosticOrderTestsNotesService = apDiagnosticOrderTestsNotesService;
         this.apDiagnosticOrderTestsSamplesService = apDiagnosticOrderTestsSamplesService;
         this.apDiagnosticOrderTestsResultService = apDiagnosticOrderTestsResultService;
@@ -48,6 +64,9 @@ public class LabController {
         this.apDiagnosticTestLaboratoryService = apDiagnosticTestLaboratoryService;
         this.apDiagnosticTestProfileService = apDiagnosticTestProfileService;
         this.apLabResultLogService = apLabResultLogService;
+        this.apDiagnosticOrderTestsService = apDiagnosticOrderTestsService;
+        this.apDiagnosticOrdersService = apDiagnosticOrdersService;
+        this.apUserService = apUserService;
     }
     @PostMapping(value = "/save-diagnostic-order-tests-notes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTestsNotes(@RequestBody ApDiagnosticOrderTestsNotes request,
@@ -247,14 +266,22 @@ public class LabController {
             ApDiagnosticTestNormalRangeLovService lovService = new ApDiagnosticTestNormalRangeLovService();
 
             results.forEach(o -> {
-
+                ApDiagnosticOrderTests test=null;
                 ApDiagnosticTestNormalRange normalRange = null;
                 try {
                     normalRange = apDiagnosticTestNormalRangeService.getRecord(o.getNormalRangeKey());
+                    test=apDiagnosticOrderTestsService.getRecord(o.getOrderTestKey());
+                    o.setTest(test);
+                    o.getTest().setTest( apDiagnosticTestService.getRecord(o.getMedicalTestKey()));
+                    o.setReviewByUser(apUserService.getRecord(o.getReviewBy()));
+                    o.getTest().setProfileList(apDiagnosticTestProfileService.getList("diagnostic_test_key= '"+o.getMedicalTestKey()+"'"));
+                    o.getTest().setOrderId(apDiagnosticOrdersService.getRecord(o.getOrderKey()).getOrderId());
+                    o.getTest().setOrder(apDiagnosticOrdersService.getRecord(o.getOrderKey()));
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
                 o.setNormalRange(normalRange);
+
 
                 if (normalRange != null) {
 
@@ -275,7 +302,7 @@ public class LabController {
                         );
                     }
                 } else {
-                    System.out.println("==============> No Normal Range found for key: " + o.getNormalRangeKey());
+
                 }
 
                 apDiagnosticOrderTestsResultService.populateLovFields(o, lang);
@@ -290,52 +317,6 @@ public class LabController {
             return ResponseEntity.status(500).body(e);
         }
     }
-
-//    @GetMapping(value = "/diagnostic-order-test-result-list", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<?> getDiagnosticOrderTestResultList(@RequestParam Map<String, String> queryParams,
-//                                                              @Nullable @RequestHeader String facility_id,
-//                                                              @Nullable @RequestHeader String access_token,
-//                                                              @Nullable @RequestHeader Integer access_level,
-//                                                              @Nullable @RequestHeader String lang) {
-//        try {
-//            ParentResponse<List<ApDiagnosticOrderTestsResult>> response = new ParentResponse<>();
-//
-//            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
-//                response.setObject(new ArrayList<>());
-//                return ResponseEntity.ok(response);
-//            }
-//
-//            ListRequest listRequest = new ListRequest(queryParams);
-//            String where = listRequest.buildWhereStatement();
-//            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-//            List<ApDiagnosticOrderTestsResult> results = apDiagnosticOrderTestsResultService.getList(where);
-//            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_diagnostic_order_tests_result where " + whereForTotal);
-//            for (ApDiagnosticOrderTestsResult o : results) {
-//                System.out.println("=============> key:"+o.getKey() );
-//                System.out.println("==============> normal :"+o.getNormalRangeKey() );
-//                 o.setNormalRange(apDiagnosticTestNormalRangeService.getRecord(o.getNormalRangeKey()));
-//                System.out.println("==============> "+o.getNormalRange().getGenderLkey() );
-//                List<ApDiagnosticTestNormalRangeLov> lovList = new ApDiagnosticTestNormalRangeLovService().getList("normal_range_key = '" +  o.getNormalRangeKey()+ "' and deleted_at is null");
-//                System.out.println("List:"+lovList);
-//                if(!lovList.isEmpty()){
-//                    List<String> lovIds = new ArrayList<>();
-//                    lovList.forEach(lov -> lovIds.add(lov.getLovLkey()));
-//                    o.getNormalRange().setLovList(lovIds);
-//                }
-//
-//                apDiagnosticOrderTestsResultService.populateLovFields(o, lang);
-//
-//            }
-//            response.setObject(results);
-//            response.setExtraNumeric(totalRecord);
-//            return ResponseEntity.ok(response);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            log.error(e.getMessage());
-//            return ResponseEntity.status(500).body(e);
-//        }
-//    }
 
 
     @PostMapping(value = "/save-diagnostic-order-tests-result-notes", produces = MediaType.APPLICATION_JSON_VALUE)

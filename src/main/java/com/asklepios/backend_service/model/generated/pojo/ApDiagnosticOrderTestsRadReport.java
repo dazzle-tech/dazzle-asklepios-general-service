@@ -10,6 +10,7 @@ import com.asklepios.backend_service.model.generated.entity.ApDiagnosticOrderTes
 @Setter
 @Slf4j
 public class ApDiagnosticOrderTestsRadReport extends ApDiagnosticOrderTestsRadReportEntity implements Serializable {
-
+    ApDiagnosticOrderTests test;
+    private ApUser reviewByUser;
 
 }

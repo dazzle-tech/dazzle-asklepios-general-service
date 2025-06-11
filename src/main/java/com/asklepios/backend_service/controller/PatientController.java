@@ -70,7 +70,22 @@ public class PatientController {
         this.apPractitionerService = apPractitionerService;
         this.apAttachmentService = apAttachmentService;
     }
+    @GetMapping("/get-patient-by-id")
+    public ResponseEntity<?> getPatientById(
+            @RequestParam String key,
+            @RequestHeader(name = "lang", required = false) String lang) throws SQLException {
 
+        ApPatient patient = apPatientService.getRecord(key);
+        ParentResponse<ApPatient> response = new ParentResponse<>();
+
+        if (patient != null && patient.getKey() != null && !patient.getKey().isEmpty()) {
+            response.setObject(patient);
+            return ResponseEntity.ok(response);
+        } else {
+            response.setObject(new ApPatient());
+            return ResponseEntity.ok(response); 
+        }
+    }
     @PostMapping(value = "/get-patient", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPatient(@RequestParam("patient_id") String patient_id, @Nullable @RequestHeader String facility_id, @Nullable @RequestHeader String access_token, @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang) {
         try {

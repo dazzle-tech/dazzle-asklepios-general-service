@@ -15,5 +15,6 @@ public class ApDiagnosticOrderTests extends ApDiagnosticOrderTestsEntity impleme
     private   ApDiagnosticTest test;
     private List<ApDiagnosticTestProfile> profileList;
     private String orderId;
+    private ApDiagnosticOrders order;
 
 }

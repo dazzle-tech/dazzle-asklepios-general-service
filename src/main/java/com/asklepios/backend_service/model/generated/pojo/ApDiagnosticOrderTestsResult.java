@@ -12,4 +12,5 @@ import com.asklepios.backend_service.model.generated.entity.ApDiagnosticOrderTes
 public class ApDiagnosticOrderTestsResult extends ApDiagnosticOrderTestsResultEntity implements Serializable {
  ApDiagnosticTestNormalRange normalRange;
  ApDiagnosticOrderTests test;
+ private ApUser reviewByUser;
 }

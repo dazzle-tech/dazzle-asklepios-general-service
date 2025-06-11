@@ -30,19 +30,31 @@ import java.util.stream.Collectors;
 //@CrossOrigin
 @Slf4j
 public class LabController {
+    @Autowired
     private  final ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService;
+    @Autowired
     private final  ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService;
+    @Autowired
     private final ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService;
+    @Autowired
     private  final  ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService;
+    @Autowired
     private final  ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService;
+    @Autowired
     private final ApDiagnosticTestService apDiagnosticTestService;
+    @Autowired
    private  final  ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService;
+    @Autowired
    private final ApDiagnosticTestProfileService apDiagnosticTestProfileService;
+    @Autowired
    private final ApLabResultLogService apLabResultLogService;
+    @Autowired
     private final ApDiagnosticOrderTestsService apDiagnosticOrderTestsService;
  @Autowired
  private final ApDiagnosticOrdersService apDiagnosticOrdersService;
-    public LabController(ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApLabResultLogService apLabResultLogService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticOrdersService apDiagnosticOrdersService) {
+ @Autowired
+ private  final ApUserService apUserService;
+    public LabController(ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApLabResultLogService apLabResultLogService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApUserService apUserService) {
         this.apDiagnosticOrderTestsNotesService = apDiagnosticOrderTestsNotesService;
         this.apDiagnosticOrderTestsSamplesService = apDiagnosticOrderTestsSamplesService;
         this.apDiagnosticOrderTestsResultService = apDiagnosticOrderTestsResultService;
@@ -54,6 +66,7 @@ public class LabController {
         this.apLabResultLogService = apLabResultLogService;
         this.apDiagnosticOrderTestsService = apDiagnosticOrderTestsService;
         this.apDiagnosticOrdersService = apDiagnosticOrdersService;
+        this.apUserService = apUserService;
     }
     @PostMapping(value = "/save-diagnostic-order-tests-notes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTestsNotes(@RequestBody ApDiagnosticOrderTestsNotes request,
@@ -259,10 +272,11 @@ public class LabController {
                     normalRange = apDiagnosticTestNormalRangeService.getRecord(o.getNormalRangeKey());
                     test=apDiagnosticOrderTestsService.getRecord(o.getOrderTestKey());
                     o.setTest(test);
-                    o.getTest().setTest( apDiagnosticTestService.getRecord(o.getMedicalTestKey()));;
-
+                    o.getTest().setTest( apDiagnosticTestService.getRecord(o.getMedicalTestKey()));
+                    o.setReviewByUser(apUserService.getRecord(o.getReviewBy()));
                     o.getTest().setProfileList(apDiagnosticTestProfileService.getList("diagnostic_test_key= '"+o.getMedicalTestKey()+"'"));
                     o.getTest().setOrderId(apDiagnosticOrdersService.getRecord(o.getOrderKey()).getOrderId());
+                    o.getTest().setOrder(apDiagnosticOrdersService.getRecord(o.getOrderKey()));
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }

@@ -79,7 +79,9 @@ public class SetupController implements Serializable {
     private final ApDiagnosticTestProfileService apDiagnosticTestProfileService;
     private  final ApMedicalSheetsService apMedicalSheetsService;
     private  final ApDiagnosticCodingService apDiagnosticCodingService;
-    public SetupController(EmailService emailService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1, EmailService emailService1, ApAgeGroupService apAgeGroupService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestPathologyService apDiagnosticTestPathologyService, ApVaccineService apVaccineService, ApVaccineBrandsService apVaccineBrandsService, ApVaccineDoseService apVaccineDoseService, ApVaccineDosesIntervalService apVaccineDosesIntervalService, ApProcedureSetupService apProcedureSetupService, ApProcedureCodingService apProcedureCodingService, ApProcedurePriceListService apProcedurePriceListService, ApDuplicationCandidateSetupService apDuplicationCandidateSetupService, ApCptService apCptService, ApLoincService apLoincService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestNormalRangeLovService apDiagnosticTestNormalRangeLovService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApMedicalSheetsService apMedicalSheetsService, ApDiagnosticCodingService apDiagnosticCodingService) {
+    private final ApRoomService apRoomService;
+    private final ApBedService apBedService;
+    public SetupController(EmailService emailService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1, EmailService emailService1, ApAgeGroupService apAgeGroupService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestPathologyService apDiagnosticTestPathologyService, ApVaccineService apVaccineService, ApVaccineBrandsService apVaccineBrandsService, ApVaccineDoseService apVaccineDoseService, ApVaccineDosesIntervalService apVaccineDosesIntervalService, ApProcedureSetupService apProcedureSetupService, ApProcedureCodingService apProcedureCodingService, ApProcedurePriceListService apProcedurePriceListService, ApDuplicationCandidateSetupService apDuplicationCandidateSetupService, ApCptService apCptService, ApLoincService apLoincService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestNormalRangeLovService apDiagnosticTestNormalRangeLovService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApMedicalSheetsService apMedicalSheetsService, ApDiagnosticCodingService apDiagnosticCodingService, ApRoomService apRoomService, ApBedService apBedService) {
         this.authService = authService;
         this.apModuleService = apModuleService;
         this.apScreenService = apScreenService;
@@ -129,6 +131,8 @@ public class SetupController implements Serializable {
         this.apDiagnosticTestProfileService = apDiagnosticTestProfileService;
         this.apMedicalSheetsService = apMedicalSheetsService;
         this.apDiagnosticCodingService = apDiagnosticCodingService;
+        this.apRoomService = apRoomService;
+        this.apBedService = apBedService;
     }
 
     @GetMapping(value = "/navigation-map", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -3054,5 +3058,150 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @PostMapping(value = "/save-room", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveRoom(
+            @RequestBody ApRoom room,
+            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+            @jakarta.annotation.Nullable @RequestHeader String access_token,
+            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+            @jakarta.annotation.Nullable @RequestHeader String lang) {
 
+
+        if (room.getFacilityKey() == null) {
+            return ResponseEntity.badRequest().body("Header 'facility_id' is required");
+        }
+
+        try {
+            ParentResponse<ApRoom> response = new ParentResponse<>();
+            apRoomService.saveRecord(room);
+
+            response.setObject(room);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body("Internal Server Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/room-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> roomList(@RequestParam Map<String, String> queryParams,
+                                        @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                        @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                        @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                        @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApRoom>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            List<ApRoom> list = apRoomService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_room where " + whereForTotal);
+            for (ApRoom all : list) {
+                if (all.getFacilityKey() != null) {
+                    all.setFacility(apFacilityService.getRecord(all.getFacilityKey()));
+                }
+                if (all.getDepartmentKey() != null) {
+                    all.setDepartment(apDepartmentService.getRecord(all.getDepartmentKey()));
+                }
+                apRoomService.populateLovFields(all, lang);
+            }
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/deactive-active-room", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deactiveActiveRoom(@RequestBody ApRoom room,
+                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                     @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApRoom> response = new ParentResponse<>();
+            apRoomService.deactive_avtice_Record(room);
+            response.setObject(room);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/save-bed", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveBed(
+            @RequestBody ApBed bed,
+            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+            @jakarta.annotation.Nullable @RequestHeader String access_token,
+            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+            @jakarta.annotation.Nullable @RequestHeader String lang) {
+          try {
+            ParentResponse<ApBed> response = new ParentResponse<>();
+            apBedService.saveRecord(bed);
+            response.setObject(bed);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body("Internal Server Error: " + e.getMessage());
+        }
+    }
+    @GetMapping(value = "/bed-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> BedList(@RequestParam Map<String, String> queryParams,
+                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                      @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApBed>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            List<ApBed> list = apBedService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_bed where " + whereForTotal);
+            for (ApBed all : list) {
+              apBedService.populateLovFields(all, lang);
+            }
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/deactive-active-bed", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deactiveActiveBed(@RequestBody ApBed bed,
+                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApBed> response = new ParentResponse<>();
+            apBedService.deactive_avtice_Record(bed);
+            response.setObject(bed);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 }

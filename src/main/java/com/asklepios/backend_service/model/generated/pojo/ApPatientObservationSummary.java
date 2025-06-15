@@ -11,5 +11,5 @@ import com.asklepios.backend_service.model.generated.entity.ApPatientObservation
 @Slf4j
 public class ApPatientObservationSummary extends ApPatientObservationSummaryEntity implements Serializable {
 
-
+private ApEncounter encounter;
 }

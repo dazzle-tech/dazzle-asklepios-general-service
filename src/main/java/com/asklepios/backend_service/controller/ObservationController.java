@@ -77,6 +77,7 @@ public class ObservationController {
             List<ApPatientObservationSummary> list = apPatientObservationSummaryService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_patient_observation_summary where " + whereForTotal);
             for (ApPatientObservationSummary obs : list) {
+                obs.setEncounter(apEncounterService.getRecord(obs.getVisitKey()));
                 apPatientObservationSummaryService.populateLovFields(obs, lang);
             }
             response.setObject(list);

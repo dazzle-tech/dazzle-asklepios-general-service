@@ -8,6 +8,7 @@ import com.asklepios.backend_service.model.pojo.ValidationResult;
 import com.asklepios.backend_service.model.pojo.request.ListRequest;
 import com.asklepios.backend_service.model.pojo.request.PhysicalExamAreaRequest;
 import com.asklepios.backend_service.model.pojo.request.ReviewOfSystemRequest;
+import com.asklepios.backend_service.model.pojo.response.GroupedTestResult;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
 import com.asklepios.backend_service.service.*;
 import jakarta.annotation.Nullable;
@@ -460,4 +461,30 @@ public class LabController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
+    @GetMapping(value = "/get-test-group-by", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getTestsGroupBy(@RequestParam Map<String, String> queryParams,
+                                             @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<GroupedTestResult>> response = new ParentResponse<>();
+
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(Collections.emptyList());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+
+            List<GroupedTestResult> groupedList = apDiagnosticOrderTestsResultService.getGroupedResultsByOrderTestKey(where);
+
+            response.setObject(groupedList);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            log.error("Error in /get-test-group-by endpoint: {}", e.getMessage());
+            return ResponseEntity.status(500).body("Error occurred while fetching grouped results.");
+        }
+    }
+
 }

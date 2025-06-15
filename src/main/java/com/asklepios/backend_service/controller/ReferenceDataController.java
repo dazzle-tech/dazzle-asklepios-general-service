@@ -2,7 +2,6 @@ package com.asklepios.backend_service.controller;
 
 import com.asklepios.backend_service.database.DS;
 import com.asklepios.backend_service.model.generated.pojo.*;
-import com.asklepios.backend_service.model.pojo.request.ListRequest;
 import com.asklepios.backend_service.model.pojo.request.ListRequestAllValues;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
 import com.asklepios.backend_service.model.pojo.response.UITranslationResponse;
@@ -25,13 +24,13 @@ import java.util.Objects;
 import redis.clients.jedis.Jedis;
 
 @RestController
-@RequestMapping("/utility")
+@RequestMapping("/reference-data")
 //@CrossOrigin
 @Slf4j
 /*
 this class will serve as the center point service for all LOVs, Users roles fetching, lookups , and non-transactional objects
  */
-public class UtilityController implements Serializable {
+public class ReferenceDataController implements Serializable {
 
     private final ApFacilityService apFacilityService;
     private final ApLovService apLovService;
@@ -49,7 +48,7 @@ public class UtilityController implements Serializable {
     private final PublicServices publicServices;
     private final AuthService authService;
 
-    public UtilityController(ApFacilityService apFacilityService, ApLovService apLovService, ApLovValuesService apLovValuesService, @Qualifier("redisTemplateLov") RedisTemplate<String, ApLov> redisTemplateLov, @Qualifier("stringRedisTemplate1") RedisTemplate<String, String> redisTemplateString, @Qualifier("redisTemplateTranslation") RedisTemplate<String, ApTranslation> translationRedisTemplate, @Qualifier("redisTemplateGlobalSettings") RedisTemplate<String, ApGlobalSettings> redisTemplateGlobalSettings, RedisTemplate<String, ApMessages> redisTemplateMessages, ApTranslationService apTranslationService, ApGlobalSettingsService apGlobalSettingsService, ApMessagesService apMessagesService, RedisTemplate<String, ApLovValues> redisTemplateLovValuesList, Jedis jedis, PublicServices publicServices, AuthService authService) {
+    public ReferenceDataController(ApFacilityService apFacilityService, ApLovService apLovService, ApLovValuesService apLovValuesService, @Qualifier("redisTemplateLov") RedisTemplate<String, ApLov> redisTemplateLov, @Qualifier("stringRedisTemplate1") RedisTemplate<String, String> redisTemplateString, @Qualifier("redisTemplateTranslation") RedisTemplate<String, ApTranslation> translationRedisTemplate, @Qualifier("redisTemplateGlobalSettings") RedisTemplate<String, ApGlobalSettings> redisTemplateGlobalSettings, RedisTemplate<String, ApMessages> redisTemplateMessages, ApTranslationService apTranslationService, ApGlobalSettingsService apGlobalSettingsService, ApMessagesService apMessagesService, RedisTemplate<String, ApLovValues> redisTemplateLovValuesList, Jedis jedis, PublicServices publicServices, AuthService authService) {
         this.apFacilityService = apFacilityService;
         this.apLovService = apLovService;
         this.apLovValuesService = apLovValuesService;

@@ -121,6 +121,8 @@ public class ApPatientEntity implements Serializable {
 	private String districtLkey;
 	private ApLovValues districtLvalue;
 	private String countryId;
+	private String bloodGroupLkey;
+	private ApLovValues bloodGroupLvalue;
 	private ApPatientEntity translatedObject;
 
 }

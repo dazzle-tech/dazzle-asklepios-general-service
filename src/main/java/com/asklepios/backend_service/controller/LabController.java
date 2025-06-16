@@ -181,6 +181,11 @@ public class LabController {
             ParentResponse<ApDiagnosticOrderTestsResult> response = new ParentResponse<>();
 
             apDiagnosticOrderTestsResultService.saveRecord(request);
+            if(request.getMedicalTestKey().equals("470435488509800") && request.getResultLkey() != null){
+                ApPatient patient = apPatientService.getRecord(request.getPatientKey());
+                patient.setBloodGroupLkey(request.getResultLkey());
+                apPatientService.updateRecord(patient);
+            }
 
             response.setObject(request);
             return ResponseEntity.ok(response);
@@ -216,6 +221,7 @@ public class LabController {
                         response.setIsProfile(true);
                         response.setTestProfileKey(profile.getKey());
                         apDiagnosticOrderTestsResultService.saveRecord(response);
+
                     }
                     ParentResponse<ApDiagnosticOrderTestsResult> response = new ParentResponse<>();
                       response.setObject(new ApDiagnosticOrderTestsResult());
@@ -335,6 +341,7 @@ public class LabController {
         try {
             ParentResponse<ApDiagnosticOrderTestsResultNotes> response = new ParentResponse<>();
             apDiagnosticOrderTestsResultNotesService.saveRecord(request);
+
             response.setObject(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -417,8 +424,6 @@ public class LabController {
         try {
             ParentResponse<ApLabResultLog> response = new ParentResponse<>();
             ApDiagnosticOrderTestsResult result=apDiagnosticOrderTestsResultService.getRecord(request.getResultKey());
-
-            System.out.println(request.getResultValue());
             apLabResultLogService.saveRecord(request);
 
             response.setObject(request);

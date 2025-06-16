@@ -55,7 +55,9 @@ public class LabController {
  private final ApDiagnosticOrdersService apDiagnosticOrdersService;
  @Autowired
  private  final ApUserService apUserService;
-    public LabController(ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApLabResultLogService apLabResultLogService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApUserService apUserService) {
+ @Autowired
+ private final  ApPatientService apPatientService;
+    public LabController(ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApLabResultLogService apLabResultLogService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApUserService apUserService, ApPatientService apPatientService) {
         this.apDiagnosticOrderTestsNotesService = apDiagnosticOrderTestsNotesService;
         this.apDiagnosticOrderTestsSamplesService = apDiagnosticOrderTestsSamplesService;
         this.apDiagnosticOrderTestsResultService = apDiagnosticOrderTestsResultService;
@@ -68,6 +70,7 @@ public class LabController {
         this.apDiagnosticOrderTestsService = apDiagnosticOrderTestsService;
         this.apDiagnosticOrdersService = apDiagnosticOrdersService;
         this.apUserService = apUserService;
+        this.apPatientService = apPatientService;
     }
     @PostMapping(value = "/save-diagnostic-order-tests-notes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTestsNotes(@RequestBody ApDiagnosticOrderTestsNotes request,
@@ -278,6 +281,7 @@ public class LabController {
                     o.getTest().setProfileList(apDiagnosticTestProfileService.getList("diagnostic_test_key= '"+o.getMedicalTestKey()+"'"));
                     o.getTest().setOrderId(apDiagnosticOrdersService.getRecord(o.getOrderKey()).getOrderId());
                     o.getTest().setOrder(apDiagnosticOrdersService.getRecord(o.getOrderKey()));
+                   o.getTest().getOrder().setPatient(apPatientService.getRecord(o.getPatientKey()));
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }

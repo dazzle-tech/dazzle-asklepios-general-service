@@ -91,47 +91,25 @@ public class ObservationController {
 
         }
     }
-
     @PostMapping(value = "/save-observation-summary", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveObservationSummary(
+    public ResponseEntity<?> saveRoomService(
             @RequestBody ApPatientObservationSummary observationSummary,
-            @RequestParam Map<String, String> queryParams,
-            @Nullable @RequestHeader String facility_id,
-            @Nullable @RequestHeader String access_token,
-            @Nullable @RequestHeader Integer access_level,
-            @Nullable @RequestHeader String lang) {
-
-        ParentResponse<List<ApPatientObservationSummary>> response = new ParentResponse<>();
-
+            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+            @jakarta.annotation.Nullable @RequestHeader String access_token,
+            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+            @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
-
-            if ("true".equals(queryParams.get("ignore"))) {
-                response.setObject(new ArrayList<>());
-                return ResponseEntity.ok(response);
-            }
-
-
-            ListRequest listRequest = new ListRequest(queryParams);
-            String where = listRequest.buildWhereStatement();
-            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-
-            List<ApPatientObservationSummary> list = apPatientObservationSummaryService.getList(where);
-
-
-
-                apPatientObservationSummaryService.saveRecord(observationSummary);
-
-
-            response.setObject(list);
+            ParentResponse<ApPatientObservationSummary> response = new ParentResponse<>();
+            apPatientObservationSummaryService.saveRecord(observationSummary);
+            response.setObject(observationSummary);
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            log.error("Error saving observation summary: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing the observation summary.");
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body("Internal Server Error: " + e.getMessage());
         }
     }
-
-
     @PostMapping(value = "/remove-observation-summary", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeObservationSummary( @RequestBody ApPatientObservationSummary observationSummary,
                                                      @Nullable @RequestHeader String facility_id,

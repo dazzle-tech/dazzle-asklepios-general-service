@@ -39,12 +39,15 @@ public class RadController {
     private final ApDiagnosticTestService apDiagnosticTestService;
     @Autowired
     private final ApDiagnosticOrdersService apDiagnosticOrdersService;
-    public RadController(ApDiagnosticOrderTestsRadReportService apDiagnosticOrderTestsRadReportService, ApDiagnosticOrderTestsReportNotesService apDiagnosticOrderTestsReportNotesService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticOrdersService apDiagnosticOrdersService) {
+    @Autowired
+    private final  ApPatientService apPatientService;
+    public RadController(ApDiagnosticOrderTestsRadReportService apDiagnosticOrderTestsRadReportService, ApDiagnosticOrderTestsReportNotesService apDiagnosticOrderTestsReportNotesService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApPatientService apPatientService) {
         this.apDiagnosticOrderTestsRadReportService = apDiagnosticOrderTestsRadReportService;
         this.apDiagnosticOrderTestsReportNotesService = apDiagnosticOrderTestsReportNotesService;
         this.apDiagnosticOrderTestsService = apDiagnosticOrderTestsService;
         this.apDiagnosticTestService = apDiagnosticTestService;
         this.apDiagnosticOrdersService = apDiagnosticOrdersService;
+        this.apPatientService = apPatientService;
     }
     @PostMapping(value = "/save-diagnostic-order-tests-rad-report", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTestsRadReport(@RequestBody ApDiagnosticOrderTestsRadReport request,
@@ -92,6 +95,7 @@ public class RadController {
                 o.setTest(test);
                 o.getTest().setTest( apDiagnosticTestService.getRecord(o.getMedicalTestKey()));
                 o.getTest().setOrder(apDiagnosticOrdersService.getRecord(o.getOrderKey()));
+                o.getTest().getOrder().setPatient(apPatientService.getRecord(o.getPatientKey()));
                 apDiagnosticOrderTestsRadReportService.populateLovFields(o, lang);
 
             }

@@ -77,7 +77,7 @@ public class PatientController {
 
         ApPatient patient = apPatientService.getRecord(key);
         ParentResponse<ApPatient> response = new ParentResponse<>();
-
+         apPatientService.populateLovFields(patient,lang);
         if (patient != null && patient.getKey() != null && !patient.getKey().isEmpty()) {
             response.setObject(patient);
             return ResponseEntity.ok(response);

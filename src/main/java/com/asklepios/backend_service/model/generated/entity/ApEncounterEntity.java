@@ -117,6 +117,7 @@ public class ApEncounterEntity implements Serializable {
 	private ApLovValues resourceTypeLvalue;
 	private String resourceKey;
 	private String planInstructionsNote;
+	private Boolean discharge = false;
 	private ApEncounterEntity translatedObject;
 
 }

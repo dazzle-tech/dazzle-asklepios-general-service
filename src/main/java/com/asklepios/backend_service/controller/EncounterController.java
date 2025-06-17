@@ -1957,4 +1957,29 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @PostMapping(value = "/discharge-inpatient-encounter", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> DischargeEncounterInpatient(@RequestBody ApEncounter apEncounter,
+                                                         @Nullable @RequestHeader String facility_id,
+                                                         @Nullable @RequestHeader String access_token,
+                                                         @Nullable @RequestHeader Integer access_level,
+                                                         @Nullable @RequestHeader String lang,
+                                                         @Nullable @RequestHeader String screenKey
+    ) {
+        try {
+            ParentResponse<ApEncounter> response = new ParentResponse<>();
+            apEncounter.setDischarge(true); // TO CLOSE INPATIENT ENCOUNTER
+            apEncounterService.saveRecord(apEncounter);
+            apEncounterService.populateLovFields(apEncounter, lang);
+            ApPatient patient = apPatientService.getRecord(apEncounter.getPatientKey());
+            apPatientService.populateLovFields(patient, lang);
+            apEncounter.setPatientObject(patient);
+            response.setObject(apEncounter);
+            response.setMsg("Visit Discharged Successfully");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 }

@@ -21,7 +21,7 @@ public class ApProcedurePerformanceEntity implements Serializable {
 	private ApLovValues anesthesiaTypeLvalue;
 	private BigDecimal anesthesiaStartTime;
 	private BigDecimal anesthesiaEndTime;
-	private String anesthesiaAdministeredBy;
+	private String anesthesiaAdministeredKey;
 	private Boolean timeOut = false;
 	private String procedureOutcomeLkey;
 	private ApLovValues procedureOutcomeLvalue;
@@ -43,6 +43,7 @@ public class ApProcedurePerformanceEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isvalid = false;
+	private String procedureKey;
 	private ApProcedurePerformanceEntity translatedObject;
 
 }

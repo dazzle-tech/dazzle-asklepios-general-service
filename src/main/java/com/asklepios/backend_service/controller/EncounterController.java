@@ -324,10 +324,14 @@ public class EncounterController {
             if (apEncounter.getEncounterStatusLkey().equals("91063195286200")) { // TODO replace with redis by lov code (ENC_STATUS/NEW)
                 // update status to in-progress when encounter is new
                 apEncounter.setEncounterStatusLkey("91084250213000"); // TODO replace with redis by lov code (ENC_STATUS/IN_PROGRESS)
+                Map<String, Integer> counts =apEncounterService.countOngoingVisits(apEncounter.getPatientKey());
 
-
+                int countOngoing = counts.getOrDefault("count_status_ongoing", 0);
+                if (countOngoing > 0) {
+                    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                            .body(Map.of("message", "There Patient Has Encounter Ongoing."));
+                }
 //                BigDecimal isExistingVisit = DS.executeDecimalResultQuery("select count(0) from ap_encounter where key ='" + apEncounter.getKey() + "'");
-
 
                 apEncounterService.saveRecord(apEncounter);
 

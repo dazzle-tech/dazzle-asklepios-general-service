@@ -245,15 +245,22 @@ public class EncounterController {
 
                 int countOngoing = counts.getOrDefault("count_status_ongoing", 0);
                 int countResourceAndStatus = counts.getOrDefault("count_resource_and_status", 0);
-
+                int countOutpatientNewEncounter = counts.getOrDefault("count_status_outpatient_new", 0);
                 if (countOngoing > 0 && apEncounter.getResourceTypeLkey().equals("4217389643435490")) {
                     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                             .body(Map.of("message", "There Patient Has Encounter Ongoing."));
                 }
-
                 if (countResourceAndStatus > 0 && apEncounter.getResourceTypeLkey().equals("4217389643435490")) {
                     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                            .body(Map.of("message", "There is more than one inpatient visit made for this patient."));
+                            .body(Map.of("message", "There Is More Than One Inpatient Visit Made For This Patient."));
+                }
+                if (countResourceAndStatus > 0 ) {
+                    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                            .body(Map.of("message", "This Patient Has Inpatient Encounter"));
+                }
+                if(countOutpatientNewEncounter > 0 && apEncounter.getResourceTypeLkey().equals("4217389643435490")){
+                    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                            .body(Map.of("message", "This Patient Has New Outpatient Encounter"));
                 }
 
                 BigDecimal lastVisitId = DS.executeDecimalResultQuery("select max(visit_id) from ap_encounter");

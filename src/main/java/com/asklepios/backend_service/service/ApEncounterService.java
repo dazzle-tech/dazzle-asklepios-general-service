@@ -284,22 +284,25 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
     }
     public Map<String, Integer> countNewInpatientOrOngoingVisits(String patientKey) throws SQLException {
         String query = """
-    SELECT 
-       COUNT(CASE
-                   WHEN encounter_status_lkey = '91084250213000'
-                       THEN 1
-             END) AS count_status_ongoing,
-     
-         COUNT(CASE
-                   WHEN resource_type_lkey = '4217389643435490'
-                       AND encounter_status_lkey = '91063195286200'
-                       AND discharge = false
-                       THEN 1
-             END) AS count_resource_and_status
-    FROM ap_encounter
-  WHERE patient_key = ? 
-""";
-
+        SELECT 
+           COUNT(CASE
+                       WHEN encounter_status_lkey = '91084250213000'
+                           THEN 1
+                 END) AS count_status_ongoing,
+          COUNT(CASE
+                       WHEN encounter_status_lkey = '91063195286200'  
+                          AND resource_type_lkey != '4217389643435490'     
+                           THEN 1
+                 END) AS count_status_outpatient_new,
+           COUNT(CASE
+                       WHEN resource_type_lkey = '4217389643435490'
+                           AND encounter_status_lkey = '91063195286200'
+                           AND discharge = false
+                           THEN 1
+                 END) AS count_resource_and_status
+        FROM ap_encounter
+        WHERE patient_key = ? 
+    """;
 
         Map<String, Integer> result = new HashMap<>();
 
@@ -307,13 +310,15 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
                 Connection con = DS.getConnection();
                 PreparedStatement ps = con.prepareStatement(query)
         ) {
-            ps.setString(1, patientKey);    ;
+            ps.setString(1, patientKey);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     result.put("count_status_ongoing", rs.getInt("count_status_ongoing"));
+                    result.put("count_status_outpatient_new", rs.getInt("count_status_outpatient_new"));
                     result.put("count_resource_and_status", rs.getInt("count_resource_and_status"));
                 } else {
                     result.put("count_status_ongoing", 0);
+                    result.put("count_status_outpatient_new", 0);
                     result.put("count_resource_and_status", 0);
                 }
             }
@@ -324,6 +329,7 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
 
         return result;
     }
+
 
 
 }

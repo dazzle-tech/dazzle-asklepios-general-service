@@ -43,7 +43,7 @@ record.setAnesthesiaUsed(rs.getBoolean("anesthesia_used"));
 record.setAnesthesiaTypeLkey(rs.getString("anesthesia_type_lkey"));
 record.setAnesthesiaStartTime(rs.getBigDecimal("anesthesia_start_time"));
 record.setAnesthesiaEndTime(rs.getBigDecimal("anesthesia_end_time"));
-record.setAnesthesiaAdministeredBy(rs.getString("anesthesia_administered_by"));
+record.setAnesthesiaAdministeredKey(rs.getString("anesthesia_administered_key"));
 record.setTimeOut(rs.getBoolean("time_out"));
 record.setProcedureOutcomeLkey(rs.getString("procedure_outcome_lkey"));
 record.setObservations(rs.getString("observations"));
@@ -61,6 +61,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsvalid(rs.getBoolean("isvalid"));
+record.setProcedureKey(rs.getString("procedure_key"));
 } else { record = null; }
 return record;
 }
@@ -68,7 +69,7 @@ return record;
 public void updateRecord(ApProcedurePerformance record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_procedure_performance set key = ?, actual_start_time = ?, anesthesia_used = ?, anesthesia_type_lkey = ?, anesthesia_start_time = ?, anesthesia_end_time = ?, anesthesia_administered_by = ?, time_out = ?, procedure_outcome_lkey = ?, observations = ?, complication_type_lkey = ?, complication_severity_lkey = ?, actions_taken = ?, actual_end_time = ?, additional_notes = ?, home_instruction_lkey = ?, home_instruction_notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, isvalid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_procedure_performance set key = ?, actual_start_time = ?, anesthesia_used = ?, anesthesia_type_lkey = ?, anesthesia_start_time = ?, anesthesia_end_time = ?, anesthesia_administered_key = ?, time_out = ?, procedure_outcome_lkey = ?, observations = ?, complication_type_lkey = ?, complication_severity_lkey = ?, actions_taken = ?, actual_end_time = ?, additional_notes = ?, home_instruction_lkey = ?, home_instruction_notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, isvalid = ?, procedure_key = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -77,7 +78,7 @@ ps.setBoolean(3, record.getAnesthesiaUsed());
 ps.setString(4, record.getAnesthesiaTypeLkey());
 ps.setBigDecimal(5, record.getAnesthesiaStartTime());
 ps.setBigDecimal(6, record.getAnesthesiaEndTime());
-ps.setString(7, record.getAnesthesiaAdministeredBy());
+ps.setString(7, record.getAnesthesiaAdministeredKey());
 ps.setBoolean(8, record.getTimeOut());
 ps.setString(9, record.getProcedureOutcomeLkey());
 ps.setString(10, record.getObservations());
@@ -95,7 +96,8 @@ ps.setBigDecimal(21, record.getCreatedAt());
 ps.setBigDecimal(22, record.getUpdatedAt());
 ps.setBigDecimal(23, record.getDeletedAt());
 ps.setBoolean(24, record.getIsvalid());
-ps.setString(25, record.getKey());
+ps.setString(25, record.getProcedureKey());
+ps.setString(26, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -123,7 +125,7 @@ record.setAnesthesiaUsed(rs.getBoolean("anesthesia_used"));
 record.setAnesthesiaTypeLkey(rs.getString("anesthesia_type_lkey"));
 record.setAnesthesiaStartTime(rs.getBigDecimal("anesthesia_start_time"));
 record.setAnesthesiaEndTime(rs.getBigDecimal("anesthesia_end_time"));
-record.setAnesthesiaAdministeredBy(rs.getString("anesthesia_administered_by"));
+record.setAnesthesiaAdministeredKey(rs.getString("anesthesia_administered_key"));
 record.setTimeOut(rs.getBoolean("time_out"));
 record.setProcedureOutcomeLkey(rs.getString("procedure_outcome_lkey"));
 record.setObservations(rs.getString("observations"));
@@ -141,6 +143,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsvalid(rs.getBoolean("isvalid"));
+record.setProcedureKey(rs.getString("procedure_key"));
 list.add(record);
 }
 return list;
@@ -149,7 +152,7 @@ return list;
 public String saveRecord(ApProcedurePerformance record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_procedure_performance values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_procedure_performance values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -162,7 +165,7 @@ ps.setBoolean(3, record.getAnesthesiaUsed());
 ps.setString(4, record.getAnesthesiaTypeLkey());
 ps.setBigDecimal(5, record.getAnesthesiaStartTime());
 ps.setBigDecimal(6, record.getAnesthesiaEndTime());
-ps.setString(7, record.getAnesthesiaAdministeredBy());
+ps.setString(7, record.getAnesthesiaAdministeredKey());
 ps.setBoolean(8, record.getTimeOut());
 ps.setString(9, record.getProcedureOutcomeLkey());
 ps.setString(10, record.getObservations());
@@ -180,6 +183,7 @@ ps.setBigDecimal(21, record.getCreatedAt());
 ps.setBigDecimal(22, record.getUpdatedAt());
 ps.setBigDecimal(23, record.getDeletedAt());
 ps.setBoolean(24, record.getIsvalid());
+ps.setString(25, record.getProcedureKey());
 ps.executeUpdate();
 return key;
 }

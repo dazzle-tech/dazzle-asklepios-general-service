@@ -329,6 +329,38 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
 
         return result;
     }
+    public Map<String, Integer> countOngoingVisits(String patientKey) throws SQLException {
+        String query = """
+        SELECT 
+            COUNT(CASE
+                WHEN encounter_status_lkey = '91084250213000'
+                THEN 1
+            END) AS count_status_ongoing
+        FROM ap_encounter
+        WHERE patient_key = ?
+    """;
+
+        Map<String, Integer> result = new HashMap<>();
+
+        try (
+                Connection con = DS.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)
+        ) {
+            ps.setString(1, patientKey);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result.put("count_status_ongoing", rs.getInt("count_status_ongoing"));
+                } else {
+                    result.put("count_status_ongoing", 0);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+        return result;
+    }
 
 
 

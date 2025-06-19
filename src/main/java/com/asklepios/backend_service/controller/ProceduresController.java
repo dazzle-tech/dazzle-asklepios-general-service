@@ -57,15 +57,22 @@ private final ApFacilityService apFacilityService;
 private final ApDepartmentService apDepartmentService;
 private final ApProcedureRegistrationService apProcedureRegistrationService;
 private final ApProcedureStaffService apProcedureStaffService;
-    private final ApUserService apUserService;
-
-    public ProceduresController(ApProcedureService apProcedureService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApProcedureRegistrationService apProcedureRegistrationService, ApProcedureStaffService apProcedureStaffService, ApUserService apUserService) {
+private final ApUserService apUserService;
+private final  ApProcedurePerformanceService apProcedurePerformanceService;
+private final ApProcedureAdministeredMedicationsService apProcedureAdministeredMedicationsService;
+private final ApPreProcedureAssessmentService apPreProcedureAssessmentService;
+private final ApPostProcedureVitalsService apPostProcedureVitalsService;
+    public ProceduresController(ApProcedureService apProcedureService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApProcedureRegistrationService apProcedureRegistrationService, ApProcedureStaffService apProcedureStaffService, ApUserService apUserService, ApProcedurePerformanceService apProcedurePerformanceService, ApProcedureAdministeredMedicationsService apProcedureAdministeredMedicationsService, ApPreProcedureAssessmentService apPreProcedureAssessmentService, ApPostProcedureVitalsService apPostProcedureVitalsService) {
         this.apProcedureService = apProcedureService;
         this.apFacilityService = apFacilityService;
         this.apDepartmentService = apDepartmentService;
         this.apProcedureRegistrationService = apProcedureRegistrationService;
         this.apProcedureStaffService = apProcedureStaffService;
         this.apUserService = apUserService;
+        this.apProcedurePerformanceService = apProcedurePerformanceService;
+        this.apProcedureAdministeredMedicationsService = apProcedureAdministeredMedicationsService;
+        this.apPreProcedureAssessmentService = apPreProcedureAssessmentService;
+        this.apPostProcedureVitalsService = apPostProcedureVitalsService;
     }
 
 
@@ -293,6 +300,236 @@ private final ApProcedureStaffService apProcedureStaffService;
             return ResponseEntity.status(500).body(e);
         }
     }
+
+
+
+
+
+    @GetMapping(value = "/post-procedure-vitals-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPostProcedureVitals(@RequestParam Map<String, String> queryParams,
+                                                    @RequestHeader(required = false) String facility_id,
+                                                    @RequestHeader(required = false) String access_token,
+                                                    @RequestHeader(required = false) Integer access_level,
+                                                    @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApPostProcedureVitals>> response = new ParentResponse<>();
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApPostProcedureVitals> list = apPostProcedureVitalsService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_post_procedure_vitals WHERE " + whereForTotal);
+
+            for (ApPostProcedureVitals item : list) {
+                apPostProcedureVitalsService.populateLovFields(item, lang);
+            }
+
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-post-procedure-vitals", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> savePostProcedureVitals(@RequestBody ApPostProcedureVitals request,
+                                                     @RequestHeader(required = false) String facility_id,
+                                                     @RequestHeader(required = false) String access_token,
+                                                     @RequestHeader(required = false) Integer access_level,
+                                                     @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<ApPostProcedureVitals> response = new ParentResponse<>();
+            apPostProcedureVitalsService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
+
+    @GetMapping(value = "/pre-procedure-assessment-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPreProcedureAssessment(@RequestParam Map<String, String> queryParams,
+                                                       @RequestHeader(required = false) String facility_id,
+                                                       @RequestHeader(required = false) String access_token,
+                                                       @RequestHeader(required = false) Integer access_level,
+                                                       @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApPreProcedureAssessment>> response = new ParentResponse<>();
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApPreProcedureAssessment> list = apPreProcedureAssessmentService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_pre_procedure_assessment WHERE " + whereForTotal);
+
+            for (ApPreProcedureAssessment item : list) {
+                apPreProcedureAssessmentService.populateLovFields(item, lang);
+            }
+
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-pre-procedure-assessment", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> savePreProcedureAssessment(@RequestBody ApPreProcedureAssessment request,
+                                                        @RequestHeader(required = false) String facility_id,
+                                                        @RequestHeader(required = false) String access_token,
+                                                        @RequestHeader(required = false) Integer access_level,
+                                                        @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<ApPreProcedureAssessment> response = new ParentResponse<>();
+            apPreProcedureAssessmentService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
+
+
+    @GetMapping(value = "/procedure-performance-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getProcedurePerformance(@RequestParam Map<String, String> queryParams,
+                                                     @RequestHeader(required = false) String facility_id,
+                                                     @RequestHeader(required = false) String access_token,
+                                                     @RequestHeader(required = false) Integer access_level,
+                                                     @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApProcedurePerformance>> response = new ParentResponse<>();
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApProcedurePerformance> list = apProcedurePerformanceService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_procedure_performance WHERE " + whereForTotal);
+
+            for (ApProcedurePerformance item : list) {
+                apProcedurePerformanceService.populateLovFields(item, lang);
+            }
+
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-procedure-performance", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveProcedurePerformance(@RequestBody ApProcedurePerformance request,
+                                                      @RequestHeader(required = false) String facility_id,
+                                                      @RequestHeader(required = false) String access_token,
+                                                      @RequestHeader(required = false) Integer access_level,
+                                                      @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<ApProcedurePerformance> response = new ParentResponse<>();
+            apProcedurePerformanceService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
+
+    @GetMapping(value = "/procedure-administered-medications-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getProcedureMedications(@RequestParam Map<String, String> queryParams,
+                                                     @RequestHeader(required = false) String facility_id,
+                                                     @RequestHeader(required = false) String access_token,
+                                                     @RequestHeader(required = false) Integer access_level,
+                                                     @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApProcedureAdministeredMedications>> response = new ParentResponse<>();
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApProcedureAdministeredMedications> list = apProcedureAdministeredMedicationsService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_procedure_administered_medications WHERE " + whereForTotal);
+
+            for (ApProcedureAdministeredMedications item : list) {
+                apProcedureAdministeredMedicationsService.populateLovFields(item, lang);
+            }
+
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-procedure-administered-medications", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveProcedureMedications(@RequestBody ApProcedureAdministeredMedications request,
+                                                      @RequestHeader(required = false) String facility_id,
+                                                      @RequestHeader(required = false) String access_token,
+                                                      @RequestHeader(required = false) Integer access_level,
+                                                      @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<ApProcedureAdministeredMedications> response = new ParentResponse<>();
+            apProcedureAdministeredMedicationsService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
+
+
+
+
+
 
 
 }

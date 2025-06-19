@@ -12,21 +12,21 @@ import com.asklepios.backend_service.model.generated.pojo.ApLovValues;
 @Getter
 @Setter
 @Slf4j
-public class ApProcedureStaffEntity implements Serializable {
+public class ApProcedureAdministeredMedicationsEntity implements Serializable {
 
 	private String key;
 	private String procedureKey;
-	private String userKey;
-	private String responsibility;
+	private String activeIngredientKey;
+	private BigDecimal dose;
+	private String unitLkey;
+	private ApLovValues unitLvalue;
 	private String createdBy;
 	private String updatedBy;
 	private String deletedBy;
 	private BigDecimal createdAt;
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
-	private String encounterKey;
-	private Boolean isPresent = false;
-	private String patientKey;
-	private ApProcedureStaffEntity translatedObject;
+	private Boolean isvalid = false;
+	private ApProcedureAdministeredMedicationsEntity translatedObject;
 
 }

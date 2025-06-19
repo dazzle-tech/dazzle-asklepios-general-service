@@ -19,104 +19,101 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.asklepios.backend_service.controller.PublicServices;
 import java.lang.reflect.Field;
-import com.asklepios.backend_service.model.generated.pojo.ApProcedureStaff;
-import com.asklepios.backend_service.model.generated.entity.ApProcedureStaffEntity;
+import com.asklepios.backend_service.model.generated.pojo.ApProcedureAdministeredMedications;
+import com.asklepios.backend_service.model.generated.entity.ApProcedureAdministeredMedicationsEntity;
 import com.asklepios.backend_service.database.DS;
 
 @Getter
 @Setter
 @Slf4j
 @Service
-public class ApProcedureStaffDAO implements Serializable {
+public class ApProcedureAdministeredMedicationsDAO implements Serializable {
 
 @Autowired private PublicServices publicServices;
-public ApProcedureStaff getRecord(String key) throws SQLException {
+public ApProcedureAdministeredMedications getRecord(String key) throws SQLException {
 try (
 Connection con = DS.getConnection();
 Statement st = con.createStatement();
-ResultSet rs = st.executeQuery("select * from ap_procedure_staff where key = '"+key+"'");) {
-ApProcedureStaff record = new ApProcedureStaff();
+ResultSet rs = st.executeQuery("select * from ap_procedure_administered_medications where key = '"+key+"'");) {
+ApProcedureAdministeredMedications record = new ApProcedureAdministeredMedications();
 if(rs.next()){
 record.setKey(rs.getString("key"));
 record.setProcedureKey(rs.getString("procedure_key"));
-record.setUserKey(rs.getString("user_key"));
-record.setResponsibility(rs.getString("responsibility"));
+record.setActiveIngredientKey(rs.getString("active_ingredient_key"));
+record.setDose(rs.getBigDecimal("dose"));
+record.setUnitLkey(rs.getString("unit_lkey"));
 record.setCreatedBy(rs.getString("created_by"));
 record.setUpdatedBy(rs.getString("updated_by"));
 record.setDeletedBy(rs.getString("deleted_by"));
 record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
-record.setEncounterKey(rs.getString("encounter_key"));
-record.setIsPresent(rs.getBoolean("is_present"));
-record.setPatientKey(rs.getString("patient_key"));
+record.setIsvalid(rs.getBoolean("isvalid"));
 } else { record = null; }
 return record;
 }
 }
-public void updateRecord(ApProcedureStaff record) throws SQLException {
+public void updateRecord(ApProcedureAdministeredMedications record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_procedure_staff set key = ?, procedure_key = ?, user_key = ?, responsibility = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, encounter_key = ?, is_present = ?, patient_key = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_procedure_administered_medications set key = ?, procedure_key = ?, active_ingredient_key = ?, dose = ?, unit_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, isvalid = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
 ps.setString(2, record.getProcedureKey());
-ps.setString(3, record.getUserKey());
-ps.setString(4, record.getResponsibility());
-ps.setString(5, record.getCreatedBy());
-ps.setString(6, record.getUpdatedBy());
-ps.setString(7, record.getDeletedBy());
-ps.setBigDecimal(8, record.getCreatedAt());
-ps.setBigDecimal(9, record.getUpdatedAt());
-ps.setBigDecimal(10, record.getDeletedAt());
-ps.setString(11, record.getEncounterKey());
-ps.setBoolean(12, record.getIsPresent());
-ps.setString(13, record.getPatientKey());
-ps.setString(14, record.getKey());
+ps.setString(3, record.getActiveIngredientKey());
+ps.setBigDecimal(4, record.getDose());
+ps.setString(5, record.getUnitLkey());
+ps.setString(6, record.getCreatedBy());
+ps.setString(7, record.getUpdatedBy());
+ps.setString(8, record.getDeletedBy());
+ps.setBigDecimal(9, record.getCreatedAt());
+ps.setBigDecimal(10, record.getUpdatedAt());
+ps.setBigDecimal(11, record.getDeletedAt());
+ps.setBoolean(12, record.getIsvalid());
+ps.setString(13, record.getKey());
 ps.executeUpdate();
 }
 }
-public void deleteRecord(ApProcedureStaff record) throws SQLException {
+public void deleteRecord(ApProcedureAdministeredMedications record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_procedure_staff set  deleted_at = '"+System.currentTimeMillis()+"' where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_procedure_administered_medications set  deleted_at = '"+System.currentTimeMillis()+"' where key = ?");
 ) {
 ps.setString(1, record.getKey());
 ps.executeUpdate();
 }
 }
-public List<ApProcedureStaff> getList(String where) throws SQLException {
+public List<ApProcedureAdministeredMedications> getList(String where) throws SQLException {
 if (where == null || where.isEmpty()) where = "1=1";
 try (
 Connection con = DS.getConnection();
 Statement st = con.createStatement();
-ResultSet rs = st.executeQuery("select * from ap_procedure_staff where "+ where);) {
-List<ApProcedureStaff> list = new ArrayList<ApProcedureStaff>();
+ResultSet rs = st.executeQuery("select * from ap_procedure_administered_medications where "+ where);) {
+List<ApProcedureAdministeredMedications> list = new ArrayList<ApProcedureAdministeredMedications>();
 while(rs.next()){
-ApProcedureStaff record = new ApProcedureStaff();
+ApProcedureAdministeredMedications record = new ApProcedureAdministeredMedications();
 record.setKey(rs.getString("key"));
 record.setProcedureKey(rs.getString("procedure_key"));
-record.setUserKey(rs.getString("user_key"));
-record.setResponsibility(rs.getString("responsibility"));
+record.setActiveIngredientKey(rs.getString("active_ingredient_key"));
+record.setDose(rs.getBigDecimal("dose"));
+record.setUnitLkey(rs.getString("unit_lkey"));
 record.setCreatedBy(rs.getString("created_by"));
 record.setUpdatedBy(rs.getString("updated_by"));
 record.setDeletedBy(rs.getString("deleted_by"));
 record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
-record.setEncounterKey(rs.getString("encounter_key"));
-record.setIsPresent(rs.getBoolean("is_present"));
-record.setPatientKey(rs.getString("patient_key"));
+record.setIsvalid(rs.getBoolean("isvalid"));
 list.add(record);
 }
 return list;
 }
 }
-public String saveRecord(ApProcedureStaff record) throws SQLException {
+public String saveRecord(ApProcedureAdministeredMedications record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_procedure_staff values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_procedure_administered_medications values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -125,23 +122,22 @@ record.setKey(key);
 
 ps.setString(1, key);
 ps.setString(2, record.getProcedureKey());
-ps.setString(3, record.getUserKey());
-ps.setString(4, record.getResponsibility());
-ps.setString(5, record.getCreatedBy());
-ps.setString(6, record.getUpdatedBy());
-ps.setString(7, record.getDeletedBy());
-ps.setBigDecimal(8, record.getCreatedAt());
-ps.setBigDecimal(9, record.getUpdatedAt());
-ps.setBigDecimal(10, record.getDeletedAt());
-ps.setString(11, record.getEncounterKey());
-ps.setBoolean(12, record.getIsPresent());
-ps.setString(13, record.getPatientKey());
+ps.setString(3, record.getActiveIngredientKey());
+ps.setBigDecimal(4, record.getDose());
+ps.setString(5, record.getUnitLkey());
+ps.setString(6, record.getCreatedBy());
+ps.setString(7, record.getUpdatedBy());
+ps.setString(8, record.getDeletedBy());
+ps.setBigDecimal(9, record.getCreatedAt());
+ps.setBigDecimal(10, record.getUpdatedAt());
+ps.setBigDecimal(11, record.getDeletedAt());
+ps.setBoolean(12, record.getIsvalid());
 ps.executeUpdate();
 return key;
 }
 }
-public void populateLovFields(ApProcedureStaffEntity entity, String lang) {
-        Class<?> myClass = ApProcedureStaffEntity.class;
+public void populateLovFields(ApProcedureAdministeredMedicationsEntity entity, String lang) {
+        Class<?> myClass = ApProcedureAdministeredMedicationsEntity.class;
         Field[] fields = myClass.getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
@@ -164,8 +160,8 @@ public void populateLovFields(ApProcedureStaffEntity entity, String lang) {
             }
         }
     }
-public void translateObject(ApProcedureStaffEntity entity, String lang) {
-        ApProcedureStaffEntity translated = (ApProcedureStaffEntity) publicServices.getObjectTranslation(entity.getKey(), entity, lang);
+public void translateObject(ApProcedureAdministeredMedicationsEntity entity, String lang) {
+        ApProcedureAdministeredMedicationsEntity translated = (ApProcedureAdministeredMedicationsEntity) publicServices.getObjectTranslation(entity.getKey(), entity, lang);
         entity.setTranslatedObject(translated);
     }
 

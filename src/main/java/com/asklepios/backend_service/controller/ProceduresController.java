@@ -61,7 +61,9 @@ private final ApPreProcedureAssessmentService apPreProcedureAssessmentService;
 private final ApPostProcedureVitalsService apPostProcedureVitalsService;
 private final ApPostProcedureCareService apPostProcedureCareService;
 private  final ApActiveIngredientService apActiveIngredientService;
-    public ProceduresController(ApProcedureService apProcedureService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApProcedureRegistrationService apProcedureRegistrationService, ApProcedureStaffService apProcedureStaffService, ApUserService apUserService, ApProcedurePerformanceService apProcedurePerformanceService, ApProcedureAdministeredMedicationsService apProcedureAdministeredMedicationsService, ApPreProcedureAssessmentService apPreProcedureAssessmentService, ApPostProcedureVitalsService apPostProcedureVitalsService, ApPostProcedureCareService apPostProcedureCareService, ApActiveIngredientService apActiveIngredientService) {
+private final ApProcedureServiceEquipmentService apProcedureServiceEquipmentService;
+    private final ApServiceService apServiceService;
+    public ProceduresController(ApProcedureService apProcedureService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApProcedureRegistrationService apProcedureRegistrationService, ApProcedureStaffService apProcedureStaffService, ApUserService apUserService, ApProcedurePerformanceService apProcedurePerformanceService, ApProcedureAdministeredMedicationsService apProcedureAdministeredMedicationsService, ApPreProcedureAssessmentService apPreProcedureAssessmentService, ApPostProcedureVitalsService apPostProcedureVitalsService, ApPostProcedureCareService apPostProcedureCareService, ApActiveIngredientService apActiveIngredientService, ApProcedureServiceEquipmentService apProcedureServiceEquipmentService, ApServiceService apServiceService) {
         this.apProcedureService = apProcedureService;
         this.apFacilityService = apFacilityService;
         this.apDepartmentService = apDepartmentService;
@@ -74,6 +76,8 @@ private  final ApActiveIngredientService apActiveIngredientService;
         this.apPostProcedureVitalsService = apPostProcedureVitalsService;
         this.apPostProcedureCareService = apPostProcedureCareService;
         this.apActiveIngredientService = apActiveIngredientService;
+        this.apProcedureServiceEquipmentService = apProcedureServiceEquipmentService;
+        this.apServiceService = apServiceService;
     }
 
 
@@ -583,6 +587,59 @@ private  final ApActiveIngredientService apActiveIngredientService;
 
 
 
+    @GetMapping(value = "/procedure-service-equipment-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getProcedurServiceEquipmentList(@RequestParam Map<String, String> queryParams,
+                                                      @RequestHeader(required = false) String facility_id,
+                                                      @RequestHeader(required = false) String access_token,
+                                                      @RequestHeader(required = false) Integer access_level,
+                                                      @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApProcedureServiceEquipment>> response = new ParentResponse<>();
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApProcedureServiceEquipment> list = apProcedureServiceEquipmentService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_procedure_service_equipment WHERE " + whereForTotal);
+
+            for (ApProcedureServiceEquipment item : list) {
+                item.setService(apServiceService.getRecord(item.getServiceKey()));
+                apProcedureServiceEquipmentService.populateLovFields(item, lang);
+            }
+
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-procedure-service-equipment", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> savePostProcedureEquipmentService(@RequestBody ApProcedureServiceEquipment request,
+                                                   @RequestHeader(required = false) String facility_id,
+                                                   @RequestHeader(required = false) String access_token,
+                                                   @RequestHeader(required = false) Integer access_level,
+                                                   @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<ApProcedureServiceEquipment>response = new ParentResponse<>();
+            apProcedureServiceEquipmentService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 
 
 

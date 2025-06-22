@@ -141,7 +141,13 @@ public class EncounterController {
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_encounter where " + whereForTotal);
             for (ApEncounter encounter : encounters) {
                 encounter.setPractitionerObject(apPractitionerService.getRecord(encounter.getPhysicianKey()));
-
+               if(encounter.getResourceKey() != null){
+                 if(encounter.getResourceTypeLkey().equals("2039534205961578")){
+                     ApDepartment department = apDepartmentService.getRecord(encounter.getDepartmentKey());
+                     encounter.setDepartmentName(department.getName());
+                 }
+                   encounter.setResourceObject(apEncounterService.getResource(encounter.getResourceTypeLkey(),encounter.getResourceKey(),lang));
+               }
                 if (encounter.getPractitionerObject() != null) {
                     apPractitionerService.populateLovFields(encounter.getPractitionerObject(),lang);
                 }

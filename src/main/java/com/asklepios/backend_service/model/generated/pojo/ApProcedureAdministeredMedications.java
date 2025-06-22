@@ -10,6 +10,7 @@ import com.asklepios.backend_service.model.generated.entity.ApProcedureAdministe
 @Setter
 @Slf4j
 public class ApProcedureAdministeredMedications extends ApProcedureAdministeredMedicationsEntity implements Serializable {
+ApActiveIngredient activeIngredient;
 
 
 }

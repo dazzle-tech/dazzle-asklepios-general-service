@@ -28,9 +28,6 @@ import com.asklepios.backend_service.model.generated.entity.ApPatientEntity;
 import com.asklepios.backend_service.model.generated.pojo.*;
         import com.asklepios.backend_service.model.pojo.ValidationResult;
 import com.asklepios.backend_service.model.pojo.request.ListRequest;
-import com.asklepios.backend_service.model.pojo.request.ListRequestAllValues;
-import com.asklepios.backend_service.model.pojo.request.PhysicalExamAreaRequest;
-import com.asklepios.backend_service.model.pojo.request.ReviewOfSystemRequest;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
 import com.asklepios.backend_service.service.*;
         import jakarta.annotation.Nullable;
@@ -62,7 +59,9 @@ private final  ApProcedurePerformanceService apProcedurePerformanceService;
 private final ApProcedureAdministeredMedicationsService apProcedureAdministeredMedicationsService;
 private final ApPreProcedureAssessmentService apPreProcedureAssessmentService;
 private final ApPostProcedureVitalsService apPostProcedureVitalsService;
-    public ProceduresController(ApProcedureService apProcedureService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApProcedureRegistrationService apProcedureRegistrationService, ApProcedureStaffService apProcedureStaffService, ApUserService apUserService, ApProcedurePerformanceService apProcedurePerformanceService, ApProcedureAdministeredMedicationsService apProcedureAdministeredMedicationsService, ApPreProcedureAssessmentService apPreProcedureAssessmentService, ApPostProcedureVitalsService apPostProcedureVitalsService) {
+private final ApPostProcedureCareService apPostProcedureCareService;
+private  final ApActiveIngredientService apActiveIngredientService;
+    public ProceduresController(ApProcedureService apProcedureService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApProcedureRegistrationService apProcedureRegistrationService, ApProcedureStaffService apProcedureStaffService, ApUserService apUserService, ApProcedurePerformanceService apProcedurePerformanceService, ApProcedureAdministeredMedicationsService apProcedureAdministeredMedicationsService, ApPreProcedureAssessmentService apPreProcedureAssessmentService, ApPostProcedureVitalsService apPostProcedureVitalsService, ApPostProcedureCareService apPostProcedureCareService, ApActiveIngredientService apActiveIngredientService) {
         this.apProcedureService = apProcedureService;
         this.apFacilityService = apFacilityService;
         this.apDepartmentService = apDepartmentService;
@@ -73,6 +72,8 @@ private final ApPostProcedureVitalsService apPostProcedureVitalsService;
         this.apProcedureAdministeredMedicationsService = apProcedureAdministeredMedicationsService;
         this.apPreProcedureAssessmentService = apPreProcedureAssessmentService;
         this.apPostProcedureVitalsService = apPostProcedureVitalsService;
+        this.apPostProcedureCareService = apPostProcedureCareService;
+        this.apActiveIngredientService = apActiveIngredientService;
     }
 
 
@@ -492,6 +493,7 @@ private final ApPostProcedureVitalsService apPostProcedureVitalsService;
             BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_procedure_administered_medications WHERE " + whereForTotal);
 
             for (ApProcedureAdministeredMedications item : list) {
+                item.setActiveIngredient(apActiveIngredientService.getRecord(item.getActiveIngredientKey()));
                 apProcedureAdministeredMedicationsService.populateLovFields(item, lang);
             }
 
@@ -524,6 +526,60 @@ private final ApPostProcedureVitalsService apPostProcedureVitalsService;
         }
     }
 
+
+
+    @GetMapping(value = "/post-procedure-care-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPostProcedureCareList(@RequestParam Map<String, String> queryParams,
+                                                     @RequestHeader(required = false) String facility_id,
+                                                     @RequestHeader(required = false) String access_token,
+                                                     @RequestHeader(required = false) Integer access_level,
+                                                     @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApPostProcedureCare>> response = new ParentResponse<>();
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApPostProcedureCare> list = apPostProcedureCareService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM post-procedure-care WHERE " + whereForTotal);
+
+            for (ApPostProcedureCare item : list) {
+                apPostProcedureCareService.populateLovFields(item, lang);
+            }
+
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-post-procedure-care", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> savePostProcedureCare(@RequestBody ApPostProcedureCare request,
+                                                      @RequestHeader(required = false) String facility_id,
+                                                      @RequestHeader(required = false) String access_token,
+                                                      @RequestHeader(required = false) Integer access_level,
+                                                      @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<ApPostProcedureCare>response = new ParentResponse<>();
+            apPostProcedureCareService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 
 
 

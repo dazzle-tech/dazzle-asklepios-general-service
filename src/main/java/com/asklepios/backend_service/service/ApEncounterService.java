@@ -6,11 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.asklepios.backend_service.database.DS;
-import com.asklepios.backend_service.model.generated.pojo.ApDiagnosticTest;
-import com.asklepios.backend_service.model.generated.pojo.ApEncounter;
-import com.asklepios.backend_service.model.generated.pojo.ApPatientDiagnose;
-import com.asklepios.backend_service.model.generated.pojo.ApPatient;
+import com.asklepios.backend_service.model.generated.pojo.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.asklepios.backend_service.model.generated.dao.ApEncounterDAO;
 
@@ -21,6 +19,16 @@ import java.util.Date;
 @Service
 @Slf4j
 public class ApEncounterService extends ApEncounterDAO implements Serializable {
+    @Autowired
+    private ApPractitionerService apPractitionerService;
+    @Autowired
+    private ApDepartmentService apDepartmentService;
+    @Autowired
+    private ApDiagnosticTestService apDiagnosticTestService;
+    @Autowired
+    private ApProcedureSetupService apProcedureSetupService;
+     @Autowired
+     private ApResourcesService apResourcesService;
 
     public String getDiagnosis(String visitKey) throws SQLException {
         String result = "";
@@ -361,7 +369,65 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
 
         return result;
     }
+    public Object  getResource(String resourceTypeKey, String key ,String lang ) throws SQLException {
+        String resourcekey = apResourcesService.getRecord(key).getResourceKey();
+        if(resourceTypeKey == null || resourceTypeKey.isEmpty()) {
+            return null;
+        }
+        // TODO update status to be a LOV value
+        if(resourceTypeKey.equals("2039534205961578")) //Practitioner
+        {
+            ApPractitioner PractitionerObject = apPractitionerService.getRecord(resourcekey);
+            if (PractitionerObject != null ) {
+                apPractitionerService.populateLovFields(PractitionerObject,lang);
+                return PractitionerObject;
+            }
+        }
 
+        // TODO update status to be a LOV value
+        else if(resourceTypeKey.equals("2039516279378421")) //Department
+        {
+             ApDepartment DepartmentObject = apDepartmentService.getRecord(resourcekey);
+
+            if (DepartmentObject != null) {
+                apDepartmentService.populateLovFields(DepartmentObject,lang);
+                return DepartmentObject;
+            }
+
+        }
+
+        // TODO update status to be a LOV value
+        else if(resourceTypeKey.equals("2039620472612029")) //Medical Test
+        {
+            ApDiagnosticTest DiagnosticObject = apDiagnosticTestService.getRecord(resourcekey);
+            if (DiagnosticObject != null) {
+                apDiagnosticTestService.populateLovFields(DiagnosticObject,lang);
+                return DiagnosticObject;
+            }
+
+        }
+        // TODO update status to be a LOV value
+        else if(resourceTypeKey.equals("2039548173192779")) //Procedure
+        {
+             ApProcedureSetup ProcedureObject =apProcedureSetupService.getRecord(resourcekey);
+            if (ProcedureObject != null) {
+                apProcedureSetupService.populateLovFields(ProcedureObject,lang);
+                return ProcedureObject;
+            }
+
+        }
+        // TODO update status to be a LOV value
+        else if(resourceTypeKey.equals("4217389643435490")) //Department Inpatient Ward
+        {
+           List<ApDepartment> listDep = apDepartmentService.getList("key = '"+ resourcekey +"' AND department_type_lkey = '5673990729647001'");
+            if (listDep != null && !listDep.isEmpty()) {
+                apDepartmentService.populateLovFields(listDep.get(0),lang);
+                return listDep.get(0);
+            }
+
+        }
+        return null ;
+    }
 
 
 }

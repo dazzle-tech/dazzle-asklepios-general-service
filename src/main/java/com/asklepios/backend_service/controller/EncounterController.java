@@ -144,7 +144,8 @@ public class EncounterController {
                if(encounter.getResourceKey() != null){
                  if(encounter.getResourceTypeLkey().equals("2039534205961578")){
                      ApDepartment department = apDepartmentService.getRecord(encounter.getDepartmentKey());
-                     encounter.setDepartmentName(department.getName());
+                     if(department != null){
+                     encounter.setDepartmentName(department.getName());}
                  }
                    encounter.setResourceObject(apEncounterService.getResource(encounter.getResourceTypeLkey(),encounter.getResourceKey(),lang));
                }

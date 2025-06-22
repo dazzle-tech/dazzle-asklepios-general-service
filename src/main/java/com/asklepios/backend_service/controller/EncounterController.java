@@ -255,11 +255,11 @@ public class EncounterController {
                 int countOutpatientNewEncounter = counts.getOrDefault("count_status_outpatient_new", 0);
                 if (countOngoing > 0 && apEncounter.getResourceTypeLkey().equals("4217389643435490")) {
                     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                            .body(Map.of("message", "There Patient Has Encounter Ongoing."));
+                            .body(Map.of("message", "The Patient has Ongoing Encounter."));
                 }
                 if (countResourceAndStatus > 0 && apEncounter.getResourceTypeLkey().equals("4217389643435490")) {
                     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                            .body(Map.of("message", "There Is More Than One Inpatient Visit Made For This Patient."));
+                            .body(Map.of("message", "Patient is already inpatient."));
                 }
                 if (countResourceAndStatus > 0 ) {
                     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)

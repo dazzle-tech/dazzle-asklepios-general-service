@@ -261,7 +261,7 @@ public class EncounterController {
                     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                             .body(Map.of("message", "Patient is already inpatient."));
                 }
-                
+
                 if (countResourceAndStatus > 0 ) {
                     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                             .body(Map.of("message", "This Patient Has Inpatient Encounter"));

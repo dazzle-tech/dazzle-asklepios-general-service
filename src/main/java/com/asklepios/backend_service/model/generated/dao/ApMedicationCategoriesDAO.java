@@ -32,6 +32,7 @@ public class ApMedicationCategoriesDAO implements Serializable {
 @Autowired private PublicServices publicServices;
 public ApMedicationCategories getRecord(String key) throws SQLException {
 try (
+
 Connection con = DS.getConnection();
 Statement st = con.createStatement();
 ResultSet rs = st.executeQuery("select * from ap_medication_categories where key = '"+key+"'");) {

@@ -927,6 +927,10 @@ public class SetupController implements Serializable {
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApPractitioner> list = apPractitionerService.getList(" deleted_at is null and "+where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_practitioner where " + whereForTotal);
+            for (ApPractitioner practitioner : list) {
+                apPractitionerService.populateLovFields(practitioner, lang);
+            }
+
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);

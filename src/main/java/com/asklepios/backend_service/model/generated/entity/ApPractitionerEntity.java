@@ -31,7 +31,6 @@ public class ApPractitionerEntity implements Serializable {
 	private String practitionerLastName;
 	private String practitionerEmail;
 	private String practitionerPhoneNumber;
-	private String jobRole;
 	private String specialtyLkey;
 	private ApLovValues specialtyLvalue;
 	private String subSpecialtyLkey;
@@ -46,6 +45,8 @@ public class ApPractitionerEntity implements Serializable {
 	private Date defaultLicenseValidUntil = new Date();
 	private Date secondaryLicenseValidUntil = new Date();
 	private Date dob = new Date();
+	private String jobRoleLkey;
+	private ApLovValues jobRoleLvalue;
 	private ApPractitionerEntity translatedObject;
 
 }

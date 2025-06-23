@@ -181,7 +181,19 @@ public class ApDiagnosticOrderTestsResultService extends ApDiagnosticOrderTestsR
         return groupList;
     }
 
+    public void deleteRecord(String testKey) {
+        String sql = "DELETE FROM ap_diagnostic_order_tests_result WHERE order_test_key = ?";
 
+        try (
+                Connection con = DS.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql);
+        ) {
+            ps.setString(1,testKey);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

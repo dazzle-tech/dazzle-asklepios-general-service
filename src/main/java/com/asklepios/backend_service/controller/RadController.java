@@ -157,4 +157,20 @@ public class RadController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
+    @DeleteMapping(value = "/delete-test-reports", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteResults(@RequestParam String testKey) {
+        try {
+
+            apDiagnosticOrderTestsRadReportService.deleteRecord(testKey);
+            ParentResponse<ApDiagnosticOrderTestsResult> response = new ParentResponse<>();
+            response.setMsg("Deleted successfully");
+            response.setObject(null);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 }

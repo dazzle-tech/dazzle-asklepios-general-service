@@ -495,5 +495,20 @@ public class LabController {
             return ResponseEntity.status(500).body("Error occurred while fetching grouped results.");
         }
     }
+    @DeleteMapping(value = "/delete-test-results", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteResults(@RequestParam String testKey) {
+        try {
+
+            apDiagnosticOrderTestsResultService.deleteRecord(testKey);
+            ParentResponse<ApDiagnosticOrderTestsResult> response = new ParentResponse<>();
+            response.setMsg("Deleted successfully");
+            response.setObject(null);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 
 }

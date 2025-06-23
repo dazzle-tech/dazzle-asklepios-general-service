@@ -609,6 +609,7 @@ private final ApProcedureServiceEquipmentService apProcedureServiceEquipmentServ
 
             for (ApProcedureServiceEquipment item : list) {
                 item.setService(apServiceService.getRecord(item.getServiceKey()));
+                apServiceService.populateLovFields(item.getService(),lang);
                 apProcedureServiceEquipmentService.populateLovFields(item, lang);
             }
 

@@ -161,7 +161,6 @@ public class RadController {
     @DeleteMapping(value = "/delete-test-reports", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteResults(@RequestParam String testKey) {
         try {
-
             apDiagnosticOrderTestsRadReportService.deleteRecord(testKey);
             ParentResponse<ApDiagnosticOrderTestsResult> response = new ParentResponse<>();
             response.setMsg("Deleted successfully");

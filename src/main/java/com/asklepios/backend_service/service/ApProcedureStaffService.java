@@ -24,7 +24,7 @@ public class ApProcedureStaffService extends ApProcedureStaffDAO implements Seri
             ps.setString(1, staff.getKey());
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace(); // أو سجّلي الخطأ في لوج النظام
+            e.printStackTrace();
         }
     }
 }

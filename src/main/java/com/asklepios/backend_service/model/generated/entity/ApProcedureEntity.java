@@ -42,6 +42,7 @@ public class ApProcedureEntity implements Serializable {
 	private String sideLkey;
 	private ApLovValues sideLvalue;
 	private Boolean currentDepartment = false;
+	private String patientKey;
 	private ApProcedureEntity translatedObject;
 
 }

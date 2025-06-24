@@ -60,6 +60,7 @@ record.setEncounterKey(rs.getString("encounter_key"));
 record.setBodyPartLkey(rs.getString("body_part_lkey"));
 record.setSideLkey(rs.getString("side_lkey"));
 record.setCurrentDepartment(rs.getBoolean("current_department"));
+record.setPatientKey(rs.getString("patient_key"));
 } else { record = null; }
 return record;
 }
@@ -67,7 +68,7 @@ return record;
 public void updateRecord(ApProcedure record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_procedure set key = ?, procedure_name_key = ?, procedure_id = ?, procedure_level_lkey = ?, category_key = ?, indications = ?, priority_lkey = ?, status_lkey = ?, scheduled_date_time = ?, notes = ?, department_key = ?, cancellation_reason = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, facility_key = ?, encounter_key = ?, body_part_lkey = ?, side_lkey = ?, current_department = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_procedure set key = ?, procedure_name_key = ?, procedure_id = ?, procedure_level_lkey = ?, category_key = ?, indications = ?, priority_lkey = ?, status_lkey = ?, scheduled_date_time = ?, notes = ?, department_key = ?, cancellation_reason = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, facility_key = ?, encounter_key = ?, body_part_lkey = ?, side_lkey = ?, current_department = ?, patient_key = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -93,7 +94,8 @@ ps.setString(20, record.getEncounterKey());
 ps.setString(21, record.getBodyPartLkey());
 ps.setString(22, record.getSideLkey());
 ps.setBoolean(23, record.getCurrentDepartment());
-ps.setString(24, record.getKey());
+ps.setString(24, record.getPatientKey());
+ps.setString(25, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -138,6 +140,7 @@ record.setEncounterKey(rs.getString("encounter_key"));
 record.setBodyPartLkey(rs.getString("body_part_lkey"));
 record.setSideLkey(rs.getString("side_lkey"));
 record.setCurrentDepartment(rs.getBoolean("current_department"));
+record.setPatientKey(rs.getString("patient_key"));
 list.add(record);
 }
 return list;
@@ -146,7 +149,7 @@ return list;
 public String saveRecord(ApProcedure record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_procedure values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_procedure values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -176,6 +179,7 @@ ps.setString(20, record.getEncounterKey());
 ps.setString(21, record.getBodyPartLkey());
 ps.setString(22, record.getSideLkey());
 ps.setBoolean(23, record.getCurrentDepartment());
+ps.setString(24, record.getPatientKey());
 ps.executeUpdate();
 return key;
 }

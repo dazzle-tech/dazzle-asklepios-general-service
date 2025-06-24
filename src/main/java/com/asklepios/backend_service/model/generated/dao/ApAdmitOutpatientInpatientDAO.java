@@ -49,6 +49,7 @@ record.setDeletedBy(rs.getString("deleted_by"));
 record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
+record.setAdmitSourceLkey(rs.getString("admit_source_lkey"));
 } else { record = null; }
 return record;
 }
@@ -56,7 +57,7 @@ return record;
 public void updateRecord(ApAdmitOutpatientInpatient record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_admit_outpatient_inpatient set key = ?, to_encounter_key = ?, from_encounter_key = ?, inpatient_department_key = ?, physician_key = ?, admission_notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_admit_outpatient_inpatient set key = ?, to_encounter_key = ?, from_encounter_key = ?, inpatient_department_key = ?, physician_key = ?, admission_notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, admit_source_lkey = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -71,7 +72,8 @@ ps.setString(9, record.getDeletedBy());
 ps.setBigDecimal(10, record.getCreatedAt());
 ps.setBigDecimal(11, record.getUpdatedAt());
 ps.setBigDecimal(12, record.getDeletedAt());
-ps.setString(13, record.getKey());
+ps.setString(13, record.getAdmitSourceLkey());
+ps.setString(14, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -105,6 +107,7 @@ record.setDeletedBy(rs.getString("deleted_by"));
 record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
+record.setAdmitSourceLkey(rs.getString("admit_source_lkey"));
 list.add(record);
 }
 return list;
@@ -113,7 +116,7 @@ return list;
 public String saveRecord(ApAdmitOutpatientInpatient record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_admit_outpatient_inpatient values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_admit_outpatient_inpatient values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -132,6 +135,7 @@ ps.setString(9, record.getDeletedBy());
 ps.setBigDecimal(10, record.getCreatedAt());
 ps.setBigDecimal(11, record.getUpdatedAt());
 ps.setBigDecimal(12, record.getDeletedAt());
+ps.setString(13, record.getAdmitSourceLkey());
 ps.executeUpdate();
 return key;
 }

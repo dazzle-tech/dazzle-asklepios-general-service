@@ -21,6 +21,7 @@ public class ApEncounter extends ApEncounterEntity implements Serializable {
     private boolean isObservations;
     private String BloodGroup;
     Object resourceObject;
+    ApAdmitOutpatientInpatient admitRecord;
     ApPractitioner practitionerObject;
     public boolean isEditable() {
         if (getEncounterStatusLkey() == null) {

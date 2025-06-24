@@ -2049,4 +2049,79 @@ public class EncounterController {
             log.error(e.getMessage());
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }
-    }}
+    }
+    @GetMapping(value = "/waiting_encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> waitingEncounterList(@RequestParam Map<String, String> queryParams,
+                                                  @Nullable @RequestHeader String facility_id,
+                                                  @Nullable @RequestHeader String access_token,
+                                                  @Nullable @RequestHeader Integer access_level,
+                                                  @Nullable @RequestHeader String lang) {
+
+        try {
+            ParentResponse<List<ApEncounter>> response = new ParentResponse<>();
+
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(Collections.emptyList());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest   = new ListRequest(queryParams);
+            String       where        = listRequest.buildWhereStatement();
+            String       whereForTotal= listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApEncounter> encounters = apEncounterService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery(
+                    "SELECT COUNT(0) FROM ap_encounter WHERE " + whereForTotal
+            );
+
+            for (ApEncounter encounter : encounters) {
+                encounter.setPractitionerObject(
+                        apPractitionerService.getRecord(encounter.getPhysicianKey())
+                );
+
+                if (encounter.getResourceKey() != null) {
+                    if ("2039534205961578".equals(encounter.getResourceTypeLkey())) {
+                        ApDepartment dep = apDepartmentService.getRecord(encounter.getDepartmentKey());
+                        if (dep != null) {
+                            encounter.setDepartmentName(dep.getName());
+                        }
+                    }
+                    encounter.setResourceObject(
+                            apEncounterService.getResource(
+                                    encounter.getResourceTypeLkey(),
+                                    encounter.getResourceKey(),
+                                    lang
+                            )
+                    );
+                }
+
+                ApAdmitOutpatientInpatient admit =
+                        apAdmitOutpatientInpatientService.getRecordByToEncounterKey(encounter.getKey());
+                encounter.setAdmitRecord(admit);
+                if (admit != null) {
+                    apAdmitOutpatientInpatientService.populateLovFields(admit, lang);
+                }
+
+                ApPatient patient = apPatientService.getRecord(encounter.getPatientKey());
+                apPatientService.populateLovFields(patient, lang);
+                encounter.setPatientObject(patient);
+
+                apEncounterService.populateLovFields(encounter, lang);
+            }
+
+            apEncounterService.processPatientObservationStatus(encounters);
+
+            response.setObject(encounters);
+            response.setExtraNumeric(totalRecord);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            log.error("waitingEncounterList failed", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        }
+    }
+
+
+}

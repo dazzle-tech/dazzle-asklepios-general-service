@@ -26,6 +26,8 @@ public class ApAdmitOutpatientInpatientEntity implements Serializable {
 	private BigDecimal createdAt;
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
+	private String admitSourceLkey;
+	private ApLovValues admitSourceLvalue;
 	private ApAdmitOutpatientInpatientEntity translatedObject;
 
 }

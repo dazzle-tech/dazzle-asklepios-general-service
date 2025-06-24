@@ -36,6 +36,7 @@ public class ApLovValuesEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private BigDecimal score;
 	private ApLovValuesEntity translatedObject;
 
 }

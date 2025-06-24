@@ -59,6 +59,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setScore(rs.getBigDecimal("score"));
 } else { record = null; }
 return record;
 }
@@ -66,7 +67,7 @@ return record;
 public void updateRecord(ApLovValues record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_lov_values set key = ?, lov_key = ?, lov_code = ?, value_code = ?, lov_display_vale = ?, love_custom_code = ?, value_description = ?, value_color = ?, value_icon = ?, value_order = ?, isdefault = ?, seeded_data = ?, for_internal_user = ?, specific_for_screen_id = ?, parent_value_id = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_lov_values set key = ?, lov_key = ?, lov_code = ?, value_code = ?, lov_display_vale = ?, love_custom_code = ?, value_description = ?, value_color = ?, value_icon = ?, value_order = ?, isdefault = ?, seeded_data = ?, for_internal_user = ?, specific_for_screen_id = ?, parent_value_id = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, score = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -91,7 +92,8 @@ ps.setBigDecimal(19, record.getCreatedAt());
 ps.setBigDecimal(20, record.getUpdatedAt());
 ps.setBigDecimal(21, record.getDeletedAt());
 ps.setBoolean(22, record.getIsValid());
-ps.setString(23, record.getKey());
+ps.setBigDecimal(23, record.getScore());
+ps.setString(24, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -135,6 +137,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setScore(rs.getBigDecimal("score"));
 list.add(record);
 }
 return list;
@@ -143,7 +146,7 @@ return list;
 public String saveRecord(ApLovValues record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_lov_values values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_lov_values values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -172,6 +175,7 @@ ps.setBigDecimal(19, record.getCreatedAt());
 ps.setBigDecimal(20, record.getUpdatedAt());
 ps.setBigDecimal(21, record.getDeletedAt());
 ps.setBoolean(22, record.getIsValid());
+ps.setBigDecimal(23, record.getScore());
 ps.executeUpdate();
 return key;
 }

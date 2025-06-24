@@ -644,6 +644,27 @@ private final ApProcedureServiceEquipmentService apProcedureServiceEquipmentServ
 
 
 
+    @DeleteMapping(value = "/delete-procedure-service-equipment", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteProcedureserviceEquipment(@RequestParam String key) {
+        try {
+            ApProcedureServiceEquipment eq = apProcedureServiceEquipmentService.getRecord(key);
+            ParentResponse<ApProcedureServiceEquipment> response = new ParentResponse<>();
+            if (eq == null) {
+                response.setMsg("Equipment record not found");
+                response.setObject(null);
+                return ResponseEntity.ok(response);
+            }
 
+            apProcedureServiceEquipmentService.deleteRecord(eq);
+
+            response.setMsg("Deleted successfully");
+            response.setObject(null);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 
 }

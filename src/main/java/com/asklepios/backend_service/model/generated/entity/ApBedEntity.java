@@ -27,6 +27,8 @@ public class ApBedEntity implements Serializable {
 	private BigDecimal createdAt;
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
+	private String statusLkey;
+	private ApLovValues statusLvalue;
 	private ApBedEntity translatedObject;
 
 }

@@ -19,98 +19,101 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.asklepios.backend_service.controller.PublicServices;
 import java.lang.reflect.Field;
-import com.asklepios.backend_service.model.generated.pojo.ApUomGroups;
-import com.asklepios.backend_service.model.generated.entity.ApUomGroupsEntity;
+import com.asklepios.backend_service.model.generated.pojo.ApProcedureAnesthesia;
+import com.asklepios.backend_service.model.generated.entity.ApProcedureAnesthesiaEntity;
 import com.asklepios.backend_service.database.DS;
 
 @Getter
 @Setter
 @Slf4j
 @Service
-public class ApUomGroupsDAO implements Serializable {
+public class ApProcedureAnesthesiaDAO implements Serializable {
 
 @Autowired private PublicServices publicServices;
-public ApUomGroups getRecord(String key) throws SQLException {
+public ApProcedureAnesthesia getRecord(String key) throws SQLException {
 try (
 Connection con = DS.getConnection();
 Statement st = con.createStatement();
-ResultSet rs = st.executeQuery("select * from ap_uom_groups where key = '"+key+"'");) {
-ApUomGroups record = new ApUomGroups();
+ResultSet rs = st.executeQuery("select * from ap_procedure_anesthesia where key = '"+key+"'");) {
+ApProcedureAnesthesia record = new ApProcedureAnesthesia();
 if(rs.next()){
 record.setKey(rs.getString("key"));
-record.setDescription(rs.getString("description"));
-record.setName(rs.getString("name"));
-record.setCode(rs.getString("code"));
+record.setProcedureKey(rs.getString("procedure_key"));
+record.setAirwayGradeLkey(rs.getString("airway_grade_lkey"));
+record.setAsaScoreLkey(rs.getString("asa_score_lkey"));
 record.setCreatedBy(rs.getString("created_by"));
 record.setUpdatedBy(rs.getString("updated_by"));
 record.setDeletedBy(rs.getString("deleted_by"));
 record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
-record.setIsValid(rs.getBoolean("is_valid"));
+record.setEncounterKey(rs.getString("encounter_key"));
+record.setPatientKey(rs.getString("patient_key"));
 } else { record = null; }
 return record;
 }
 }
-public void updateRecord(ApUomGroups record) throws SQLException {
+public void updateRecord(ApProcedureAnesthesia record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_uom_groups set key = ?, description = ?, name = ?, code = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_procedure_anesthesia set key = ?, procedure_key = ?, airway_grade_lkey = ?, asa_score_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, encounter_key = ?, patient_key = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
-ps.setString(2, record.getDescription());
-ps.setString(3, record.getName());
-ps.setString(4, record.getCode());
+ps.setString(2, record.getProcedureKey());
+ps.setString(3, record.getAirwayGradeLkey());
+ps.setString(4, record.getAsaScoreLkey());
 ps.setString(5, record.getCreatedBy());
 ps.setString(6, record.getUpdatedBy());
 ps.setString(7, record.getDeletedBy());
 ps.setBigDecimal(8, record.getCreatedAt());
 ps.setBigDecimal(9, record.getUpdatedAt());
 ps.setBigDecimal(10, record.getDeletedAt());
-ps.setBoolean(11, record.getIsValid());
-ps.setString(12, record.getKey());
+ps.setString(11, record.getEncounterKey());
+ps.setString(12, record.getPatientKey());
+ps.setString(13, record.getKey());
 ps.executeUpdate();
 }
 }
-public void deleteRecord(ApUomGroups record) throws SQLException {
+public void deleteRecord(ApProcedureAnesthesia record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_uom_groups set  deleted_at = '"+System.currentTimeMillis()+"' where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_procedure_anesthesia set  deleted_at = '"+System.currentTimeMillis()+"' where key = ?");
 ) {
 ps.setString(1, record.getKey());
 ps.executeUpdate();
 }
 }
-public List<ApUomGroups> getList(String where) throws SQLException {
+public List<ApProcedureAnesthesia> getList(String where) throws SQLException {
 if (where == null || where.isEmpty()) where = "1=1";
 try (
 Connection con = DS.getConnection();
 Statement st = con.createStatement();
-ResultSet rs = st.executeQuery("select * from ap_uom_groups where "+ where);) {
-List<ApUomGroups> list = new ArrayList<ApUomGroups>();
+ResultSet rs = st.executeQuery("select * from ap_procedure_anesthesia where "+ where);) {
+List<ApProcedureAnesthesia> list = new ArrayList<ApProcedureAnesthesia>();
 while(rs.next()){
-ApUomGroups record = new ApUomGroups();
+ApProcedureAnesthesia record = new ApProcedureAnesthesia();
 record.setKey(rs.getString("key"));
-record.setDescription(rs.getString("description"));
-record.setName(rs.getString("name"));
-record.setCode(rs.getString("code"));
+record.setProcedureKey(rs.getString("procedure_key"));
+record.setAirwayGradeLkey(rs.getString("airway_grade_lkey"));
+record.setAsaScoreLkey(rs.getString("asa_score_lkey"));
 record.setCreatedBy(rs.getString("created_by"));
 record.setUpdatedBy(rs.getString("updated_by"));
 record.setDeletedBy(rs.getString("deleted_by"));
 record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
-record.setIsValid(rs.getBoolean("is_valid"));
+record.setEncounterKey(rs.getString("encounter_key"));
+record.setPatientKey(rs.getString("patient_key"));
 list.add(record);
 }
 return list;
 }
 }
-public String saveRecord(ApUomGroups record) throws SQLException {
+public String saveRecord(ApProcedureAnesthesia record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_uom_groups values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_procedure_anesthesia values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -118,22 +121,23 @@ String key = "" + System.nanoTime();
 record.setKey(key);
 
 ps.setString(1, key);
-ps.setString(2, record.getDescription());
-ps.setString(3, record.getName());
-ps.setString(4, record.getCode());
+ps.setString(2, record.getProcedureKey());
+ps.setString(3, record.getAirwayGradeLkey());
+ps.setString(4, record.getAsaScoreLkey());
 ps.setString(5, record.getCreatedBy());
 ps.setString(6, record.getUpdatedBy());
 ps.setString(7, record.getDeletedBy());
 ps.setBigDecimal(8, record.getCreatedAt());
 ps.setBigDecimal(9, record.getUpdatedAt());
 ps.setBigDecimal(10, record.getDeletedAt());
-ps.setBoolean(11, record.getIsValid());
+ps.setString(11, record.getEncounterKey());
+ps.setString(12, record.getPatientKey());
 ps.executeUpdate();
 return key;
 }
 }
-public void populateLovFields(ApUomGroupsEntity entity, String lang) {
-        Class<?> myClass = ApUomGroupsEntity.class;
+public void populateLovFields(ApProcedureAnesthesiaEntity entity, String lang) {
+        Class<?> myClass = ApProcedureAnesthesiaEntity.class;
         Field[] fields = myClass.getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
@@ -156,8 +160,8 @@ public void populateLovFields(ApUomGroupsEntity entity, String lang) {
             }
         }
     }
-public void translateObject(ApUomGroupsEntity entity, String lang) {
-        ApUomGroupsEntity translated = (ApUomGroupsEntity) publicServices.getObjectTranslation(entity.getKey(), entity, lang);
+public void translateObject(ApProcedureAnesthesiaEntity entity, String lang) {
+        ApProcedureAnesthesiaEntity translated = (ApProcedureAnesthesiaEntity) publicServices.getObjectTranslation(entity.getKey(), entity, lang);
         entity.setTranslatedObject(translated);
     }
 

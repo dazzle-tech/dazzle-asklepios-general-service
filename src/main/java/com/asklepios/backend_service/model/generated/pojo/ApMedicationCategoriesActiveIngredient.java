@@ -1,5 +1,6 @@
 package com.asklepios.backend_service.model.generated.pojo;
 
+import java.util.List;
 import java.io.Serializable;
 import lombok.extern.slf4j.Slf4j;
 import lombok.Getter;
@@ -11,5 +12,6 @@ import com.asklepios.backend_service.model.generated.entity.ApMedicationCategori
 @Slf4j
 public class ApMedicationCategoriesActiveIngredient extends ApMedicationCategoriesActiveIngredientEntity implements Serializable {
 
+    private List<String> activeIngredientList;
 
 }

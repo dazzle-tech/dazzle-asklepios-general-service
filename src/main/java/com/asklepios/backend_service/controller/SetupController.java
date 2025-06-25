@@ -749,6 +749,10 @@ public class SetupController implements Serializable {
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApUomGroupsUnits> list = apUomGroupsUnitsService.getList( where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_uom_groups_units where " + whereForTotal);
+            for (ApUomGroupsUnits uom : list) {
+                apUomGroupsUnitsService.populateLovFields(uom, lang);
+            }
+
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);
@@ -814,6 +818,9 @@ public class SetupController implements Serializable {
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApUomGroupsRelation> list = apUomGroupsRelationService.getList( where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_uom_groups_relation where " + whereForTotal);
+            for (ApUomGroupsRelation uom : list) {
+                apUomGroupsRelationService.populateLovFields(uom, lang);
+            }
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);
@@ -878,9 +885,11 @@ public class SetupController implements Serializable {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-            System.out.println("  deleted_at is null and " + where);
-            List<ApUomGroups> list = apUomGroupsService.getList("  deleted_at is null and " + where);
+            List<ApUomGroups> list = apUomGroupsService.getList( where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_uom_groups where " + whereForTotal);
+            for (ApUomGroups uom : list) {
+                apUomGroupsService.populateLovFields(uom, lang);
+            }
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);

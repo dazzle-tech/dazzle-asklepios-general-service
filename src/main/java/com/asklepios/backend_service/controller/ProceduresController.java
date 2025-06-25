@@ -62,8 +62,9 @@ private final ApPostProcedureVitalsService apPostProcedureVitalsService;
 private final ApPostProcedureCareService apPostProcedureCareService;
 private  final ApActiveIngredientService apActiveIngredientService;
 private final ApProcedureServiceEquipmentService apProcedureServiceEquipmentService;
-    private final ApServiceService apServiceService;
-    public ProceduresController(ApProcedureService apProcedureService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApProcedureRegistrationService apProcedureRegistrationService, ApProcedureStaffService apProcedureStaffService, ApUserService apUserService, ApProcedurePerformanceService apProcedurePerformanceService, ApProcedureAdministeredMedicationsService apProcedureAdministeredMedicationsService, ApPreProcedureAssessmentService apPreProcedureAssessmentService, ApPostProcedureVitalsService apPostProcedureVitalsService, ApPostProcedureCareService apPostProcedureCareService, ApActiveIngredientService apActiveIngredientService, ApProcedureServiceEquipmentService apProcedureServiceEquipmentService, ApServiceService apServiceService) {
+private final ApServiceService apServiceService;
+private final ApProcedureAnesthesiaService apProcedureAnesthesiaService;
+    public ProceduresController(ApProcedureService apProcedureService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApProcedureRegistrationService apProcedureRegistrationService, ApProcedureStaffService apProcedureStaffService, ApUserService apUserService, ApProcedurePerformanceService apProcedurePerformanceService, ApProcedureAdministeredMedicationsService apProcedureAdministeredMedicationsService, ApPreProcedureAssessmentService apPreProcedureAssessmentService, ApPostProcedureVitalsService apPostProcedureVitalsService, ApPostProcedureCareService apPostProcedureCareService, ApActiveIngredientService apActiveIngredientService, ApProcedureServiceEquipmentService apProcedureServiceEquipmentService, ApServiceService apServiceService, ApProcedureAnesthesiaService apProcedureAnesthesiaService) {
         this.apProcedureService = apProcedureService;
         this.apFacilityService = apFacilityService;
         this.apDepartmentService = apDepartmentService;
@@ -78,6 +79,7 @@ private final ApProcedureServiceEquipmentService apProcedureServiceEquipmentServ
         this.apActiveIngredientService = apActiveIngredientService;
         this.apProcedureServiceEquipmentService = apProcedureServiceEquipmentService;
         this.apServiceService = apServiceService;
+        this.apProcedureAnesthesiaService = apProcedureAnesthesiaService;
     }
 
 
@@ -659,6 +661,60 @@ private final ApProcedureServiceEquipmentService apProcedureServiceEquipmentServ
 
             response.setMsg("Deleted successfully");
             response.setObject(null);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(value = "/procedure-anesthesia-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getProcedurAnesthesiaList(@RequestParam Map<String, String> queryParams,
+                                                             @RequestHeader(required = false) String facility_id,
+                                                             @RequestHeader(required = false) String access_token,
+                                                             @RequestHeader(required = false) Integer access_level,
+                                                             @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApProcedureAnesthesia>> response = new ParentResponse<>();
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApProcedureAnesthesia> list = apProcedureAnesthesiaService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_procedure_anesthesia WHERE " + whereForTotal);
+
+            for (ApProcedureAnesthesia item : list) {
+
+                apProcedureAnesthesiaService.populateLovFields(item, lang);
+            }
+
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-procedure-anesthesia", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveProcedureAnesthesia(@RequestBody ApProcedureAnesthesia request,
+                                                               @RequestHeader(required = false) String facility_id,
+                                                               @RequestHeader(required = false) String access_token,
+                                                               @RequestHeader(required = false) Integer access_level,
+                                                               @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<ApProcedureAnesthesia>response = new ParentResponse<>();
+            apProcedureAnesthesiaService.saveRecord(request);
+            response.setObject(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();

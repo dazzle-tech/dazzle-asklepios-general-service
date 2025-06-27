@@ -2014,7 +2014,12 @@ public class EncounterController {
             apEncounterService.saveRecord(apEncounter);
             apEncounterService.populateLovFields(apEncounter, lang);
             ApPatient patient = apPatientService.getRecord(apEncounter.getPatientKey());
+            ApAdmitOutpatientInpatient admitOutpatientInpatient = apAdmitOutpatientInpatientService.getList("to_encounter_key = '"+apEncounter.getKey()+"'").get(0);
+            ApBed apBed = apBedService.getRecord(admitOutpatientInpatient.getBedKey());
+            apBed.setStatusLkey("5258572711068224");
+            apBedService.saveRecord(apBed);
             apPatientService.populateLovFields(patient, lang);
+
             apEncounter.setPatientObject(patient);
             response.setObject(apEncounter);
             response.setMsg("Visit Discharged Successfully");

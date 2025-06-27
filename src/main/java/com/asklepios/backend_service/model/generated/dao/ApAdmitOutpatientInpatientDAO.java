@@ -50,6 +50,12 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setAdmitSourceLkey(rs.getString("admit_source_lkey"));
+record.setAdmissionDepartmentKey(rs.getString("admission_department_key"));
+record.setRoomKey(rs.getString("room_key"));
+record.setBedKey(rs.getString("bed_key"));
+record.setHandoffInformation(rs.getString("handoff_information"));
+record.setIcd10(rs.getString("icd_10"));
+record.setReasonOfAdmission(rs.getString("reason_of_admission"));
 } else { record = null; }
 return record;
 }
@@ -57,7 +63,7 @@ return record;
 public void updateRecord(ApAdmitOutpatientInpatient record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_admit_outpatient_inpatient set key = ?, to_encounter_key = ?, from_encounter_key = ?, inpatient_department_key = ?, physician_key = ?, admission_notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, admit_source_lkey = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_admit_outpatient_inpatient set key = ?, to_encounter_key = ?, from_encounter_key = ?, inpatient_department_key = ?, physician_key = ?, admission_notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, admit_source_lkey = ?, admission_department_key = ?, room_key = ?, bed_key = ?, handoff_information = ?, icd_10 = ?, reason_of_admission = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -73,7 +79,13 @@ ps.setBigDecimal(10, record.getCreatedAt());
 ps.setBigDecimal(11, record.getUpdatedAt());
 ps.setBigDecimal(12, record.getDeletedAt());
 ps.setString(13, record.getAdmitSourceLkey());
-ps.setString(14, record.getKey());
+ps.setString(14, record.getAdmissionDepartmentKey());
+ps.setString(15, record.getRoomKey());
+ps.setString(16, record.getBedKey());
+ps.setString(17, record.getHandoffInformation());
+ps.setString(18, record.getIcd10());
+ps.setString(19, record.getReasonOfAdmission());
+ps.setString(20, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -108,6 +120,12 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setAdmitSourceLkey(rs.getString("admit_source_lkey"));
+record.setAdmissionDepartmentKey(rs.getString("admission_department_key"));
+record.setRoomKey(rs.getString("room_key"));
+record.setBedKey(rs.getString("bed_key"));
+record.setHandoffInformation(rs.getString("handoff_information"));
+record.setIcd10(rs.getString("icd_10"));
+record.setReasonOfAdmission(rs.getString("reason_of_admission"));
 list.add(record);
 }
 return list;
@@ -116,7 +134,7 @@ return list;
 public String saveRecord(ApAdmitOutpatientInpatient record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_admit_outpatient_inpatient values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_admit_outpatient_inpatient values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -136,6 +154,12 @@ ps.setBigDecimal(10, record.getCreatedAt());
 ps.setBigDecimal(11, record.getUpdatedAt());
 ps.setBigDecimal(12, record.getDeletedAt());
 ps.setString(13, record.getAdmitSourceLkey());
+ps.setString(14, record.getAdmissionDepartmentKey());
+ps.setString(15, record.getRoomKey());
+ps.setString(16, record.getBedKey());
+ps.setString(17, record.getHandoffInformation());
+ps.setString(18, record.getIcd10());
+ps.setString(19, record.getReasonOfAdmission());
 ps.executeUpdate();
 return key;
 }

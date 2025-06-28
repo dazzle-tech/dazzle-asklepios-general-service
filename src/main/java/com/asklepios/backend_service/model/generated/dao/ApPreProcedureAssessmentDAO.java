@@ -60,6 +60,8 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsvalid(rs.getBoolean("isvalid"));
+record.setAsaScoreLkey(rs.getString("asa_score_lkey"));
+record.setAirwayGradeLkey(rs.getString("airway_grade_lkey"));
 } else { record = null; }
 return record;
 }
@@ -67,7 +69,7 @@ return record;
 public void updateRecord(ApPreProcedureAssessment record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_pre_procedure_assessment set key = ?, procedure_key = ?, fasting_required = ?, patient_prepared = ?, special_instructions = ?, blood_pressure_systolic = ?, blood_pressure_diastolic = ?, heart_rate = ?, temperature = ?, oxygen_saturation = ?, patient_identity_verified = ?, consent_confirmed = ?, procedure_site_marked = ?, allergies_confirmed = ?, patient_premedicated = ?, equipment_counting_done = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, isvalid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_pre_procedure_assessment set key = ?, procedure_key = ?, fasting_required = ?, patient_prepared = ?, special_instructions = ?, blood_pressure_systolic = ?, blood_pressure_diastolic = ?, heart_rate = ?, temperature = ?, oxygen_saturation = ?, patient_identity_verified = ?, consent_confirmed = ?, procedure_site_marked = ?, allergies_confirmed = ?, patient_premedicated = ?, equipment_counting_done = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, isvalid = ?, asa_score_lkey = ?, airway_grade_lkey = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -93,7 +95,9 @@ ps.setBigDecimal(20, record.getCreatedAt());
 ps.setBigDecimal(21, record.getUpdatedAt());
 ps.setBigDecimal(22, record.getDeletedAt());
 ps.setBoolean(23, record.getIsvalid());
-ps.setString(24, record.getKey());
+ps.setString(24, record.getAsaScoreLkey());
+ps.setString(25, record.getAirwayGradeLkey());
+ps.setString(26, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -138,6 +142,8 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsvalid(rs.getBoolean("isvalid"));
+record.setAsaScoreLkey(rs.getString("asa_score_lkey"));
+record.setAirwayGradeLkey(rs.getString("airway_grade_lkey"));
 list.add(record);
 }
 return list;
@@ -146,7 +152,7 @@ return list;
 public String saveRecord(ApPreProcedureAssessment record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_pre_procedure_assessment values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_pre_procedure_assessment values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -176,6 +182,8 @@ ps.setBigDecimal(20, record.getCreatedAt());
 ps.setBigDecimal(21, record.getUpdatedAt());
 ps.setBigDecimal(22, record.getDeletedAt());
 ps.setBoolean(23, record.getIsvalid());
+ps.setString(24, record.getAsaScoreLkey());
+ps.setString(25, record.getAirwayGradeLkey());
 ps.executeUpdate();
 return key;
 }

@@ -4,12 +4,12 @@ import java.io.Serializable;
 import lombok.extern.slf4j.Slf4j;
 import lombok.Getter;
 import lombok.Setter;
-import com.asklepios.backend_service.model.generated.entity.ApProcedureAnesthesiaEntity;
+import com.asklepios.backend_service.model.generated.entity.ApPostProcedureChecklistEntity;
 
 @Getter
 @Setter
 @Slf4j
-public class ApProcedureAnesthesia extends ApProcedureAnesthesiaEntity implements Serializable {
+public class ApPostProcedureChecklist extends ApPostProcedureChecklistEntity implements Serializable {
 
 
 }

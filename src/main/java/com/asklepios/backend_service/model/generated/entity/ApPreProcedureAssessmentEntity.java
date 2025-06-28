@@ -37,6 +37,10 @@ public class ApPreProcedureAssessmentEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isvalid = false;
+	private String asaScoreLkey;
+	private ApLovValues asaScoreLvalue;
+	private String airwayGradeLkey;
+	private ApLovValues airwayGradeLvalue;
 	private ApPreProcedureAssessmentEntity translatedObject;
 
 }

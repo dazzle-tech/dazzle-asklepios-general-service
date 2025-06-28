@@ -2313,4 +2313,62 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @GetMapping(value = "/bed-transactions-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> bedTransactionsList(@RequestParam Map<String, String> queryParams,
+                                                    @Nullable @RequestHeader String facility_id,
+                                                    @Nullable @RequestHeader String access_token,
+                                                    @Nullable @RequestHeader Integer access_level,
+                                                    @Nullable @RequestHeader String lang) {
+        try {
+
+            ParentResponse<List<ApBedTransactions>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false,false);
+            List<ApBedTransactions> bedTransactions = apBedTransactionsService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_encounter where " + whereForTotal);
+            for (ApBedTransactions transaction : bedTransactions) {
+                if(transaction.getFromRoomKey()!=null){
+                    transaction.setFromRoom(apRoomService.getRecord(transaction.getFromRoomKey()));
+                    apRoomService.populateLovFields(transaction.getFromRoom(),lang);
+                }
+                if(transaction.getToRoomKey()!=null){
+                    transaction.setToRoom(apRoomService.getRecord(transaction.getToRoomKey()));
+                    apRoomService.populateLovFields(transaction.getToRoom(),lang);
+                }
+                if(transaction.getFromBedKey() !=null){
+                    transaction.setFromBed(apBedService.getRecord(transaction.getFromBedKey()));
+                    apBedService.populateLovFields(transaction.getFromBed(),lang);
+                }
+                if(transaction.getToBedKey() !=null){
+                    transaction.setToBed(apBedService.getRecord(transaction.getToBedKey()));
+                    apBedService.populateLovFields(transaction.getToBed(),lang);
+                }
+                if(transaction.getPatientKey() !=null){
+                    transaction.setPatient(apPatientService.getRecord(transaction.getPatientKey()));
+                    apPatientService.populateLovFields(transaction.getPatient(),lang);
+                }
+                ApAdmitOutpatientInpatient admitOutpatientInpatient = apAdmitOutpatientInpatientService.getList("to_encounter_key = '"+transaction.getEncounterKey()+"'").get(0);
+                transaction.setAdmitOutpatientInpatient(admitOutpatientInpatient);
+                apAdmitOutpatientInpatientService.populateLovFields(transaction.getAdmitOutpatientInpatient(),lang);
+            }
+
+            response.setObject(bedTransactions);
+            response.setExtraNumeric(totalRecord);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+
+        }
+    }
 }

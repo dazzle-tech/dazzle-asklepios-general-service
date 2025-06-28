@@ -27,6 +27,7 @@ public class ApBedTransactionsEntity implements Serializable {
 	private String fromBedKey;
 	private String toRoomKey;
 	private String toBedKey;
+	private String departmentKey;
 	private ApBedTransactionsEntity translatedObject;
 
 }

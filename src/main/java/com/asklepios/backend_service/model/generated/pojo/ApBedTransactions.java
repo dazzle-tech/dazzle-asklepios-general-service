@@ -10,6 +10,10 @@ import com.asklepios.backend_service.model.generated.entity.ApBedTransactionsEnt
 @Setter
 @Slf4j
 public class ApBedTransactions extends ApBedTransactionsEntity implements Serializable {
-
-
+    ApRoom fromRoom;
+    ApRoom toRoom;
+    ApBed fromBed;
+    ApBed toBed;
+    ApPatient patient;
+    ApAdmitOutpatientInpatient admitOutpatientInpatient;
 }

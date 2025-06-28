@@ -50,6 +50,7 @@ record.setFromRoomKey(rs.getString("from_room_key"));
 record.setFromBedKey(rs.getString("from_bed_key"));
 record.setToRoomKey(rs.getString("to_room_key"));
 record.setToBedKey(rs.getString("to_bed_key"));
+record.setDepartmentKey(rs.getString("department_key"));
 } else { record = null; }
 return record;
 }
@@ -57,7 +58,7 @@ return record;
 public void updateRecord(ApBedTransactions record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_bed_transactions set key = ?, encounter_key = ?, patient_key = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, from_room_key = ?, from_bed_key = ?, to_room_key = ?, to_bed_key = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_bed_transactions set key = ?, encounter_key = ?, patient_key = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, from_room_key = ?, from_bed_key = ?, to_room_key = ?, to_bed_key = ?, department_key = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -73,7 +74,8 @@ ps.setString(10, record.getFromRoomKey());
 ps.setString(11, record.getFromBedKey());
 ps.setString(12, record.getToRoomKey());
 ps.setString(13, record.getToBedKey());
-ps.setString(14, record.getKey());
+ps.setString(14, record.getDepartmentKey());
+ps.setString(15, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -108,6 +110,7 @@ record.setFromRoomKey(rs.getString("from_room_key"));
 record.setFromBedKey(rs.getString("from_bed_key"));
 record.setToRoomKey(rs.getString("to_room_key"));
 record.setToBedKey(rs.getString("to_bed_key"));
+record.setDepartmentKey(rs.getString("department_key"));
 list.add(record);
 }
 return list;
@@ -116,7 +119,7 @@ return list;
 public String saveRecord(ApBedTransactions record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_bed_transactions values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_bed_transactions values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -136,6 +139,7 @@ ps.setString(10, record.getFromRoomKey());
 ps.setString(11, record.getFromBedKey());
 ps.setString(12, record.getToRoomKey());
 ps.setString(13, record.getToBedKey());
+ps.setString(14, record.getDepartmentKey());
 ps.executeUpdate();
 return key;
 }

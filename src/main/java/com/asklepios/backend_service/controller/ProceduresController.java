@@ -1,47 +1,18 @@
 package com.asklepios.backend_service.controller;
 
 import com.asklepios.backend_service.database.DS;
-import com.asklepios.backend_service.model.generated.entity.ApPatientEntity;
 import com.asklepios.backend_service.model.generated.pojo.*;
-import com.asklepios.backend_service.model.pojo.ValidationResult;
 import com.asklepios.backend_service.model.pojo.request.ListRequest;
-import com.asklepios.backend_service.model.pojo.request.ListRequestAllValues;
-import com.asklepios.backend_service.model.pojo.request.PhysicalExamAreaRequest;
-import com.asklepios.backend_service.model.pojo.request.ReviewOfSystemRequest;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
 import com.asklepios.backend_service.service.*;
 import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.*;
-import java.util.stream.Collectors;
-
-import com.asklepios.backend_service.database.DS;
-import com.asklepios.backend_service.model.generated.entity.ApPatientEntity;
-import com.asklepios.backend_service.model.generated.pojo.*;
-        import com.asklepios.backend_service.model.pojo.ValidationResult;
-import com.asklepios.backend_service.model.pojo.request.ListRequest;
-import com.asklepios.backend_service.model.pojo.response.ParentResponse;
-import com.asklepios.backend_service.service.*;
-        import jakarta.annotation.Nullable;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-        import org.springframework.web.client.RestTemplate;
-
-import java.math.BigDecimal;
-import java.sql.SQLException;
-import java.util.*;
-        import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/procedures")
@@ -63,8 +34,9 @@ private final ApPostProcedureCareService apPostProcedureCareService;
 private  final ApActiveIngredientService apActiveIngredientService;
 private final ApProcedureServiceEquipmentService apProcedureServiceEquipmentService;
 private final ApServiceService apServiceService;
-private final ApProcedureAnesthesiaService apProcedureAnesthesiaService;
-    public ProceduresController(ApProcedureService apProcedureService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApProcedureRegistrationService apProcedureRegistrationService, ApProcedureStaffService apProcedureStaffService, ApUserService apUserService, ApProcedurePerformanceService apProcedurePerformanceService, ApProcedureAdministeredMedicationsService apProcedureAdministeredMedicationsService, ApPreProcedureAssessmentService apPreProcedureAssessmentService, ApPostProcedureVitalsService apPostProcedureVitalsService, ApPostProcedureCareService apPostProcedureCareService, ApActiveIngredientService apActiveIngredientService, ApProcedureServiceEquipmentService apProcedureServiceEquipmentService, ApServiceService apServiceService, ApProcedureAnesthesiaService apProcedureAnesthesiaService) {
+private final ApPostProcedureAnesthesiaService apPostProcedureAnesthesiaService;
+private final ApPostProcedureChecklistService apPostProcedureChecklistService;
+    public ProceduresController(ApProcedureService apProcedureService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApProcedureRegistrationService apProcedureRegistrationService, ApProcedureStaffService apProcedureStaffService, ApUserService apUserService, ApProcedurePerformanceService apProcedurePerformanceService, ApProcedureAdministeredMedicationsService apProcedureAdministeredMedicationsService, ApPreProcedureAssessmentService apPreProcedureAssessmentService, ApPostProcedureVitalsService apPostProcedureVitalsService, ApPostProcedureCareService apPostProcedureCareService, ApActiveIngredientService apActiveIngredientService, ApProcedureServiceEquipmentService apProcedureServiceEquipmentService, ApServiceService apServiceService, ApPostProcedureAnesthesiaService apPostProcedureAnesthesiaService, ApPostProcedureChecklistService apPostProcedureChecklistService) {
         this.apProcedureService = apProcedureService;
         this.apFacilityService = apFacilityService;
         this.apDepartmentService = apDepartmentService;
@@ -79,7 +51,9 @@ private final ApProcedureAnesthesiaService apProcedureAnesthesiaService;
         this.apActiveIngredientService = apActiveIngredientService;
         this.apProcedureServiceEquipmentService = apProcedureServiceEquipmentService;
         this.apServiceService = apServiceService;
-        this.apProcedureAnesthesiaService = apProcedureAnesthesiaService;
+
+        this.apPostProcedureAnesthesiaService = apPostProcedureAnesthesiaService;
+        this.apPostProcedureChecklistService = apPostProcedureChecklistService;
     }
 
 
@@ -646,6 +620,7 @@ private final ApProcedureAnesthesiaService apProcedureAnesthesiaService;
 
 
 
+
     @DeleteMapping(value = "/delete-procedure-service-equipment", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteProcedureserviceEquipment(@RequestParam String key) {
         try {
@@ -669,14 +644,14 @@ private final ApProcedureAnesthesiaService apProcedureAnesthesiaService;
         }
     }
 
-    @GetMapping(value = "/procedure-anesthesia-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getProcedurAnesthesiaList(@RequestParam Map<String, String> queryParams,
+    @GetMapping(value = "/post-procedure-anesthesia-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPostProcedurAnesthesiaList(@RequestParam Map<String, String> queryParams,
                                                              @RequestHeader(required = false) String facility_id,
                                                              @RequestHeader(required = false) String access_token,
                                                              @RequestHeader(required = false) Integer access_level,
                                                              @RequestHeader(required = false) String lang) {
         try {
-            ParentResponse<List<ApProcedureAnesthesia>> response = new ParentResponse<>();
+            ParentResponse<List<ApPostProcedureAnesthesia>> response = new ParentResponse<>();
             if ("true".equals(queryParams.get("ignore"))) {
                 response.setObject(new ArrayList<>());
                 return ResponseEntity.ok(response);
@@ -686,12 +661,13 @@ private final ApProcedureAnesthesiaService apProcedureAnesthesiaService;
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
 
-            List<ApProcedureAnesthesia> list = apProcedureAnesthesiaService.getList(where);
-            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_procedure_anesthesia WHERE " + whereForTotal);
+            List<ApPostProcedureAnesthesia> list = apPostProcedureAnesthesiaService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_post_procedure_anesthesia WHERE " + whereForTotal);
 
-            for (ApProcedureAnesthesia item : list) {
+            for (ApPostProcedureAnesthesia item : list) {
 
-                apProcedureAnesthesiaService.populateLovFields(item, lang);
+
+                apPostProcedureAnesthesiaService.populateLovFields(item, lang);
             }
 
             response.setObject(list);
@@ -705,15 +681,72 @@ private final ApProcedureAnesthesiaService apProcedureAnesthesiaService;
         }
     }
 
-    @PostMapping(value = "/save-procedure-anesthesia", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveProcedureAnesthesia(@RequestBody ApProcedureAnesthesia request,
+    @PostMapping(value = "/save-post-procedure-anesthesia", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> savePostProcedurAnesthesia(@RequestBody ApPostProcedureAnesthesia request,
                                                                @RequestHeader(required = false) String facility_id,
                                                                @RequestHeader(required = false) String access_token,
                                                                @RequestHeader(required = false) Integer access_level,
                                                                @RequestHeader(required = false) String lang) {
         try {
-            ParentResponse<ApProcedureAnesthesia>response = new ParentResponse<>();
-            apProcedureAnesthesiaService.saveRecord(request);
+            ParentResponse<ApPostProcedureAnesthesia>response = new ParentResponse<>();
+
+            apPostProcedureAnesthesiaService.saveRecord(request);
+            response.setObject(request);
+            apPostProcedureAnesthesiaService.populateLovFields(request, lang);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
+    @GetMapping(value = "/post-procedure-checklist-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPostProcedureCheckListList(@RequestParam Map<String, String> queryParams,
+                                                             @RequestHeader(required = false) String facility_id,
+                                                             @RequestHeader(required = false) String access_token,
+                                                             @RequestHeader(required = false) Integer access_level,
+                                                             @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApPostProcedureChecklist>> response = new ParentResponse<>();
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApPostProcedureChecklist> list = apPostProcedureChecklistService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_post_procedure_checklist WHERE " + whereForTotal);
+
+            for (ApPostProcedureChecklist item : list) {
+
+                apPostProcedureChecklistService.populateLovFields(item, lang);
+            }
+
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-post-procedure-checklist", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> savePostProcedureCheckList(@RequestBody ApPostProcedureChecklist request,
+                                                               @RequestHeader(required = false) String facility_id,
+                                                               @RequestHeader(required = false) String access_token,
+                                                               @RequestHeader(required = false) Integer access_level,
+                                                               @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<ApPostProcedureChecklist>response = new ParentResponse<>();
+            apPostProcedureChecklistService.saveRecord(request);
             response.setObject(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {

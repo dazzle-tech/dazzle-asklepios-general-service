@@ -2212,12 +2212,12 @@ public class EncounterController {
     }
     @GetMapping(value = "/inpatient-encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> inpatientEncounterList(@RequestParam Map<String, String> queryParams,
-                                           @Nullable @RequestHeader String facility_id,
-                                           @Nullable @RequestHeader String access_token,
-                                           @Nullable @RequestHeader Integer access_level,
-                                           @Nullable @RequestHeader String lang) {
+                                                    @RequestHeader("department_key") String depKey,
+                                                    @Nullable @RequestHeader String facility_id,
+                                                    @Nullable @RequestHeader String access_token,
+                                                    @Nullable @RequestHeader Integer access_level,
+                                                    @Nullable @RequestHeader String lang) {
         try {
-
             ParentResponse<List<ApEncounter>> response = new ParentResponse<>();
 
             if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
@@ -2227,43 +2227,60 @@ public class EncounterController {
 
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
-            String whereForTotal = listRequest.buildWhereStatement(true, false, false,false);
             List<ApEncounter> encounters = apEncounterService.getList(where);
-            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_encounter where " + whereForTotal);
+            List<ApEncounter> filteredEncounters = new ArrayList<>();
+
             for (ApEncounter encounter : encounters) {
                 encounter.setPractitionerObject(apPractitionerService.getRecord(encounter.getPhysicianKey()));
-                if(encounter.getResourceKey() != null){
-                    if(encounter.getResourceTypeLkey().equals("2039534205961578")){
-                        ApDepartment department = apDepartmentService.getRecord(encounter.getDepartmentKey());
-                        if(department != null){
-                            encounter.setDepartmentName(department.getName());}
+
+                if (encounter.getResourceKey() != null) {
+                    if (encounter.getResourceTypeLkey().equals("4217389643435490")) {
+                        ApResources apResources = apResourcesService.getRecord(encounter.getResourceKey());
+                        ApDepartment department = apDepartmentService.getRecord(apResources.getResourceKey());
+                        if (department != null) {
+                            encounter.setDepartmentName(department.getName());
+                            String departmentKey = department.getKey();
+                            if (depKey != null && !depKey.isBlank() && !departmentKey.equals(depKey)) {
+                                continue;
+                            }
+
+                        }
                     }
-                    encounter.setResourceObject(apEncounterService.getResource(encounter.getResourceTypeLkey(),encounter.getResourceKey(),lang));
+                    encounter.setResourceObject(apEncounterService.getResource(encounter.getResourceTypeLkey(), encounter.getResourceKey(), lang));
                 }
+
                 if (encounter.getPractitionerObject() != null) {
-                    apPractitionerService.populateLovFields(encounter.getPractitionerObject(),lang);
+                    apPractitionerService.populateLovFields(encounter.getPractitionerObject(), lang);
                 }
+
                 ApPatient patient = apPatientService.getRecord(encounter.getPatientKey());
                 patient.setHasAllergy(apPatientService.getHasAllergy(encounter.getPatientKey()));
                 patient.setHasWarning(apPatientService.getHasWarning(encounter.getPatientKey()));
                 apPatientService.populateLovFields(patient, lang);
                 encounter.setPatientObject(patient);
+
                 encounter.setDiagnosis(apEncounterService.getDiagnosis(encounter.getKey()));
                 encounter.setHasOrder(apEncounterService.getHasOrder(encounter.getKey()));
                 encounter.setHasPrescription(apEncounterService.getHasPrescription(encounter.getKey()));
                 encounter.setHasAllergy(apEncounterService.getHasAllergy(encounter.getKey()));
                 encounter.setHasObservation(apEncounterService.getHasObservation(encounter.getKey()));
-
                 apEncounterService.populateLovFields(encounter, lang);
-                ApAdmitOutpatientInpatient admitObject = apAdmitOutpatientInpatientService.getList("to_encounter_key = '"+encounter.getKey()+"'").get(0);
+
+                ApAdmitOutpatientInpatient admitObject = apAdmitOutpatientInpatientService
+                        .getList("to_encounter_key = '" + encounter.getKey() + "'").get(0);
+
                 encounter.setApBed(apBedService.getRecord(admitObject.getBedKey()));
-                apBedService.populateLovFields(encounter.getApBed(),lang);
+                apBedService.populateLovFields(encounter.getApBed(), lang);
+
                 encounter.setApRoom(apRoomService.getRecord(admitObject.getRoomKey()));
-                apRoomService.populateLovFields(encounter.getApRoom(),lang);
+                apRoomService.populateLovFields(encounter.getApRoom(), lang);
+
+                filteredEncounters.add(encounter);
             }
-            apEncounterService.processPatientObservationStatus(encounters);
-            response.setObject(encounters);
-            response.setExtraNumeric(totalRecord);
+
+            apEncounterService.processPatientObservationStatus(filteredEncounters);
+            response.setObject(filteredEncounters);
+            response.setExtraNumeric(new BigDecimal(filteredEncounters.size()));
 
             return ResponseEntity.ok(response);
 
@@ -2271,9 +2288,9 @@ public class EncounterController {
             e.printStackTrace();
             log.error(e.getMessage());
             return ResponseEntity.status(500).body(e);
-
         }
     }
+
     @PostMapping(value = "/save-bed-transaction", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveBedTransaction(@RequestBody ApBedTransactions bedTransactions ,
                                                                  @jakarta.annotation.Nullable @RequestHeader String facility_id,

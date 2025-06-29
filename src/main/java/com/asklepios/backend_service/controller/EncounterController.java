@@ -1404,7 +1404,8 @@ public class EncounterController {
                 o.setEncounter(apEncounterService.getRecord(o.getVisitKey()));
 
                 if(o.getEncounter()!=null){
-                o.getEncounter().setDiagnosis(apEncounterService.getDiagnosis( o.getEncounter().getKey()));}
+                o.getEncounter().setDiagnosis(apEncounterService.getDiagnosis( o.getEncounter().getKey()));
+                    apEncounterService.populateLovFields(o.getEncounter(), lang);}
                 if(o.getPatient()!=null){
                 o.getPatient().setHasAllergy(apPatientService.getHasAllergy(o.getPatient().getKey()));
                 o.getPatient().setHasWarning(apPatientService.getHasWarning(o.getPatient().getKey()));}
@@ -1412,7 +1413,7 @@ public class EncounterController {
                 o.setHasRadiology(!apDiagnosticOrderTestsService.getList("order_type_lkey = '862828331135792' and order_key = '"+o.getKey()+"'").isEmpty());
                 apDiagnosticOrdersService.populateLovFields(o, lang);
                 apPatientService.populateLovFields(o.getPatient(), lang);
-                apEncounterService.populateLovFields(o.getEncounter(), lang);
+
 
             }
 

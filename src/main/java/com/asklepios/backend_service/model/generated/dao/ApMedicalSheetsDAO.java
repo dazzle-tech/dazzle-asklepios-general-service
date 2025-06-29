@@ -67,6 +67,7 @@ record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setObservation(rs.getBoolean("observation"));
 record.setVaccination(rs.getBoolean("vaccination"));
+record.setOperationRequests(rs.getBoolean("operation_requests"));
 } else { record = null; }
 return record;
 }
@@ -74,7 +75,7 @@ return record;
 public void updateRecord(ApMedicalSheets record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_medical_sheets set key = ?, department_key = ?, facility_key = ?, patient_dashboard = ?, clinical_visit = ?, diagnostics_order = ?, prescription = ?, drug_order = ?, consultation = ?, procedures = ?, patient_history = ?, allergies = ?, medical_warnings = ?, medications_record = ?, psychological_exam = ?, audiometry_puretone = ?, optometric_exam = ?, vaccine_reccord = ?, diagnostics_result = ?, dental_care = ?, cardiology = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, observation = ?, vaccination = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_medical_sheets set key = ?, department_key = ?, facility_key = ?, patient_dashboard = ?, clinical_visit = ?, diagnostics_order = ?, prescription = ?, drug_order = ?, consultation = ?, procedures = ?, patient_history = ?, allergies = ?, medical_warnings = ?, medications_record = ?, psychological_exam = ?, audiometry_puretone = ?, optometric_exam = ?, vaccine_reccord = ?, diagnostics_result = ?, dental_care = ?, cardiology = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, observation = ?, vaccination = ?, operation_requests = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -107,7 +108,8 @@ ps.setBigDecimal(27, record.getDeletedAt());
 ps.setBoolean(28, record.getIsValid());
 ps.setBoolean(29, record.getObservation());
 ps.setBoolean(30, record.getVaccination());
-ps.setString(31, record.getKey());
+ps.setBoolean(31, record.getOperationRequests());
+ps.setString(32, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -159,6 +161,7 @@ record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setObservation(rs.getBoolean("observation"));
 record.setVaccination(rs.getBoolean("vaccination"));
+record.setOperationRequests(rs.getBoolean("operation_requests"));
 list.add(record);
 }
 return list;
@@ -167,7 +170,7 @@ return list;
 public String saveRecord(ApMedicalSheets record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_medical_sheets values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_medical_sheets values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -204,6 +207,7 @@ ps.setBigDecimal(27, record.getDeletedAt());
 ps.setBoolean(28, record.getIsValid());
 ps.setBoolean(29, record.getObservation());
 ps.setBoolean(30, record.getVaccination());
+ps.setBoolean(31, record.getOperationRequests());
 ps.executeUpdate();
 return key;
 }

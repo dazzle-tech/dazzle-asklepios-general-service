@@ -11,5 +11,5 @@ import com.asklepios.backend_service.model.generated.entity.ApProductsEntity;
 @Slf4j
 public class ApProducts extends ApProductsEntity implements Serializable {
 
-
+    ApGenericMedication medicationObject;
 }

@@ -11,5 +11,6 @@ import com.asklepios.backend_service.model.generated.entity.ApUomGroupsUnitsEnti
 @Slf4j
 public class ApUomGroupsUnits extends ApUomGroupsUnitsEntity implements Serializable {
 
+    String units;
 
 }

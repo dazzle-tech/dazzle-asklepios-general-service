@@ -85,8 +85,10 @@ public class SetupController implements Serializable {
     private final ApResourcesService apResourcesService;
     private final ApUomGroupsUnitsService apUomGroupsUnitsService;
     private final ApUomGroupsRelationService apUomGroupsRelationService;
+    private final ApProductsService apProductsService;
 
-    public SetupController(EmailService emailService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1, EmailService emailService1, ApAgeGroupService apAgeGroupService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestPathologyService apDiagnosticTestPathologyService, ApVaccineService apVaccineService, ApVaccineBrandsService apVaccineBrandsService, ApVaccineDoseService apVaccineDoseService, ApVaccineDosesIntervalService apVaccineDosesIntervalService, ApProcedureSetupService apProcedureSetupService, ApProcedureCodingService apProcedureCodingService, ApProcedurePriceListService apProcedurePriceListService, ApDuplicationCandidateSetupService apDuplicationCandidateSetupService, ApCptService apCptService, ApLoincService apLoincService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestNormalRangeLovService apDiagnosticTestNormalRangeLovService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApMedicalSheetsService apMedicalSheetsService, ApDiagnosticCodingService apDiagnosticCodingService, ApRoomService apRoomService, ApBedService apBedService, ApRoomServicesService apRoomServicesService, ApResourcesService apResourcesService, ApUomGroupsUnitsService apUomGroupsUnitsService, ApUomGroupsRelationService apUomGroupsRelationService, ApUomGroupsRelationService apUomGroupsRelationService1) {
+
+    public SetupController(EmailService emailService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1, EmailService emailService1, ApAgeGroupService apAgeGroupService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestPathologyService apDiagnosticTestPathologyService, ApVaccineService apVaccineService, ApVaccineBrandsService apVaccineBrandsService, ApVaccineDoseService apVaccineDoseService, ApVaccineDosesIntervalService apVaccineDosesIntervalService, ApProcedureSetupService apProcedureSetupService, ApProcedureCodingService apProcedureCodingService, ApProcedurePriceListService apProcedurePriceListService, ApDuplicationCandidateSetupService apDuplicationCandidateSetupService, ApCptService apCptService, ApLoincService apLoincService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestNormalRangeLovService apDiagnosticTestNormalRangeLovService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApMedicalSheetsService apMedicalSheetsService, ApDiagnosticCodingService apDiagnosticCodingService, ApRoomService apRoomService, ApBedService apBedService, ApRoomServicesService apRoomServicesService, ApResourcesService apResourcesService, ApUomGroupsUnitsService apUomGroupsUnitsService, ApUomGroupsRelationService apUomGroupsRelationService, ApUomGroupsRelationService apUomGroupsRelationService1, ApProductsService apProductsService, ApGenericMedicationService apGenericMedicationService) {
         this.authService = authService;
         this.apModuleService = apModuleService;
         this.apScreenService = apScreenService;
@@ -142,6 +144,7 @@ public class SetupController implements Serializable {
         this.apResourcesService = apResourcesService;
         this.apUomGroupsUnitsService = apUomGroupsUnitsService;
         this.apUomGroupsRelationService = apUomGroupsRelationService1;
+        this.apProductsService = apProductsService;
     }
 
     @GetMapping(value = "/navigation-map", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -751,6 +754,7 @@ public class SetupController implements Serializable {
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_uom_groups_units where " + whereForTotal);
             for (ApUomGroupsUnits uom : list) {
                 apUomGroupsUnitsService.populateLovFields(uom, lang);
+                uom.setUnits(apUomGroupsUnitsService.getUnitName(uom.getUomLkey()));
             }
 
             response.setObject(list);
@@ -3445,6 +3449,76 @@ public class SetupController implements Serializable {
             e.printStackTrace();
             log.error(e.getMessage());
             return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/products-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> productsList(@RequestParam Map<String, String> queryParams,
+                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApProducts>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            List<ApProducts> list = apProductsService.getList( where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_products where " + whereForTotal);
+            for (ApProducts product : list) {
+                apProductsService.populateLovFields(product, lang);
+                apProductsService.getMedication(product.getMedicationKey());
+            }
+
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
+    @PostMapping(value = "/save-product", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveProduct(@RequestBody ApProducts product,
+                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApProducts> response = new ParentResponse<>();
+            apProductsService.saveRecord(product);
+            response.setObject(product);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/remove-product", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeProduct(@RequestBody ApProducts product,
+                                                  @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                  @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                  @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                  @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApProducts> response = new ParentResponse<>();
+            apProductsService.deleteRecord(product);
+            response.setObject(product);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
         }
     }
 

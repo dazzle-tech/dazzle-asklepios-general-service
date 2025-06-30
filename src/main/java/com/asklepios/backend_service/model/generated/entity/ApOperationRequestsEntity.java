@@ -45,6 +45,8 @@ public class ApOperationRequestsEntity implements Serializable {
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
 	private BigDecimal operationDateTime;
+	private String statusLkey;
+	private ApLovValues statusLvalue;
 	private ApOperationRequestsEntity translatedObject;
 
 }

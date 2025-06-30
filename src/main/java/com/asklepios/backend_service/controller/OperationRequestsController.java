@@ -5,7 +5,8 @@ import com.asklepios.backend_service.model.generated.pojo.*;
 import com.asklepios.backend_service.model.pojo.request.ListRequest;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
 import com.asklepios.backend_service.service.*;
-
+import com.asklepios.backend_service.model.generated.pojo.ApOperationRequests;
+import com.asklepios.backend_service.service.ApOperationRequestsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -19,22 +20,82 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/operation")
+
 @Slf4j
 public class OperationRequestsController {
 
+    @Autowired
+    private final ApOperationRequestsService apOperationRequestsService;
     private final ApOperationSetupService operationSetupService;
     private final ApOperationCodingService operationCodingService;
     private final ApOperationPriceListService operationPriceListService;
 
-    @Autowired
+
     public OperationRequestsController(
-            ApOperationSetupService operationSetupService,
+            ApOperationRequestsService apOperationRequestsService, ApOperationSetupService operationSetupService,
             ApOperationCodingService operationCodingService,
             ApOperationPriceListService operationPriceListService
     ) {
+        this.apOperationRequestsService = apOperationRequestsService;
         this.operationSetupService = operationSetupService;
         this.operationCodingService = operationCodingService;
         this.operationPriceListService = operationPriceListService;
+    }
+
+    @PostMapping(value = "/save-operation-request", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveOperationRequests(@RequestBody ApOperationRequests request,
+                                                   @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                   @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                   @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+
+            ParentResponse<ApOperationRequests> response = new ParentResponse<>();
+            apOperationRequestsService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/operation-request-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getOperationRequestsList(@RequestParam Map<String, String> queryParams,
+                                                      @RequestHeader(required = false) String facility_id,
+                                                      @RequestHeader(required = false) String access_token,
+                                                      @RequestHeader(required = false) Integer access_level,
+                                                      @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApOperationRequests>> response = new ParentResponse<>();
+
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApOperationRequests> list = apOperationRequestsService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_operation_requests WHERE " + whereForTotal);
+
+            for (ApOperationRequests item : list) {
+
+                apOperationRequestsService.populateLovFields(item, lang);
+            }
+
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
     }
 
     @GetMapping(value = "/operation-list", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -62,6 +62,7 @@ record.setDeletedBy(rs.getString("deleted_by"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setOperationDateTime(rs.getBigDecimal("operation_date_time"));
+record.setStatusLkey(rs.getString("status_lkey"));
 } else { record = null; }
 return record;
 }
@@ -69,7 +70,7 @@ return record;
 public void updateRecord(ApOperationRequests record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_operation_requests set key = ?, facility_key = ?, department_key = ?, operation_key = ?, operation_type_lkey = ?, operation_level_lkey = ?, priority_lkey = ?, diagnosis_key = ?, request_status = ?, body_part_lkey = ?, side_of_procedure_lkey = ?, planned_anesthesia_type_lkey = ?, need_blood_products = ?, implant_or_device_expected = ?, notes = ?, created_by = ?, created_at = ?, updated_by = ?, updated_at = ?, cancelled_by = ?, cancelled_at = ?, deleted_by = ?, deleted_at = ?, is_valid = ?, operation_date_time = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_operation_requests set key = ?, facility_key = ?, department_key = ?, operation_key = ?, operation_type_lkey = ?, operation_level_lkey = ?, priority_lkey = ?, diagnosis_key = ?, request_status = ?, body_part_lkey = ?, side_of_procedure_lkey = ?, planned_anesthesia_type_lkey = ?, need_blood_products = ?, implant_or_device_expected = ?, notes = ?, created_by = ?, created_at = ?, updated_by = ?, updated_at = ?, cancelled_by = ?, cancelled_at = ?, deleted_by = ?, deleted_at = ?, is_valid = ?, operation_date_time = ?, status_lkey = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -97,7 +98,8 @@ ps.setString(22, record.getDeletedBy());
 ps.setBigDecimal(23, record.getDeletedAt());
 ps.setBoolean(24, record.getIsValid());
 ps.setBigDecimal(25, record.getOperationDateTime());
-ps.setString(26, record.getKey());
+ps.setString(26, record.getStatusLkey());
+ps.setString(27, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -144,6 +146,7 @@ record.setDeletedBy(rs.getString("deleted_by"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setOperationDateTime(rs.getBigDecimal("operation_date_time"));
+record.setStatusLkey(rs.getString("status_lkey"));
 list.add(record);
 }
 return list;
@@ -152,7 +155,7 @@ return list;
 public String saveRecord(ApOperationRequests record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_operation_requests values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_operation_requests values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -184,6 +187,7 @@ ps.setString(22, record.getDeletedBy());
 ps.setBigDecimal(23, record.getDeletedAt());
 ps.setBoolean(24, record.getIsValid());
 ps.setBigDecimal(25, record.getOperationDateTime());
+ps.setString(26, record.getStatusLkey());
 ps.executeUpdate();
 return key;
 }

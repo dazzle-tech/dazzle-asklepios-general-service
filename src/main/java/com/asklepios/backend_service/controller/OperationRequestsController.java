@@ -1,0 +1,195 @@
+package com.asklepios.backend_service.controller;
+
+import com.asklepios.backend_service.database.DS;
+import com.asklepios.backend_service.model.generated.pojo.*;
+import com.asklepios.backend_service.model.pojo.request.ListRequest;
+import com.asklepios.backend_service.model.pojo.response.ParentResponse;
+import com.asklepios.backend_service.service.*;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/operation")
+@Slf4j
+public class OperationRequestsController {
+
+    private final ApOperationSetupService operationSetupService;
+    private final ApOperationCodingService operationCodingService;
+    private final ApOperationPriceListService operationPriceListService;
+
+    @Autowired
+    public OperationRequestsController(
+            ApOperationSetupService operationSetupService,
+            ApOperationCodingService operationCodingService,
+            ApOperationPriceListService operationPriceListService
+    ) {
+        this.operationSetupService = operationSetupService;
+        this.operationCodingService = operationCodingService;
+        this.operationPriceListService = operationPriceListService;
+    }
+
+    @GetMapping(value = "/operation-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> operationList(@RequestParam Map<String, String> queryParams,
+                                           @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApOperationSetup>> response = new ParentResponse<>();
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApOperationSetup> list = operationSetupService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_operation_setup where " + whereForTotal);
+            for (ApOperationSetup item : list) {
+                operationSetupService.populateLovFields(item, lang);
+            }
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error fetching operation list", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/save-operation", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveOperation(@RequestBody ApOperationSetup apOperationSetup) {
+        try {
+            ParentResponse<ApOperationSetup> response = new ParentResponse<>();
+            operationSetupService.saveRecord(apOperationSetup);
+            response.setObject(apOperationSetup);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error saving operation", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/remove-operation", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeOperation(@RequestBody ApOperationSetup apOperationSetup) {
+        try {
+            ParentResponse<ApOperationSetup> response = new ParentResponse<>();
+            operationSetupService.deleteRecord(apOperationSetup);
+            response.setObject(apOperationSetup);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error deleting operation", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/operation-coding-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> operationCodingList(@RequestParam Map<String, String> queryParams,
+                                                 @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApOperationCoding>> response = new ParentResponse<>();
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApOperationCoding> list = operationCodingService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_operation_coding where " + whereForTotal);
+            for (ApOperationCoding item : list) {
+                operationCodingService.populateLovFields(item, lang);
+            }
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error fetching operation coding list", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/save-operation-coding", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveOperationCoding(@RequestBody ApOperationCoding apOperationCoding) {
+        try {
+            ParentResponse<ApOperationCoding> response = new ParentResponse<>();
+            operationCodingService.saveRecord(apOperationCoding);
+            response.setObject(apOperationCoding);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error saving operation coding", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/remove-coding", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteOperationCoding(@RequestBody ApOperationCoding apOperationCoding) {
+        try {
+            ParentResponse<ApOperationCoding> response = new ParentResponse<>();
+            operationCodingService.deleteCoding(apOperationCoding);
+            response.setObject(apOperationCoding);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error deleting operation coding", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/operation-price-list-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> operationPriceList(@RequestParam Map<String, String> queryParams,
+                                                @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApOperationPriceList>> response = new ParentResponse<>();
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApOperationPriceList> list = operationPriceListService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_operation_price_list where " + whereForTotal);
+            for (ApOperationPriceList item : list) {
+                operationPriceListService.populateLovFields(item, lang);
+            }
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error fetching operation price list", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/save-operation-price-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveOperationPriceList(@RequestBody ApOperationPriceList apOperationPriceList) {
+        try {
+            ParentResponse<ApOperationPriceList> response = new ParentResponse<>();
+            operationPriceListService.saveRecord(apOperationPriceList);
+            response.setObject(apOperationPriceList);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error saving operation price list", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/remove-price-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteOperationPriceList(@RequestBody ApOperationPriceList apOperationPriceList) {
+        try {
+            ParentResponse<ApOperationPriceList> response = new ParentResponse<>();
+            operationPriceListService.deletePriceList(apOperationPriceList);
+            response.setObject(apOperationPriceList);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error deleting operation price list", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+}

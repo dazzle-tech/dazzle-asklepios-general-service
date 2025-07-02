@@ -44,6 +44,7 @@ public class ApMedicalSheetsEntity implements Serializable {
 	private Boolean isValid = true;
 	private Boolean observation = false;
 	private Boolean vaccination = false;
+	private Boolean operationRequests = false;
 	private ApMedicalSheetsEntity translatedObject;
 
 }

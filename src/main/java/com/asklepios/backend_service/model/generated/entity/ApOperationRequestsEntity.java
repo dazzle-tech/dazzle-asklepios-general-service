@@ -49,6 +49,8 @@ public class ApOperationRequestsEntity implements Serializable {
 	private ApLovValues statusLvalue;
 	private String encounterKey;
 	private String patientKey;
+	private BigDecimal submitedAt;
+	private String submitedBy;
 	private ApOperationRequestsEntity translatedObject;
 
 }

@@ -53,7 +53,14 @@ public class OperationRequestsController {
         try {
 
             ParentResponse<ApOperationRequests> response = new ParentResponse<>();
+            if(apOperationRequestsService.
+                    getList("encounter_key ='"+request.getEncounterKey() +"' and patient_key = '"+request.getPatientKey() +"' and status_lkey = '3621653475992516'").size()>0) {
+                response.setMsg("You cant add new operation because have one requested");
+                response.setObject(new ApOperationRequests());
+                return ResponseEntity.ok(response);
+            }
             apOperationRequestsService.saveRecord(request);
+            response.setMsg("Saved Successfuly");
             response.setObject(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -128,7 +135,9 @@ public class OperationRequestsController {
     public ResponseEntity<?> saveOperation(@RequestBody ApOperationSetup apOperationSetup) {
         try {
             ParentResponse<ApOperationSetup> response = new ParentResponse<>();
+
             operationSetupService.saveRecord(apOperationSetup);
+
             response.setObject(apOperationSetup);
             return ResponseEntity.ok(response);
         } catch (Exception e) {

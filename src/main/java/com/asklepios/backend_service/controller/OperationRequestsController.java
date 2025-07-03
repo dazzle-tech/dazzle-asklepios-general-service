@@ -53,9 +53,10 @@ public class OperationRequestsController {
         try {
 
             ParentResponse<ApOperationRequests> response = new ParentResponse<>();
-            if(apOperationRequestsService.
-                    getList("encounter_key ='"+request.getEncounterKey() +"' and patient_key = '"+request.getPatientKey() +"' and status_lkey = '3621653475992516'").size()>0) {
-                response.setMsg("You cant add new operation because have one requested");
+            if (request.getKey() == null && apOperationRequestsService
+                    .getList("encounter_key = '" + request.getEncounterKey() + "' AND patient_key = '" + request.getPatientKey() + "' AND status_lkey = '3621653475992516'")
+                    .size() > 0) {
+                response.setMsg("You can't add a new operation because there is already one in request state.");
                 response.setObject(new ApOperationRequests());
                 return ResponseEntity.ok(response);
             }
@@ -102,6 +103,36 @@ public class OperationRequestsController {
             e.printStackTrace();
             log.error(e.getMessage());
             return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/operation-request-by-status", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getRequestedOperationByEncounterAndPatient(@RequestParam String encounterKey,
+                                                                        @RequestParam String patientKey,
+                                                                        @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<ApOperationRequests> response = new ParentResponse<>();
+            // TODO  status lvalue for request status
+            String where = String.format(
+                    "encounter_key = '%s' AND patient_key = '%s' AND status_lkey = '3621653475992516'",
+                    encounterKey, patientKey
+            );
+
+            List<ApOperationRequests> list = apOperationRequestsService.getList(where);
+
+            if (list.isEmpty()) {
+                response.setMsg("No request found");
+                return ResponseEntity.ok(response);
+            }
+
+            ApOperationRequests request = list.get(0);
+            apOperationRequestsService.populateLovFields(request, lang);
+
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 

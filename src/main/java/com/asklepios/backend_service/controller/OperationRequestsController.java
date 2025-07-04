@@ -29,17 +29,18 @@ public class OperationRequestsController {
     private final ApOperationSetupService operationSetupService;
     private final ApOperationCodingService operationCodingService;
     private final ApOperationPriceListService operationPriceListService;
-
+   private final ApOperationAnesthesiaCarePlanService operationAnesthesiaCarePlanService;
 
     public OperationRequestsController(
             ApOperationRequestsService apOperationRequestsService, ApOperationSetupService operationSetupService,
             ApOperationCodingService operationCodingService,
-            ApOperationPriceListService operationPriceListService
+            ApOperationPriceListService operationPriceListService, ApOperationAnesthesiaCarePlanService operationAnesthesiaCarePlanService
     ) {
         this.apOperationRequestsService = apOperationRequestsService;
         this.operationSetupService = operationSetupService;
         this.operationCodingService = operationCodingService;
         this.operationPriceListService = operationPriceListService;
+        this.operationAnesthesiaCarePlanService = operationAnesthesiaCarePlanService;
     }
 
     @PostMapping(value = "/save-operation-request", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -290,6 +291,45 @@ public class OperationRequestsController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.error("Error deleting operation price list", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/operation-care-plan-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> operationCarePlan(@RequestParam Map<String, String> queryParams,
+                                                @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApOperationAnesthesiaCarePlan>> response = new ParentResponse<>();
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApOperationAnesthesiaCarePlan> list = operationAnesthesiaCarePlanService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_operation_anesthesia_care_plan where " + whereForTotal);
+            for (ApOperationAnesthesiaCarePlan item : list) {
+                operationAnesthesiaCarePlanService.populateLovFields(item, lang);
+            }
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error fetching operation price list", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/save-operation-care-plan", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveOperationCarePlan(@RequestBody ApOperationAnesthesiaCarePlan apOperationAnesthesiaCarePlan) {
+        try {
+            ParentResponse<ApOperationAnesthesiaCarePlan> response = new ParentResponse<>();
+            operationAnesthesiaCarePlanService.saveRecord(apOperationAnesthesiaCarePlan);
+            response.setObject(apOperationAnesthesiaCarePlan);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error saving operation price list", e);
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }

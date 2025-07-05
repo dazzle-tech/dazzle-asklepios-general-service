@@ -3259,6 +3259,11 @@ public class SetupController implements Serializable {
             List<ApRoom> list = apRoomService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_room where " + whereForTotal);
             for (ApRoom all : list) {
+                BigDecimal bedCount = DS.executeDecimalResultQuery(
+                        "SELECT COUNT(0) FROM ap_bed WHERE room_key = '" + all.getKey() + "'"
+                );
+                all.setBedCount(bedCount);
+
                 if (all.getFacilityKey() != null) {
                     all.setFacility(apFacilityService.getRecord(all.getFacilityKey()));
                 }

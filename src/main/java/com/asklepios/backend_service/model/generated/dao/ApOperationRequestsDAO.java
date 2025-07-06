@@ -67,6 +67,7 @@ record.setEncounterKey(rs.getString("encounter_key"));
 record.setPatientKey(rs.getString("patient_key"));
 record.setSubmitedAt(rs.getBigDecimal("submited_at"));
 record.setSubmitedBy(rs.getString("submited_by"));
+record.setOperationStatusLkey(rs.getString("operation_status_lkey"));
 } else { record = null; }
 return record;
 }
@@ -74,7 +75,7 @@ return record;
 public void updateRecord(ApOperationRequests record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_operation_requests set key = ?, facility_key = ?, department_key = ?, operation_key = ?, operation_type_lkey = ?, operation_level_lkey = ?, priority_lkey = ?, diagnosis_key = ?, request_status = ?, body_part_lkey = ?, side_of_procedure_lkey = ?, planned_anesthesia_type_lkey = ?, need_blood_products = ?, implant_or_device_expected = ?, notes = ?, created_by = ?, created_at = ?, updated_by = ?, updated_at = ?, cancelled_by = ?, cancelled_at = ?, deleted_by = ?, deleted_at = ?, is_valid = ?, operation_date_time = ?, status_lkey = ?, encounter_key = ?, patient_key = ?, submited_at = ?, submited_by = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_operation_requests set key = ?, facility_key = ?, department_key = ?, operation_key = ?, operation_type_lkey = ?, operation_level_lkey = ?, priority_lkey = ?, diagnosis_key = ?, request_status = ?, body_part_lkey = ?, side_of_procedure_lkey = ?, planned_anesthesia_type_lkey = ?, need_blood_products = ?, implant_or_device_expected = ?, notes = ?, created_by = ?, created_at = ?, updated_by = ?, updated_at = ?, cancelled_by = ?, cancelled_at = ?, deleted_by = ?, deleted_at = ?, is_valid = ?, operation_date_time = ?, status_lkey = ?, encounter_key = ?, patient_key = ?, submited_at = ?, submited_by = ?, operation_status_lkey = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -107,7 +108,8 @@ ps.setString(27, record.getEncounterKey());
 ps.setString(28, record.getPatientKey());
 ps.setBigDecimal(29, record.getSubmitedAt());
 ps.setString(30, record.getSubmitedBy());
-ps.setString(31, record.getKey());
+ps.setString(31, record.getOperationStatusLkey());
+ps.setString(32, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -159,6 +161,7 @@ record.setEncounterKey(rs.getString("encounter_key"));
 record.setPatientKey(rs.getString("patient_key"));
 record.setSubmitedAt(rs.getBigDecimal("submited_at"));
 record.setSubmitedBy(rs.getString("submited_by"));
+record.setOperationStatusLkey(rs.getString("operation_status_lkey"));
 list.add(record);
 }
 return list;
@@ -167,7 +170,7 @@ return list;
 public String saveRecord(ApOperationRequests record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_operation_requests values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_operation_requests values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -204,6 +207,7 @@ ps.setString(27, record.getEncounterKey());
 ps.setString(28, record.getPatientKey());
 ps.setBigDecimal(29, record.getSubmitedAt());
 ps.setString(30, record.getSubmitedBy());
+ps.setString(31, record.getOperationStatusLkey());
 ps.executeUpdate();
 return key;
 }

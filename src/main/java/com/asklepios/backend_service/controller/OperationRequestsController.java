@@ -31,10 +31,13 @@ public class OperationRequestsController {
     private final ApOperationPriceListService operationPriceListService;
    private final ApOperationAnesthesiaCarePlanService operationAnesthesiaCarePlanService;
    private final ApPreOperationChecklistService apPreOperationChecklistService;
+   private final ApPatientService apPatientService;
+   private final ApEncounterService apEncounterService;
+   private  final ApIcdCodeService apIcdCodeService;
     public OperationRequestsController(
             ApOperationRequestsService apOperationRequestsService, ApOperationSetupService operationSetupService,
             ApOperationCodingService operationCodingService,
-            ApOperationPriceListService operationPriceListService, ApOperationAnesthesiaCarePlanService operationAnesthesiaCarePlanService, ApPreOperationChecklistService apPreOperationChecklistService
+            ApOperationPriceListService operationPriceListService, ApOperationAnesthesiaCarePlanService operationAnesthesiaCarePlanService, ApPreOperationChecklistService apPreOperationChecklistService, ApPatientService apPatientService, ApEncounterService apEncounterService, ApIcdCodeService apIcdCodeService
     ) {
         this.apOperationRequestsService = apOperationRequestsService;
         this.operationSetupService = operationSetupService;
@@ -42,6 +45,9 @@ public class OperationRequestsController {
         this.operationPriceListService = operationPriceListService;
         this.operationAnesthesiaCarePlanService = operationAnesthesiaCarePlanService;
         this.apPreOperationChecklistService = apPreOperationChecklistService;
+        this.apPatientService = apPatientService;
+        this.apEncounterService = apEncounterService;
+        this.apIcdCodeService = apIcdCodeService;
     }
 
     @PostMapping(value = "/save-operation-request", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -94,7 +100,12 @@ public class OperationRequestsController {
             BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_operation_requests WHERE " + whereForTotal);
 
             for (ApOperationRequests item : list) {
-
+                item.setPatient(apPatientService.getRecord(item.getPatientKey()));
+                apPatientService.populateLovFields(item.getPatient(), lang);
+                item.setEncounter(apEncounterService.getRecord(item.getEncounterKey()));
+                apEncounterService.populateLovFields(item.getEncounter(), lang);
+                item.setDiagnosis(apIcdCodeService.getRecord(item.getDiagnosisKey()));
+                apIcdCodeService.populateLovFields(item.getDiagnosis(), lang);
                 apOperationRequestsService.populateLovFields(item, lang);
             }
 
@@ -153,6 +164,7 @@ public class OperationRequestsController {
             List<ApOperationSetup> list = operationSetupService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_operation_setup where " + whereForTotal);
             for (ApOperationSetup item : list) {
+
                 operationSetupService.populateLovFields(item, lang);
             }
             response.setObject(list);

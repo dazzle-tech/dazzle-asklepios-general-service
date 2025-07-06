@@ -10,6 +10,8 @@ import com.asklepios.backend_service.model.generated.entity.ApOperationRequestsE
 @Setter
 @Slf4j
 public class ApOperationRequests extends ApOperationRequestsEntity implements Serializable {
-
+ApPatient patient;
+ApEncounter encounter;
+ApIcdCode diagnosis;
 
 }

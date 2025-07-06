@@ -71,6 +71,32 @@ public class ApBedService extends ApBedDAO implements Serializable {
         return result;
     }
 
+    public int getBedCountByDepartment(String departmentKey) throws SQLException {
+        String query = """
+        SELECT COUNT(b.key) AS bed_count
+        FROM ap_bed b
+        JOIN ap_room r ON b.room_key = r.key
+        WHERE b.is_valid = true 
+          AND r.is_valid = true 
+          AND r.department_key = ?
+          AND b.status_lkey = '5258243122289092'
+    """;
+
+        try (
+                Connection con = DS.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)
+        ) {
+            ps.setString(1, departmentKey);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("bed_count");
+                } else {
+                    return 0;
+                }
+            }
+        }
+    }
 
 
 }

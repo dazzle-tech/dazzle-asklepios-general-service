@@ -83,8 +83,9 @@ public class EncounterController {
     private final ApFunctionalAssessmentService apFunctionalAssessmentService;
     private final ApMedicationReconciliationService apMedicationReconciliationService;
     private final ApActiveIngredientService apActiveIngredientService;
+    private final ApTransferPatientService apTransferPatientService;
 
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService) {
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -139,6 +140,7 @@ public class EncounterController {
         this.apFunctionalAssessmentService = apFunctionalAssessmentService;
         this.apMedicationReconciliationService = apMedicationReconciliationService;
         this.apActiveIngredientService = apActiveIngredientService;
+        this.apTransferPatientService = apTransferPatientService;
     }
 
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -2289,6 +2291,13 @@ public class EncounterController {
                 apRoomService.populateLovFields(encounter.getApRoom(), lang);
 
                 filteredEncounters.add(encounter);
+                ApAdmitOutpatientInpatient admit =
+                        apAdmitOutpatientInpatientService.getRecordByToEncounterKey(encounter.getKey());
+                encounter.setAdmitRecord(admit);
+                if (admit != null) {
+                    apAdmitOutpatientInpatientService.populateLovFields(admit, lang);
+                }
+
             }
 
             apEncounterService.processPatientObservationStatus(filteredEncounters);
@@ -2676,4 +2685,24 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @PostMapping(value = "/save-transfer-patient", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveMedicationReconciliation(@RequestBody ApTransferPatient apTransferPatient ,
+                                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                          @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+            ParentResponse<ApTransferPatient> response = new ParentResponse<>();
+            apTransferPatientService.saveRecord(apTransferPatient);
+            response.setObject(apTransferPatient);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
 }

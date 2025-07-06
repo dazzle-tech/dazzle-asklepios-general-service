@@ -86,9 +86,11 @@ public class SetupController implements Serializable {
     private final ApUomGroupsUnitsService apUomGroupsUnitsService;
     private final ApUomGroupsRelationService apUomGroupsRelationService;
     private final ApProductsService apProductsService;
+    private final ApWarehouseService apWarehouseService;
+    private final ApWarehouseUserService apWarehouseUserService;
 
 
-    public SetupController(EmailService emailService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1, EmailService emailService1, ApAgeGroupService apAgeGroupService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestPathologyService apDiagnosticTestPathologyService, ApVaccineService apVaccineService, ApVaccineBrandsService apVaccineBrandsService, ApVaccineDoseService apVaccineDoseService, ApVaccineDosesIntervalService apVaccineDosesIntervalService, ApProcedureSetupService apProcedureSetupService, ApProcedureCodingService apProcedureCodingService, ApProcedurePriceListService apProcedurePriceListService, ApDuplicationCandidateSetupService apDuplicationCandidateSetupService, ApCptService apCptService, ApLoincService apLoincService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestNormalRangeLovService apDiagnosticTestNormalRangeLovService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApMedicalSheetsService apMedicalSheetsService, ApDiagnosticCodingService apDiagnosticCodingService, ApRoomService apRoomService, ApBedService apBedService, ApRoomServicesService apRoomServicesService, ApResourcesService apResourcesService, ApUomGroupsUnitsService apUomGroupsUnitsService, ApUomGroupsRelationService apUomGroupsRelationService, ApUomGroupsRelationService apUomGroupsRelationService1, ApProductsService apProductsService, ApGenericMedicationService apGenericMedicationService) {
+    public SetupController(EmailService emailService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1, EmailService emailService1, ApAgeGroupService apAgeGroupService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestPathologyService apDiagnosticTestPathologyService, ApVaccineService apVaccineService, ApVaccineBrandsService apVaccineBrandsService, ApVaccineDoseService apVaccineDoseService, ApVaccineDosesIntervalService apVaccineDosesIntervalService, ApProcedureSetupService apProcedureSetupService, ApProcedureCodingService apProcedureCodingService, ApProcedurePriceListService apProcedurePriceListService, ApDuplicationCandidateSetupService apDuplicationCandidateSetupService, ApCptService apCptService, ApLoincService apLoincService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestNormalRangeLovService apDiagnosticTestNormalRangeLovService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApMedicalSheetsService apMedicalSheetsService, ApDiagnosticCodingService apDiagnosticCodingService, ApRoomService apRoomService, ApBedService apBedService, ApRoomServicesService apRoomServicesService, ApResourcesService apResourcesService, ApUomGroupsUnitsService apUomGroupsUnitsService, ApUomGroupsRelationService apUomGroupsRelationService, ApUomGroupsRelationService apUomGroupsRelationService1, ApProductsService apProductsService, ApGenericMedicationService apGenericMedicationService, ApWarehouseService apWarehouseService, ApWarehouseUserService apWarehouseUserService) {
         this.authService = authService;
         this.apModuleService = apModuleService;
         this.apScreenService = apScreenService;
@@ -145,6 +147,8 @@ public class SetupController implements Serializable {
         this.apUomGroupsUnitsService = apUomGroupsUnitsService;
         this.apUomGroupsRelationService = apUomGroupsRelationService1;
         this.apProductsService = apProductsService;
+        this.apWarehouseService = apWarehouseService;
+        this.apWarehouseUserService = apWarehouseUserService;
     }
 
     @GetMapping(value = "/navigation-map", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -3519,6 +3523,142 @@ public class SetupController implements Serializable {
             ParentResponse<ApProducts> response = new ParentResponse<>();
             apProductsService.deleteRecord(product);
             response.setObject(product);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/warehouses-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> warehousesList(@RequestParam Map<String, String> queryParams,
+                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                          @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApWarehouse>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            List<ApWarehouse> list = apWarehouseService.getList( where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_warehouse where " + whereForTotal);
+            for (ApWarehouse warehouse : list) {
+                apWarehouseService.populateLovFields(warehouse, lang);
+            }
+
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
+    @PostMapping(value = "/save-warehouse", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveWarehouse(@RequestBody ApWarehouse warehouse,
+                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                         @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                         @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApWarehouse> response = new ParentResponse<>();
+            apWarehouseService.saveRecord(warehouse);
+            response.setObject(warehouse);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/remove-warehouse", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeWarehouse(@RequestBody ApWarehouse warehouse,
+                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApWarehouse> response = new ParentResponse<>();
+            apWarehouseService.deleteRecord(warehouse);
+            response.setObject(warehouse);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/warehouses-user-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> warehousesUserList(@RequestParam Map<String, String> queryParams,
+                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                            @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApWarehouseUser>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            List<ApWarehouseUser> list = apWarehouseUserService.getList( where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_warehouse_user where " + whereForTotal);
+            for (ApWarehouseUser warehouseUser : list) {
+                apWarehouseUserService.populateLovFields(warehouseUser, lang);
+            }
+
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
+    @PostMapping(value = "/save-warehouse-user", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveWarehouseUser(@RequestBody ApWarehouseUser warehouseUser,
+                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApWarehouseUser> response = new ParentResponse<>();
+            apWarehouseUserService.saveRecord(warehouseUser);
+            response.setObject(warehouseUser);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/remove-warehouse-user", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeWarehouseUser(@RequestBody ApWarehouseUser warehouseUser,
+                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                             @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApWarehouseUser> response = new ParentResponse<>();
+            apWarehouseUserService.deleteRecord(warehouseUser);
+            response.setObject(warehouseUser);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();

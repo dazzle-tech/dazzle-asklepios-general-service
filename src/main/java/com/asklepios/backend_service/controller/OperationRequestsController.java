@@ -30,17 +30,18 @@ public class OperationRequestsController {
     private final ApOperationCodingService operationCodingService;
     private final ApOperationPriceListService operationPriceListService;
    private final ApOperationAnesthesiaCarePlanService operationAnesthesiaCarePlanService;
-
+   private final ApPreOperationChecklistService apPreOperationChecklistService;
     public OperationRequestsController(
             ApOperationRequestsService apOperationRequestsService, ApOperationSetupService operationSetupService,
             ApOperationCodingService operationCodingService,
-            ApOperationPriceListService operationPriceListService, ApOperationAnesthesiaCarePlanService operationAnesthesiaCarePlanService
+            ApOperationPriceListService operationPriceListService, ApOperationAnesthesiaCarePlanService operationAnesthesiaCarePlanService, ApPreOperationChecklistService apPreOperationChecklistService
     ) {
         this.apOperationRequestsService = apOperationRequestsService;
         this.operationSetupService = operationSetupService;
         this.operationCodingService = operationCodingService;
         this.operationPriceListService = operationPriceListService;
         this.operationAnesthesiaCarePlanService = operationAnesthesiaCarePlanService;
+        this.apPreOperationChecklistService = apPreOperationChecklistService;
     }
 
     @PostMapping(value = "/save-operation-request", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -330,6 +331,47 @@ public class OperationRequestsController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.error("Error saving operation price list", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+
+    @PostMapping(value = "/save-pre-operation-checklist", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> savePreOperationChecklist(@RequestBody ApPreOperationChecklist apPreOperationChecklist) {
+        try {
+            ParentResponse<ApPreOperationChecklist> response = new ParentResponse<>();
+            apPreOperationChecklistService.saveRecord(apPreOperationChecklist);
+            response.setObject(apPreOperationChecklist);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error saving operation coding", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+
+    @GetMapping(value = "/pre-operation-checklist-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> PreOperationChecklistList(@RequestParam Map<String, String> queryParams,
+                                               @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApPreOperationChecklist>> response = new ParentResponse<>();
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApPreOperationChecklist> list = apPreOperationChecklistService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_pre_operation_checklist where " + whereForTotal);
+            for (ApPreOperationChecklist item : list) {
+                apPreOperationChecklistService.populateLovFields(item, lang);
+            }
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error fetching operation checklist", e);
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }

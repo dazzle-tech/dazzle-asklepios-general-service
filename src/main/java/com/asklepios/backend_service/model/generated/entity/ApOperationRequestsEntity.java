@@ -55,6 +55,7 @@ public class ApOperationRequestsEntity implements Serializable {
 	private ApLovValues operationStatusLvalue;
 	private BigDecimal startedAt;
 	private String startedBy;
+	private BigDecimal increaseByMinutes;
 	private ApOperationRequestsEntity translatedObject;
 
 }

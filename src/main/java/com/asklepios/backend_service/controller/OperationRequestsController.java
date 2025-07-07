@@ -34,10 +34,18 @@ public class OperationRequestsController {
    private final ApPatientService apPatientService;
    private final ApEncounterService apEncounterService;
    private  final ApIcdCodeService apIcdCodeService;
+   private final ApOperationStaffService apOperationStaffService;
+   private final ApUserService apUserService;
+   private final ApOperationAnesthesiaInductionMonitoringService apOperationAnesthesiaInductionMonitoringService;
+   private final ApOperationNameLogService apOperationNameLogService;
+   private final ApOperationInductionService apOperationInductionService;
+   private final ApOperationPatientArrivalService apOperationPatientArrivalService;
+   private final ApOperationPreMedicationService apOperationPreMedicationService;
+   private final ApOperationIntraoperativeMonitoringService apOperationIntraoperativeMonitoringService;
     public OperationRequestsController(
             ApOperationRequestsService apOperationRequestsService, ApOperationSetupService operationSetupService,
             ApOperationCodingService operationCodingService,
-            ApOperationPriceListService operationPriceListService, ApOperationAnesthesiaCarePlanService operationAnesthesiaCarePlanService, ApPreOperationChecklistService apPreOperationChecklistService, ApPatientService apPatientService, ApEncounterService apEncounterService, ApIcdCodeService apIcdCodeService
+            ApOperationPriceListService operationPriceListService, ApOperationAnesthesiaCarePlanService operationAnesthesiaCarePlanService, ApPreOperationChecklistService apPreOperationChecklistService, ApPatientService apPatientService, ApEncounterService apEncounterService, ApIcdCodeService apIcdCodeService, ApOperationStaffService apOperationStaffService, ApUserService apUserService, ApOperationAnesthesiaInductionMonitoringService apOperationAnesthesiaInductionMonitoringService, ApOperationNameLogService apOperationNameLogService, ApOperationInductionService apOperationInductionService, ApOperationPatientArrivalService apOperationPatientArrivalService, ApOperationPreMedicationService apOperationPreMedicationService, ApOperationIntraoperativeMonitoringService apOperationIntraoperativeMonitoringService
     ) {
         this.apOperationRequestsService = apOperationRequestsService;
         this.operationSetupService = operationSetupService;
@@ -48,6 +56,14 @@ public class OperationRequestsController {
         this.apPatientService = apPatientService;
         this.apEncounterService = apEncounterService;
         this.apIcdCodeService = apIcdCodeService;
+        this.apOperationStaffService = apOperationStaffService;
+        this.apUserService = apUserService;
+        this.apOperationAnesthesiaInductionMonitoringService = apOperationAnesthesiaInductionMonitoringService;
+        this.apOperationNameLogService = apOperationNameLogService;
+        this.apOperationInductionService = apOperationInductionService;
+        this.apOperationPatientArrivalService = apOperationPatientArrivalService;
+        this.apOperationPreMedicationService = apOperationPreMedicationService;
+        this.apOperationIntraoperativeMonitoringService = apOperationIntraoperativeMonitoringService;
     }
 
     @PostMapping(value = "/save-operation-request", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -387,4 +403,245 @@ public class OperationRequestsController {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
+
+
+    @GetMapping(value = "/operation-staff-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getOperationStaffList(@RequestParam Map<String, String> queryParams,
+                                                   @RequestHeader(required = false) String facility_id,
+                                                   @RequestHeader(required = false) String access_token,
+                                                   @RequestHeader(required = false) Integer access_level,
+                                                   @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApOperationStaff>> response = new ParentResponse<>();
+
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApOperationStaff> list = apOperationStaffService
+.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_operation_staff WHERE " + whereForTotal);
+
+            for (ApOperationStaff item : list) {
+                item.setUser(apUserService.getRecord(item.getUserKey()));
+                apOperationStaffService
+.populateLovFields(item, lang);
+            }
+
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-operation-staff", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveOperationStaff(@RequestBody ApOperationStaff request,
+                                                @RequestHeader(required = false) String facility_id,
+                                                @RequestHeader(required = false) String ap_icd_codeaccess_token,
+                                                @RequestHeader(required = false) Integer access_level,
+                                                @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<ApOperationStaff> response = new ParentResponse<>();
+            apOperationStaffService
+.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @DeleteMapping(value = "/delete-operation-staff", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteOperationStaff(@RequestParam String key) {
+        try {
+            ApOperationStaff staff = apOperationStaffService
+.getRecord(key);
+            ParentResponse<ApOperationStaff> response = new ParentResponse<>();
+            if (staff == null) {
+                response.setMsg("Staff record not found");
+                response.setObject(null);
+                return ResponseEntity.ok(response);
+            }
+
+            apOperationStaffService.deleteRecord(staff);
+
+            response.setMsg("Deleted successfully");
+            response.setObject(null);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-operation-name-log", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveOperationNameLog(@RequestBody ApOperationNameLog log) {
+        try {
+            ParentResponse<ApOperationNameLog> response = new ParentResponse<>();
+            apOperationNameLogService.saveRecord(log);
+            response.setObject(log);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/operation-name-log-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getOperationNameLogList(@RequestParam Map<String, String> queryParams,
+
+                                                     @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApOperationNameLog>> response = new ParentResponse<>();
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApOperationNameLog> list = apOperationNameLogService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("select count(0) from ap_operation_name_log where " + whereForTotal);
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error fetching name log list", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+    @PostMapping(value = "/save-operation-induction", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveOperationInduction(@RequestBody ApOperationInduction record) {
+        try {
+            ParentResponse<ApOperationInduction> response = new ParentResponse<>();
+            apOperationInductionService.saveRecord(record);
+            response.setObject(record);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error saving induction", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/operation-induction-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getOperationInductionList(@RequestParam Map<String, String> queryParams,
+                                                       @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApOperationInduction>> response = new ParentResponse<>();
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApOperationInduction> list = apOperationInductionService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("select count(0) from ap_operation_induction where " + whereForTotal);
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error fetching induction list", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+    @PostMapping(value = "/save-operation-patient-arrival", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveOperationPatientArrival(@RequestBody ApOperationPatientArrival record) {
+        try {
+            ParentResponse<ApOperationPatientArrival> response = new ParentResponse<>();
+            apOperationPatientArrivalService.saveRecord(record);
+            response.setObject(record);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error saving patient arrival", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/operation-patient-arrival-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getOperationPatientArrivalList(@RequestParam Map<String, String> queryParams,
+                                                            @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApOperationPatientArrival>> response = new ParentResponse<>();
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApOperationPatientArrival> list = apOperationPatientArrivalService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("select count(0) from ap_operation_patient_arrival where " + whereForTotal);
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error fetching patient arrival list", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+    @PostMapping(value = "/save-operation-pre-medication", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveOperationPreMedication(@RequestBody ApOperationPreMedication record) {
+        try {
+            ParentResponse<ApOperationPreMedication> response = new ParentResponse<>();
+            apOperationPreMedicationService.saveRecord(record);
+            response.setObject(record);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error saving pre-medication", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/operation-pre-medication-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getOperationPreMedicationList(@RequestParam Map<String, String> queryParams,
+                                                           @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApOperationPreMedication>> response = new ParentResponse<>();
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApOperationPreMedication> list = apOperationPreMedicationService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("select count(0) from ap_operation_pre_medication where " + whereForTotal);
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error fetching pre-medication list", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+    @PostMapping(value = "/save-intraoperative-monitoring", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveIntraoperativeMonitoring(@RequestBody ApOperationIntraoperativeMonitoring record) {
+        try {
+            ParentResponse<ApOperationIntraoperativeMonitoring> response = new ParentResponse<>();
+            apOperationIntraoperativeMonitoringService.saveRecord(record);
+            response.setObject(record);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error saving intraoperative monitoring", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/intraoperative-monitoring-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getIntraoperativeMonitoringList(@RequestParam Map<String, String> queryParams,
+                                                             @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApOperationIntraoperativeMonitoring>> response = new ParentResponse<>();
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApOperationIntraoperativeMonitoring> list = apOperationIntraoperativeMonitoringService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("select count(0) from ap_operation_intraoperative_monitoring where " + whereForTotal);
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error fetching intraoperative monitoring list", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+
 }

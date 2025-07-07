@@ -5,6 +5,7 @@ import com.asklepios.backend_service.model.generated.dao.ApAccessRoleAuthorizati
 import com.asklepios.backend_service.model.generated.dao.ApCatalogDiagnosticTestDAO;
 import com.asklepios.backend_service.model.generated.dao.ApUserMedicalLicenseDAO;
 import com.asklepios.backend_service.model.generated.pojo.*;
+import com.asklepios.backend_service.model.jpa.User;
 import com.asklepios.backend_service.model.pojo.request.ListRequest;
 import com.asklepios.backend_service.model.pojo.response.NavigationMap;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
@@ -85,13 +86,14 @@ public class SetupController implements Serializable {
     private final ApResourcesService apResourcesService;
     private final ApUomGroupsUnitsService apUomGroupsUnitsService;
     private final ApUomGroupsRelationService apUomGroupsRelationService;
+    private final UserService userService ;
     private final ApProductsService apProductsService;
     private final ApWarehouseService apWarehouseService;
     private final ApWarehouseUserService apWarehouseUserService;
     private final ApWarehouseProductService apWarehouseProductService;
 
 
-    public SetupController(EmailService emailService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1, EmailService emailService1, ApAgeGroupService apAgeGroupService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestPathologyService apDiagnosticTestPathologyService, ApVaccineService apVaccineService, ApVaccineBrandsService apVaccineBrandsService, ApVaccineDoseService apVaccineDoseService, ApVaccineDosesIntervalService apVaccineDosesIntervalService, ApProcedureSetupService apProcedureSetupService, ApProcedureCodingService apProcedureCodingService, ApProcedurePriceListService apProcedurePriceListService, ApDuplicationCandidateSetupService apDuplicationCandidateSetupService, ApCptService apCptService, ApLoincService apLoincService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestNormalRangeLovService apDiagnosticTestNormalRangeLovService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApMedicalSheetsService apMedicalSheetsService, ApDiagnosticCodingService apDiagnosticCodingService, ApRoomService apRoomService, ApBedService apBedService, ApRoomServicesService apRoomServicesService, ApResourcesService apResourcesService, ApUomGroupsUnitsService apUomGroupsUnitsService, ApUomGroupsRelationService apUomGroupsRelationService, ApUomGroupsRelationService apUomGroupsRelationService1, ApProductsService apProductsService, ApGenericMedicationService apGenericMedicationService, ApWarehouseService apWarehouseService, ApWarehouseUserService apWarehouseUserService, ApWarehouseProductService apWarehouseProductService, ApWarehouseProductService apWarehouseProductService1) {
+    public SetupController(EmailService emailService,UserService userService , ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService, ApUserFacilitiesService apUserFacilitiesService, AuthService authService, ApModuleService apModuleService, ApUomGroupsService apUomGroupsService, ApScreenService apScreenService, ApFacilityService apFacilityService, ApAccessRoleService apAccessRoleService, ApLovService apLovService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApAccessRoleScreenService apAccessRoleScreenService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApDentalActionService apDentalActionService, ApCdtService apCdtService, ApCdtDentalActionService apCdtDentalActionService, ApServiceService apServiceService, ApServiceCdtService apServiceCdtService, ApAllergensService apAllergensService, ApIcdCodeService apIcdCodeService, ApActiveIngredientService apActiveIngredientService, ApActiveIngredientIndicationService apActiveIngredientIndicationService, ApActiveIngredientContraindicationService apActiveIngredientContraindicationService, ApActiveIngredientDrugInteractionService apActiveIngredientDrugInteractionService, ApActiveIngredientFoodInteractionService apActiveIngredientFoodInteractionService, ApActiveIngredientAdverseEffectService apActiveIngredientAdverseEffectService, ApActiveIngredientSynonymService apActiveIngredientSynonymService, ApDiagnosticTestService apDiagnosticTestService, ApDiagnosticTestSpecialPopulationService apDiagnosticTestSpecialPopulationService, ApDiagnosticTestCatalogHeaderService apDiagnosticTestCatalogHeaderService, ApDiagnosticTestRadiologyService apDiagnosticTestRadiologyService, ApDiagnosticTestGeneticsService apDiagnosticTestGeneticsService, ApAddressesService apAddressesService, ApUserMedicalLicenseService apUserMedicalLicenseService, ApCatalogDiagnosticTestService apCatalogDiagnosticTestService, ApPatientDiagnoseService apPatientDiagnoseService, ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService1, EmailService emailService1, ApAgeGroupService apAgeGroupService, ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService, ApDiagnosticTestPathologyService apDiagnosticTestPathologyService, ApVaccineService apVaccineService, ApVaccineBrandsService apVaccineBrandsService, ApVaccineDoseService apVaccineDoseService, ApVaccineDosesIntervalService apVaccineDosesIntervalService, ApProcedureSetupService apProcedureSetupService, ApProcedureCodingService apProcedureCodingService, ApProcedurePriceListService apProcedurePriceListService, ApDuplicationCandidateSetupService apDuplicationCandidateSetupService, ApCptService apCptService, ApLoincService apLoincService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApDiagnosticTestNormalRangeLovService apDiagnosticTestNormalRangeLovService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApMedicalSheetsService apMedicalSheetsService, ApDiagnosticCodingService apDiagnosticCodingService, ApRoomService apRoomService, ApBedService apBedService, ApRoomServicesService apRoomServicesService, ApResourcesService apResourcesService, ApUomGroupsUnitsService apUomGroupsUnitsService, ApUomGroupsRelationService apUomGroupsRelationService, ApUomGroupsRelationService apUomGroupsRelationService1, ApProductsService apProductsService, ApGenericMedicationService apGenericMedicationService, ApWarehouseService apWarehouseService, ApWarehouseUserService apWarehouseUserService, ApWarehouseProductService apWarehouseProductService, ApWarehouseProductService apWarehouseProductService1) {
         this.authService = authService;
         this.apModuleService = apModuleService;
         this.apScreenService = apScreenService;
@@ -150,11 +152,13 @@ public class SetupController implements Serializable {
         this.apProductsService = apProductsService;
         this.apWarehouseService = apWarehouseService;
         this.apWarehouseUserService = apWarehouseUserService;
+        this.userService = userService;
         this.apWarehouseProductService = apWarehouseProductService1;
+
     }
 
     @GetMapping(value = "/navigation-map", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity navigationMap(@Nullable @RequestHeader String access_token,
+    public ResponseEntity navigationMap(@Nullable @RequestHeader String userId,
                                         @Nullable @RequestHeader String facility_id,
                                         @Nullable @RequestHeader Integer access_level,
                                         @Nullable @RequestHeader String lang) {
@@ -162,28 +166,39 @@ public class SetupController implements Serializable {
         try {
             NavigationMap navigationMap = new NavigationMap();
 
-            ApAccessToken token = authService.validateToken(access_token);
+            if (userId == null || userId.isEmpty()) {
+                response.setMsg("Missing userId header");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
 
-            // TODO validating tokens should not be done within this service layer, rather in the api gateway
-            if (token == null) {
-                response.setMsg("Invalid Token");
+//          ApUser user = apUserService.getRecord(userId);
+            User user = userService.getUserByKey(userId);
+            if (user == null) {
+                response.setMsg("User not found");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
 
-            ApUser user = apUserService.getRecord(token.getUserKey());
 
+// TODO: TO BE REPLACED WITH NEW ACCESS ROLES AND AUTHS
+//            List<ApScreen> directScreens = apScreenService.getList(" order by view_order");
+            List<ApScreen> directScreens = apScreenService.getList(" 1=1");
 
-            // TODO conduct a more rich screen access structure, and build queries within services when that is done
-            List<ApScreen> directScreens = apScreenService.getList("module_key is null " +
-                    " and key in (select screen_key from ap_access_role_screen where can_read = true and access_role_key = '" + user.getAccessRoleKey() + "') " +
-                    " order by view_order");
             navigationMap.setScreens(directScreens);
-            List<ApModule> modules = apModuleService.getList("1=1 order by view_order");
+
+            List<ApModule> modules = apModuleService.getList("1=1");
             List<ApModule> finalModules = new ArrayList<>();
+//            for (ApModule module : modules) {
+//                List<ApScreen> moduleScreens = apScreenService.getList("module_key = '" + module.getKey() + "' " +
+//                        " and key in (select screen_key from ap_access_role_screen where can_read = true and access_role_key = '" + user.getAccessRoleKey() + "') " +
+//                        " order by view_order");
+//                module.setScreens(moduleScreens);
+//                if (!moduleScreens.isEmpty())
+//                    finalModules.add(module);
+//            }
+
+// TODO: TO BE REPLACED WITH NEW ACCESS ROLES AND AUTHS
             for (ApModule module : modules) {
-                List<ApScreen> moduleScreens = apScreenService.getList("module_key = '" + module.getKey() + "' " +
-                        " and key in (select screen_key from ap_access_role_screen where can_read = true and access_role_key = '" + user.getAccessRoleKey() + "') " +
-                        " order by view_order");
+                List<ApScreen> moduleScreens = apScreenService.getList("1=1");
                 module.setScreens(moduleScreens);
                 if (!moduleScreens.isEmpty())
                     finalModules.add(module);
@@ -193,12 +208,14 @@ public class SetupController implements Serializable {
 
             response.setObject(navigationMap);
             return ResponseEntity.ok(response);
+
         } catch (Exception e) {
             e.printStackTrace();
             response.addGeneralError(e.getMessage());
             return ResponseEntity.internalServerError().body(response);
         }
     }
+
 
     @GetMapping(value = "/facility-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> facilityList(@RequestParam Map<String, String> queryParams,

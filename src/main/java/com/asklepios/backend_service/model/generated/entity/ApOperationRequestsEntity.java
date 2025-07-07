@@ -53,6 +53,8 @@ public class ApOperationRequestsEntity implements Serializable {
 	private String submitedBy;
 	private String operationStatusLkey;
 	private ApLovValues operationStatusLvalue;
+	private BigDecimal startedAt;
+	private String startedBy;
 	private ApOperationRequestsEntity translatedObject;
 
 }

@@ -11,5 +11,6 @@ import com.asklepios.backend_service.model.generated.entity.ApWarehouseProductEn
 @Slf4j
 public class ApWarehouseProduct extends ApWarehouseProductEntity implements Serializable {
 
+    ApProducts productObj;
 
 }

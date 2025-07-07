@@ -11,5 +11,6 @@ import com.asklepios.backend_service.model.generated.entity.ApWarehouseEntity;
 @Slf4j
 public class ApWarehouse extends ApWarehouseEntity implements Serializable {
 
+    ApDepartment department;
 
 }

@@ -3551,6 +3551,7 @@ public class SetupController implements Serializable {
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_warehouse where " + whereForTotal);
             for (ApWarehouse warehouse : list) {
                 apWarehouseService.populateLovFields(warehouse, lang);
+                warehouse.setDepartment(apWarehouseService.getDepartment(warehouse.getDepartmentKey()));
             }
 
             response.setObject(list);

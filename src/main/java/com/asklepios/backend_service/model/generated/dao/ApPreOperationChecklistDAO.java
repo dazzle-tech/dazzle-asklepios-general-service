@@ -76,6 +76,9 @@ record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedBy(rs.getString("deleted_by"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setIsConfirm(rs.getBoolean("is_confirm"));
+record.setUserKey(rs.getString("user_key"));
+record.setConfirmTime(rs.getBigDecimal("confirm_time"));
 } else { record = null; }
 return record;
 }
@@ -83,7 +86,7 @@ return record;
 public void updateRecord(ApPreOperationChecklist record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_pre_operation_checklist set key = ?, encounter_key = ?, patient_key = ?, operation_key = ?, patient_identity_verified = ?, consent_surgery_signed = ?, consent_anesthesia_signed = ?, surgical_procedure_confirmed = ?, site_of_surgery_marked = ?, npo_status_confirmed = ?, pre_op_vitals_recorded = ?, patient_bathed = ?, jewelry_removed = ?, dentures_removed_or_noted = ?, prosthesis_noted_or_removed = ?, clothing_replaced = ?, allergies_reviewed = ?, pre_op_meds_given = ?, chronic_meds_managed = ?, anticoagulants_managed = ?, iv_access_secured = ?, iv_fluids_started = ?, blood_products_prepared = ?, emr_updated = ?, labs_imaging_reviewed = ?, consent_forms_available = ?, personal_belongings_secured = ?, interpreter_arranged = ?, voided_or_catheter_present = ?, bed_in_lowest_position = ?, transfer_mode_arranged = ?, handoff_to_or_nurse_prepared = ?, created_by = ?, created_at = ?, updated_by = ?, updated_at = ?, deleted_by = ?, deleted_at = ?, is_valid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_pre_operation_checklist set key = ?, encounter_key = ?, patient_key = ?, operation_key = ?, patient_identity_verified = ?, consent_surgery_signed = ?, consent_anesthesia_signed = ?, surgical_procedure_confirmed = ?, site_of_surgery_marked = ?, npo_status_confirmed = ?, pre_op_vitals_recorded = ?, patient_bathed = ?, jewelry_removed = ?, dentures_removed_or_noted = ?, prosthesis_noted_or_removed = ?, clothing_replaced = ?, allergies_reviewed = ?, pre_op_meds_given = ?, chronic_meds_managed = ?, anticoagulants_managed = ?, iv_access_secured = ?, iv_fluids_started = ?, blood_products_prepared = ?, emr_updated = ?, labs_imaging_reviewed = ?, consent_forms_available = ?, personal_belongings_secured = ?, interpreter_arranged = ?, voided_or_catheter_present = ?, bed_in_lowest_position = ?, transfer_mode_arranged = ?, handoff_to_or_nurse_prepared = ?, created_by = ?, created_at = ?, updated_by = ?, updated_at = ?, deleted_by = ?, deleted_at = ?, is_valid = ?, is_confirm = ?, user_key = ?, confirm_time = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -125,7 +128,10 @@ ps.setBigDecimal(36, record.getUpdatedAt());
 ps.setString(37, record.getDeletedBy());
 ps.setBigDecimal(38, record.getDeletedAt());
 ps.setBoolean(39, record.getIsValid());
-ps.setString(40, record.getKey());
+ps.setBoolean(40, record.getIsConfirm());
+ps.setString(41, record.getUserKey());
+ps.setBigDecimal(42, record.getConfirmTime());
+ps.setString(43, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -186,6 +192,9 @@ record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedBy(rs.getString("deleted_by"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
+record.setIsConfirm(rs.getBoolean("is_confirm"));
+record.setUserKey(rs.getString("user_key"));
+record.setConfirmTime(rs.getBigDecimal("confirm_time"));
 list.add(record);
 }
 return list;
@@ -194,7 +203,7 @@ return list;
 public String saveRecord(ApPreOperationChecklist record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_pre_operation_checklist values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_pre_operation_checklist values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -240,6 +249,9 @@ ps.setBigDecimal(36, record.getUpdatedAt());
 ps.setString(37, record.getDeletedBy());
 ps.setBigDecimal(38, record.getDeletedAt());
 ps.setBoolean(39, record.getIsValid());
+ps.setBoolean(40, record.getIsConfirm());
+ps.setString(41, record.getUserKey());
+ps.setBigDecimal(42, record.getConfirmTime());
 ps.executeUpdate();
 return key;
 }

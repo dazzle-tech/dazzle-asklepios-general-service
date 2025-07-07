@@ -53,6 +53,9 @@ public class ApPreOperationChecklistEntity implements Serializable {
 	private String deletedBy;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private Boolean isConfirm = false;
+	private String userKey;
+	private BigDecimal confirmTime;
 	private ApPreOperationChecklistEntity translatedObject;
 
 }

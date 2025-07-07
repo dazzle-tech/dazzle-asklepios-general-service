@@ -60,6 +60,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setStatusLkey(rs.getString("status_lkey"));
+record.setFrequencyValue(rs.getBigDecimal("frequency_value"));
 } else { record = null; }
 return record;
 }
@@ -67,7 +68,7 @@ return record;
 public void updateRecord(ApMedicationReconciliation record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_medication_reconciliation set key = ?, patient_key = ?, encounter_key = ?, active_ingredient_key = ?, dosage = ?, dosage_lkey = ?, route_lkey = ?, frequency_lkey = ?, start_date = ?, last_dose_taken = ?, indication = ?, source_of_info = ?, medication_available_with_patient = ?, continue_in_hospital = ?, discrepancy_identified = ?, action_taken = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, status_lkey = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_medication_reconciliation set key = ?, patient_key = ?, encounter_key = ?, active_ingredient_key = ?, dosage = ?, dosage_lkey = ?, route_lkey = ?, frequency_lkey = ?, start_date = ?, last_dose_taken = ?, indication = ?, source_of_info = ?, medication_available_with_patient = ?, continue_in_hospital = ?, discrepancy_identified = ?, action_taken = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, status_lkey = ?, frequency_value = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -93,7 +94,8 @@ ps.setBigDecimal(20, record.getCreatedAt());
 ps.setBigDecimal(21, record.getUpdatedAt());
 ps.setBigDecimal(22, record.getDeletedAt());
 ps.setString(23, record.getStatusLkey());
-ps.setString(24, record.getKey());
+ps.setBigDecimal(24, record.getFrequencyValue());
+ps.setString(25, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -138,6 +140,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setStatusLkey(rs.getString("status_lkey"));
+record.setFrequencyValue(rs.getBigDecimal("frequency_value"));
 list.add(record);
 }
 return list;
@@ -146,7 +149,7 @@ return list;
 public String saveRecord(ApMedicationReconciliation record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_medication_reconciliation values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_medication_reconciliation values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -176,6 +179,7 @@ ps.setBigDecimal(20, record.getCreatedAt());
 ps.setBigDecimal(21, record.getUpdatedAt());
 ps.setBigDecimal(22, record.getDeletedAt());
 ps.setString(23, record.getStatusLkey());
+ps.setBigDecimal(24, record.getFrequencyValue());
 ps.executeUpdate();
 return key;
 }

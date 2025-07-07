@@ -41,6 +41,7 @@ public class ApMedicationReconciliationEntity implements Serializable {
 	private BigDecimal deletedAt;
 	private String statusLkey;
 	private ApLovValues statusLvalue;
+	private BigDecimal frequencyValue;
 	private ApMedicationReconciliationEntity translatedObject;
 
 }

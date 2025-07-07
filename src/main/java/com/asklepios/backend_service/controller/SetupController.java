@@ -3686,8 +3686,8 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
-    @GetMapping(value = "/warehouses-items-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> warehousesItemsList(@RequestParam Map<String, String> queryParams,
+    @GetMapping(value = "/warehouses-products-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> warehousesProductsList(@RequestParam Map<String, String> queryParams,
                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -3720,8 +3720,8 @@ public class SetupController implements Serializable {
     }
 
 
-    @PostMapping(value = "/save-warehouse-items", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveWarehouseItems(@RequestBody ApWarehouseProduct warehouseProduct,
+    @PostMapping(value = "/save-warehouse-products", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveWarehouseProducts(@RequestBody ApWarehouseProduct warehouseProduct,
                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -3738,8 +3738,8 @@ public class SetupController implements Serializable {
         }
     }
 
-    @PostMapping(value = "/remove-warehouse-items", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> removeWarehouseItems(@RequestBody ApWarehouseProduct warehouseProduct,
+    @PostMapping(value = "/remove-warehouse-products", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeWarehouseProducts(@RequestBody ApWarehouseProduct warehouseProduct,
                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,

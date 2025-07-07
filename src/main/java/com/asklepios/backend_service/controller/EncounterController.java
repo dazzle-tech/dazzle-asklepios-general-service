@@ -2057,6 +2057,14 @@ public class EncounterController {
             ParentResponse<ApAdmitOutpatientInpatient> response = new ParentResponse<>();
             ApEncounter encounter = apEncounterService.getRecord(admitOutpatientInpatient.getFromEncounterKey());
 
+            BigDecimal waitingEncounterCount = DS.executeDecimalResultQuery(
+                    "SELECT COUNT(0) FROM ap_encounter WHERE patient_key = " +"'"+encounter.getPatientKey()+"' AND encounter_status_lkey = "+"'5256965920133084'"
+            );
+            System.out.println("waitingEncounterCount"+waitingEncounterCount);
+            if (waitingEncounterCount.compareTo(BigDecimal.ZERO) > 0)  {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                        .body(Map.of("message", "This Patient Has One More Encounter On The Waiting List."));
+            }
 
             if (admitOutpatientInpatient.getInpatientDepartmentKey() == null || admitOutpatientInpatient.getInpatientDepartmentKey().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)

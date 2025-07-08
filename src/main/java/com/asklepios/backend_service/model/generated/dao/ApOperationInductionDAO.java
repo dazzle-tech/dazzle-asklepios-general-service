@@ -39,8 +39,6 @@ ApOperationInduction record = new ApOperationInduction();
 if(rs.next()){
 record.setKey(rs.getString("key"));
 record.setOperationRequestKey(rs.getString("operation_request_key"));
-record.setDiagnoseKey(rs.getString("diagnose_key"));
-record.setPatientCondition(rs.getString("patient_condition"));
 record.setCreatedBy(rs.getString("created_by"));
 record.setUpdatedBy(rs.getString("updated_by"));
 record.setDeletedBy(rs.getString("deleted_by"));
@@ -48,6 +46,9 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsvalid(rs.getBoolean("isvalid"));
+record.setDose(rs.getBigDecimal("dose"));
+record.setUnitLkey(rs.getString("unit_lkey"));
+record.setActiveIngredientKey(rs.getBigDecimal("active_ingredient_key"));
 } else { record = null; }
 return record;
 }
@@ -55,21 +56,22 @@ return record;
 public void updateRecord(ApOperationInduction record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_operation_induction set key = ?, operation_request_key = ?, diagnose_key = ?, patient_condition = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, isvalid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_operation_induction set key = ?, operation_request_key = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, isvalid = ?, dose = ?, unit_lkey = ?, active_ingredient_key = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
 ps.setString(2, record.getOperationRequestKey());
-ps.setString(3, record.getDiagnoseKey());
-ps.setString(4, record.getPatientCondition());
-ps.setString(5, record.getCreatedBy());
-ps.setString(6, record.getUpdatedBy());
-ps.setString(7, record.getDeletedBy());
-ps.setBigDecimal(8, record.getCreatedAt());
-ps.setBigDecimal(9, record.getUpdatedAt());
-ps.setBigDecimal(10, record.getDeletedAt());
-ps.setBoolean(11, record.getIsvalid());
-ps.setString(12, record.getKey());
+ps.setString(3, record.getCreatedBy());
+ps.setString(4, record.getUpdatedBy());
+ps.setString(5, record.getDeletedBy());
+ps.setBigDecimal(6, record.getCreatedAt());
+ps.setBigDecimal(7, record.getUpdatedAt());
+ps.setBigDecimal(8, record.getDeletedAt());
+ps.setBoolean(9, record.getIsvalid());
+ps.setBigDecimal(10, record.getDose());
+ps.setString(11, record.getUnitLkey());
+ps.setBigDecimal(12, record.getActiveIngredientKey());
+ps.setString(13, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -93,8 +95,6 @@ while(rs.next()){
 ApOperationInduction record = new ApOperationInduction();
 record.setKey(rs.getString("key"));
 record.setOperationRequestKey(rs.getString("operation_request_key"));
-record.setDiagnoseKey(rs.getString("diagnose_key"));
-record.setPatientCondition(rs.getString("patient_condition"));
 record.setCreatedBy(rs.getString("created_by"));
 record.setUpdatedBy(rs.getString("updated_by"));
 record.setDeletedBy(rs.getString("deleted_by"));
@@ -102,6 +102,9 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsvalid(rs.getBoolean("isvalid"));
+record.setDose(rs.getBigDecimal("dose"));
+record.setUnitLkey(rs.getString("unit_lkey"));
+record.setActiveIngredientKey(rs.getBigDecimal("active_ingredient_key"));
 list.add(record);
 }
 return list;
@@ -110,7 +113,7 @@ return list;
 public String saveRecord(ApOperationInduction record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_operation_induction values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_operation_induction values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -119,15 +122,16 @@ record.setKey(key);
 
 ps.setString(1, key);
 ps.setString(2, record.getOperationRequestKey());
-ps.setString(3, record.getDiagnoseKey());
-ps.setString(4, record.getPatientCondition());
-ps.setString(5, record.getCreatedBy());
-ps.setString(6, record.getUpdatedBy());
-ps.setString(7, record.getDeletedBy());
-ps.setBigDecimal(8, record.getCreatedAt());
-ps.setBigDecimal(9, record.getUpdatedAt());
-ps.setBigDecimal(10, record.getDeletedAt());
-ps.setBoolean(11, record.getIsvalid());
+ps.setString(3, record.getCreatedBy());
+ps.setString(4, record.getUpdatedBy());
+ps.setString(5, record.getDeletedBy());
+ps.setBigDecimal(6, record.getCreatedAt());
+ps.setBigDecimal(7, record.getUpdatedAt());
+ps.setBigDecimal(8, record.getDeletedAt());
+ps.setBoolean(9, record.getIsvalid());
+ps.setBigDecimal(10, record.getDose());
+ps.setString(11, record.getUnitLkey());
+ps.setBigDecimal(12, record.getActiveIngredientKey());
 ps.executeUpdate();
 return key;
 }

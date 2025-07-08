@@ -53,6 +53,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsvalid(rs.getBoolean("isvalid"));
+record.setDepartmentKey(rs.getString("department_key"));
 } else { record = null; }
 return record;
 }
@@ -60,7 +61,7 @@ return record;
 public void updateRecord(ApWarehouseProduct record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_warehouse_product set key = ?, warehouse_key = ?, product_key = ?, quantity = ?, re_order_quantity = ?, mini_order = ?, max_order = ?, working_hours_from_time = ?, working_hours_to_time = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, isvalid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_warehouse_product set key = ?, warehouse_key = ?, product_key = ?, quantity = ?, re_order_quantity = ?, mini_order = ?, max_order = ?, working_hours_from_time = ?, working_hours_to_time = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, isvalid = ?, department_key = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -79,7 +80,8 @@ ps.setBigDecimal(13, record.getCreatedAt());
 ps.setBigDecimal(14, record.getUpdatedAt());
 ps.setBigDecimal(15, record.getDeletedAt());
 ps.setBoolean(16, record.getIsvalid());
-ps.setString(17, record.getKey());
+ps.setString(17, record.getDepartmentKey());
+ps.setString(18, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -117,6 +119,7 @@ record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsvalid(rs.getBoolean("isvalid"));
+record.setDepartmentKey(rs.getString("department_key"));
 list.add(record);
 }
 return list;
@@ -125,7 +128,7 @@ return list;
 public String saveRecord(ApWarehouseProduct record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_warehouse_product values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_warehouse_product values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -148,6 +151,7 @@ ps.setBigDecimal(13, record.getCreatedAt());
 ps.setBigDecimal(14, record.getUpdatedAt());
 ps.setBigDecimal(15, record.getDeletedAt());
 ps.setBoolean(16, record.getIsvalid());
+ps.setString(17, record.getDepartmentKey());
 ps.executeUpdate();
 return key;
 }

@@ -43,10 +43,12 @@ public class OperationRequestsController {
    private final ApOperationPatientArrivalService apOperationPatientArrivalService;
    private final ApOperationPreMedicationService apOperationPreMedicationService;
    private final ApOperationIntraoperativeMonitoringService apOperationIntraoperativeMonitoringService;
+   private final ApPreOperativeTimeoutService apPreOperativeTimeoutService;
+   private final ApLovValuesService apLovValuesService;
     public OperationRequestsController(
             ApOperationRequestsService apOperationRequestsService, ApOperationSetupService operationSetupService,
             ApOperationCodingService operationCodingService,
-            ApOperationPriceListService operationPriceListService, ApOperationAnesthesiaCarePlanService operationAnesthesiaCarePlanService, ApPreOperationChecklistService apPreOperationChecklistService, ApPatientService apPatientService, ApEncounterService apEncounterService, ApIcdCodeService apIcdCodeService, ApOperationStaffService apOperationStaffService, ApUserService apUserService, ApOperationAnesthesiaInductionMonitoringService apOperationAnesthesiaInductionMonitoringService, ApOperationNameLogService apOperationNameLogService, ApOperationInductionService apOperationInductionService, ApOperationPatientArrivalService apOperationPatientArrivalService, ApOperationPreMedicationService apOperationPreMedicationService, ApOperationIntraoperativeMonitoringService apOperationIntraoperativeMonitoringService
+            ApOperationPriceListService operationPriceListService, ApOperationAnesthesiaCarePlanService operationAnesthesiaCarePlanService, ApPreOperationChecklistService apPreOperationChecklistService, ApPatientService apPatientService, ApEncounterService apEncounterService, ApIcdCodeService apIcdCodeService, ApOperationStaffService apOperationStaffService, ApUserService apUserService, ApOperationAnesthesiaInductionMonitoringService apOperationAnesthesiaInductionMonitoringService, ApOperationNameLogService apOperationNameLogService, ApOperationInductionService apOperationInductionService, ApOperationPatientArrivalService apOperationPatientArrivalService, ApOperationPreMedicationService apOperationPreMedicationService, ApOperationIntraoperativeMonitoringService apOperationIntraoperativeMonitoringService, ApPreOperativeTimeoutService apPreOperativeTimeoutService, ApLovValuesService apLovValuesService
     ) {
         this.apOperationRequestsService = apOperationRequestsService;
         this.operationSetupService = operationSetupService;
@@ -65,6 +67,8 @@ public class OperationRequestsController {
         this.apOperationPatientArrivalService = apOperationPatientArrivalService;
         this.apOperationPreMedicationService = apOperationPreMedicationService;
         this.apOperationIntraoperativeMonitoringService = apOperationIntraoperativeMonitoringService;
+        this.apPreOperativeTimeoutService = apPreOperativeTimeoutService;
+        this.apLovValuesService = apLovValuesService;
     }
 
     @PostMapping(value = "/save-operation-request", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -667,5 +671,45 @@ public class OperationRequestsController {
         }
     }
 
+    @PostMapping(value = "/save-pre-operative-timeout", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> savePreOperativeTimeout(@RequestBody ApPreOperativeTimeout record) {
+        try {
+            ParentResponse<ApPreOperativeTimeout> response = new ParentResponse<>();
+            if (record.getKey() == null || record.getKey().isEmpty()) {
+                System.out.println("IIIIIIIIIIIIIII");
+                ApOperationRequests request = apOperationRequestsService.getRecord(record.getOperationRequestKey());
+                // ToDo key for PROC_INPROGRESS from PROC_STATUS lovs
+                request.setOperationStatusLkey("3622377660614958");
+
+                apOperationRequestsService.saveRecord(request);
+            }
+
+            apPreOperativeTimeoutService.saveRecord(record);
+            response.setObject(record);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/pre-operative-timeout-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPreOperativeTimeout(@RequestParam Map<String, String> queryParams,
+                                                           @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApPreOperativeTimeout>> response = new ParentResponse<>();
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApPreOperativeTimeout> list = apPreOperativeTimeoutService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("select count(0) from ap_pre_operative_timeout where " + whereForTotal);
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
 
 }

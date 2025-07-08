@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -402,6 +403,29 @@ public class OperationRequestsController {
             log.error("Error fetching operation checklist", e);
             return ResponseEntity.status(500).body(e.getMessage());
         }
+    }
+    @GetMapping("/get-checklist-list-by-operation-id")
+    public ResponseEntity<?> getOperationChecklistList(
+            @RequestParam("operation_key") String operationKey,
+            @RequestHeader(name = "lang", required = false) String lang) throws SQLException {
+
+        ParentResponse<ApPreOperationChecklist> response = new ParentResponse<>();
+
+
+        String where = "operation_key = '" + operationKey + "' ORDER BY created_at DESC";
+
+        List<ApPreOperationChecklist> checklistList = apPreOperationChecklistService.getList(where);
+
+
+        if (checklistList != null && !checklistList.isEmpty()) {
+            ApPreOperationChecklist latestChecklist = checklistList.get(0);
+            apPreOperationChecklistService.populateLovFields(latestChecklist, lang);
+            response.setObject(latestChecklist);
+        } else {
+            response.setObject(new ApPreOperationChecklist());
+        }
+
+        return ResponseEntity.ok(response);
     }
 
 

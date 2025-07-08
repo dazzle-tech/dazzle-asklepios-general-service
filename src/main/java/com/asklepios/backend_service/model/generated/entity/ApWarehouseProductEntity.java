@@ -30,6 +30,7 @@ public class ApWarehouseProductEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isvalid = false;
+	private String departmentKey;
 	private ApWarehouseProductEntity translatedObject;
 
 }

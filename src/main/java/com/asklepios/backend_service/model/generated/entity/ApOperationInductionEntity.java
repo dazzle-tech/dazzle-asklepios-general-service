@@ -16,8 +16,6 @@ public class ApOperationInductionEntity implements Serializable {
 
 	private String key;
 	private String operationRequestKey;
-	private String diagnoseKey;
-	private String patientCondition;
 	private String createdBy;
 	private String updatedBy;
 	private String deletedBy;
@@ -25,6 +23,10 @@ public class ApOperationInductionEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isvalid = false;
+	private BigDecimal dose;
+	private String unitLkey;
+	private ApLovValues unitLvalue;
+	private BigDecimal activeIngredientKey;
 	private ApOperationInductionEntity translatedObject;
 
 }

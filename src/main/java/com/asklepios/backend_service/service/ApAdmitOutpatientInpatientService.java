@@ -67,6 +67,8 @@ public class ApAdmitOutpatientInpatientService extends ApAdmitOutpatientInpatien
                 record.setCreatedAt(rs.getBigDecimal("created_at"));
                 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
                 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
+                record.setBedKey(rs.getString("bed_key"));
+                record.setRoomKey(rs.getString("room_key"));
                 record.setAdmitSourceLkey(rs.getString("admit_source_lkey"));
             } else { record = null; }
             return record;

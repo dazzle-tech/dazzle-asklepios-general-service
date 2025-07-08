@@ -57,6 +57,14 @@ record.setDeletedBy(rs.getString("deleted_by"));
 record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
+record.setStatusLkey(rs.getString("status_lkey"));
+record.setCancellationReason(rs.getString("cancellation_reason"));
+record.setFromRoom(rs.getString("from_room"));
+record.setToRoom(rs.getString("to_room"));
+record.setFromBed(rs.getString("from_bed"));
+record.setToBed(rs.getString("to_bed"));
+record.setConfirmedBy(rs.getString("confirmed_by"));
+record.setConfirmedAt(rs.getString("confirmed_at"));
 } else { record = null; }
 return record;
 }
@@ -64,7 +72,7 @@ return record;
 public void updateRecord(ApTransferPatient record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_transfer_patient set key = ?, patient_key = ?, encounter_key = ?, from_inpatient_department_key = ?, to_inpatient_department_key = ?, reason_for_transfer = ?, urgent_transfer = ?, planned_transfer = ?, transfer_notes = ?, final_vitals_before_transfer = ?, iv_lines_drips_checked = ?, medication_administered_pre_transfer = ?, belongings_sent_with_patient = ?, clinical_handover_done = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_transfer_patient set key = ?, patient_key = ?, encounter_key = ?, from_inpatient_department_key = ?, to_inpatient_department_key = ?, reason_for_transfer = ?, urgent_transfer = ?, planned_transfer = ?, transfer_notes = ?, final_vitals_before_transfer = ?, iv_lines_drips_checked = ?, medication_administered_pre_transfer = ?, belongings_sent_with_patient = ?, clinical_handover_done = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, status_lkey = ?, cancellation_reason = ?, from_room = ?, to_room = ?, from_bed = ?, to_bed = ?, confirmed_by = ?, confirmed_at = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -87,7 +95,15 @@ ps.setString(17, record.getDeletedBy());
 ps.setBigDecimal(18, record.getCreatedAt());
 ps.setBigDecimal(19, record.getUpdatedAt());
 ps.setBigDecimal(20, record.getDeletedAt());
-ps.setString(21, record.getKey());
+ps.setString(21, record.getStatusLkey());
+ps.setString(22, record.getCancellationReason());
+ps.setString(23, record.getFromRoom());
+ps.setString(24, record.getToRoom());
+ps.setString(25, record.getFromBed());
+ps.setString(26, record.getToBed());
+ps.setString(27, record.getConfirmedBy());
+ps.setString(28, record.getConfirmedAt());
+ps.setString(29, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -129,6 +145,14 @@ record.setDeletedBy(rs.getString("deleted_by"));
 record.setCreatedAt(rs.getBigDecimal("created_at"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
+record.setStatusLkey(rs.getString("status_lkey"));
+record.setCancellationReason(rs.getString("cancellation_reason"));
+record.setFromRoom(rs.getString("from_room"));
+record.setToRoom(rs.getString("to_room"));
+record.setFromBed(rs.getString("from_bed"));
+record.setToBed(rs.getString("to_bed"));
+record.setConfirmedBy(rs.getString("confirmed_by"));
+record.setConfirmedAt(rs.getString("confirmed_at"));
 list.add(record);
 }
 return list;
@@ -137,7 +161,7 @@ return list;
 public String saveRecord(ApTransferPatient record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_transfer_patient values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_transfer_patient values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -164,6 +188,14 @@ ps.setString(17, record.getDeletedBy());
 ps.setBigDecimal(18, record.getCreatedAt());
 ps.setBigDecimal(19, record.getUpdatedAt());
 ps.setBigDecimal(20, record.getDeletedAt());
+ps.setString(21, record.getStatusLkey());
+ps.setString(22, record.getCancellationReason());
+ps.setString(23, record.getFromRoom());
+ps.setString(24, record.getToRoom());
+ps.setString(25, record.getFromBed());
+ps.setString(26, record.getToBed());
+ps.setString(27, record.getConfirmedBy());
+ps.setString(28, record.getConfirmedAt());
 ps.executeUpdate();
 return key;
 }

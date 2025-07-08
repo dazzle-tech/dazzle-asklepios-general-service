@@ -34,6 +34,15 @@ public class ApTransferPatientEntity implements Serializable {
 	private BigDecimal createdAt;
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
+	private String statusLkey;
+	private ApLovValues statusLvalue;
+	private String cancellationReason;
+	private String fromRoom;
+	private String toRoom;
+	private String fromBed;
+	private String toBed;
+	private String confirmedBy;
+	private String confirmedAt;
 	private ApTransferPatientEntity translatedObject;
 
 }

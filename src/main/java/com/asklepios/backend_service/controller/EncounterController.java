@@ -2694,7 +2694,7 @@ public class EncounterController {
         }
     }
     @PostMapping(value = "/save-transfer-patient", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveMedicationReconciliation(@RequestBody ApTransferPatient apTransferPatient ,
+    public ResponseEntity<?> saveTransferPatient(@RequestBody ApTransferPatient apTransferPatient ,
                                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -2712,5 +2712,205 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @GetMapping(value = "/transfer-requests-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getTransferRequestsList(@RequestParam Map<String, String> queryParams,
+                                                             @Nullable @RequestHeader String facility_id,
+                                                             @Nullable @RequestHeader String access_token,
+                                                             @Nullable @RequestHeader Integer access_level,
+                                                             @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApTransferPatient>> response = new ParentResponse<>();
 
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApTransferPatient> transferPatients = apTransferPatientService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_transfer_patient  where " + whereForTotal);
+            for (ApTransferPatient transferPatient : transferPatients) {
+                if (transferPatient.getFromInpatientDepartmentKey() != null) {
+                    ApDepartment fromDept = apDepartmentService.getRecord(transferPatient.getFromInpatientDepartmentKey());
+                    transferPatient.setFromDepartment(fromDept);
+                    if (fromDept != null) {
+                        apDepartmentService.populateLovFields(fromDept, lang);
+                    }
+                }
+
+                if (transferPatient.getToInpatientDepartmentKey() != null) {
+                    ApDepartment toDept = apDepartmentService.getRecord(transferPatient.getToInpatientDepartmentKey());
+                    transferPatient.setToDepartment(toDept);
+                    if (toDept != null) {
+                        apDepartmentService.populateLovFields(toDept, lang);
+                    }
+                }
+
+                if (transferPatient.getPatientKey() != null) {
+                    ApPatient patient = apPatientService.getRecord(transferPatient.getPatientKey());
+                    transferPatient.setPatient(patient);
+                    if (patient != null) {
+                        apPatientService.populateLovFields(patient, lang);
+                    }
+                }
+
+                apTransferPatientService.populateLovFields(transferPatient, lang);
+            }
+
+
+            response.setObject(transferPatients);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/approval-transfer-patient", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveApprovalTransferPatient(@RequestBody ApTransferPatient apTransferPatient ,
+                                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                          @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+            ParentResponse<ApTransferPatient> response = new ParentResponse<>();
+            if (apTransferPatient.getEncounterKey() != null) {
+                if (apTransferPatient.getToRoom() == null || apTransferPatient.getToRoom().trim().isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                            .body(Map.of("message", "Please Select Room."));
+                }
+                if (apTransferPatient.getToBed() == null || apTransferPatient.getToBed().trim().isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                            .body(Map.of("message", "Please Select Bed."));
+                }
+                if (apTransferPatient.getToInpatientDepartmentKey() == null || apTransferPatient.getToInpatientDepartmentKey().trim().isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                            .body(Map.of("message", "Please Select Department."));
+                }
+
+                ApAdmitOutpatientInpatient admit = apAdmitOutpatientInpatientService.getRecordByToEncounterKey(apTransferPatient.getEncounterKey());
+                if (admit != null) {
+                    apTransferPatient.setFromRoom(admit.getRoomKey());
+                    apTransferPatient.setFromBed(admit.getBedKey());
+                    admit.setRoomKey(apTransferPatient.getToRoom());
+                    admit.setBedKey(apTransferPatient.getToBed());
+                    apAdmitOutpatientInpatientService.saveRecord(admit);
+                }
+
+                ApEncounter encounter = apEncounterService.getRecord(apTransferPatient.getEncounterKey());
+                if (encounter != null && apTransferPatient.getToInpatientDepartmentKey() != null) {
+                    List<ApResources> resourcesList = apResourcesService.getList(
+                            "resource_type_lkey='4217389643435490' AND resource_key='" + apTransferPatient.getToInpatientDepartmentKey() + "'"
+                    );
+
+                    if (resourcesList != null && !resourcesList.isEmpty()) {
+                        ApResources resources = resourcesList.get(0);
+                        if (resources != null) {
+                            encounter.setResourceKey(resources.getKey());
+                            apEncounterService.saveRecord(encounter);
+                        }
+                    }
+                }
+            }
+
+            if (apTransferPatient.getFromBed() != null) {
+                ApBed fromBed = apBedService.getRecord(apTransferPatient.getFromBed());
+                if (fromBed != null) {
+                    fromBed.setStatusLkey("5258572711068224");
+                    apBedService.saveRecord(fromBed);
+                }
+            }
+
+            apTransferPatientService.saveRecord(apTransferPatient);
+            response.setObject(apTransferPatient);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/transfer-transactions-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getTransferTransactionsList(@RequestParam Map<String, String> queryParams,
+                                                     @Nullable @RequestHeader String facility_id,
+                                                     @Nullable @RequestHeader String access_token,
+                                                     @Nullable @RequestHeader Integer access_level,
+                                                     @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApTransferPatient>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApTransferPatient> transferPatients = apTransferPatientService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_transfer_patient  where " + whereForTotal);
+            for (ApTransferPatient  transferPatient : transferPatients) {
+                if (transferPatient.getFromInpatientDepartmentKey() != null) {
+                    ApDepartment fromDept = apDepartmentService.getRecord(transferPatient.getFromInpatientDepartmentKey());
+                    transferPatient.setFromDepartment(fromDept);
+                    if (fromDept != null) {
+                        apDepartmentService.populateLovFields(fromDept, lang);
+                    }
+                }
+
+                if (transferPatient.getToInpatientDepartmentKey() != null) {
+                    ApDepartment toDept = apDepartmentService.getRecord(transferPatient.getToInpatientDepartmentKey());
+                    transferPatient.setToDepartment(toDept);
+                    if (toDept != null) {
+                        apDepartmentService.populateLovFields(toDept, lang);
+                    }
+                }
+
+                if (transferPatient.getPatientKey() != null) {
+                    ApPatient patient = apPatientService.getRecord(transferPatient.getPatientKey());
+                    transferPatient.setPatient(patient);
+                    if (patient != null) {
+                        apPatientService.populateLovFields(patient, lang);
+                    }
+                }
+
+                if (transferPatient.getFromBed() != null) {
+                    transferPatient.setFromBedObject(apBedService.getRecord(transferPatient.getFromBed()));
+                }
+
+                if (transferPatient.getToBed() != null) {
+                    transferPatient.setToBedObject(apBedService.getRecord(transferPatient.getToBed()));
+                }
+
+                if (transferPatient.getFromRoom() != null) {
+                    transferPatient.setFromRoomObject(apRoomService.getRecord(transferPatient.getFromRoom()));
+                }
+
+                if (transferPatient.getToRoom() != null) {
+                    transferPatient.setToRoomObject(apRoomService.getRecord(transferPatient.getToRoom()));
+                }
+
+                apTransferPatientService.populateLovFields(transferPatient, lang);
+
+            }
+
+            response.setObject(transferPatients);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 }

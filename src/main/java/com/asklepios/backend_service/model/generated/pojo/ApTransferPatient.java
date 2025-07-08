@@ -10,6 +10,12 @@ import com.asklepios.backend_service.model.generated.entity.ApTransferPatientEnt
 @Setter
 @Slf4j
 public class ApTransferPatient extends ApTransferPatientEntity implements Serializable {
-
+ApDepartment fromDepartment;
+ApDepartment toDepartment;
+ApPatient patient;
+ApBed fromBedObject;
+ApBed toBedObject;
+ApRoom fromRoomObject;
+ApRoom toRoomObject;
 
 }

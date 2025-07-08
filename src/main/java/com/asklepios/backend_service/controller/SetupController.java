@@ -3703,7 +3703,7 @@ public class SetupController implements Serializable {
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApWarehouseProduct> list = apWarehouseProductService.getList( where);
-            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_warehouse_items where " + whereForTotal);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_warehouse_product where " + whereForTotal);
             for (ApWarehouseProduct warehouseProduct : list) {
                 apWarehouseProductService.populateLovFields(warehouseProduct, lang);
                 warehouseProduct.setProductObj(apWarehouseProductService.getProduct(warehouseProduct.getProductKey()));

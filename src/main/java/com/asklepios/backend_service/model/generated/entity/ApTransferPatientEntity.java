@@ -42,7 +42,7 @@ public class ApTransferPatientEntity implements Serializable {
 	private String fromBed;
 	private String toBed;
 	private String confirmedBy;
-	private String confirmedAt;
+	private BigDecimal confirmedAt;
 	private ApTransferPatientEntity translatedObject;
 
 }

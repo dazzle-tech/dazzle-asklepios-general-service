@@ -64,7 +64,7 @@ record.setToRoom(rs.getString("to_room"));
 record.setFromBed(rs.getString("from_bed"));
 record.setToBed(rs.getString("to_bed"));
 record.setConfirmedBy(rs.getString("confirmed_by"));
-record.setConfirmedAt(rs.getString("confirmed_at"));
+record.setConfirmedAt(rs.getBigDecimal("confirmed_at"));
 } else { record = null; }
 return record;
 }
@@ -102,7 +102,7 @@ ps.setString(24, record.getToRoom());
 ps.setString(25, record.getFromBed());
 ps.setString(26, record.getToBed());
 ps.setString(27, record.getConfirmedBy());
-ps.setString(28, record.getConfirmedAt());
+ps.setBigDecimal(28, record.getConfirmedAt());
 ps.setString(29, record.getKey());
 ps.executeUpdate();
 }
@@ -152,7 +152,7 @@ record.setToRoom(rs.getString("to_room"));
 record.setFromBed(rs.getString("from_bed"));
 record.setToBed(rs.getString("to_bed"));
 record.setConfirmedBy(rs.getString("confirmed_by"));
-record.setConfirmedAt(rs.getString("confirmed_at"));
+record.setConfirmedAt(rs.getBigDecimal("confirmed_at"));
 list.add(record);
 }
 return list;
@@ -195,7 +195,7 @@ ps.setString(24, record.getToRoom());
 ps.setString(25, record.getFromBed());
 ps.setString(26, record.getToBed());
 ps.setString(27, record.getConfirmedBy());
-ps.setString(28, record.getConfirmedAt());
+ps.setBigDecimal(28, record.getConfirmedAt());
 ps.executeUpdate();
 return key;
 }

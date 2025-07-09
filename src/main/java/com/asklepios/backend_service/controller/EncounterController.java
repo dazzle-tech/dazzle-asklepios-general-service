@@ -84,8 +84,10 @@ public class EncounterController {
     private final ApMedicationReconciliationService apMedicationReconciliationService;
     private final ApActiveIngredientService apActiveIngredientService;
     private final ApTransferPatientService apTransferPatientService;
+    private final ApDoctorRoundStaffService apDoctorRoundStaffService;
+    private final ApDoctorRoundService apDoctorRoundService;
 
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService) {
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService, ApDoctorRoundStaffService apDoctorRoundStaffService, ApDoctorRoundService apDoctorRoundService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -141,6 +143,8 @@ public class EncounterController {
         this.apMedicationReconciliationService = apMedicationReconciliationService;
         this.apActiveIngredientService = apActiveIngredientService;
         this.apTransferPatientService = apTransferPatientService;
+        this.apDoctorRoundStaffService = apDoctorRoundStaffService;
+        this.apDoctorRoundService = apDoctorRoundService;
     }
 
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -2904,6 +2908,132 @@ public class EncounterController {
             }
 
             response.setObject(transferPatients);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/doctor-round-staff-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getDoctorRoundStaffList(@RequestParam Map<String, String> queryParams,
+                                                   @RequestHeader(required = false) String facility_id,
+                                                   @RequestHeader(required = false) String access_token,
+                                                   @RequestHeader(required = false) Integer access_level,
+                                                   @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApDoctorRoundStaff>> response = new ParentResponse<>();
+
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApDoctorRoundStaff> list = apDoctorRoundStaffService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_doctor_round_staff WHERE " + whereForTotal);
+
+            for (ApDoctorRoundStaff item : list) {
+                item.setUser(apUserService.getRecord(item.getUserKey()));
+                apDoctorRoundStaffService.populateLovFields(item, lang);
+            }
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/save-doctor-round-staff", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveDoctorRoundStaff(@RequestBody ApDoctorRoundStaff request,
+                                                @RequestHeader(required = false) String facility_id,
+                                                @RequestHeader(required = false) String access_token,
+                                                @RequestHeader(required = false) Integer access_level,
+                                                @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<ApDoctorRoundStaff> response = new ParentResponse<>();
+            apDoctorRoundStaffService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @DeleteMapping(value = "/delete-doctor-round-staff", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteDoctorRoundStaff(@RequestParam String key) {
+        try {
+            ApDoctorRoundStaff staff = apDoctorRoundStaffService.getRecord(key);
+            ParentResponse<ApDoctorRoundStaff> response = new ParentResponse<>();
+            if (staff == null) {
+                response.setMsg("Staff record not found");
+                response.setObject(null);
+                return ResponseEntity.ok(response);
+            }
+
+            apDoctorRoundStaffService.deleteRecord(staff);
+
+            response.setMsg("Deleted successfully");
+            response.setObject(null);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/save-new-round", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveNewRound(@RequestBody ApDoctorRound apDoctorRound ,
+                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                 @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+            ParentResponse<ApDoctorRound> response = new ParentResponse<>();
+            apDoctorRoundService.saveRecord(apDoctorRound);
+            response.setObject(apDoctorRound);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/doctor-round-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getDoctorRoundList(@RequestParam Map<String, String> queryParams,
+                                                             @Nullable @RequestHeader String facility_id,
+                                                             @Nullable @RequestHeader String access_token,
+                                                             @Nullable @RequestHeader Integer access_level,
+                                                             @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApDoctorRound>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApDoctorRound> doctorRounds = apDoctorRoundService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_doctor_round where " + whereForTotal);
+            for (ApDoctorRound  item : doctorRounds) {
+                apDoctorRoundService.populateLovFields(item, lang);
+            }
+
+            response.setObject(doctorRounds);
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);
 

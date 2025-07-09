@@ -20,7 +20,6 @@ public class ApOperationAnesthesiaInductionMonitoringEntity implements Serializa
 	private BigDecimal fastingDuration;
 	private Boolean ivLineEstablished = false;
 	private String monitorsConnected;
-	private Date inductionStartTime = new Date();
 	private Boolean intubationDone = false;
 	private String tubeSize;
 	private String tubeType;
@@ -38,6 +37,8 @@ public class ApOperationAnesthesiaInductionMonitoringEntity implements Serializa
 	private String adverseEventsNote;
 	private String actionsTaken;
 	private Boolean surgeonNotified = false;
+	private BigDecimal inductionStartTime;
+	private String intubationDoneNote;
 	private ApOperationAnesthesiaInductionMonitoringEntity translatedObject;
 
 }

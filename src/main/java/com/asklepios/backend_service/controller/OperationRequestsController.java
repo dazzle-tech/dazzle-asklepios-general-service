@@ -711,5 +711,37 @@ public class OperationRequestsController {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
+    @PostMapping(value = "/save-operation-anesthesia-induction-monitoring", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveOperationAnesthesiaInductionMonitoring(@RequestBody ApOperationAnesthesiaInductionMonitoring record) {
+        try {
+            ParentResponse<ApOperationAnesthesiaInductionMonitoring> response = new ParentResponse<>();
+            apOperationAnesthesiaInductionMonitoringService.saveRecord(record);
+            response.setObject(record);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error saving pre-medication", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/operation-anesthesia-induction-monitoring-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getOperationAnesthesiaInductionMonitoringList(@RequestParam Map<String, String> queryParams,
+                                                           @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApOperationAnesthesiaInductionMonitoring>> response = new ParentResponse<>();
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+            List<ApOperationAnesthesiaInductionMonitoring> list =  apOperationAnesthesiaInductionMonitoringService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("select count(0) from ap_operation_anesthesia_induction_monitoring where " + whereForTotal);
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error fetching pre-medication list", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
 
 }

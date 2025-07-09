@@ -34,6 +34,7 @@ public class ApOperationIntraoperativeMonitoringEntity implements Serializable {
 	private BigDecimal deletedAt;
 	private String encounterKey;
 	private String patientKey;
+	private BigDecimal heartRate;
 	private ApOperationIntraoperativeMonitoringEntity translatedObject;
 
 }

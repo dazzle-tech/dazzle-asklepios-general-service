@@ -56,6 +56,7 @@ public class ApOperationRequestsEntity implements Serializable {
 	private BigDecimal startedAt;
 	private String startedBy;
 	private BigDecimal increaseByMinutes;
+	private BigDecimal monitorSlot;
 	private ApOperationRequestsEntity translatedObject;
 
 }

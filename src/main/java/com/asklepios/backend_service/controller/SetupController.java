@@ -3707,6 +3707,9 @@ public class SetupController implements Serializable {
             for (ApWarehouseProduct warehouseProduct : list) {
                 apWarehouseProductService.populateLovFields(warehouseProduct, lang);
                 warehouseProduct.setProductObj(apWarehouseProductService.getProduct(warehouseProduct.getProductKey()));
+                apProductsService.populateLovFields(warehouseProduct.getProductObj(), lang);
+
+
             }
 
             response.setObject(list);
@@ -3750,6 +3753,41 @@ public class SetupController implements Serializable {
             apWarehouseProductService.deleteRecord(warehouseProduct);
             response.setObject(warehouseProduct);
             return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    //Return warehouses that contain products only
+    @GetMapping(value = "/warehouses-contain-products-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> warehousesContainProductsList(@RequestParam Map<String, String> queryParams,
+                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                    @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                    @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApWarehouse>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            List<ApWarehouseProduct> list = apWarehouseProductService.getList( where);
+            List <ApWarehouse> warehouseList = apWarehouseProductService.warehouseList(list);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_warehouse where " + whereForTotal);
+            for (ApWarehouse warehouse : warehouseList) {
+                apWarehouseService.populateLovFields(warehouse, lang);
+
+            }
+
+            response.setObject(warehouseList);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());

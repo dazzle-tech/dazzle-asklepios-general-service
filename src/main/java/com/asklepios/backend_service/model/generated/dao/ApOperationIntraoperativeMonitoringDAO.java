@@ -57,6 +57,7 @@ record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setEncounterKey(rs.getString("encounter_key"));
 record.setPatientKey(rs.getString("patient_key"));
+record.setHeartRate(rs.getBigDecimal("heart_rate"));
 } else { record = null; }
 return record;
 }
@@ -64,7 +65,7 @@ return record;
 public void updateRecord(ApOperationIntraoperativeMonitoring record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_operation_intraoperative_monitoring set key = ?, operation_request_key = ?, period = ?, spo2 = ?, bp_systolic = ?, bp_diastolic = ?, respiratory_rate = ?, temperature = ?, etco2 = ?, fluids_given = ?, blood_given = ?, urine_output = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, encounter_key = ?, patient_key = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_operation_intraoperative_monitoring set key = ?, operation_request_key = ?, period = ?, spo2 = ?, bp_systolic = ?, bp_diastolic = ?, respiratory_rate = ?, temperature = ?, etco2 = ?, fluids_given = ?, blood_given = ?, urine_output = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, encounter_key = ?, patient_key = ?, heart_rate = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -87,7 +88,8 @@ ps.setBigDecimal(17, record.getUpdatedAt());
 ps.setBigDecimal(18, record.getDeletedAt());
 ps.setString(19, record.getEncounterKey());
 ps.setString(20, record.getPatientKey());
-ps.setString(21, record.getKey());
+ps.setBigDecimal(21, record.getHeartRate());
+ps.setString(22, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -129,6 +131,7 @@ record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setEncounterKey(rs.getString("encounter_key"));
 record.setPatientKey(rs.getString("patient_key"));
+record.setHeartRate(rs.getBigDecimal("heart_rate"));
 list.add(record);
 }
 return list;
@@ -137,7 +140,7 @@ return list;
 public String saveRecord(ApOperationIntraoperativeMonitoring record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_operation_intraoperative_monitoring values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_operation_intraoperative_monitoring values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -164,6 +167,7 @@ ps.setBigDecimal(17, record.getUpdatedAt());
 ps.setBigDecimal(18, record.getDeletedAt());
 ps.setString(19, record.getEncounterKey());
 ps.setString(20, record.getPatientKey());
+ps.setBigDecimal(21, record.getHeartRate());
 ps.executeUpdate();
 return key;
 }

@@ -69,6 +69,19 @@ record.setObservation(rs.getBoolean("observation"));
 record.setVaccination(rs.getBoolean("vaccination"));
 record.setOperationRequests(rs.getBoolean("operation_requests"));
 record.setDoctorRound(rs.getBoolean("doctor_round"));
+record.setDayCase(rs.getBoolean("day_case"));
+record.setBedsideProceduresRequest(rs.getBoolean("bedside_procedures_request"));
+record.setReferralRequest(rs.getBoolean("referral_request"));
+record.setBloodOrder(rs.getBoolean("blood_order"));
+record.setIvFluidOrder(rs.getBoolean("iv_fluid_order"));
+record.setIntakeOutputBalance(rs.getBoolean("intake_output_balance"));
+record.setRiskAssessments(rs.getBoolean("risk_assessments"));
+record.setMultidisciplinaryTeamNotes(rs.getBoolean("multidisciplinary_team_notes"));
+record.setNutritionStateAssessment(rs.getBoolean("nutrition_state_assessment"));
+record.setPhysicianOrderSummary(rs.getBoolean("physician_order_summary"));
+record.setCarePlanAndGoals(rs.getBoolean("care_plan_and_goals"));
+record.setDischargePlanning(rs.getBoolean("discharge_planning"));
+record.setPregnancyFollowUp(rs.getBoolean("pregnancy_follow_up"));
 } else { record = null; }
 return record;
 }
@@ -76,7 +89,7 @@ return record;
 public void updateRecord(ApMedicalSheets record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_medical_sheets set key = ?, department_key = ?, facility_key = ?, patient_dashboard = ?, clinical_visit = ?, diagnostics_order = ?, prescription = ?, drug_order = ?, consultation = ?, procedures = ?, patient_history = ?, allergies = ?, medical_warnings = ?, medications_record = ?, psychological_exam = ?, audiometry_puretone = ?, optometric_exam = ?, vaccine_reccord = ?, diagnostics_result = ?, dental_care = ?, cardiology = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, observation = ?, vaccination = ?, operation_requests = ?, doctor_round = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_medical_sheets set key = ?, department_key = ?, facility_key = ?, patient_dashboard = ?, clinical_visit = ?, diagnostics_order = ?, prescription = ?, drug_order = ?, consultation = ?, procedures = ?, patient_history = ?, allergies = ?, medical_warnings = ?, medications_record = ?, psychological_exam = ?, audiometry_puretone = ?, optometric_exam = ?, vaccine_reccord = ?, diagnostics_result = ?, dental_care = ?, cardiology = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, observation = ?, vaccination = ?, operation_requests = ?, doctor_round = ?, day_case = ?, bedside_procedures_request = ?, referral_request = ?, blood_order = ?, iv_fluid_order = ?, intake_output_balance = ?, risk_assessments = ?, multidisciplinary_team_notes = ?, nutrition_state_assessment = ?, physician_order_summary = ?, care_plan_and_goals = ?, discharge_planning = ?, pregnancy_follow_up = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -111,7 +124,20 @@ ps.setBoolean(29, record.getObservation());
 ps.setBoolean(30, record.getVaccination());
 ps.setBoolean(31, record.getOperationRequests());
 ps.setBoolean(32, record.getDoctorRound());
-ps.setString(33, record.getKey());
+ps.setBoolean(33, record.getDayCase());
+ps.setBoolean(34, record.getBedsideProceduresRequest());
+ps.setBoolean(35, record.getReferralRequest());
+ps.setBoolean(36, record.getBloodOrder());
+ps.setBoolean(37, record.getIvFluidOrder());
+ps.setBoolean(38, record.getIntakeOutputBalance());
+ps.setBoolean(39, record.getRiskAssessments());
+ps.setBoolean(40, record.getMultidisciplinaryTeamNotes());
+ps.setBoolean(41, record.getNutritionStateAssessment());
+ps.setBoolean(42, record.getPhysicianOrderSummary());
+ps.setBoolean(43, record.getCarePlanAndGoals());
+ps.setBoolean(44, record.getDischargePlanning());
+ps.setBoolean(45, record.getPregnancyFollowUp());
+ps.setString(46, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -165,6 +191,19 @@ record.setObservation(rs.getBoolean("observation"));
 record.setVaccination(rs.getBoolean("vaccination"));
 record.setOperationRequests(rs.getBoolean("operation_requests"));
 record.setDoctorRound(rs.getBoolean("doctor_round"));
+record.setDayCase(rs.getBoolean("day_case"));
+record.setBedsideProceduresRequest(rs.getBoolean("bedside_procedures_request"));
+record.setReferralRequest(rs.getBoolean("referral_request"));
+record.setBloodOrder(rs.getBoolean("blood_order"));
+record.setIvFluidOrder(rs.getBoolean("iv_fluid_order"));
+record.setIntakeOutputBalance(rs.getBoolean("intake_output_balance"));
+record.setRiskAssessments(rs.getBoolean("risk_assessments"));
+record.setMultidisciplinaryTeamNotes(rs.getBoolean("multidisciplinary_team_notes"));
+record.setNutritionStateAssessment(rs.getBoolean("nutrition_state_assessment"));
+record.setPhysicianOrderSummary(rs.getBoolean("physician_order_summary"));
+record.setCarePlanAndGoals(rs.getBoolean("care_plan_and_goals"));
+record.setDischargePlanning(rs.getBoolean("discharge_planning"));
+record.setPregnancyFollowUp(rs.getBoolean("pregnancy_follow_up"));
 list.add(record);
 }
 return list;
@@ -173,7 +212,7 @@ return list;
 public String saveRecord(ApMedicalSheets record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_medical_sheets values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_medical_sheets values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -212,6 +251,19 @@ ps.setBoolean(29, record.getObservation());
 ps.setBoolean(30, record.getVaccination());
 ps.setBoolean(31, record.getOperationRequests());
 ps.setBoolean(32, record.getDoctorRound());
+ps.setBoolean(33, record.getDayCase());
+ps.setBoolean(34, record.getBedsideProceduresRequest());
+ps.setBoolean(35, record.getReferralRequest());
+ps.setBoolean(36, record.getBloodOrder());
+ps.setBoolean(37, record.getIvFluidOrder());
+ps.setBoolean(38, record.getIntakeOutputBalance());
+ps.setBoolean(39, record.getRiskAssessments());
+ps.setBoolean(40, record.getMultidisciplinaryTeamNotes());
+ps.setBoolean(41, record.getNutritionStateAssessment());
+ps.setBoolean(42, record.getPhysicianOrderSummary());
+ps.setBoolean(43, record.getCarePlanAndGoals());
+ps.setBoolean(44, record.getDischargePlanning());
+ps.setBoolean(45, record.getPregnancyFollowUp());
 ps.executeUpdate();
 return key;
 }

@@ -44,6 +44,11 @@ public class ApGeneralAssessmentEntity implements Serializable {
 	private String cancellationReason;
 	private String statusLkey;
 	private ApLovValues statusLvalue;
+	private String livingCondition;
+	private Boolean patientNeedHelp = false;
+	private String supportingMembers;
+	private String familyLocationLkey;
+	private ApLovValues familyLocationLvalue;
 	private ApGeneralAssessmentEntity translatedObject;
 
 }

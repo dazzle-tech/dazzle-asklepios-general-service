@@ -60,6 +60,10 @@ record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setCancellationReason(rs.getString("cancellation_reason"));
 record.setStatusLkey(rs.getString("status_lkey"));
+record.setLivingCondition(rs.getString("living_condition"));
+record.setPatientNeedHelp(rs.getBoolean("patient_need_help"));
+record.setSupportingMembers(rs.getString("supporting_members"));
+record.setFamilyLocationLkey(rs.getString("family_location_lkey"));
 } else { record = null; }
 return record;
 }
@@ -67,7 +71,7 @@ return record;
 public void updateRecord(ApGeneralAssessment record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_general_assessment set key = ?, patient_key = ?, encounter_key = ?, position_status_lkey = ?, body_movements_lkey = ?, level_of_consciousness_lkey = ?, facial_expression_lkey = ?, speech_lkey = ?, mood_behavior_lkey = ?, memory_recent = ?, memory_remote = ?, signs_of_agitation = ?, signs_of_depression = ?, signs_of_suicidal_ideation = ?, signs_of_substance_use = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, cancellation_reason = ?, status_lkey = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_general_assessment set key = ?, patient_key = ?, encounter_key = ?, position_status_lkey = ?, body_movements_lkey = ?, level_of_consciousness_lkey = ?, facial_expression_lkey = ?, speech_lkey = ?, mood_behavior_lkey = ?, memory_recent = ?, memory_remote = ?, signs_of_agitation = ?, signs_of_depression = ?, signs_of_suicidal_ideation = ?, signs_of_substance_use = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, cancellation_reason = ?, status_lkey = ?, living_condition = ?, patient_need_help = ?, supporting_members = ?, family_location_lkey = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -93,7 +97,11 @@ ps.setBigDecimal(20, record.getUpdatedAt());
 ps.setBigDecimal(21, record.getDeletedAt());
 ps.setString(22, record.getCancellationReason());
 ps.setString(23, record.getStatusLkey());
-ps.setString(24, record.getKey());
+ps.setString(24, record.getLivingCondition());
+ps.setBoolean(25, record.getPatientNeedHelp());
+ps.setString(26, record.getSupportingMembers());
+ps.setString(27, record.getFamilyLocationLkey());
+ps.setString(28, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -138,6 +146,10 @@ record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setCancellationReason(rs.getString("cancellation_reason"));
 record.setStatusLkey(rs.getString("status_lkey"));
+record.setLivingCondition(rs.getString("living_condition"));
+record.setPatientNeedHelp(rs.getBoolean("patient_need_help"));
+record.setSupportingMembers(rs.getString("supporting_members"));
+record.setFamilyLocationLkey(rs.getString("family_location_lkey"));
 list.add(record);
 }
 return list;
@@ -146,7 +158,7 @@ return list;
 public String saveRecord(ApGeneralAssessment record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_general_assessment values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_general_assessment values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -176,6 +188,10 @@ ps.setBigDecimal(20, record.getUpdatedAt());
 ps.setBigDecimal(21, record.getDeletedAt());
 ps.setString(22, record.getCancellationReason());
 ps.setString(23, record.getStatusLkey());
+ps.setString(24, record.getLivingCondition());
+ps.setBoolean(25, record.getPatientNeedHelp());
+ps.setString(26, record.getSupportingMembers());
+ps.setString(27, record.getFamilyLocationLkey());
 ps.executeUpdate();
 return key;
 }

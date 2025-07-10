@@ -11,5 +11,6 @@ import com.asklepios.backend_service.model.generated.entity.ApDoctorRoundEntity;
 @Slf4j
 public class ApDoctorRound extends ApDoctorRoundEntity implements Serializable {
 
+    private ApPractitioner practitioner;
 
 }

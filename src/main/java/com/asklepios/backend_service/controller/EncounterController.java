@@ -3032,6 +3032,7 @@ public class EncounterController {
             List<ApDoctorRound> doctorRounds = apDoctorRoundService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_doctor_round where " + whereForTotal);
             for (ApDoctorRound  item : doctorRounds) {
+                item.setPractitioner(apPractitionerService.getRecord(item.getPractitionerKey()));
                 apDoctorRoundService.populateLovFields(item, lang);
             }
 

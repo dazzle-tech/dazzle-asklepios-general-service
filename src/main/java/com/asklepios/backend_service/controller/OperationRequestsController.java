@@ -460,14 +460,12 @@ public class OperationRequestsController {
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
 
-            List<ApOperationStaff> list = apOperationStaffService
-.getList(where);
+            List<ApOperationStaff> list = apOperationStaffService.getList(where);
             BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_operation_staff WHERE " + whereForTotal);
 
             for (ApOperationStaff item : list) {
                 item.setUser(apUserService.getRecord(item.getUserKey()));
-                apOperationStaffService
-.populateLovFields(item, lang);
+                apOperationStaffService.populateLovFields(item, lang);
             }
 
             response.setObject(list);
@@ -547,6 +545,10 @@ public class OperationRequestsController {
             String whereForTotal = listRequest.buildWhereStatement(true, false, false);
             List<ApOperationNameLog> list = apOperationNameLogService.getList(where);
             BigDecimal total = DS.executeDecimalResultQuery("select count(0) from ap_operation_name_log where " + whereForTotal);
+            for (ApOperationNameLog item : list) {
+
+                apOperationNameLogService.populateLovFields(item, lang);
+            }
             response.setObject(list);
             response.setExtraNumeric(total);
             return ResponseEntity.ok(response);
@@ -578,6 +580,10 @@ public class OperationRequestsController {
             String whereForTotal = listRequest.buildWhereStatement(true, false, false);
             List<ApOperationInduction> list = apOperationInductionService.getList(where);
             BigDecimal total = DS.executeDecimalResultQuery("select count(0) from ap_operation_induction where " + whereForTotal);
+            for (ApOperationInduction item : list) {
+
+                apOperationInductionService.populateLovFields(item, lang);
+            }
             response.setObject(list);
             response.setExtraNumeric(total);
             return ResponseEntity.ok(response);
@@ -609,6 +615,10 @@ public class OperationRequestsController {
             String whereForTotal = listRequest.buildWhereStatement(true, false, false);
             List<ApOperationPatientArrival> list = apOperationPatientArrivalService.getList(where);
             BigDecimal total = DS.executeDecimalResultQuery("select count(0) from ap_operation_patient_arrival where " + whereForTotal);
+            for (ApOperationPatientArrival item : list) {
+
+                apOperationPatientArrivalService.populateLovFields(item, lang);
+            }
             response.setObject(list);
             response.setExtraNumeric(total);
             return ResponseEntity.ok(response);
@@ -640,6 +650,10 @@ public class OperationRequestsController {
             String whereForTotal = listRequest.buildWhereStatement(true, false, false);
             List<ApOperationPreMedication> list = apOperationPreMedicationService.getList(where);
             BigDecimal total = DS.executeDecimalResultQuery("select count(0) from ap_operation_pre_medication where " + whereForTotal);
+            for (ApOperationPreMedication item : list) {
+                apOperationPreMedicationService.populateLovFields(item, lang);
+            }
+
             response.setObject(list);
             response.setExtraNumeric(total);
             return ResponseEntity.ok(response);
@@ -671,6 +685,9 @@ public class OperationRequestsController {
             String whereForTotal = listRequest.buildWhereStatement(true, false, false);
             List<ApOperationIntraoperativeMonitoring> list = apOperationIntraoperativeMonitoringService.getList(where);
             BigDecimal total = DS.executeDecimalResultQuery("select count(0) from ap_operation_intraoperative_monitoring where " + whereForTotal);
+            for (ApOperationIntraoperativeMonitoring item : list) {
+                apOperationIntraoperativeMonitoringService.populateLovFields(item, lang);
+            }
             response.setObject(list);
             response.setExtraNumeric(total);
             return ResponseEntity.ok(response);
@@ -712,6 +729,9 @@ public class OperationRequestsController {
             String whereForTotal = listRequest.buildWhereStatement(true, false, false);
             List<ApPreOperativeTimeout> list = apPreOperativeTimeoutService.getList(where);
             BigDecimal total = DS.executeDecimalResultQuery("select count(0) from ap_pre_operative_timeout where " + whereForTotal);
+            for (ApPreOperativeTimeout item : list) {
+                apPreOperativeTimeoutService.populateLovFields(item, lang);
+            }
             response.setObject(list);
             response.setExtraNumeric(total);
             return ResponseEntity.ok(response);
@@ -743,6 +763,9 @@ public class OperationRequestsController {
             String whereForTotal = listRequest.buildWhereStatement(true, false, false);
             List<ApOperationAnesthesiaInductionMonitoring> list =  apOperationAnesthesiaInductionMonitoringService.getList(where);
             BigDecimal total = DS.executeDecimalResultQuery("select count(0) from ap_operation_anesthesia_induction_monitoring where " + whereForTotal);
+            for (ApOperationAnesthesiaInductionMonitoring item : list) {
+                apOperationAnesthesiaInductionMonitoringService.populateLovFields(item, lang);
+            }
             response.setObject(list);
             response.setExtraNumeric(total);
             return ResponseEntity.ok(response);

@@ -627,6 +627,29 @@ public class OperationRequestsController {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
+    @GetMapping(value = "/operation-patient-arrival-by-operation", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getOperationPatientArrivalByOperationKey(@RequestParam("operationKey") String operationKey,
+                                                       @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<ApOperationPatientArrival> response = new ParentResponse<>();
+
+
+            String where = "operation_request_key = '" + operationKey + "' ORDER BY created_at DESC LIMIT 1";
+
+            List<ApOperationPatientArrival> list =apOperationPatientArrivalService.getList(where);
+
+            if (!list.isEmpty()) {
+                ApOperationPatientArrival item = list.get(0);
+                apOperationPatientArrivalService.populateLovFields(item, lang);
+                response.setObject(item);
+            }
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error fetching latest surgical preparation by operation key", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
     @PostMapping(value = "/save-operation-pre-medication", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveOperationPreMedication(@RequestBody ApOperationPreMedication record) {
         try {
@@ -815,6 +838,31 @@ public class OperationRequestsController {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
+
+    @GetMapping(value = "/surgical-by-operation", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getSurgicalByOperationKey(@RequestParam("operationKey") String operationKey,
+                                                       @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<ApOperationSurgicalPreparationIncision> response = new ParentResponse<>();
+
+
+            String where = "operation_request_key = '" + operationKey + "' ORDER BY created_at DESC LIMIT 1";
+
+            List<ApOperationSurgicalPreparationIncision> list = apOperationSurgicalPreparationIncisionService.getList(where);
+
+            if (!list.isEmpty()) {
+                ApOperationSurgicalPreparationIncision item = list.get(0);
+                apOperationSurgicalPreparationIncisionService.populateLovFields(item, lang);
+                response.setObject(item);
+            }
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error fetching latest surgical preparation by operation key", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
     @PostMapping(value = "/save-intraoperative-event", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveIntraoperativeEvent(@RequestBody ApOperationIntraoperativeEvents request,
                                                      @RequestHeader(required = false) String lang) {

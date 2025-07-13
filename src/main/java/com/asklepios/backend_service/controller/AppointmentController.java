@@ -251,6 +251,24 @@ public class AppointmentController {
                 return ResponseEntity.ok(responseDia);
 
             }
+            // TODO update status to be a LOV value
+            else if (resource_type.equals("5433343011954425")) //Department Day Case
+            {
+                ParentResponse<List<ApDepartment>> responseDep = new ParentResponse<>();
+                List<ApDepartment> listDep = apDepartmentService.getList("appointable = true AND department_type_lkey = '5673990729647005'");
+                responseDep.setObject(listDep);
+                return ResponseEntity.ok(responseDep);
+
+            }
+            // TODO update status to be a LOV value
+            else if (resource_type.equals("6743167799449277")) //Department Emergency
+            {
+                ParentResponse<List<ApDepartment>> responseDep = new ParentResponse<>();
+                List<ApDepartment> listDep = apDepartmentService.getList("appointable = true AND department_type_lkey = '5673990729647004'");
+                responseDep.setObject(listDep);
+                return ResponseEntity.ok(responseDep);
+
+            }
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {

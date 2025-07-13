@@ -933,7 +933,7 @@ public class OperationRequestsController {
         try {
             ParentResponse<ApOperationPostOpNotesHandover> response = new ParentResponse<>();
             if (request.getKey() == null || request.getKey().isEmpty()) {
-                System.out.println("KEYYYYyyyyy"+request.getOperationRequestKey());
+
                 if (request.getOperationRequestKey() == null || request.getOperationRequestKey().isEmpty()) {
                     return ResponseEntity.badRequest().body("Missing operationRequestKey");
                 }
@@ -941,6 +941,8 @@ public class OperationRequestsController {
                 ApOperationRequests record= apOperationRequestsService.getRecord(request.getOperationRequestKey());
                 // ToDo key for PROC_COMPLETED from PROC_STATUS lovs
                 record.setOperationStatusLkey("3621707345048408");
+                // ToDo key for RECOVERY from RECOVERY_STATUS
+                record.setRecoveryStatusLkey("6563788334455179");
 
                 apOperationRequestsService.saveRecord(record);
             }

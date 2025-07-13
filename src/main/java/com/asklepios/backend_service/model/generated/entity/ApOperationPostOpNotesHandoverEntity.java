@@ -20,7 +20,7 @@ public class ApOperationPostOpNotesHandoverEntity implements Serializable {
 	private String operativeFindings;
 	private String operationPerformedSummary;
 	private String variationsFromPlan;
-	private String postOpDestination;
+	private String postOpDestinationKey;
 	private Boolean oxygenRequired = false;
 	private BigDecimal oxygenFlowRate;
 	private String specialInstructions;

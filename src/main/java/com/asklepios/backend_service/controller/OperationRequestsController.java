@@ -725,7 +725,7 @@ public class OperationRequestsController {
         try {
             ParentResponse<ApPreOperativeTimeout> response = new ParentResponse<>();
             if (record.getKey() == null || record.getKey().isEmpty()) {
-                System.out.println("IIIIIIIIIIIIIII");
+
                 ApOperationRequests request = apOperationRequestsService.getRecord(record.getOperationRequestKey());
                 // ToDo key for PROC_INPROGRESS from PROC_STATUS lovs
                 request.setOperationStatusLkey("3622377660614958");
@@ -903,6 +903,30 @@ public class OperationRequestsController {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
+
+    @GetMapping(value = "/intraoperative-events-by-operation", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getIntraoperativeEventsByOperationKey(@RequestParam("operationKey") String operationKey,
+                                                       @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<ApOperationIntraoperativeEvents> response = new ParentResponse<>();
+
+
+            String where = "operation_request_key = '" + operationKey + "' ORDER BY created_at DESC LIMIT 1";
+
+            List<ApOperationIntraoperativeEvents> list = apOperationIntraoperativeEventsService.getList(where);
+
+            if (!list.isEmpty()) {
+                ApOperationIntraoperativeEvents item = list.get(0);
+                apOperationIntraoperativeEventsService.populateLovFields(item, lang);
+                response.setObject(item);
+            }
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error fetching latest surgical preparation by operation key", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
     @PostMapping(value = "/save-post-op-handover", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePostOpHandover(@RequestBody ApOperationPostOpNotesHandover request,
                                                 @RequestHeader(required = false) String lang) {
@@ -911,6 +935,14 @@ public class OperationRequestsController {
             apOperationPostOpNotesHandoverService.saveRecord(request);
             apOperationPostOpNotesHandoverService.populateLovFields(request, lang);
             response.setObject(request);
+            if (request.getKey() == null || request.getKey().isEmpty()) {
+
+                ApOperationRequests record= apOperationRequestsService.getRecord(request.getOperationRequestKey());
+                // ToDo key for PROC_COMPLETED from PROC_STATUS lovs
+                record.setOperationStatusLkey("3621707345048408");
+
+                apOperationRequestsService.saveRecord(record);
+            }
             response.setMsg("Saved successfully");
             return ResponseEntity.ok(response);
         } catch (Exception e) {

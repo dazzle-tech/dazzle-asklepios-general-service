@@ -932,10 +932,11 @@ public class OperationRequestsController {
                                                 @RequestHeader(required = false) String lang) {
         try {
             ParentResponse<ApOperationPostOpNotesHandover> response = new ParentResponse<>();
-            apOperationPostOpNotesHandoverService.saveRecord(request);
-            apOperationPostOpNotesHandoverService.populateLovFields(request, lang);
-            response.setObject(request);
             if (request.getKey() == null || request.getKey().isEmpty()) {
+                System.out.println("KEYYYYyyyyy"+request.getOperationRequestKey());
+                if (request.getOperationRequestKey() == null || request.getOperationRequestKey().isEmpty()) {
+                    return ResponseEntity.badRequest().body("Missing operationRequestKey");
+                }
 
                 ApOperationRequests record= apOperationRequestsService.getRecord(request.getOperationRequestKey());
                 // ToDo key for PROC_COMPLETED from PROC_STATUS lovs
@@ -943,6 +944,10 @@ public class OperationRequestsController {
 
                 apOperationRequestsService.saveRecord(record);
             }
+            apOperationPostOpNotesHandoverService.saveRecord(request);
+            apOperationPostOpNotesHandoverService.populateLovFields(request, lang);
+            response.setObject(request);
+
             response.setMsg("Saved successfully");
             return ResponseEntity.ok(response);
         } catch (Exception e) {

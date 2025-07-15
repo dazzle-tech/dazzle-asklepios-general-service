@@ -426,6 +426,26 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
             }
 
         }
+
+        // TODO update status to be a LOV value
+        else if(resourceTypeKey.equals("5433343011954425"))  //Department Day Case
+        {
+            System.out.println("resourceTypeKey====>"+resourceTypeKey);
+            List<ApDepartment> listDep = new ApDepartmentService().getList("key = '"+ resourcekey +"' AND department_type_lkey = '5673990729647005'");
+            if (listDep != null && !listDep.isEmpty()) {
+                return listDep.get(0);
+            }
+
+        }
+        // TODO update status to be a LOV value
+        else if(resourceTypeKey.equals("6743167799449277")) //Department Emergency
+        {
+            List<ApDepartment> listDep = new ApDepartmentService().getList("key = '"+ resourcekey +"' AND department_type_lkey = '5673990729647004'");
+            if (listDep != null && !listDep.isEmpty()) {
+                return listDep.get(0);
+            }
+
+        }
         return null ;
     }
 

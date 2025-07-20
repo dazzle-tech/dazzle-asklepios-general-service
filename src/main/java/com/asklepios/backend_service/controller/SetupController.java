@@ -3707,8 +3707,10 @@ public class SetupController implements Serializable {
             for (ApWarehouseProduct warehouseProduct : list) {
                 apWarehouseProductService.populateLovFields(warehouseProduct, lang);
                 warehouseProduct.setProductObj(apWarehouseProductService.getProduct(warehouseProduct.getProductKey()));
+
                 apProductsService.populateLovFields(warehouseProduct.getProductObj(), lang);
 
+                warehouseProduct.setProductName(warehouseProduct.getProductObj().getName());
 
             }
 

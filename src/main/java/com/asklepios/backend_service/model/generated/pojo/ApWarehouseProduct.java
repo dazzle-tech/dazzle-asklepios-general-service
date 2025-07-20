@@ -14,4 +14,7 @@ import com.asklepios.backend_service.model.generated.entity.ApWarehouseProductEn
 public class ApWarehouseProduct extends ApWarehouseProductEntity implements Serializable {
 
     ApProducts productObj;
+    String productName;
+    String warehouseName;
+
 }

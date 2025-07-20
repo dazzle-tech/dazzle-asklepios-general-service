@@ -31,6 +31,6 @@ public class ApWarehouseProductEntity implements Serializable {
 	private BigDecimal deletedAt;
 	private Boolean isvalid = false;
 	private String departmentKey;
+	private BigDecimal avgCost;
 	private ApWarehouseProductEntity translatedObject;
-
 }

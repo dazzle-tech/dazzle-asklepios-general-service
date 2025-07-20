@@ -12,19 +12,16 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     
-    // Get all active users
     public List<User> getAllActiveUsers() {
-        return userRepository.findAllActiveUsers();
+        return userRepository.findAll();
     }
     
-    // Get user by key
     public User getUserByKey(String key) {
         return userRepository.findById(key).orElse(null);
     }
     
 
     
-    // Get all users (simple list)
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }

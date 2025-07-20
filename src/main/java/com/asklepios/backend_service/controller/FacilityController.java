@@ -1,31 +1,43 @@
 package com.asklepios.backend_service.controller;
 
+import com.asklepios.backend_service.exception.EntityInUseException;
 import com.asklepios.backend_service.model.jpa.Facility;
 import com.asklepios.backend_service.service.FacilityService;
-import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/setup/facilities")
 //@CrossOrigin(origins = "*")
 public class FacilityController {
-    
+    private static final Logger logger = LogManager.getLogger(RoleController.class);
+
     @Autowired
     private FacilityService facilityService;
-    
-    // Create facility
-    @PostMapping
+
+     @PostMapping
     public ResponseEntity<Facility> createFacility(@Valid @RequestBody Facility facility) {
         Facility createdFacility = facilityService.createFacility(facility);
         return ResponseEntity.ok(createdFacility);
     }
+
     //TODO:   always show isValid as true, need to fix it in back end
     // Get all facilities
     @GetMapping
@@ -34,7 +46,6 @@ public class FacilityController {
         return ResponseEntity.ok(facilities);
     }
     
-    // Get facility by ID
     @GetMapping("/{id}")
     public ResponseEntity<Facility> getFacilityById(@PathVariable Long id) {
         Optional<Facility> facility = facilityService.getFacilityById(id);
@@ -42,45 +53,14 @@ public class FacilityController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
     
-    // Get facility by name
     @GetMapping("/name/{name}")
     public ResponseEntity<List<Facility>> getFacilityByName(@PathVariable String name) {
         List<Facility> facilities = facilityService.getFacilityByName(name);
         return ResponseEntity.ok(facilities);
     }
     
-    // Get facility by email
-    @GetMapping("/email/{email}")
-    public ResponseEntity<Facility> getFacilityByEmail(@PathVariable String email) {
-        Optional<Facility> facility = facilityService.getFacilityByEmail(email);
-        return facility.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-    
 
-    
-    // Get facilities by type
-    @GetMapping("/type/{type}")
-    public ResponseEntity<List<Facility>> getFacilitiesByType(@PathVariable String type) {
-        List<Facility> facilities = facilityService.getFacilitiesByType(type);
-        return ResponseEntity.ok(facilities);
-    }
-    
-    // Get facilities by phone
-    @GetMapping("/phone/{phone}")
-    public ResponseEntity<List<Facility>> getFacilitiesByPhone(@PathVariable String phone) {
-        List<Facility> facilities = facilityService.getFacilitiesByPhone(phone);
-        return ResponseEntity.ok(facilities);
-    }
-    
-    // Get facilities by address ID
-    @GetMapping("/address/{addressId}")
-    public ResponseEntity<List<Facility>> getFacilitiesByAddressId(@PathVariable String addressId) {
-        List<Facility> facilities = facilityService.getFacilitiesByAddressId(addressId);
-        return ResponseEntity.ok(facilities);
-    }
-    
-    // Get facilities registered after date
+
     @GetMapping("/registered-after")
     public ResponseEntity<List<Facility>> getFacilitiesRegisteredAfter(@RequestParam String date) {
         try {
@@ -92,7 +72,6 @@ public class FacilityController {
         }
     }
     
-    // Update facility
     @PutMapping("/{id}")
     public ResponseEntity<Facility> updateFacility(@PathVariable Long id, @RequestBody Facility facility) {
         try {
@@ -102,25 +81,17 @@ public class FacilityController {
             return ResponseEntity.notFound().build();
         }
     }
-    
-    // Delete facility
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFacility(@PathVariable Long id) {
+
+     try {
         facilityService.deleteFacility(id);
-        return ResponseEntity.ok().build();
     }
-    
-    // Check if facility exists by name
-    @GetMapping("/exists/name/{name}")
-    public ResponseEntity<Boolean> facilityExistsByName(@PathVariable String name) {
-        boolean exists = facilityService.facilityExistsByName(name);
-        return ResponseEntity.ok(exists);
+        catch (DataIntegrityViolationException ex) {
+            throw new EntityInUseException("Cannot delete facility because it is referenced by other entities.");
+     }
+        return ResponseEntity.noContent().build();
     }
-    
-    // Check if facility exists by email
-    @GetMapping("/exists/email/{email}")
-    public ResponseEntity<Boolean> facilityExistsByEmail(@PathVariable String email) {
-        boolean exists = facilityService.facilityExistsByEmail(email);
-        return ResponseEntity.ok(exists);
-    }
+
 } 

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/jpa/users")
+@RequestMapping("/api/users")
 @CrossOrigin(origins = "*")
 public class UserController {
     
@@ -17,7 +17,6 @@ public class UserController {
     
 
     
-    // Get user by key
     @GetMapping("/{key}")
     public ResponseEntity<User> getUserByKey(@PathVariable String key) {
         User user = userService.getUserByKey(key);
@@ -26,10 +25,8 @@ public class UserController {
         }
         return ResponseEntity.notFound().build();
     }
-    
 
     
-    // Get all users
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();

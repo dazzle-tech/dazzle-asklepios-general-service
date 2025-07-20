@@ -11,10 +11,8 @@ public interface UserRepository extends JpaRepository<User, String> {
     
 
 
-    // Find users by email
     List<User> findByEmail(String email);
-    
-    // Custom query to get all users with basic info
-    @Query("SELECT u FROM User u ")
-    List<User> findAllActiveUsers();
+
+    List<User> findAll();
+
 } 

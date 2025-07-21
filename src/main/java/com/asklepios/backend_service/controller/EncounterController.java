@@ -188,7 +188,17 @@ public class EncounterController {
                 if (encounter.getPractitionerObject() != null) {
                     apPractitionerService.populateLovFields(encounter.getPractitionerObject(),lang);
                 }
-
+                if(encounter.getResourceTypeLkey().equals("5433343011954425")||encounter.getResourceTypeLkey().equals("2039548173192779")){
+                    ApDayCaseEncounters dayCaseEncounters = apDayCaseEncountersService
+                            .getList("encounter_key = '" + encounter.getKey() + "'")
+                            .get(0);
+                    if(dayCaseEncounters != null){
+                    encounter.setApBed(apBedService.getRecord(dayCaseEncounters.getBedKey()));
+                    encounter.setApRoom(apRoomService.getRecord(dayCaseEncounters.getRoomKey()));
+                    apBedService.populateLovFields(encounter.getApBed(),lang);
+                    apRoomService.populateLovFields(encounter.getApRoom(),lang);
+                    }
+                }
                 ApPatient patient = apPatientService.getRecord(encounter.getPatientKey());
                 patient.setHasAllergy(apPatientService.getHasAllergy(encounter.getPatientKey()));
                 patient.setHasWarning(apPatientService.getHasWarning(encounter.getPatientKey()));
@@ -318,7 +328,6 @@ public class EncounterController {
                 }
 
                 apEncounter.setVisitId(newVisitId.toString());
-
                 String appointmentDate = String.valueOf(apEncounter.getPlannedStartDate());
 
                 String query = "patient_key =  '" + apEncounter.getPatientKey() + "'" +
@@ -2041,6 +2050,7 @@ public class EncounterController {
         try {
             ParentResponse<ApEncounter> response = new ParentResponse<>();
             apEncounter.setDischarge(true); // TO CLOSE INPATIENT ENCOUNTER
+            apEncounter.setEncounterStatusLkey("91109811181900");
             apEncounterService.saveRecord(apEncounter);
             apEncounterService.populateLovFields(apEncounter, lang);
             ApPatient patient = apPatientService.getRecord(apEncounter.getPatientKey());

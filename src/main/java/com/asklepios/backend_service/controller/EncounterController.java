@@ -188,22 +188,30 @@ public class EncounterController {
                 if (encounter.getPractitionerObject() != null) {
                     apPractitionerService.populateLovFields(encounter.getPractitionerObject(),lang);
                 }
-                if(encounter.getResourceTypeLkey().equals("5433343011954425")||encounter.getResourceTypeLkey().equals("2039548173192779")){
-                    ApDayCaseEncounters dayCaseEncounters = apDayCaseEncountersService
-                            .getList("encounter_key = '" + encounter.getKey() + "'")
-                            .get(0);
-                    if(dayCaseEncounters != null){
-                    encounter.setApBed(apBedService.getRecord(dayCaseEncounters.getBedKey()));
-                    encounter.setApRoom(apRoomService.getRecord(dayCaseEncounters.getRoomKey()));
-                    apBedService.populateLovFields(encounter.getApBed(),lang);
-                    apRoomService.populateLovFields(encounter.getApRoom(),lang);
+                if (encounter.getResourceTypeLkey().equals("5433343011954425") ||
+                        encounter.getResourceTypeLkey().equals("2039548173192779")) {
+
+                    List<ApDayCaseEncounters> dayCaseEncountersList = apDayCaseEncountersService
+                            .getList("encounter_key = '" + encounter.getKey() + "'");
+
+                    if (!dayCaseEncountersList.isEmpty()) {
+                        ApDayCaseEncounters dayCaseEncounters = dayCaseEncountersList.get(0);
+                        encounter.setApBed(apBedService.getRecord(dayCaseEncounters.getBedKey()));
+                        encounter.setApRoom(apRoomService.getRecord(dayCaseEncounters.getRoomKey()));
+                        apBedService.populateLovFields(encounter.getApBed(), lang);
+                        apRoomService.populateLovFields(encounter.getApRoom(), lang);
                     }
                 }
+
                 ApPatient patient = apPatientService.getRecord(encounter.getPatientKey());
-                patient.setHasAllergy(apPatientService.getHasAllergy(encounter.getPatientKey()));
-                patient.setHasWarning(apPatientService.getHasWarning(encounter.getPatientKey()));
-                apPatientService.populateLovFields(patient, lang);
-                encounter.setPatientObject(patient);
+                if (patient != null) {
+                    patient.setHasAllergy(apPatientService.getHasAllergy(encounter.getPatientKey()));
+                    patient.setHasWarning(apPatientService.getHasWarning(encounter.getPatientKey()));
+                    apPatientService.populateLovFields(patient, lang);
+                    encounter.setPatientObject(patient);
+                } else {
+                    log.warn("Patient not found for encounter key: {}", encounter.getKey());
+                }
                 encounter.setDiagnosis(apEncounterService.getDiagnosis(encounter.getKey()));
                 encounter.setHasOrder(apEncounterService.getHasOrder(encounter.getKey()));
                 encounter.setHasPrescription(apEncounterService.getHasPrescription(encounter.getKey()));

@@ -24,8 +24,7 @@ public class ApPostProcedureAnesthesiaEntity implements Serializable {
 	private ApLovValues circulationLvalue;
 	private String consciousnessLkey;
 	private ApLovValues consciousnessLvalue;
-	private String oxygenSaturationLkey;
-	private ApLovValues oxygenSaturationLvalue;
+	private String oxygenSaturation;
 	private BigDecimal aldreteScore;
 	private String createdBy;
 	private String updatedBy;

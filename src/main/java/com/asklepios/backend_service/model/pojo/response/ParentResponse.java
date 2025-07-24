@@ -12,39 +12,33 @@ import java.util.List;
 @Getter
 @Setter
 public class ParentResponse<T> {
-    T object;
-    String msg;
-    boolean error;
-    List<ParentError> errors;
-    List<ApTranslation> translations; // TODO replace with actual structure of translations of fields
-    String extraString;
-    BigDecimal extraNumeric;
-    ValidationResult validationResult;
+    private T object;
+    private String msg;
+    private boolean success;
+    private List<ParentError> errors;
+    private List<ApTranslation> translations;
+    private String extraString;
+    private BigDecimal extraNumeric;
+    private ValidationResult validationResult;
+    private String errorCode;
+    private int statusCode;
 
-    public void addError(String errorMessage) {
-        error = true;
-
-        if (errors == null)
-            errors = new ArrayList<>();
-
-        errors.add(new ParentError(null, errorMessage));
+    public void addGeneralError(String errorMessage) {
+        success = false;
+        msg = errorMessage;
     }
 
     public void addError(String fieldId, String errorMessage) {
-        error = true;
+        success = false;
 
-        if (errors == null)
+        if (errors == null) {
             errors = new ArrayList<>();
+        }
 
         errors.add(new ParentError(fieldId, errorMessage));
     }
 
-    public void addGeneralError(String errorMessage) {
-        error = true;
-        msg = errorMessage;
-    }
-
-    public void setData(T t){
-        setObject(t);
+    public void setData(T t) {
+        setObject(t); // تأكد من أن الدالة setObject موجودة إذا كنت تستخدم "object" كاسم
     }
 }

@@ -28,7 +28,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/pas")
-@CrossOrigin
 @Slf4j
 public class PatientController {
 

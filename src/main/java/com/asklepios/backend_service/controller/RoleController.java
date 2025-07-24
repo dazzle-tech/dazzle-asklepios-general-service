@@ -102,18 +102,18 @@ public class RoleController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
-        try{
+        logger.info("Attempting to delete role with id {}", id);
+        try {
             roleService.deleteRole(id);
-        }
-        catch (DataIntegrityViolationException ex) {
+            logger.info("Role with id {} deleted successfully", id);
+            return ResponseEntity.noContent().build();
+        } catch (DataIntegrityViolationException ex) {
+            logger.warn("Failed to delete role with id {} due to integrity constraint: {}", id, ex.getMessage());
             throw new EntityInUseException("Cannot delete role because it is assigned to users.");
+        } catch (Exception e) {
+            logger.error("Unexpected error occurred while deleting role with id {}", id, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-       catch (Exception e){
-           logger.error("Error occurred while deleting role with id " + id, e);
-           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/types")

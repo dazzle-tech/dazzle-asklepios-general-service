@@ -32,25 +32,50 @@ public class FacilityController {
     @Autowired
     private FacilityService facilityService;
 
-     @PostMapping
+    @PostMapping
     public ResponseEntity<Facility> createFacility(@Valid @RequestBody Facility facility) {
-        Facility createdFacility = facilityService.createFacility(facility);
-        return ResponseEntity.ok(createdFacility);
+        logger.info("Received request to create facility with data: {}", facility);
+        try {
+            Facility createdFacility = facilityService.createFacility(facility);
+            logger.info("Facility Saved successfully with data: {}", facility);
+            return ResponseEntity.ok(createdFacility);
+        } catch (Exception ex) {
+            logger.error("Error occurred while creating facility: {}", ex.getMessage(), ex);
+            throw ex;
+        }
     }
 
     //TODO:   always show isValid as true, need to fix it in back end
     // Get all facilities
     @GetMapping
     public ResponseEntity<List<Facility>> getAllFacilities() {
-        List<Facility> facilities = facilityService.getAllFacilities();
-        return ResponseEntity.ok(facilities);
+        logger.info("Received request to get all facilities");
+        try {
+            List<Facility> facilities = facilityService.getAllFacilities();
+            logger.info("Successfully retrieved {} facilities", facilities.size());
+            return ResponseEntity.ok(facilities);
+        } catch (Exception ex) {
+            logger.error("Error occurred while fetching facilities", ex);
+            throw ex;
+        }
     }
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<Facility> getFacilityById(@PathVariable Long id) {
-        Optional<Facility> facility = facilityService.getFacilityById(id);
-        return facility.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        logger.info("Received request to get facility with id {}", id);
+        try {
+            Optional<Facility> facility = facilityService.getFacilityById(id);
+            if (facility.isPresent()) {
+                logger.info("Facility with id {} found", id);
+                return ResponseEntity.ok(facility.get());
+            } else {
+                logger.warn("Facility with id {} not found", id);
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception ex) {
+            logger.error("Error while fetching facility with id {}: {}", id, ex.getMessage(), ex);
+            throw ex;
+        }
     }
     
     @GetMapping("/name/{name}")
@@ -58,7 +83,7 @@ public class FacilityController {
         List<Facility> facilities = facilityService.getFacilityByName(name);
         return ResponseEntity.ok(facilities);
     }
-    
+
 
 
     @GetMapping("/registered-after")
@@ -71,26 +96,33 @@ public class FacilityController {
             return ResponseEntity.badRequest().build();
         }
     }
-    
+
     @PutMapping("/{id}")
     public ResponseEntity<Facility> updateFacility(@PathVariable Long id, @RequestBody Facility facility) {
+        logger.info("Received request to update facility with id {} and payload: {}", id, facility);
         try {
             Facility updatedFacility = facilityService.updateFacility(id, facility);
+            logger.info("Facility with id {} updated successfully to: {}", id, updatedFacility);
             return ResponseEntity.ok(updatedFacility);
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            logger.error("Error updating facility with id {}: {}", id, e.getMessage(), e);
+            throw e;
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFacility(@PathVariable Long id) {
-
-     try {
-        facilityService.deleteFacility(id);
-    }
-        catch (DataIntegrityViolationException ex) {
+        logger.info("Received request to delete facility with id: {}", id);
+        try {
+            facilityService.deleteFacility(id);
+            logger.info("Facility with id {} deleted successfully", id);
+        } catch (DataIntegrityViolationException ex) {
+            logger.warn("Attempted to delete facility with id {} but failed due to integrity constraint", id);
             throw new EntityInUseException("Cannot delete facility because it is referenced by other entities.");
-     }
+        } catch (Exception ex) {
+            logger.error("Error occurred while deleting facility with id {}: {}", id, ex.getMessage(), ex);
+            throw ex;
+        }
         return ResponseEntity.noContent().build();
     }
 

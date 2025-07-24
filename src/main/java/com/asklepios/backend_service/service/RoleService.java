@@ -22,19 +22,39 @@ public class RoleService {
     private RoleRepository roleRepository;
 
     public Role saveRole(Role role) {
-        return roleRepository.save(role);
+        log.info("Saving role: {}", role.getName());
+        try {
+            Role savedRole = roleRepository.save(role);
+            log.debug("Saved role with ID: {}", savedRole.getId());
+            return savedRole;
+        } catch (Exception e) {
+            log.error("Error while saving role: {}", role.getName(), e);
+            throw e;
+        }
     }
 
     public List<Role> getAllRoles() {
-        return roleRepository.findAll();
+        log.info("Fetching all roles");
+        List<Role> roles = roleRepository.findAll();
+        log.debug("Fetched {} roles", roles.size());
+        return roles;
     }
 
+
     public Page<Role> getRoles(Pageable pageable) {
+        log.info("Fetching roles with pagination: page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
         return roleRepository.findAll(pageable);
     }
 
     public Optional<Role> getRoleById(Long id) {
-        return roleRepository.findById(id);
+        log.info("Fetching role with ID: {}", id);
+        Optional<Role> role = roleRepository.findById(id);
+        if (role.isEmpty()) {
+            log.warn("Role with ID {} not found", id);
+        } else {
+            log.debug("Role found: {}", role.get().getName());
+        }
+        return role;
     }
 
     @Transactional
@@ -42,7 +62,7 @@ public class RoleService {
         try {
             roleRepository.deleteById(id);
         } catch (Exception ex) {
-          log.error(String.valueOf(ex.getClass()),ex);
+            log.error(String.valueOf(ex.getClass()),ex);
         }
     }
 }

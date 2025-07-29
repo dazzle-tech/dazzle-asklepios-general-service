@@ -25,6 +25,7 @@ public class ApEncounter extends ApEncounterEntity implements Serializable {
     ApBed apBed;
     ApRoom apRoom;
     ApPractitioner practitionerObject;
+    ApEmergencyTriage emergencyTriage;
     public boolean isEditable() {
         if (getEncounterStatusLkey() == null) {
             return false;

@@ -11,5 +11,6 @@ import com.asklepios.backend_service.model.generated.entity.ApEmergencyTriageEnt
 @Slf4j
 public class ApEmergencyTriage extends ApEmergencyTriageEntity implements Serializable {
 
-
+    private ApUser createdByUser;
+    private ApUser updatedByUser;
 }

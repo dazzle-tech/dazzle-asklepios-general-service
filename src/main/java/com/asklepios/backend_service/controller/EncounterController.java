@@ -347,7 +347,7 @@ public class EncounterController {
                         : "resource_key = '" + apEncounter.getResourceKey() + "'") + ")";
 
                 if (apEncounter.getKey() != null && !apEncounter.getKey().equals("null")) {
-                    query += " and encounter_key <> '" + apEncounter.getKey() + "'";
+                    query += " and key <> '" + apEncounter.getKey() + "'";
                 }
 
                 List<ApEncounter> existingEncounter = apEncounterService
@@ -3298,6 +3298,90 @@ public class EncounterController {
             e.printStackTrace();
             log.error(e.getMessage());
             return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(value = "/er-waiting-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> ERWaitingList(@RequestParam Map<String, String> queryParams,
+                                                  @Nullable @RequestHeader String facility_id,
+                                                  @Nullable @RequestHeader String access_token,
+                                                  @Nullable @RequestHeader Integer access_level,
+                                                  @Nullable @RequestHeader String lang) {
+
+        try {
+            ParentResponse<List<ApEncounter>> response = new ParentResponse<>();
+
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(Collections.emptyList());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest   = new ListRequest(queryParams);
+            String       where        = listRequest.buildWhereStatement();
+            String       whereForTotal= listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApEncounter> encounters = apEncounterService.getList(where);
+
+            List<String> priorityOrder = Arrays.asList(
+                    "6859764100147954",
+                    "6859787815891749",
+                    "6859815212595414",
+                    "6859862840597358",
+                    "6859834949140744"
+            );
+
+            encounters.sort(Comparator.comparingInt(e -> {
+                String level = (e.getEmergencyTriage() != null) ? e.getEmergencyTriage().getEmergencyLevelLkey() : "";
+                int index = priorityOrder.indexOf(level);
+                return index == -1 ? Integer.MAX_VALUE : index;
+            }));
+
+            BigDecimal totalRecord = DS.executeDecimalResultQuery(
+                    "SELECT COUNT(0) FROM ap_encounter WHERE " + whereForTotal
+            );
+
+            for (ApEncounter encounter : encounters) {
+                encounter.setEmergencyTriage(apEmergencyTriageService.getList("encounter_key = '"+encounter.getKey()+"'").get(0));
+                   if( encounter.getEmergencyTriage() !=null){
+                       apEmergencyTriageService.populateLovFields(encounter.getEmergencyTriage(), lang);
+                   }
+                if (encounter.getResourceKey() != null) {
+                    if ("2039534205961578".equals(encounter.getResourceTypeLkey())) {
+                        ApDepartment dep = apDepartmentService.getRecord(encounter.getDepartmentKey());
+                        if (dep != null) {
+                            encounter.setDepartmentName(dep.getName());
+                        }
+                    }
+                    encounter.setResourceObject(
+                            apEncounterService.getResource(
+                                    encounter.getResourceTypeLkey(),
+                                    encounter.getResourceKey(),
+                                    lang
+                            )
+                    );
+                }
+                if(encounter.getEmergencyTriage() != null ){
+                    encounter.getEmergencyTriage().setCreatedByUser(apUserService.getRecord(encounter.getEmergencyTriage().getCreatedBy()));
+                }
+
+                ApPatient patient = apPatientService.getRecord(encounter.getPatientKey());
+                apPatientService.populateLovFields(patient, lang);
+                encounter.setPatientObject(patient);
+
+                apEncounterService.populateLovFields(encounter, lang);
+            }
+
+            apEncounterService.processPatientObservationStatus(encounters);
+
+            response.setObject(encounters);
+            response.setExtraNumeric(totalRecord);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            log.error("waitingEncounterList failed", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
         }
     }
 }

@@ -59,6 +59,10 @@ public class ApMedicalSheetsEntity implements Serializable {
 	private Boolean carePlanAndGoals = false;
 	private Boolean dischargePlanning = false;
 	private Boolean pregnancyFollowUp = false;
+	private Boolean morseFallScale = false;
+	private Boolean hendrichFallRisk = false;
+	private Boolean stratifyScale = false;
+	private Boolean johnsHopkinsFallRiskAssessmentTool   = false;
 	private ApMedicalSheetsEntity translatedObject;
 
 }

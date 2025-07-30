@@ -88,11 +88,10 @@ public class EncounterController {
     private final ApDoctorRoundService apDoctorRoundService;
     private final ApNurseNotesService apNurseNotesService;
     private final ApRepositioningService apRepositioningService;
-    private final ApDayCaseEncountersService apDayCaseEncountersService;
     private final ApPreOperationAdministeredMedicationsService apPreOperationAdministeredMedicationsService;
     private final ApEmergencyTriageService apEmergencyTriageService;
-
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService, ApDoctorRoundStaffService apDoctorRoundStaffService, ApDoctorRoundService apDoctorRoundService, ApNurseNotesService apNurseNotesService, ApRepositioningService apRepositioningService, ApDayCaseEncountersService apDayCaseEncountersService, ApPreOperationAdministeredMedicationsService apPreOperationAdministeredMedicationsService, ApEmergencyTriageService apEmergencyTriageService) {
+    private final ApEncounterAssignToBedService apEncounterAssignToBedService;
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService, ApDoctorRoundStaffService apDoctorRoundStaffService, ApDoctorRoundService apDoctorRoundService, ApNurseNotesService apNurseNotesService, ApRepositioningService apRepositioningService, ApDayCaseEncountersService apDayCaseEncountersService, ApPreOperationAdministeredMedicationsService apPreOperationAdministeredMedicationsService, ApEmergencyTriageService apEmergencyTriageService, ApEncounterAssignToBedService apEncounterAssignToBedService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -152,9 +151,9 @@ public class EncounterController {
         this.apDoctorRoundService = apDoctorRoundService;
         this.apNurseNotesService = apNurseNotesService;
         this.apRepositioningService = apRepositioningService;
-        this.apDayCaseEncountersService = apDayCaseEncountersService;
         this.apPreOperationAdministeredMedicationsService = apPreOperationAdministeredMedicationsService;
         this.apEmergencyTriageService = apEmergencyTriageService;
+        this.apEncounterAssignToBedService = apEncounterAssignToBedService;
     }
 
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -193,13 +192,13 @@ public class EncounterController {
                 if (encounter.getResourceTypeLkey().equals("5433343011954425") ||
                         encounter.getResourceTypeLkey().equals("2039548173192779")) {
 
-                    List<ApDayCaseEncounters> dayCaseEncountersList = apDayCaseEncountersService
+                    List<ApEncounterAssignToBed> encounterAssignToBeds = apEncounterAssignToBedService
                             .getList("encounter_key = '" + encounter.getKey() + "'");
 
-                    if (!dayCaseEncountersList.isEmpty()) {
-                        ApDayCaseEncounters dayCaseEncounters = dayCaseEncountersList.get(0);
-                        encounter.setApBed(apBedService.getRecord(dayCaseEncounters.getBedKey()));
-                        encounter.setApRoom(apRoomService.getRecord(dayCaseEncounters.getRoomKey()));
+                    if (!encounterAssignToBeds.isEmpty()) {
+                        ApEncounterAssignToBed apEncounterAssignToBed = encounterAssignToBeds.get(0);
+                        encounter.setApBed(apBedService.getRecord(apEncounterAssignToBed.getBedKey()));
+                        encounter.setApRoom(apRoomService.getRecord(apEncounterAssignToBed.getRoomKey()));
                         apBedService.populateLovFields(encounter.getApBed(), lang);
                         apRoomService.populateLovFields(encounter.getApRoom(), lang);
                     }
@@ -3180,8 +3179,8 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
-    @PostMapping(value = "/save-new-day-case", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveNewDayCaseEncounters(@RequestBody ApDayCaseEncounters apDayCaseEncounters ,
+    @PostMapping(value = "/save-assign-to-bed", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveNewDayCaseEncounters(@RequestBody ApEncounterAssignToBed apEncounterAssignToBed ,
                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -3189,12 +3188,12 @@ public class EncounterController {
 
     ) {
         try {
-            ParentResponse<ApDayCaseEncounters> response = new ParentResponse<>();
-            ApEncounter apEncounter = apEncounterService.getRecord(apDayCaseEncounters.getEncounterKey());
+            ParentResponse<ApEncounterAssignToBed> response = new ParentResponse<>();
+            ApEncounter apEncounter = apEncounterService.getRecord(apEncounterAssignToBed.getEncounterKey());
             apEncounter.setEncounterStatusLkey("91063195286200");
             apEncounterService.saveRecord(apEncounter);
-            apDayCaseEncountersService.saveRecord(apDayCaseEncounters);
-            response.setObject(apDayCaseEncounters);
+            apEncounterAssignToBedService.saveRecord(apEncounterAssignToBed);
+            response.setObject(apEncounterAssignToBed);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -3382,6 +3381,137 @@ public class EncounterController {
             log.error("waitingEncounterList failed", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(e.getMessage());
+        }
+    }
+    @PostMapping(value = "/er-complete-encounter", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> ERCompleteEncounter(@RequestBody ApEncounter apEncounter,
+                                                 @RequestHeader("triage_key") String triageKey,
+                                                 @RequestHeader("destination_key") String destinationKey,
+                                                 @Nullable @RequestHeader String facility_id,
+                                                 @Nullable @RequestHeader String access_token,
+                                                 @Nullable @RequestHeader Integer access_level,
+                                                 @Nullable @RequestHeader String lang
+    ) {
+        try {
+            ParentResponse<ApEncounter> response = new ParentResponse<>();
+            ApEmergencyTriage emergencyTriage = apEmergencyTriageService.getRecord(triageKey);
+            emergencyTriage.setDestinationLkey(destinationKey);
+            apEmergencyTriageService.saveRecord(emergencyTriage);
+            apEncounter.setEncounterStatusLkey("91109811181900"); // TODO replace with redis by lov code (ENC_STATUS/CLOSED)
+            apEncounterService.saveRecord(apEncounter);
+            apEncounterService.populateLovFields(apEncounter, lang);
+            ApPatient patient = apPatientService.getRecord(apEncounter.getPatientKey());
+            apPatientService.populateLovFields(patient, lang);
+            apEncounter.setPatientObject(patient);
+            response.setObject(apEncounter);
+            response.setMsg("Visit Closed");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+
+
+    }
+
+
+    @PostMapping(value = "/sent-to-er", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> sentToER(@RequestBody ApEncounter apEncounter,
+                                      @RequestHeader("triage_key") String triageKey,
+                                      @RequestHeader("destination_key") String destinationKey,
+                                                  @Nullable @RequestHeader String facility_id,
+                                                  @Nullable @RequestHeader String access_token,
+                                                  @Nullable @RequestHeader Integer access_level,
+                                                  @Nullable @RequestHeader String lang,
+                                                  @Nullable @RequestHeader String screenKey
+    ) {
+        try {
+            ParentResponse<ApEncounter> response = new ParentResponse<>();
+
+
+            if (apEncounter.getKey() == null) {
+                response.addGeneralError("Encounter doesn't exist");
+                return ResponseEntity.status(400).body(response);
+            }
+            ApEmergencyTriage emergencyTriage = apEmergencyTriageService.getRecord(triageKey);
+            emergencyTriage.setDestinationLkey(destinationKey);
+            apEmergencyTriageService.saveRecord(emergencyTriage);
+            apEncounterService.saveRecord(apEncounter);
+            apEncounterService.populateLovFields(apEncounter, lang);
+            response.setObject(apEncounter);
+            response.setMsg("Changes saved successfully");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/er-triage-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> ERTriageList(@RequestParam Map<String, String> queryParams,
+                                           @Nullable @RequestHeader String facility_id,
+                                           @Nullable @RequestHeader String access_token,
+                                           @Nullable @RequestHeader Integer access_level,
+                                           @Nullable @RequestHeader String lang) {
+        try {
+
+            ParentResponse<List<ApEncounter>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false,false);
+            List<ApEncounter> encounters = apEncounterService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_encounter where " + whereForTotal);
+            for (ApEncounter encounter : encounters) {
+                List<ApEmergencyTriage> triageList = apEmergencyTriageService.getList("encounter_key = '" + encounter.getKey() + "'");
+                if (!triageList.isEmpty()) {
+                    encounter.setEmergencyTriage(triageList.get(0));
+                    apEmergencyTriageService.populateLovFields(encounter.getEmergencyTriage(), lang);
+                }
+                if(encounter.getResourceKey() != null){
+                    if(encounter.getResourceTypeLkey().equals("2039534205961578")){
+                        ApDepartment department = apDepartmentService.getRecord(encounter.getDepartmentKey());
+                        if(department != null){
+                            encounter.setDepartmentName(department.getName());}
+                    }
+                    encounter.setResourceObject(apEncounterService.getResource(encounter.getResourceTypeLkey(),encounter.getResourceKey(),lang));
+                }
+                if (encounter.getPractitionerObject() != null) {
+                    apPractitionerService.populateLovFields(encounter.getPractitionerObject(),lang);
+                }
+
+
+                ApPatient patient = apPatientService.getRecord(encounter.getPatientKey());
+                if (patient != null) {
+                    patient.setHasAllergy(apPatientService.getHasAllergy(encounter.getPatientKey()));
+                    patient.setHasWarning(apPatientService.getHasWarning(encounter.getPatientKey()));
+                    apPatientService.populateLovFields(patient, lang);
+                    encounter.setPatientObject(patient);
+                } else {
+                    log.warn("Patient not found for encounter key: {}", encounter.getKey());
+                }
+
+
+                apEncounterService.populateLovFields(encounter, lang);
+
+            }
+            apEncounterService.processPatientObservationStatus(encounters);
+            response.setObject(encounters);
+            response.setExtraNumeric(totalRecord);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+
         }
     }
 }

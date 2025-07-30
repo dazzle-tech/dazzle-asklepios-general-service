@@ -65,6 +65,7 @@ record.setIvFluidsLkey(rs.getString("iv_fluids_lkey"));
 record.setMedicationLkey(rs.getString("medication_lkey"));
 record.setEcgLkey(rs.getString("ecg_lkey"));
 record.setConsultationLkey(rs.getString("consultation_lkey"));
+record.setDestinationLkey(rs.getString("destination_lkey"));
 } else { record = null; }
 return record;
 }
@@ -72,7 +73,7 @@ return record;
 public void updateRecord(ApEmergencyTriage record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_emergency_triage set key = ?, patient_key = ?, encounter_key = ?, emergency_level_lkey = ?, right_eye_light_response = ?, right_eye_pupil_size_lkey = ?, left_eye_light_response = ?, left_eye_pupil_size_lkey = ?, is_pregnancy = ?, history_of_present_illness = ?, additional_notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, life_saving_lkey = ?, unresponsive_lkey = ?, high_risk_lkey = ?, avpu_scale_lkey = ?, pain_score_lkey = ?, labs_lkey = ?, imaging_lkey = ?, iv_fluids_lkey = ?, medication_lkey = ?, ecg_lkey = ?, consultation_lkey = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_emergency_triage set key = ?, patient_key = ?, encounter_key = ?, emergency_level_lkey = ?, right_eye_light_response = ?, right_eye_pupil_size_lkey = ?, left_eye_light_response = ?, left_eye_pupil_size_lkey = ?, is_pregnancy = ?, history_of_present_illness = ?, additional_notes = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, life_saving_lkey = ?, unresponsive_lkey = ?, high_risk_lkey = ?, avpu_scale_lkey = ?, pain_score_lkey = ?, labs_lkey = ?, imaging_lkey = ?, iv_fluids_lkey = ?, medication_lkey = ?, ecg_lkey = ?, consultation_lkey = ?, destination_lkey = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -103,7 +104,8 @@ ps.setString(25, record.getIvFluidsLkey());
 ps.setString(26, record.getMedicationLkey());
 ps.setString(27, record.getEcgLkey());
 ps.setString(28, record.getConsultationLkey());
-ps.setString(29, record.getKey());
+ps.setString(29, record.getDestinationLkey());
+ps.setString(30, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -153,6 +155,7 @@ record.setIvFluidsLkey(rs.getString("iv_fluids_lkey"));
 record.setMedicationLkey(rs.getString("medication_lkey"));
 record.setEcgLkey(rs.getString("ecg_lkey"));
 record.setConsultationLkey(rs.getString("consultation_lkey"));
+record.setDestinationLkey(rs.getString("destination_lkey"));
 list.add(record);
 }
 return list;
@@ -161,7 +164,7 @@ return list;
 public String saveRecord(ApEmergencyTriage record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_emergency_triage values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_emergency_triage values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -196,6 +199,7 @@ ps.setString(25, record.getIvFluidsLkey());
 ps.setString(26, record.getMedicationLkey());
 ps.setString(27, record.getEcgLkey());
 ps.setString(28, record.getConsultationLkey());
+ps.setString(29, record.getDestinationLkey());
 ps.executeUpdate();
 return key;
 }

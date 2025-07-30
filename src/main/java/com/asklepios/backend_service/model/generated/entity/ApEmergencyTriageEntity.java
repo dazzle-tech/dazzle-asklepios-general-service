@@ -56,6 +56,8 @@ public class ApEmergencyTriageEntity implements Serializable {
 	private ApLovValues ecgLvalue;
 	private String consultationLkey;
 	private ApLovValues consultationLvalue;
+	private String destinationLkey;
+	private ApLovValues destinationLvalue;
 	private ApEmergencyTriageEntity translatedObject;
 
 }

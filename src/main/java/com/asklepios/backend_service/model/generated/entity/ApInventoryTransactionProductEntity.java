@@ -31,6 +31,9 @@ public class ApInventoryTransactionProductEntity implements Serializable {
 	private Boolean isValid = true;
 	private Boolean isEffectedWarehouse = false;
 	private Date expiryDate = new Date();
+	private String notes;
+	private String transUomKey;
+	private BigDecimal newQuentityBaseUom;
 	private ApInventoryTransactionProductEntity translatedObject;
 
 }

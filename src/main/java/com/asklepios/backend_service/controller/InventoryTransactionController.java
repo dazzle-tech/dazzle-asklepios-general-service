@@ -29,13 +29,19 @@ public class InventoryTransactionController  implements Serializable {
     private final ApInventoryTransactionProductService apInventoryTransactionProductService;
     private final ApWarehouseProductService apWarehouseProductService;
     private final ApWarehouseService apWarehouseService;
+    private final ApInventoryTransferService apInventoryTransferService;
+    private final ApInventoryTransferProductService apInventoryTransferProductService;
+    private final ApProductsService apProductsService;
 
-    public InventoryTransactionController(ApInventoryTransactionService apInventoryTransactionService, ApInventoryTransactionAttachmentService apInventoryTransactionAttachmentService, ApInventoryTransactionProductService apInventoryTransactionProductService, ApWarehouseProductService apWarehouseProductService, ApWarehouseService apWarehouseService) {
+    public InventoryTransactionController(ApInventoryTransactionService apInventoryTransactionService, ApInventoryTransactionAttachmentService apInventoryTransactionAttachmentService, ApInventoryTransactionProductService apInventoryTransactionProductService, ApWarehouseProductService apWarehouseProductService, ApWarehouseService apWarehouseService, ApInventoryTransferService apInventoryTransferService, ApInventoryTransferProductService apInventoryTransferProductService, ApProductsService apProductsService) {
         this.apInventoryTransactionService = apInventoryTransactionService;
         this.apInventoryTransactionAttachmentService = apInventoryTransactionAttachmentService;
         this.apInventoryTransactionProductService = apInventoryTransactionProductService;
         this.apWarehouseProductService = apWarehouseProductService;
         this.apWarehouseService = apWarehouseService;
+        this.apInventoryTransferService = apInventoryTransferService;
+        this.apInventoryTransferProductService = apInventoryTransferProductService;
+        this.apProductsService = apProductsService;
     }
 
     @GetMapping(value = "/inventory-transaction-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -284,6 +290,184 @@ public class InventoryTransactionController  implements Serializable {
             apInventoryTransactionProductService.confirmProductTransactionOnWarehouse(Key);
             response.setObject(apInventoryTransactionService.getRecord(Key));
             return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(value = "/inventory-transfer-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> inventoryTransferList(@RequestParam Map<String, String> queryParams,
+                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                      @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApInventoryTransfer>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            List<ApInventoryTransfer> list = apInventoryTransferService.getList( where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_inventory_transfer where " + whereForTotal);
+            for (ApInventoryTransfer transfer : list) {
+                apInventoryTransferService.populateLovFields(transfer, lang);
+            }
+
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
+    @PostMapping(value = "/save-inventory-transfer", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveInventoryTransfer(@RequestBody ApInventoryTransfer inventoryTransfer,
+                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                      @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApInventoryTransfer> response = new ParentResponse<>();
+            apInventoryTransferService.saveRecord(inventoryTransfer);
+            response.setObject(inventoryTransfer);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/remove-inventory-transfer", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeInventoryTransfer(@RequestBody ApInventoryTransfer inventoryTransfer,
+                                                        @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                        @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                        @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                        @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApInventoryTransfer> response = new ParentResponse<>();
+            apInventoryTransferService.deleteRecord(inventoryTransfer);
+            response.setObject(inventoryTransfer);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
+    @GetMapping(value = "/inventory-transfer-product-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> inventoryTransferProductList(@RequestParam Map<String, String> queryParams,
+                                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                             @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApInventoryTransferProduct>> response = new ParentResponse<>();
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            List<ApInventoryTransferProduct> list = apInventoryTransferProductService.getList( where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_inventory_transfer_product where " + whereForTotal);
+            for (ApInventoryTransferProduct product : list) {
+                apInventoryTransferProductService.populateLovFields(product, lang);
+                product.setProductObj(apWarehouseProductService.getProduct(product.getProductKey()));
+                product.setTransferObj(apInventoryTransferService.getRecord(product.getTransferKey()));
+                if(product.getTransferObj() != null )
+                    product.setFromWarehouseObj(apWarehouseService.getRecord(product.getTransferObj().getFromWarehouseKey()));
+                    product.setToWarehouseObj(apWarehouseService.getRecord(product.getTransferObj().getToWarehouseKey()));
+
+            }
+
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
+    @PostMapping(value = "/save-inventory-transfer-product", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveInventoryTransferProduct(@RequestBody ApInventoryTransferProduct inventoryTransferProduct,
+                                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                             @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApInventoryTransferProduct> response = new ParentResponse<>();
+            ApProducts product =apProductsService.getRecord(inventoryTransferProduct.getProductKey());
+            BigDecimal QtyBaseUOM = apInventoryTransactionProductService.convert(inventoryTransferProduct.getQuentityApproved(),  inventoryTransferProduct.getTransUomKey(), product.getBaseUomKey(),  product.getUomGroupKey());
+            inventoryTransferProduct.setQuentityRequestedBaseUom(QtyBaseUOM);
+            apInventoryTransferProductService.saveRecord(inventoryTransferProduct);
+            response.setObject(inventoryTransferProduct);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/remove-inventory-transfer-Product", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeInventoryTransferProduct(@RequestBody ApInventoryTransferProduct inventoryTransferProduct,
+                                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                               @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                               @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                               @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApInventoryTransferProduct> response = new ParentResponse<>();
+            apInventoryTransferProductService.deleteRecord(inventoryTransferProduct);
+            response.setObject(inventoryTransferProduct);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(value = "/qty_in_base_uom", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> QuantityInBaseUom(@RequestParam BigDecimal quantity,
+                                               @RequestParam String transUnit,
+                                               @RequestParam String toBaseUnit,
+                                               @RequestParam String uomGroup,
+                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                               @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                               @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                               @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<BigDecimal> response = new ParentResponse<>();
+
+            if (quantity == null || quantity.compareTo(BigDecimal.ZERO) == 0 || transUnit == null || toBaseUnit == null || uomGroup == null) {
+                response.setObject(BigDecimal.ZERO);
+                return ResponseEntity.ok(response);
+            }
+
+
+            BigDecimal QtyBaseUOM = apInventoryTransactionProductService.convert(quantity,  transUnit,  toBaseUnit,  uomGroup); // example number
+            response.setObject(QtyBaseUOM);
+
+            return ResponseEntity.ok(response);
+
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());

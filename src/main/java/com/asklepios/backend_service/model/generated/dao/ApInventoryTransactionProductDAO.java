@@ -53,6 +53,9 @@ record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setIsEffectedWarehouse(rs.getBoolean("is_effected_warehouse"));
 record.setExpiryDate(rs.getDate("expiry_date"));
+record.setNotes(rs.getString("notes"));
+record.setTransUomKey(rs.getString("trans_uom_key"));
+record.setNewQuentityBaseUom(rs.getBigDecimal("new_quentity_base_uom"));
 } else { record = null; }
 return record;
 }
@@ -60,7 +63,7 @@ return record;
 public void updateRecord(ApInventoryTransactionProduct record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_inventory_transaction_product set key = ?, inventory_trans_key = ?, product_key = ?, new_quentity = ?, lotserialnumber = ?, new_cost = ?, currency_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, is_effected_warehouse = ?, expiry_date = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_inventory_transaction_product set key = ?, inventory_trans_key = ?, product_key = ?, new_quentity = ?, lotserialnumber = ?, new_cost = ?, currency_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, is_effected_warehouse = ?, expiry_date = ?, notes = ?, trans_uom_key = ?, new_quentity_base_uom = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -80,7 +83,10 @@ ps.setBoolean(14, record.getIsValid());
 ps.setBoolean(15, record.getIsEffectedWarehouse());
 if (record.getExpiryDate() != null) ps.setDate(16, new java.sql.Date(record.getExpiryDate().getTime()));
 else ps.setDate(16, null); 
-ps.setString(17, record.getKey());
+ps.setString(17, record.getNotes());
+ps.setString(18, record.getTransUomKey());
+ps.setBigDecimal(19, record.getNewQuentityBaseUom());
+ps.setString(20, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -118,6 +124,9 @@ record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setIsEffectedWarehouse(rs.getBoolean("is_effected_warehouse"));
 record.setExpiryDate(rs.getDate("expiry_date"));
+record.setNotes(rs.getString("notes"));
+record.setTransUomKey(rs.getString("trans_uom_key"));
+record.setNewQuentityBaseUom(rs.getBigDecimal("new_quentity_base_uom"));
 list.add(record);
 }
 return list;
@@ -126,7 +135,7 @@ return list;
 public String saveRecord(ApInventoryTransactionProduct record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_inventory_transaction_product values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_inventory_transaction_product values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -150,6 +159,9 @@ ps.setBoolean(14, record.getIsValid());
 ps.setBoolean(15, record.getIsEffectedWarehouse());
 if (record.getExpiryDate() != null) ps.setDate(16, new java.sql.Date(record.getExpiryDate().getTime()));
 else ps.setDate(16, null); 
+ps.setString(17, record.getNotes());
+ps.setString(18, record.getTransUomKey());
+ps.setBigDecimal(19, record.getNewQuentityBaseUom());
 ps.executeUpdate();
 return key;
 }

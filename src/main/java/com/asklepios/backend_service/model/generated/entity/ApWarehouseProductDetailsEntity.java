@@ -12,17 +12,12 @@ import com.asklepios.backend_service.model.generated.pojo.ApLovValues;
 @Getter
 @Setter
 @Slf4j
-public class ApWarehouseProductEntity implements Serializable {
+public class ApWarehouseProductDetailsEntity implements Serializable {
 
 	private String key;
-	private String warehouseKey;
-	private String productKey;
+	private String warehouseProductKey;
+	private String lotSerialNum;
 	private BigDecimal quantity;
-	private BigDecimal reOrderQuantity;
-	private BigDecimal miniOrder;
-	private BigDecimal maxOrder;
-	private BigDecimal workingHoursFromTime;
-	private BigDecimal workingHoursToTime;
 	private String createdBy;
 	private String updatedBy;
 	private String deletedBy;
@@ -30,8 +25,7 @@ public class ApWarehouseProductEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isvalid = false;
-	private String departmentKey;
-	private BigDecimal avgCost;
-	private ApWarehouseProductEntity translatedObject;
+	private Date expiryDate = new Date();
+	private ApWarehouseProductDetailsEntity translatedObject;
 
 }

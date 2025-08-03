@@ -214,7 +214,7 @@ public class RecoveryRoomController {
                                                             @RequestHeader(required = false) String lang) {
         try {
             ParentResponse<List<ApOperationRecoveryVitalsMonitoring>> response = new ParentResponse<>();
-            List<ApOperationRecoveryVitalsMonitoring> list = apOperationRecoveryVitalsMonitoringService.getList("operation_request_key = '" + operationKey + "'");
+            List<ApOperationRecoveryVitalsMonitoring> list = apOperationRecoveryVitalsMonitoringService.getList("operation_request_key = '" + operationKey + "' and isValid = True");
 
             for (ApOperationRecoveryVitalsMonitoring item : list) {
                 apOperationRecoveryVitalsMonitoringService.populateLovFields(item, lang);

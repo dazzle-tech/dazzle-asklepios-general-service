@@ -37,7 +37,8 @@ public class RecoveryRoomController {
 
     @Autowired
     private ApOperationDischargeToWardService apOperationDischargeToWardService;
-
+   @Autowired
+    private  ApOperationRecoveryAntiemeticGivenService apOperationRecoveryAntiemeticGivenService;
 
     // ====== Arrival to Recovery Room ======
 
@@ -418,6 +419,46 @@ public class RecoveryRoomController {
 
         } catch (Exception e) {
             log.error("Error fetching discharge to ward by operation", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+
+    @PostMapping(value = "/save-antiemetic-given", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveAntiemeticGiven(@RequestBody ApOperationRecoveryAntiemeticGiven request) {
+        try {
+            ParentResponse<ApOperationRecoveryAntiemeticGiven> response = new ParentResponse<>();
+            apOperationRecoveryAntiemeticGivenService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error saving continuous vitals", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/antiemetic-given-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAntiemeticGivenList(@RequestParam Map<String, String> queryParams,
+                                                     @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<List<ApOperationRecoveryAntiemeticGiven>> response = new ParentResponse<>();
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true,false,false);
+
+            List<ApOperationRecoveryAntiemeticGiven> list =apOperationRecoveryAntiemeticGivenService.getList(where);
+            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_operation_recovery_vitals_monitoring WHERE " + whereForTotal);
+
+            for (ApOperationRecoveryAntiemeticGiven item : list) {
+                apOperationRecoveryAntiemeticGivenService.populateLovFields(item, lang);
+            }
+
+            response.setObject(list);
+            response.setExtraNumeric(total);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            log.error("Error fetching continuous vitals list", e);
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }

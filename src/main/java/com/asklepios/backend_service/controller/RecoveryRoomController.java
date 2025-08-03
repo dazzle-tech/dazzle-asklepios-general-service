@@ -64,7 +64,7 @@ public class RecoveryRoomController {
             String whereForTotal = listRequest.buildWhereStatement(true,false,false);
 
             List<ApOperationArrivalToRecoveryRoom> list = apOperationArrivalToRecoveryRoomService.getList(where);
-            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_operation_recovery_arrival WHERE " + whereForTotal);
+            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_operation_arrival_to_recovery_room WHERE " + whereForTotal);
 
             for (ApOperationArrivalToRecoveryRoom item : list) {
                 apOperationArrivalToRecoveryRoomService.populateLovFields(item, lang);
@@ -84,14 +84,16 @@ public class RecoveryRoomController {
     public ResponseEntity<?> getArrivalByOperation(@RequestParam String operationKey,
                                                    @RequestHeader(required = false) String lang) {
         try {
-            ParentResponse<List<ApOperationArrivalToRecoveryRoom>> response = new ParentResponse<>();
-            List<ApOperationArrivalToRecoveryRoom> list = apOperationArrivalToRecoveryRoomService.getList("operation_key = '" + operationKey + "'");
+            ParentResponse<ApOperationArrivalToRecoveryRoom> response = new ParentResponse<>();
+            List<ApOperationArrivalToRecoveryRoom> list = apOperationArrivalToRecoveryRoomService.getList("operation_request_key = '" + operationKey + "' ORDER BY created_at DESC LIMIT 1");
 
-            for (ApOperationArrivalToRecoveryRoom item : list) {
+
+            if (!list.isEmpty()) {
+                ApOperationArrivalToRecoveryRoom item = list.get(0);
                 apOperationArrivalToRecoveryRoomService.populateLovFields(item, lang);
+                response.setObject(item);
             }
 
-            response.setObject(list);
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
@@ -147,14 +149,16 @@ public class RecoveryRoomController {
     public ResponseEntity<?> getAnesthesiaRecoveryByOperation(@RequestParam String operationKey,
                                                               @RequestHeader(required = false) String lang) {
         try {
-            ParentResponse<List<ApOperationAnesthesiaRecovery>> response = new ParentResponse<>();
-            List<ApOperationAnesthesiaRecovery> list = apOperationAnesthesiaRecoveryService.getList("operation_key = '" + operationKey + "'");
+            ParentResponse<ApOperationAnesthesiaRecovery> response = new ParentResponse<>();
+            List<ApOperationAnesthesiaRecovery> list = apOperationAnesthesiaRecoveryService.getList("operation_request_key = '" + operationKey + "' ORDER BY created_at DESC LIMIT 1");
 
-            for (ApOperationAnesthesiaRecovery item : list) {
+
+            if (!list.isEmpty()) {
+                ApOperationAnesthesiaRecovery item = list.get(0);
                 apOperationAnesthesiaRecoveryService.populateLovFields(item, lang);
+                response.setObject(item);
             }
 
-            response.setObject(list);
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
@@ -189,7 +193,7 @@ public class RecoveryRoomController {
             String whereForTotal = listRequest.buildWhereStatement(true,false,false);
 
             List<ApOperationRecoveryVitalsMonitoring> list =apOperationRecoveryVitalsMonitoringService.getList(where);
-            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_operation_continuous_vitals WHERE " + whereForTotal);
+            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_operation_recovery_vitals_monitoring WHERE " + whereForTotal);
 
             for (ApOperationRecoveryVitalsMonitoring item : list) {
                 apOperationRecoveryVitalsMonitoringService.populateLovFields(item, lang);
@@ -210,7 +214,7 @@ public class RecoveryRoomController {
                                                             @RequestHeader(required = false) String lang) {
         try {
             ParentResponse<List<ApOperationRecoveryVitalsMonitoring>> response = new ParentResponse<>();
-            List<ApOperationRecoveryVitalsMonitoring> list = apOperationRecoveryVitalsMonitoringService.getList("operation_key = '" + operationKey + "'");
+            List<ApOperationRecoveryVitalsMonitoring> list = apOperationRecoveryVitalsMonitoringService.getList("operation_request_key = '" + operationKey + "'");
 
             for (ApOperationRecoveryVitalsMonitoring item : list) {
                 apOperationRecoveryVitalsMonitoringService.populateLovFields(item, lang);
@@ -251,7 +255,7 @@ public class RecoveryRoomController {
             String whereForTotal = listRequest.buildWhereStatement(true,false,false);
 
             List<ApOperationNursingCareInterventions> list = apOperationNursingCareService.getList(where);
-            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_operation_nursing_care WHERE " + whereForTotal);
+            BigDecimal total = DS.executeDecimalResultQuery("SELECT COUNT(0) FROM ap_operation_nursing_care_interventions WHERE " + whereForTotal);
 
             for (ApOperationNursingCareInterventions item : list) {
                 apOperationNursingCareService.populateLovFields(item, lang);
@@ -271,14 +275,16 @@ public class RecoveryRoomController {
     public ResponseEntity<?> getNursingCareByOperation(@RequestParam String operationKey,
                                                        @RequestHeader(required = false) String lang) {
         try {
-            ParentResponse<List<ApOperationNursingCareInterventions>> response = new ParentResponse<>();
-            List<ApOperationNursingCareInterventions> list = apOperationNursingCareService.getList("operation_key = '" + operationKey + "'");
+            ParentResponse<ApOperationNursingCareInterventions> response = new ParentResponse<>();
+            List<ApOperationNursingCareInterventions> list = apOperationNursingCareService.getList("operation_request_key = '" + operationKey + "' ORDER BY created_at DESC LIMIT 1");
 
-            for (ApOperationNursingCareInterventions item : list) {
+
+            if (!list.isEmpty()) {
+                ApOperationNursingCareInterventions item = list.get(0);
                 apOperationNursingCareService.populateLovFields(item, lang);
+                response.setObject(item);
             }
 
-            response.setObject(list);
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
@@ -334,14 +340,16 @@ public class RecoveryRoomController {
     public ResponseEntity<?> getDischargeReadinessByOperation(@RequestParam String operationKey,
                                                               @RequestHeader(required = false) String lang) {
         try {
-            ParentResponse<List<ApOperationDischargeReadiness>> response = new ParentResponse<>();
-            List<ApOperationDischargeReadiness> list = apOperationDischargeReadinessService.getList("operation_key = '" + operationKey + "'");
+            ParentResponse<ApOperationDischargeReadiness> response = new ParentResponse<>();
+            List<ApOperationDischargeReadiness> list = apOperationDischargeReadinessService.getList("operation_request_key = '" + operationKey + "' ORDER BY created_at DESC LIMIT 1");
 
-            for (ApOperationDischargeReadiness item : list) {
+
+            if (!list.isEmpty()) {
+                ApOperationDischargeReadiness item = list.get(0);
                 apOperationDischargeReadinessService.populateLovFields(item, lang);
+                response.setObject(item);
             }
 
-            response.setObject(list);
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
@@ -396,14 +404,16 @@ public class RecoveryRoomController {
     public ResponseEntity<?> getDischargeToWardByOperation(@RequestParam String operationKey,
                                                            @RequestHeader(required = false) String lang) {
         try {
-            ParentResponse<List<ApOperationDischargeToWard>> response = new ParentResponse<>();
-            List<ApOperationDischargeToWard> list = apOperationDischargeToWardService.getList("operation_key = '" + operationKey + "'");
+            ParentResponse<ApOperationDischargeToWard> response = new ParentResponse<>();
+            List<ApOperationDischargeToWard> list = apOperationDischargeToWardService.getList("operation_request_key = '" + operationKey + "' ORDER BY created_at DESC LIMIT 1");
 
-            for (ApOperationDischargeToWard item : list) {
+
+            if (!list.isEmpty()) {
+                ApOperationDischargeToWard item = list.get(0);
                 apOperationDischargeToWardService.populateLovFields(item, lang);
+                response.setObject(item);
             }
-
-            response.setObject(list);
+          
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {

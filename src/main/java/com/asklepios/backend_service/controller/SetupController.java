@@ -3452,8 +3452,8 @@ public class SetupController implements Serializable {
         try {
             ParentResponse<List<Map<String, Object>>> response = new ParentResponse<>();
 
-            ApResources resources = apResourcesService.getRecord(resourceKey);
-            List<Map<String, Object>> roomBedsMap = apBedService.getBedsByDepartmentKey(resources.getResourceKey() , lang);
+           // ApResources resources = apResourcesService.getRecord(resourceKey);
+            List<Map<String, Object>> roomBedsMap = apBedService.getBedsByDepartmentKey(resourceKey , lang);
 
             response.setObject(roomBedsMap);
             return ResponseEntity.ok(response);

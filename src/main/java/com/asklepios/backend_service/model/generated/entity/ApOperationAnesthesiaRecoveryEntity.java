@@ -20,8 +20,7 @@ public class ApOperationAnesthesiaRecoveryEntity implements Serializable {
 	private Boolean oxygenGiven = false;
 	private BigDecimal oxygenFlowLpm;
 	private BigDecimal extubationTime;
-	private String extubationStatusLkey;
-	private ApLovValues extubationStatusLvalue;
+	private String extubationStatus;
 	private String consciousnessLevelLkey;
 	private ApLovValues consciousnessLevelLvalue;
 	private String painLevelLkey;

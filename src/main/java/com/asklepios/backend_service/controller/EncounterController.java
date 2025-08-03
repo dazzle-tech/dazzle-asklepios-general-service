@@ -2354,27 +2354,38 @@ public class EncounterController {
     }
 
     @PostMapping(value = "/save-bed-transaction", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveBedTransaction(@RequestBody ApBedTransactions bedTransactions ,
-                                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                                 @jakarta.annotation.Nullable @RequestHeader String lang
-
-    ) {
+    public ResponseEntity<?> saveBedTransaction(
+            @RequestBody ApBedTransactions bedTransactions,
+            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+            @jakarta.annotation.Nullable @RequestHeader String access_token,
+            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+            @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApBedTransactions> response = new ParentResponse<>();
-            if( bedTransactions.getToBedKey() == null ||bedTransactions.getToBedKey().isEmpty()){
+
+            if (bedTransactions.getToBedKey() == null || bedTransactions.getToBedKey().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                         .body(Map.of("message", "Please Select a Bed"));
             }
-            if(bedTransactions.getToRoomKey() == null || bedTransactions.getToRoomKey().isEmpty()) {
+            if (bedTransactions.getToRoomKey() == null || bedTransactions.getToRoomKey().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                         .body(Map.of("message", "Please Select a Room"));
             }
-            ApAdmitOutpatientInpatient admitOutpatientInpatient = apAdmitOutpatientInpatientService.getList("to_encounter_key = '"+bedTransactions.getEncounterKey()+"'").get(0);
+
+            List<ApAdmitOutpatientInpatient> list = apAdmitOutpatientInpatientService.getList(
+                    "to_encounter_key = '" + bedTransactions.getEncounterKey() + "'"
+            );
+            if (list == null || list.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("message", "No admission record found for the given encounter key"));
+            }
+
+            ApAdmitOutpatientInpatient admitOutpatientInpatient = list.get(0);
+
             ApBed firstBed = apBedService.getRecord(admitOutpatientInpatient.getBedKey());
             firstBed.setStatusLkey("5258572711068224");
             apBedService.saveRecord(firstBed);
+
             ApBed secondBed = apBedService.getRecord(bedTransactions.getToBedKey());
             secondBed.setStatusLkey("5258252390107597");
             apBedService.saveRecord(secondBed);
@@ -2385,6 +2396,7 @@ public class EncounterController {
 
             apBedTransactionsService.saveRecord(bedTransactions);
             response.setObject(bedTransactions);
+
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -2392,6 +2404,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/bed-transactions-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> bedTransactionsList(@RequestParam Map<String, String> queryParams,
                                                     @Nullable @RequestHeader String facility_id,
@@ -2411,7 +2424,7 @@ public class EncounterController {
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false,false);
             List<ApBedTransactions> bedTransactions = apBedTransactionsService.getList(where);
-            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_bed where " + whereForTotal);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_bed_transactions where " + whereForTotal);
             for (ApBedTransactions transaction : bedTransactions) {
                 if(transaction.getFromRoomKey()!=null){
                     transaction.setFromRoom(apRoomService.getRecord(transaction.getFromRoomKey()));
@@ -3190,6 +3203,9 @@ public class EncounterController {
         try {
             ParentResponse<ApEncounterAssignToBed> response = new ParentResponse<>();
             ApEncounter apEncounter = apEncounterService.getRecord(apEncounterAssignToBed.getEncounterKey());
+            ApBed bed = apBedService.getRecord(apEncounterAssignToBed.getBedKey());
+            bed.setStatusLkey("5258252390107597");
+            apBedService.saveRecord(bed);
             apEncounter.setEncounterStatusLkey("91063195286200");
             apEncounterService.saveRecord(apEncounter);
             apEncounterAssignToBedService.saveRecord(apEncounterAssignToBed);
@@ -3514,4 +3530,88 @@ public class EncounterController {
 
         }
     }
+    @GetMapping(value = "/emergency-encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> emergencyEncounterList(@RequestParam Map<String, String> queryParams,
+                                                    @RequestHeader("department_key") String depKey,
+                                                    @Nullable @RequestHeader String facility_id,
+                                                    @Nullable @RequestHeader String access_token,
+                                                    @Nullable @RequestHeader Integer access_level,
+                                                    @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApEncounter>> response = new ParentResponse<>();
+
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            List<ApEncounter> encounters = apEncounterService.getList(where);
+            List<ApEncounter> filteredEncounters = new ArrayList<>();
+
+            for (ApEncounter encounter : encounters) {
+                encounter.setPractitionerObject(apPractitionerService.getRecord(encounter.getPhysicianKey()));
+
+                if (encounter.getResourceKey() != null) {
+                    if ("2039548173192779".equals(encounter.getResourceTypeLkey())) {
+                        ApResources apResources = apResourcesService.getRecord(encounter.getResourceKey());
+                        ApDepartment department = apDepartmentService.getRecord(apResources.getResourceKey());
+                        if (department != null) {
+                            encounter.setDepartmentName(department.getName());
+                            String departmentKey = department.getKey();
+                            if (depKey != null && !depKey.isBlank() && !departmentKey.equals(depKey)) {
+                                continue;
+                            }
+                        }
+                    }
+                    encounter.setResourceObject(apEncounterService.getResource(encounter.getResourceTypeLkey(),
+                            encounter.getResourceKey(), lang));
+
+
+                    List<ApEncounterAssignToBed> encounterAssignToBeds = apEncounterAssignToBedService
+                            .getList("encounter_key = '" + encounter.getKey() + "'");
+
+                    if (!encounterAssignToBeds.isEmpty()) {
+                        ApEncounterAssignToBed apEncounterAssignToBed = encounterAssignToBeds.get(0);
+                        encounter.setApBed(apBedService.getRecord(apEncounterAssignToBed.getBedKey()));
+                        encounter.setApRoom(apRoomService.getRecord(apEncounterAssignToBed.getRoomKey()));
+                        apBedService.populateLovFields(encounter.getApBed(), lang);
+                        apRoomService.populateLovFields(encounter.getApRoom(), lang);
+                    }
+                }
+                if (encounter.getPractitionerObject() != null) {
+                    apPractitionerService.populateLovFields(encounter.getPractitionerObject(), lang);
+                }
+
+                ApPatient patient = apPatientService.getRecord(encounter.getPatientKey());
+                patient.setHasAllergy(apPatientService.getHasAllergy(encounter.getPatientKey()));
+                patient.setHasWarning(apPatientService.getHasWarning(encounter.getPatientKey()));
+                apPatientService.populateLovFields(patient, lang);
+                encounter.setPatientObject(patient);
+
+                encounter.setDiagnosis(apEncounterService.getDiagnosis(encounter.getKey()));
+                encounter.setHasOrder(apEncounterService.getHasOrder(encounter.getKey()));
+                encounter.setHasPrescription(apEncounterService.getHasPrescription(encounter.getKey()));
+                encounter.setHasAllergy(apEncounterService.getHasAllergy(encounter.getKey()));
+                encounter.setHasObservation(apEncounterService.getHasObservation(encounter.getKey()));
+                apEncounterService.populateLovFields(encounter, lang);
+
+                filteredEncounters.add(encounter);
+
+            }
+
+            apEncounterService.processPatientObservationStatus(filteredEncounters);
+            response.setObject(filteredEncounters);
+            response.setExtraNumeric(new BigDecimal(filteredEncounters.size()));
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
 }

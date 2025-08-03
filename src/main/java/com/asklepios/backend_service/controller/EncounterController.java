@@ -2371,28 +2371,39 @@ public class EncounterController {
                 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                         .body(Map.of("message", "Please Select a Room"));
             }
-
+          ApEncounter encounter = apEncounterService.getRecord(bedTransactions.getKey());
+            if(encounter!=null && encounter.getResourceTypeLkey().equals("4217389643435490")){
             List<ApAdmitOutpatientInpatient> list = apAdmitOutpatientInpatientService.getList(
                     "to_encounter_key = '" + bedTransactions.getEncounterKey() + "'"
             );
+
             if (list == null || list.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(Map.of("message", "No admission record found for the given encounter key"));
             }
 
             ApAdmitOutpatientInpatient admitOutpatientInpatient = list.get(0);
-
-            ApBed firstBed = apBedService.getRecord(admitOutpatientInpatient.getBedKey());
-            firstBed.setStatusLkey("5258572711068224");
-            apBedService.saveRecord(firstBed);
-
-            ApBed secondBed = apBedService.getRecord(bedTransactions.getToBedKey());
-            secondBed.setStatusLkey("5258252390107597");
-            apBedService.saveRecord(secondBed);
-
             admitOutpatientInpatient.setBedKey(bedTransactions.getToBedKey());
             admitOutpatientInpatient.setRoomKey(bedTransactions.getToRoomKey());
             apAdmitOutpatientInpatientService.saveRecord(admitOutpatientInpatient);
+            ApBed firstBed = apBedService.getRecord(admitOutpatientInpatient.getBedKey());
+            firstBed.setStatusLkey("5258572711068224");
+            apBedService.saveRecord(firstBed);
+            }
+            else{
+                ApBed firstBed = apBedService.getRecord(bedTransactions.getFromBedKey());
+                firstBed.setStatusLkey("5258572711068224");
+                apBedService.saveRecord(firstBed);
+                ApEncounterAssignToBed encounterAssignToBed = apEncounterAssignToBedService.getList("bed_key = '"+firstBed.getKey()+"'").get(0);
+                if(encounterAssignToBed!=null){
+                    encounterAssignToBed.setRoomKey(bedTransactions.getToRoomKey());
+                    encounterAssignToBed.setBedKey(bedTransactions.getToBedKey());
+                    apEncounterAssignToBedService.saveRecord(encounterAssignToBed);
+                }
+            }
+            ApBed secondBed = apBedService.getRecord(bedTransactions.getToBedKey());
+            secondBed.setStatusLkey("5258252390107597");
+            apBedService.saveRecord(secondBed);
 
             apBedTransactionsService.saveRecord(bedTransactions);
             response.setObject(bedTransactions);
@@ -2407,10 +2418,10 @@ public class EncounterController {
 
     @GetMapping(value = "/bed-transactions-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> bedTransactionsList(@RequestParam Map<String, String> queryParams,
-                                                    @Nullable @RequestHeader String facility_id,
-                                                    @Nullable @RequestHeader String access_token,
-                                                    @Nullable @RequestHeader Integer access_level,
-                                                    @Nullable @RequestHeader String lang) {
+                                                 @Nullable @RequestHeader String facility_id,
+                                                 @Nullable @RequestHeader String access_token,
+                                                 @Nullable @RequestHeader Integer access_level,
+                                                 @Nullable @RequestHeader String lang) {
         try {
 
             ParentResponse<List<ApBedTransactions>> response = new ParentResponse<>();
@@ -2422,33 +2433,40 @@ public class EncounterController {
 
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
-            String whereForTotal = listRequest.buildWhereStatement(true, false, false,false);
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApBedTransactions> bedTransactions = apBedTransactionsService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_bed_transactions where " + whereForTotal);
+
             for (ApBedTransactions transaction : bedTransactions) {
-                if(transaction.getFromRoomKey()!=null){
+                if (transaction.getFromRoomKey() != null) {
                     transaction.setFromRoom(apRoomService.getRecord(transaction.getFromRoomKey()));
-                    apRoomService.populateLovFields(transaction.getFromRoom(),lang);
+                    apRoomService.populateLovFields(transaction.getFromRoom(), lang);
                 }
-                if(transaction.getToRoomKey()!=null){
+                if (transaction.getToRoomKey() != null) {
                     transaction.setToRoom(apRoomService.getRecord(transaction.getToRoomKey()));
-                    apRoomService.populateLovFields(transaction.getToRoom(),lang);
+                    apRoomService.populateLovFields(transaction.getToRoom(), lang);
                 }
-                if(transaction.getFromBedKey() !=null){
+                if (transaction.getFromBedKey() != null) {
                     transaction.setFromBed(apBedService.getRecord(transaction.getFromBedKey()));
-                    apBedService.populateLovFields(transaction.getFromBed(),lang);
+                    apBedService.populateLovFields(transaction.getFromBed(), lang);
                 }
-                if(transaction.getToBedKey() !=null){
+                if (transaction.getToBedKey() != null) {
                     transaction.setToBed(apBedService.getRecord(transaction.getToBedKey()));
-                    apBedService.populateLovFields(transaction.getToBed(),lang);
+                    apBedService.populateLovFields(transaction.getToBed(), lang);
                 }
-                if(transaction.getPatientKey() !=null){
+                if (transaction.getPatientKey() != null) {
                     transaction.setPatient(apPatientService.getRecord(transaction.getPatientKey()));
-                    apPatientService.populateLovFields(transaction.getPatient(),lang);
+                    apPatientService.populateLovFields(transaction.getPatient(), lang);
                 }
-                ApAdmitOutpatientInpatient admitOutpatientInpatient = apAdmitOutpatientInpatientService.getList("to_encounter_key = '"+transaction.getEncounterKey()+"'").get(0);
-                transaction.setAdmitOutpatientInpatient(admitOutpatientInpatient);
-                apAdmitOutpatientInpatientService.populateLovFields(transaction.getAdmitOutpatientInpatient(),lang);
+
+                List<ApAdmitOutpatientInpatient> admitList =
+                        apAdmitOutpatientInpatientService.getList("to_encounter_key = '" + transaction.getEncounterKey() + "'");
+
+                if (admitList != null && !admitList.isEmpty()) {
+                    ApAdmitOutpatientInpatient admitOutpatientInpatient = admitList.get(0);
+                    transaction.setAdmitOutpatientInpatient(admitOutpatientInpatient);
+                    apAdmitOutpatientInpatientService.populateLovFields(transaction.getAdmitOutpatientInpatient(), lang);
+                }
             }
 
             response.setObject(bedTransactions);
@@ -2460,9 +2478,9 @@ public class EncounterController {
             e.printStackTrace();
             log.error(e.getMessage());
             return ResponseEntity.status(500).body(e);
-
         }
     }
+
     @PostMapping(value = "/save-pain-assessment", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePainAssessment(@RequestBody ApPainAssessment painAssessment ,
                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,

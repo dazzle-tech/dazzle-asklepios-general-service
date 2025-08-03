@@ -16,12 +16,17 @@ public class ApOperationDischargeReadinessEntity implements Serializable {
 
 	private String key;
 	private String operationRequestKey;
-	private BigDecimal activityScore;
-	private BigDecimal respirationScore;
-	private BigDecimal circulationScore;
-	private BigDecimal consciousnessScore;
-	private BigDecimal oxygenSaturationScore;
-	private BigDecimal totalAldreteScore;
+	private String activityLkey;
+	private ApLovValues activityLvalue;
+	private String respirationLkey;
+	private ApLovValues respirationLvalue;
+	private String circulationLkey;
+	private ApLovValues circulationLvalue;
+	private String consciousnessLkey;
+	private ApLovValues consciousnessLvalue;
+	private String oxygenSaturationLkey;
+	private ApLovValues oxygenSaturationLvalue;
+	private String aldreteScore;
 	private Boolean painControlled = false;
 	private Boolean vitalsStable = false;
 	private Boolean fullyAwake = false;

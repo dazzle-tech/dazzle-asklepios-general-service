@@ -23,8 +23,7 @@ public class ApOperationDischargeToWardEntity implements Serializable {
 	private String receivingNurseKey;
 	private String finalNotes;
 	private Boolean patientIdBandRechecked = false;
-	private String transportModeLkey;
-	private ApLovValues transportModeLvalue;
+	private String transportMode;
 	private String createdBy;
 	private BigDecimal createdAt;
 	private String updatedBy;

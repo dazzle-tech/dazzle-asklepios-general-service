@@ -86,6 +86,10 @@ record.setMorseFallScale(rs.getBoolean("morse_fall_scale"));
 record.setHendrichFallRisk(rs.getBoolean("hendrich_fall_risk"));
 record.setStratifyScale(rs.getBoolean("stratify_scale"));
 record.setJohnsHopkinsFallRiskAssessmentTool(rs.getBoolean("johns_hopkins_fall_risk_assessment_tool"));
+record.setBradenScaleForPressureUlcer(rs.getBoolean("braden_scale_for_pressure_ulcer"));
+record.setGlasgowComaScale(rs.getBoolean("glasgow_coma_scale"));
+record.setVteRiskAssessment(rs.getBoolean("vte_risk_assessment"));
+record.setProgressNotes(rs.getBoolean("progress_notes"));
 } else { record = null; }
 return record;
 }
@@ -93,7 +97,7 @@ return record;
 public void updateRecord(ApMedicalSheets record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_medical_sheets set key = ?, department_key = ?, facility_key = ?, patient_dashboard = ?, clinical_visit = ?, diagnostics_order = ?, prescription = ?, drug_order = ?, consultation = ?, procedures = ?, patient_history = ?, allergies = ?, medical_warnings = ?, medications_record = ?, psychological_exam = ?, audiometry_puretone = ?, optometric_exam = ?, vaccine_reccord = ?, diagnostics_result = ?, dental_care = ?, cardiology = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, observation = ?, vaccination = ?, operation_requests = ?, doctor_round = ?, day_case = ?, bedside_procedures_request = ?, referral_request = ?, blood_order = ?, iv_fluid_order = ?, intake_output_balance = ?, risk_assessments = ?, multidisciplinary_team_notes = ?, nutrition_state_assessment = ?, physician_order_summary = ?, care_plan_and_goals = ?, discharge_planning = ?, pregnancy_follow_up = ?, morse_fall_scale = ?, hendrich_fall_risk = ?, stratify_scale = ?, johns_hopkins_fall_risk_assessment_tool = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_medical_sheets set key = ?, department_key = ?, facility_key = ?, patient_dashboard = ?, clinical_visit = ?, diagnostics_order = ?, prescription = ?, drug_order = ?, consultation = ?, procedures = ?, patient_history = ?, allergies = ?, medical_warnings = ?, medications_record = ?, psychological_exam = ?, audiometry_puretone = ?, optometric_exam = ?, vaccine_reccord = ?, diagnostics_result = ?, dental_care = ?, cardiology = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, observation = ?, vaccination = ?, operation_requests = ?, doctor_round = ?, day_case = ?, bedside_procedures_request = ?, referral_request = ?, blood_order = ?, iv_fluid_order = ?, intake_output_balance = ?, risk_assessments = ?, multidisciplinary_team_notes = ?, nutrition_state_assessment = ?, physician_order_summary = ?, care_plan_and_goals = ?, discharge_planning = ?, pregnancy_follow_up = ?, morse_fall_scale = ?, hendrich_fall_risk = ?, stratify_scale = ?, johns_hopkins_fall_risk_assessment_tool = ?, braden_scale_for_pressure_ulcer = ?, glasgow_coma_scale = ?, vte_risk_assessment = ?, progress_notes = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -145,7 +149,11 @@ ps.setBoolean(46, record.getMorseFallScale());
 ps.setBoolean(47, record.getHendrichFallRisk());
 ps.setBoolean(48, record.getStratifyScale());
 ps.setBoolean(49, record.getJohnsHopkinsFallRiskAssessmentTool());
-ps.setString(50, record.getKey());
+ps.setBoolean(50, record.getBradenScaleForPressureUlcer());
+ps.setBoolean(51, record.getGlasgowComaScale());
+ps.setBoolean(52, record.getVteRiskAssessment());
+ps.setBoolean(53, record.getProgressNotes());
+ps.setString(54, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -216,6 +224,10 @@ record.setMorseFallScale(rs.getBoolean("morse_fall_scale"));
 record.setHendrichFallRisk(rs.getBoolean("hendrich_fall_risk"));
 record.setStratifyScale(rs.getBoolean("stratify_scale"));
 record.setJohnsHopkinsFallRiskAssessmentTool(rs.getBoolean("johns_hopkins_fall_risk_assessment_tool"));
+record.setBradenScaleForPressureUlcer(rs.getBoolean("braden_scale_for_pressure_ulcer"));
+record.setGlasgowComaScale(rs.getBoolean("glasgow_coma_scale"));
+record.setVteRiskAssessment(rs.getBoolean("vte_risk_assessment"));
+record.setProgressNotes(rs.getBoolean("progress_notes"));
 list.add(record);
 }
 return list;
@@ -224,7 +236,7 @@ return list;
 public String saveRecord(ApMedicalSheets record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_medical_sheets values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_medical_sheets values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -280,6 +292,10 @@ ps.setBoolean(46, record.getMorseFallScale());
 ps.setBoolean(47, record.getHendrichFallRisk());
 ps.setBoolean(48, record.getStratifyScale());
 ps.setBoolean(49, record.getJohnsHopkinsFallRiskAssessmentTool());
+ps.setBoolean(50, record.getBradenScaleForPressureUlcer());
+ps.setBoolean(51, record.getGlasgowComaScale());
+ps.setBoolean(52, record.getVteRiskAssessment());
+ps.setBoolean(53, record.getProgressNotes());
 ps.executeUpdate();
 return key;
 }

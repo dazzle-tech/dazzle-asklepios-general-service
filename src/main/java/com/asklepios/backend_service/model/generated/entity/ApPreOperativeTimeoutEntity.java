@@ -16,7 +16,6 @@ public class ApPreOperativeTimeoutEntity implements Serializable {
 
 	private String key;
 	private String operationRequestKey;
-	private Date timeoutStartTime = new Date();
 	private String initiatedBy;
 	private Boolean patientIdentityConfirmed = false;
 	private Boolean surgicalSiteConfirmed = false;
@@ -42,6 +41,7 @@ public class ApPreOperativeTimeoutEntity implements Serializable {
 	private BigDecimal deletedAt;
 	private String encounterKey;
 	private String patientKey;
+	private BigDecimal timeoutStartTime;
 	private ApPreOperativeTimeoutEntity translatedObject;
 
 }

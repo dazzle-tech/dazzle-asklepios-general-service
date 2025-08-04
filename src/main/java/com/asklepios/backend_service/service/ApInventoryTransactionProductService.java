@@ -129,7 +129,7 @@ public class ApInventoryTransactionProductService extends ApInventoryTransaction
                               "warehouse_product_key = '" +  warehouseProducts.get(0).getKey() + "'");
 
                   List<ApWarehouseProductDetails> matchingDetails = details.stream()
-                          .filter(d -> product.getLotserialnumber().equalsIgnoreCase(d.getLotSerialNum())
+                          .filter(d -> product.getLotserialnumber().equalsIgnoreCase(d.getKey())
                                   && product.getExpiryDate().equals(d.getExpiryDate()))
                           .collect(Collectors.toList());
 
@@ -155,6 +155,54 @@ public class ApInventoryTransactionProductService extends ApInventoryTransaction
           }
       }
     }
+
+    public void confirmProductTransactionOutWarehouse(String trans_id) throws SQLException {
+        List<ApInventoryTransactionProduct> allProductOutTrans = apInventoryTransactionProductDAO.getList("inventory_trans_key = '"+trans_id+"' and is_effected_warehouse = false");
+
+        for(ApInventoryTransactionProduct product : allProductOutTrans) {
+            ApInventoryTransaction trans = apInventoryTransactionService.getRecord(product.getInventoryTransKey());
+            if(trans != null ) {
+                String warehouseKey  = trans.getWarehouseKey();
+                if(warehouseKey != null) {
+                    List<ApWarehouseProduct> warehouseProducts = apWarehouseProductService.getList("product_key = '"+product.getProductKey()+"' and warehouse_key = '"+warehouseKey+"'");
+                    if(warehouseProducts.size() > 0) {
+                        ApProducts apProduct = apProductsService.getRecord(warehouseProducts.get(0).getProductKey());
+                        String uomGroup= apProduct.getUomGroupKey();
+                        BigDecimal quantityInBaseUnit = convert( product.getNewQuentity() , product.getTransUomKey() , apProduct.getBaseUomKey() , uomGroup);
+                        BigDecimal denominator = warehouseProducts.get(0).getQuantity().subtract(quantityInBaseUnit);
+
+                        warehouseProducts.get(0).setQuantity(denominator );
+                        product.setNewQuentityBaseUom(quantityInBaseUnit);
+                        // Insert Lot/Serial Details if applicable
+                        List<ApWarehouseProductDetails> details = apWarehouseProductDetailsService.getList(
+                                "warehouse_product_key = '" +  warehouseProducts.get(0).getKey() + "'");
+
+                        List<ApWarehouseProductDetails> matchingDetails = details.stream()
+                                .filter(d -> product.getLotserialnumber().equalsIgnoreCase(d.getKey()))
+                                .collect(Collectors.toList());
+
+
+                        if (!matchingDetails.isEmpty()) {
+                            if(matchingDetails.get(0).getQuantity().compareTo(quantityInBaseUnit) > -1){
+                                BigDecimal newQuantity = matchingDetails.get(0).getQuantity().subtract(quantityInBaseUnit);
+                                matchingDetails.get(0).setQuantity(newQuantity);
+                                apWarehouseProductDetailsService.saveRecord(matchingDetails.get(0));
+                            }
+                            else{
+                                log.error("Transaction quantity exceeds available stock.");
+
+                            }
+                            product.setIsEffectedWarehouse(true);
+                        }
+
+                        apInventoryTransactionProductDAO. saveRecord(product);
+                        apWarehouseProductService.saveRecord( warehouseProducts.get(0));
+                    }
+                }
+            }
+        }
+    }
+
 
 
 }

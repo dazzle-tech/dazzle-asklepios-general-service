@@ -226,6 +226,7 @@ public class InventoryTransactionController  implements Serializable {
             for (ApInventoryTransactionProduct product : list) {
                 apInventoryTransactionProductService.populateLovFields(product, lang);
                 product.setProductObj(apWarehouseProductService.getProduct(product.getProductKey()));
+                apProductsService.populateLovFields(product.getProductObj(), lang);
                 product.setTransactionObj(apInventoryTransactionService.getRecord(product.getInventoryTransKey()));
                 if(product.getTransactionObj() != null )
                 product.setWarehouseObj(apWarehouseService.getRecord(product.getTransactionObj().getWarehouseKey()));
@@ -296,6 +297,25 @@ public class InventoryTransactionController  implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
+    @PostMapping(value = "/confirm-trans-product-stock-out", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> confirmTransProductStockOut(@RequestHeader("Key") String Key,
+                                                        @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                        @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                        @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                        @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApInventoryTransaction> response = new ParentResponse<>();
+            apInventoryTransactionProductService.confirmProductTransactionOutWarehouse(Key);
+            response.setObject(apInventoryTransactionService.getRecord(Key));
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
 
     @GetMapping(value = "/inventory-transfer-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> inventoryTransferList(@RequestParam Map<String, String> queryParams,
@@ -419,6 +439,63 @@ public class InventoryTransactionController  implements Serializable {
             inventoryTransferProduct.setQuentityRequestedBaseUom(QtyBaseUOM);
             apInventoryTransferProductService.saveRecord(inventoryTransferProduct);
             response.setObject(inventoryTransferProduct);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-inventory-transfer-product-approved", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveApprovedTransferProduct(@RequestBody List<ApInventoryTransferProduct> transferProducts,
+                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                       @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                       @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                       @jakarta.annotation.Nullable @RequestHeader String lang) {
+
+        try {
+            ParentResponse<List<ApInventoryTransferProduct>> response = new ParentResponse<>();
+            for (ApInventoryTransferProduct rec : transferProducts) {
+                if(!rec.getIsEffectedWarehouse()){
+                   ApInventoryTransferProduct record = apInventoryTransferProductService.getRecord(rec.getKey());
+
+                    record.setStatusLkey("1804566422622516");//Accepted status
+                    apInventoryTransferProductService.confirmProductTransferInWarehouse(record);
+                    apInventoryTransferProductService.confirmProductTransferOutWarehouse(record);
+                    record.setIsEffectedWarehouse(true);
+                    apInventoryTransferProductService.saveRecord(record);
+                }
+
+            }
+            response.setObject(transferProducts);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-inventory-transfer-product-rejected", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveRejectedTransferProduct(@RequestBody List<ApInventoryTransferProduct> transferProducts,
+                                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                         @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                         @jakarta.annotation.Nullable @RequestHeader String lang) {
+
+        try {
+            ParentResponse<List<ApInventoryTransferProduct>> response = new ParentResponse<>();
+            for (ApInventoryTransferProduct rec : transferProducts) {
+                if(!rec.getIsEffectedWarehouse()){
+                    ApInventoryTransferProduct record = apInventoryTransferProductService.getRecord(rec.getKey());
+                    record.setStatusLkey("1804533730103990");//Rejected status
+                    record.setIsEffectedWarehouse(true);
+                    apInventoryTransferProductService.saveRecord(record);
+                }
+
+            }
+            response.setObject(transferProducts);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();

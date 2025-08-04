@@ -28,7 +28,7 @@ public class ApOperationRecoveryVitalsMonitoringEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private String deletedBy;
 	private BigDecimal deletedAt;
-	private Boolean isvalid = false;
+	private Boolean isValid = true;
 	private ApOperationRecoveryVitalsMonitoringEntity translatedObject;
 
 }

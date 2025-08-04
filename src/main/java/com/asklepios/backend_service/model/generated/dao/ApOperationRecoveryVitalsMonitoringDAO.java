@@ -51,7 +51,7 @@ record.setUpdatedBy(rs.getString("updated_by"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedBy(rs.getString("deleted_by"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
-record.setIsvalid(rs.getBoolean("isvalid"));
+record.setIsValid(rs.getBoolean("is_valid"));
 } else { record = null; }
 return record;
 }
@@ -59,7 +59,7 @@ return record;
 public void updateRecord(ApOperationRecoveryVitalsMonitoring record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_operation_recovery_vitals_monitoring set key = ?, operation_request_key = ?, recorded_time = ?, blood_pressure_systolic = ?, blood_pressure_diastolic = ?, heart_rate = ?, temperature = ?, oxygen_saturation = ?, created_by = ?, created_at = ?, updated_by = ?, updated_at = ?, deleted_by = ?, deleted_at = ?, isvalid = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_operation_recovery_vitals_monitoring set key = ?, operation_request_key = ?, recorded_time = ?, blood_pressure_systolic = ?, blood_pressure_diastolic = ?, heart_rate = ?, temperature = ?, oxygen_saturation = ?, created_by = ?, created_at = ?, updated_by = ?, updated_at = ?, deleted_by = ?, deleted_at = ?, is_valid = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -76,7 +76,7 @@ ps.setString(11, record.getUpdatedBy());
 ps.setBigDecimal(12, record.getUpdatedAt());
 ps.setString(13, record.getDeletedBy());
 ps.setBigDecimal(14, record.getDeletedAt());
-ps.setBoolean(15, record.getIsvalid());
+ps.setBoolean(15, record.getIsValid());
 ps.setString(16, record.getKey());
 ps.executeUpdate();
 }
@@ -113,7 +113,7 @@ record.setUpdatedBy(rs.getString("updated_by"));
 record.setUpdatedAt(rs.getBigDecimal("updated_at"));
 record.setDeletedBy(rs.getString("deleted_by"));
 record.setDeletedAt(rs.getBigDecimal("deleted_at"));
-record.setIsvalid(rs.getBoolean("isvalid"));
+record.setIsValid(rs.getBoolean("is_valid"));
 list.add(record);
 }
 return list;
@@ -143,7 +143,7 @@ ps.setString(11, record.getUpdatedBy());
 ps.setBigDecimal(12, record.getUpdatedAt());
 ps.setString(13, record.getDeletedBy());
 ps.setBigDecimal(14, record.getDeletedAt());
-ps.setBoolean(15, record.getIsvalid());
+ps.setBoolean(15, record.getIsValid());
 ps.executeUpdate();
 return key;
 }

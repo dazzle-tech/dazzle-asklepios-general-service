@@ -123,6 +123,7 @@ record.setResourceKey(rs.getString("resource_key"));
 record.setPlanInstructionsNote(rs.getString("plan_instructions_note"));
 record.setDischarge(rs.getBoolean("discharge"));
 record.setEmergencyLevelLkey(rs.getString("emergency_level_lkey"));
+record.setDischargeAt(rs.getBigDecimal("discharge_at"));
 } else { record = null; }
 return record;
 }
@@ -130,7 +131,7 @@ return record;
 public void updateRecord(ApEncounter record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_encounter set key = ?, patient_key = ?, patient_full_name = ?, patient_age = ?, encounter_status_lkey = ?, encounter_class_lkey = ?, encounter_priority_lkey = ?, encounter_type_lkey = ?, service_type_lkey = ?, patient_status_lkey = ?, episode_care_key = ?, based_on_lkey = ?, based_on_key = ?, part_of_encounter_key = ?, attending_physician_key = ?, responsible_physician_key = ?, facility_key = ?, appointment_key = ?, virtual_service = ?, planned_start_date = ?, planned_end_date = ?, actual_start_date = ?, actual_end_date = ?, actual_length_hrs = ?, reason_lkey = ?, primary_diagnose_key = ?, diet_preference_lkey = ?, diet_preference_text = ?, valuable_items_text = ?, special_arrangement_lkey = ?, special_arrangement_text = ?, special_courtesy_lkey = ?, origin_lkey = ?, admission_source = ?, readmission = ?, discharge_destination = ?, discharge_disposition = ?, location_type_lkey = ?, location_key = ?, follow_up_encounter_key = ?, queue_number = ?, billing_account_key = ?, payment_type_lkey = ?, payer_type_lkey = ?, payer_key = ?, insurance_plan = ?, payer_member_id = ?, referral_number = ?, access_level = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, department_key = ?, discharge_type_lkey = ?, actual_length_minutes = ?, chief_complaint = ?, hpi_summery = ?, hpi_key = ?, past_medical_history_summery = ?, past_medical_history_key = ?, ros_summery = ?, ros_key = ?, assessment_summery = ?, assessment_key = ?, physical_exam_summery = ?, physical_exam_summery_key = ?, progress_note = ?, discharge_note = ?, discharge_summery = ?, visit_id = ?, encounter_notes = ?, source_name = ?, physical_exam_note = ?, plan_instructions_lkey = ?, visit_type_lkey = ?, physician_key = ?, insurance_key = ?, resource_type_lkey = ?, resource_key = ?, plan_instructions_note = ?, discharge = ?, emergency_level_lkey = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_encounter set key = ?, patient_key = ?, patient_full_name = ?, patient_age = ?, encounter_status_lkey = ?, encounter_class_lkey = ?, encounter_priority_lkey = ?, encounter_type_lkey = ?, service_type_lkey = ?, patient_status_lkey = ?, episode_care_key = ?, based_on_lkey = ?, based_on_key = ?, part_of_encounter_key = ?, attending_physician_key = ?, responsible_physician_key = ?, facility_key = ?, appointment_key = ?, virtual_service = ?, planned_start_date = ?, planned_end_date = ?, actual_start_date = ?, actual_end_date = ?, actual_length_hrs = ?, reason_lkey = ?, primary_diagnose_key = ?, diet_preference_lkey = ?, diet_preference_text = ?, valuable_items_text = ?, special_arrangement_lkey = ?, special_arrangement_text = ?, special_courtesy_lkey = ?, origin_lkey = ?, admission_source = ?, readmission = ?, discharge_destination = ?, discharge_disposition = ?, location_type_lkey = ?, location_key = ?, follow_up_encounter_key = ?, queue_number = ?, billing_account_key = ?, payment_type_lkey = ?, payer_type_lkey = ?, payer_key = ?, insurance_plan = ?, payer_member_id = ?, referral_number = ?, access_level = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, department_key = ?, discharge_type_lkey = ?, actual_length_minutes = ?, chief_complaint = ?, hpi_summery = ?, hpi_key = ?, past_medical_history_summery = ?, past_medical_history_key = ?, ros_summery = ?, ros_key = ?, assessment_summery = ?, assessment_key = ?, physical_exam_summery = ?, physical_exam_summery_key = ?, progress_note = ?, discharge_note = ?, discharge_summery = ?, visit_id = ?, encounter_notes = ?, source_name = ?, physical_exam_note = ?, plan_instructions_lkey = ?, visit_type_lkey = ?, physician_key = ?, insurance_key = ?, resource_type_lkey = ?, resource_key = ?, plan_instructions_note = ?, discharge = ?, emergency_level_lkey = ?, discharge_at = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -223,7 +224,8 @@ ps.setString(83, record.getResourceKey());
 ps.setString(84, record.getPlanInstructionsNote());
 ps.setBoolean(85, record.getDischarge());
 ps.setString(86, record.getEmergencyLevelLkey());
-ps.setString(87, record.getKey());
+ps.setBigDecimal(87, record.getDischargeAt());
+ps.setString(88, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -331,6 +333,7 @@ record.setResourceKey(rs.getString("resource_key"));
 record.setPlanInstructionsNote(rs.getString("plan_instructions_note"));
 record.setDischarge(rs.getBoolean("discharge"));
 record.setEmergencyLevelLkey(rs.getString("emergency_level_lkey"));
+record.setDischargeAt(rs.getBigDecimal("discharge_at"));
 list.add(record);
 }
 return list;
@@ -339,7 +342,7 @@ return list;
 public String saveRecord(ApEncounter record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_encounter values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_encounter values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -436,6 +439,7 @@ ps.setString(83, record.getResourceKey());
 ps.setString(84, record.getPlanInstructionsNote());
 ps.setBoolean(85, record.getDischarge());
 ps.setString(86, record.getEmergencyLevelLkey());
+ps.setBigDecimal(87, record.getDischargeAt());
 ps.executeUpdate();
 return key;
 }

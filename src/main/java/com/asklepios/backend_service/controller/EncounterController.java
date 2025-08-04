@@ -2048,8 +2048,8 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
-    @PostMapping(value = "/discharge-inpatient-encounter", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> DischargeEncounterInpatient(@RequestBody ApEncounter apEncounter,
+    @PostMapping(value = "/discharge-encounter", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> DischargeEncounter(@RequestBody ApEncounter apEncounter,
                                                          @Nullable @RequestHeader String facility_id,
                                                          @Nullable @RequestHeader String access_token,
                                                          @Nullable @RequestHeader Integer access_level,
@@ -2058,15 +2058,21 @@ public class EncounterController {
     ) {
         try {
             ParentResponse<ApEncounter> response = new ParentResponse<>();
-            apEncounter.setDischarge(true); // TO CLOSE INPATIENT ENCOUNTER
-            apEncounter.setEncounterStatusLkey("91109811181900");
+            apEncounter.setDischarge(true); // TO CLOSE ENCOUNTER
+
+            apEncounter.setEncounterStatusLkey("6550164111662337");
             apEncounterService.saveRecord(apEncounter);
             apEncounterService.populateLovFields(apEncounter, lang);
             ApPatient patient = apPatientService.getRecord(apEncounter.getPatientKey());
-            ApAdmitOutpatientInpatient admitOutpatientInpatient = apAdmitOutpatientInpatientService.getList("to_encounter_key = '"+apEncounter.getKey()+"'").get(0);
-            ApBed apBed = apBedService.getRecord(admitOutpatientInpatient.getBedKey());
-            apBed.setStatusLkey("5258572711068224");
-            apBedService.saveRecord(apBed);
+            List<ApAdmitOutpatientInpatient> admitList = apAdmitOutpatientInpatientService
+                    .getList("to_encounter_key = '" + apEncounter.getKey() + "'");
+
+            if (admitList != null && !admitList.isEmpty()) {
+                ApAdmitOutpatientInpatient admitOutpatientInpatient = admitList.get(0);
+                ApBed apBed = apBedService.getRecord(admitOutpatientInpatient.getBedKey());
+                apBed.setStatusLkey("5258572711068224");
+                apBedService.saveRecord(apBed);
+            }
             apPatientService.populateLovFields(patient, lang);
 
             apEncounter.setPatientObject(patient);

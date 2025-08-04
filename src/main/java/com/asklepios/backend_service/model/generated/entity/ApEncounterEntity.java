@@ -120,6 +120,7 @@ public class ApEncounterEntity implements Serializable {
 	private Boolean discharge = false;
 	private String emergencyLevelLkey;
 	private ApLovValues emergencyLevelLvalue;
+	private BigDecimal dischargeAt;
 	private ApEncounterEntity translatedObject;
 
 }

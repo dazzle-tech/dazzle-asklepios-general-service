@@ -799,6 +799,27 @@ public class OperationRequestsController {
         }
     }
 
+    @GetMapping(value = "/operation-anesthesia-induction-monitoring-by-operation", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getOperationAnesthesiaInductionMonitoringByOperation(@RequestParam String operationKey,
+                                                               @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<ApOperationAnesthesiaInductionMonitoring> response = new ParentResponse<>();
+            List<ApOperationAnesthesiaInductionMonitoring> list = apOperationAnesthesiaInductionMonitoringService.getList("operation_request_key = '" + operationKey + "' ORDER BY created_at DESC LIMIT 1");
+
+
+            if (!list.isEmpty()) {
+                ApOperationAnesthesiaInductionMonitoring item = list.get(0);
+                apOperationAnesthesiaInductionMonitoringService.populateLovFields(item, lang);
+                response.setObject(item);
+            }
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            log.error("Error fetching nursing care by operation", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
     @GetMapping(value = "/operation-anesthesia-induction-monitoring-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getOperationAnesthesiaInductionMonitoringList(@RequestParam Map<String, String> queryParams,
                                                            @RequestHeader(required = false) String lang) {

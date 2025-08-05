@@ -742,6 +742,29 @@ public class OperationRequestsController {
         }
     }
 
+
+    @GetMapping(value = "/operative-timeout-by-operation", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPreOperativeTimeoutByOperation(@RequestParam String operationKey,
+                                                       @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<ApPreOperativeTimeout> response = new ParentResponse<>();
+            List<ApPreOperativeTimeout> list = apPreOperativeTimeoutService.getList("operation_request_key = '" + operationKey + "' ORDER BY created_at DESC LIMIT 1");
+
+
+            if (!list.isEmpty()) {
+                ApPreOperativeTimeout item = list.get(0);
+                apPreOperativeTimeoutService.populateLovFields(item, lang);
+                response.setObject(item);
+            }
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            log.error("Error fetching nursing care by operation", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
     @GetMapping(value = "/pre-operative-timeout-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPreOperativeTimeout(@RequestParam Map<String, String> queryParams,
                                                            @RequestHeader(required = false) String lang) {

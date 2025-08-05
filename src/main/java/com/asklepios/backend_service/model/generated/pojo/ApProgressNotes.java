@@ -10,6 +10,9 @@ import com.asklepios.backend_service.model.generated.entity.ApProgressNotesEntit
 @Setter
 @Slf4j
 public class ApProgressNotes extends ApProgressNotesEntity implements Serializable {
+    private ApUser createdByUser;
+    private ApUser updatedByUser;
+    private ApUser deletedByUser;
 
 
 }

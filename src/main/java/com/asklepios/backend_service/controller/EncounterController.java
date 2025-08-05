@@ -91,7 +91,9 @@ public class EncounterController {
     private final ApPreOperationAdministeredMedicationsService apPreOperationAdministeredMedicationsService;
     private final ApEmergencyTriageService apEmergencyTriageService;
     private final ApEncounterAssignToBedService apEncounterAssignToBedService;
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService, ApDoctorRoundStaffService apDoctorRoundStaffService, ApDoctorRoundService apDoctorRoundService, ApNurseNotesService apNurseNotesService, ApRepositioningService apRepositioningService, ApDayCaseEncountersService apDayCaseEncountersService, ApPreOperationAdministeredMedicationsService apPreOperationAdministeredMedicationsService, ApEmergencyTriageService apEmergencyTriageService, ApEncounterAssignToBedService apEncounterAssignToBedService) {
+    private final ApProgressNotesService apProgressNotesService;
+
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService, ApDoctorRoundStaffService apDoctorRoundStaffService, ApDoctorRoundService apDoctorRoundService, ApNurseNotesService apNurseNotesService, ApRepositioningService apRepositioningService, ApDayCaseEncountersService apDayCaseEncountersService, ApPreOperationAdministeredMedicationsService apPreOperationAdministeredMedicationsService, ApEmergencyTriageService apEmergencyTriageService, ApEncounterAssignToBedService apEncounterAssignToBedService, ApProgressNotesService apProgressNotesService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -154,6 +156,7 @@ public class EncounterController {
         this.apPreOperationAdministeredMedicationsService = apPreOperationAdministeredMedicationsService;
         this.apEmergencyTriageService = apEmergencyTriageService;
         this.apEncounterAssignToBedService = apEncounterAssignToBedService;
+        this.apProgressNotesService = apProgressNotesService;
     }
 
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -3637,5 +3640,66 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @PostMapping(value = "/save-progress-notes", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveProgressNotes(@RequestBody ApProgressNotes progressNotes ,
+                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                @jakarta.annotation.Nullable @RequestHeader String lang
 
+    ) {
+        try {
+            ParentResponse<ApProgressNotes> response = new ParentResponse<>();
+            apProgressNotesService.saveRecord(progressNotes);
+            response.setObject(progressNotes);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/progress-notes-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getProgressNotesList(@RequestParam Map<String, String> queryParams,
+                                                   @Nullable @RequestHeader String facility_id,
+                                                   @Nullable @RequestHeader String access_token,
+                                                   @Nullable @RequestHeader Integer access_level,
+                                                   @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApProgressNotes>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApProgressNotes> progressNotes = apProgressNotesService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_progress_notes where " + whereForTotal);
+
+            for (ApProgressNotes  progressNote : progressNotes) {
+                if (progressNote.getCreatedBy() != null) {
+                    progressNote.setCreatedByUser(apUserService.getRecord(progressNote.getCreatedBy()));
+                }
+                if (progressNote.getUpdatedBy() != null) {
+                    progressNote.setUpdatedByUser(apUserService.getRecord(progressNote.getUpdatedBy()));
+                }
+                if (progressNote.getDeletedBy() != null) {
+                    progressNote.setDeletedByUser(apUserService.getRecord(progressNote.getDeletedBy()));
+                }
+                apProgressNotesService.populateLovFields( progressNote, lang);
+            }
+            response.setObject(progressNotes);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 }

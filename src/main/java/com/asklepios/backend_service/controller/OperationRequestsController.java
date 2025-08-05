@@ -1026,6 +1026,28 @@ public class OperationRequestsController {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
+
+    @GetMapping(value = "/post-op-handover-by-operation", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPostOpHandoverByOperation(@RequestParam String operationKey,
+                                                                                  @RequestHeader(required = false) String lang) {
+        try {
+            ParentResponse<ApOperationPostOpNotesHandover> response = new ParentResponse<>();
+            List<ApOperationPostOpNotesHandover> list = apOperationPostOpNotesHandoverService.getList("operation_request_key = '" + operationKey + "' ORDER BY created_at DESC LIMIT 1");
+
+
+            if (!list.isEmpty()) {
+                ApOperationPostOpNotesHandover item = list.get(0);
+                apOperationPostOpNotesHandoverService.populateLovFields(item, lang);
+                response.setObject(item);
+            }
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            log.error("Error fetching nursing care by operation", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
     @PostMapping(value = "/save-antimicrobial-prophylaxis", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveAntimicrobialProphylaxis(@RequestBody ApOperationAntimicrobialProphylaxisGiven request,
                                                           @RequestHeader(required = false) String lang) {

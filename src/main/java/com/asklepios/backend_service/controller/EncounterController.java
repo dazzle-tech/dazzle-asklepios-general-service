@@ -248,6 +248,48 @@ public class EncounterController {
         ParentResponse<ApEncounter> response = new ParentResponse<>();
 
         if (encounter != null && encounter.getKey() != null && !encounter.getKey().isEmpty()) {
+            encounter.setPractitionerObject(apPractitionerService.getRecord(encounter.getPhysicianKey()));
+            if(encounter.getResourceKey() != null){
+                if(encounter.getResourceTypeLkey().equals("2039534205961578")){
+                    ApDepartment department = apDepartmentService.getRecord(encounter.getDepartmentKey());
+                    if(department != null){
+                        encounter.setDepartmentName(department.getName());}
+                }
+                encounter.setResourceObject(apEncounterService.getResource(encounter.getResourceTypeLkey(),encounter.getResourceKey(),lang));
+            }
+            if (encounter.getPractitionerObject() != null) {
+                apPractitionerService.populateLovFields(encounter.getPractitionerObject(),lang);
+            }
+            if (encounter.getResourceTypeLkey().equals("5433343011954425") ||
+                    encounter.getResourceTypeLkey().equals("2039548173192779")) {
+
+                List<ApEncounterAssignToBed> encounterAssignToBeds = apEncounterAssignToBedService
+                        .getList("encounter_key = '" + encounter.getKey() + "'");
+
+                if (!encounterAssignToBeds.isEmpty()) {
+                    ApEncounterAssignToBed apEncounterAssignToBed = encounterAssignToBeds.get(0);
+                    encounter.setApBed(apBedService.getRecord(apEncounterAssignToBed.getBedKey()));
+                    encounter.setApRoom(apRoomService.getRecord(apEncounterAssignToBed.getRoomKey()));
+                    apBedService.populateLovFields(encounter.getApBed(), lang);
+                    apRoomService.populateLovFields(encounter.getApRoom(), lang);
+                }
+            }
+
+            ApPatient patient = apPatientService.getRecord(encounter.getPatientKey());
+            if (patient != null) {
+                patient.setHasAllergy(apPatientService.getHasAllergy(encounter.getPatientKey()));
+                patient.setHasWarning(apPatientService.getHasWarning(encounter.getPatientKey()));
+                apPatientService.populateLovFields(patient, lang);
+                encounter.setPatientObject(patient);
+            } else {
+                log.warn("Patient not found for encounter key: {}", encounter.getKey());
+            }
+            encounter.setDiagnosis(apEncounterService.getDiagnosis(encounter.getKey()));
+            encounter.setHasOrder(apEncounterService.getHasOrder(encounter.getKey()));
+            encounter.setHasPrescription(apEncounterService.getHasPrescription(encounter.getKey()));
+            encounter.setHasAllergy(apEncounterService.getHasAllergy(encounter.getKey()));
+            encounter.setHasObservation(apEncounterService.getHasObservation(encounter.getKey()));
+
             apEncounterService.populateLovFields(encounter, lang);
             response.setObject(encounter);
             return ResponseEntity.ok(response);

@@ -13,5 +13,8 @@ public class ApOperationRequests extends ApOperationRequestsEntity implements Se
 ApPatient patient;
 ApEncounter encounter;
 ApIcdCode diagnosis;
+ApOperationSetup operation;
+ApFacility facility;
+ApDepartment department;
 
 }

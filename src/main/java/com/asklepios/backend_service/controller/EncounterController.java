@@ -240,6 +240,7 @@ public class EncounterController {
     }
     @GetMapping("/get-encounter-by-id")
     public ResponseEntity<?> getEncounterById(
+
             @RequestParam String key,
             @RequestHeader(name = "lang", required = false) String lang) throws SQLException {
 
@@ -247,6 +248,7 @@ public class EncounterController {
         ParentResponse<ApEncounter> response = new ParentResponse<>();
 
         if (encounter != null && encounter.getKey() != null && !encounter.getKey().isEmpty()) {
+            apEncounterService.populateLovFields(encounter, lang);
             response.setObject(encounter);
             return ResponseEntity.ok(response);
         } else {

@@ -104,6 +104,10 @@ record.setLatestFallRiskDetails(rs.getString("latest_fall_risk_details"));
 record.setPlatestFallRiskDetails(rs.getString("platest_fall_risk_details"));
 record.setLatestActionToTake(rs.getString("latest_action_to_take"));
 record.setPlatestActionToTake(rs.getString("platest_action_to_take"));
+record.setLatestFunctionalStatus(rs.getString("latest_functional_status"));
+record.setPlatestFunctionalStatus(rs.getString("platest_functional_status"));
+record.setLatestCognitiveCheck(rs.getString("latest_cognitive_check"));
+record.setPlatestCognitiveCheck(rs.getString("platest_cognitive_check"));
 } else { record = null; }
 return record;
 }
@@ -111,7 +115,7 @@ return record;
 public void updateRecord(ApPatientObservationSummary record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_patient_observation_summary set key = ?, patient_key = ?, visit_key = ?, last_date = ?, latesttemperature = ?, latestbp_systolic = ?, latestbp_diastolic = ?, latestheartrate = ?, latestrespiratoryrate = ?, latestoxygensaturation = ?, latestglucoselevel = ?, latestpainlevel_lkey = ?, latestweight = ?, latestheight = ?, latestheadcircumference = ?, latestlength = ?, latestbmi = ?, age = ?, prev_record_key = ?, plast_date = ?, platesttemperature = ?, platestbp_systolic = ?, platestbp_diastolic = ?, platestheartrate = ?, platestrespiratoryrate = ?, platestoxygensaturation = ?, platestglucoselevel = ?, platestpainlevel_lkey = ?, platestweight = ?, platestheight = ?, platestheadcircumference = ?, platestlength = ?, platestbmi = ?, page = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, latestnotes = ?, platestnotes = ?, latestpaindescription = ?, platestpaindescription = ?, latestpainlevel = ?, platestpainlevel = ?, platesthearingtest = ?, latesthearingtest = ?, latest_dehydration = ?, platest_dehydration = ?, latest_nasal_flaring = ?, platest_nasal_flaring = ?, latest_response_to_light = ?, platest_response_to_light = ?, latest_pupil_response = ?, platest_pupil_response = ?, latest_ability_to_follow_target = ?, platest_ability_to_follow_target = ?, latest_color_testing = ?, platest_color_testing = ?, latest_fall_risk = ?, platest_fall_risk = ?, latest_fall_risk_details = ?, platest_fall_risk_details = ?, latest_action_to_take = ?, platest_action_to_take = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_patient_observation_summary set key = ?, patient_key = ?, visit_key = ?, last_date = ?, latesttemperature = ?, latestbp_systolic = ?, latestbp_diastolic = ?, latestheartrate = ?, latestrespiratoryrate = ?, latestoxygensaturation = ?, latestglucoselevel = ?, latestpainlevel_lkey = ?, latestweight = ?, latestheight = ?, latestheadcircumference = ?, latestlength = ?, latestbmi = ?, age = ?, prev_record_key = ?, plast_date = ?, platesttemperature = ?, platestbp_systolic = ?, platestbp_diastolic = ?, platestheartrate = ?, platestrespiratoryrate = ?, platestoxygensaturation = ?, platestglucoselevel = ?, platestpainlevel_lkey = ?, platestweight = ?, platestheight = ?, platestheadcircumference = ?, platestlength = ?, platestbmi = ?, page = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, latestnotes = ?, platestnotes = ?, latestpaindescription = ?, platestpaindescription = ?, latestpainlevel = ?, platestpainlevel = ?, platesthearingtest = ?, latesthearingtest = ?, latest_dehydration = ?, platest_dehydration = ?, latest_nasal_flaring = ?, platest_nasal_flaring = ?, latest_response_to_light = ?, platest_response_to_light = ?, latest_pupil_response = ?, platest_pupil_response = ?, latest_ability_to_follow_target = ?, platest_ability_to_follow_target = ?, latest_color_testing = ?, platest_color_testing = ?, latest_fall_risk = ?, platest_fall_risk = ?, latest_fall_risk_details = ?, platest_fall_risk_details = ?, latest_action_to_take = ?, platest_action_to_take = ?, latest_functional_status = ?, platest_functional_status = ?, latest_cognitive_check = ?, platest_cognitive_check = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -183,7 +187,11 @@ ps.setString(64, record.getLatestFallRiskDetails());
 ps.setString(65, record.getPlatestFallRiskDetails());
 ps.setString(66, record.getLatestActionToTake());
 ps.setString(67, record.getPlatestActionToTake());
-ps.setString(68, record.getKey());
+ps.setString(68, record.getLatestFunctionalStatus());
+ps.setString(69, record.getPlatestFunctionalStatus());
+ps.setString(70, record.getLatestCognitiveCheck());
+ps.setString(71, record.getPlatestCognitiveCheck());
+ps.setString(72, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -272,6 +280,10 @@ record.setLatestFallRiskDetails(rs.getString("latest_fall_risk_details"));
 record.setPlatestFallRiskDetails(rs.getString("platest_fall_risk_details"));
 record.setLatestActionToTake(rs.getString("latest_action_to_take"));
 record.setPlatestActionToTake(rs.getString("platest_action_to_take"));
+record.setLatestFunctionalStatus(rs.getString("latest_functional_status"));
+record.setPlatestFunctionalStatus(rs.getString("platest_functional_status"));
+record.setLatestCognitiveCheck(rs.getString("latest_cognitive_check"));
+record.setPlatestCognitiveCheck(rs.getString("platest_cognitive_check"));
 list.add(record);
 }
 return list;
@@ -280,7 +292,7 @@ return list;
 public String saveRecord(ApPatientObservationSummary record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_patient_observation_summary values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_patient_observation_summary values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -356,6 +368,10 @@ ps.setString(64, record.getLatestFallRiskDetails());
 ps.setString(65, record.getPlatestFallRiskDetails());
 ps.setString(66, record.getLatestActionToTake());
 ps.setString(67, record.getPlatestActionToTake());
+ps.setString(68, record.getLatestFunctionalStatus());
+ps.setString(69, record.getPlatestFunctionalStatus());
+ps.setString(70, record.getLatestCognitiveCheck());
+ps.setString(71, record.getPlatestCognitiveCheck());
 ps.executeUpdate();
 return key;
 }

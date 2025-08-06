@@ -84,6 +84,26 @@ record.setLatestpaindescription(rs.getString("latestpaindescription"));
 record.setPlatestpaindescription(rs.getString("platestpaindescription"));
 record.setLatestpainlevel(rs.getBigDecimal("latestpainlevel"));
 record.setPlatestpainlevel(rs.getBigDecimal("platestpainlevel"));
+record.setPlatesthearingtest(rs.getString("platesthearingtest"));
+record.setLatesthearingtest(rs.getString("latesthearingtest"));
+record.setLatestDehydration(rs.getBoolean("latest_dehydration"));
+record.setPlatestDehydration(rs.getBoolean("platest_dehydration"));
+record.setLatestNasalFlaring(rs.getBoolean("latest_nasal_flaring"));
+record.setPlatestNasalFlaring(rs.getBoolean("platest_nasal_flaring"));
+record.setLatestResponseToLight(rs.getBoolean("latest_response_to_light"));
+record.setPlatestResponseToLight(rs.getBoolean("platest_response_to_light"));
+record.setLatestPupilResponse(rs.getBoolean("latest_pupil_response"));
+record.setPlatestPupilResponse(rs.getBoolean("platest_pupil_response"));
+record.setLatestAbilityToFollowTarget(rs.getBoolean("latest_ability_to_follow_target"));
+record.setPlatestAbilityToFollowTarget(rs.getBoolean("platest_ability_to_follow_target"));
+record.setLatestColorTesting(rs.getBoolean("latest_color_testing"));
+record.setPlatestColorTesting(rs.getBoolean("platest_color_testing"));
+record.setLatestFallRisk(rs.getBoolean("latest_fall_risk"));
+record.setPlatestFallRisk(rs.getBoolean("platest_fall_risk"));
+record.setLatestFallRiskDetails(rs.getString("latest_fall_risk_details"));
+record.setPlatestFallRiskDetails(rs.getString("platest_fall_risk_details"));
+record.setLatestActionToTake(rs.getString("latest_action_to_take"));
+record.setPlatestActionToTake(rs.getString("platest_action_to_take"));
 } else { record = null; }
 return record;
 }
@@ -91,7 +111,7 @@ return record;
 public void updateRecord(ApPatientObservationSummary record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_patient_observation_summary set key = ?, patient_key = ?, visit_key = ?, last_date = ?, latesttemperature = ?, latestbp_systolic = ?, latestbp_diastolic = ?, latestheartrate = ?, latestrespiratoryrate = ?, latestoxygensaturation = ?, latestglucoselevel = ?, latestpainlevel_lkey = ?, latestweight = ?, latestheight = ?, latestheadcircumference = ?, latestlength = ?, latestbmi = ?, age = ?, prev_record_key = ?, plast_date = ?, platesttemperature = ?, platestbp_systolic = ?, platestbp_diastolic = ?, platestheartrate = ?, platestrespiratoryrate = ?, platestoxygensaturation = ?, platestglucoselevel = ?, platestpainlevel_lkey = ?, platestweight = ?, platestheight = ?, platestheadcircumference = ?, platestlength = ?, platestbmi = ?, page = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, latestnotes = ?, platestnotes = ?, latestpaindescription = ?, platestpaindescription = ?, latestpainlevel = ?, platestpainlevel = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_patient_observation_summary set key = ?, patient_key = ?, visit_key = ?, last_date = ?, latesttemperature = ?, latestbp_systolic = ?, latestbp_diastolic = ?, latestheartrate = ?, latestrespiratoryrate = ?, latestoxygensaturation = ?, latestglucoselevel = ?, latestpainlevel_lkey = ?, latestweight = ?, latestheight = ?, latestheadcircumference = ?, latestlength = ?, latestbmi = ?, age = ?, prev_record_key = ?, plast_date = ?, platesttemperature = ?, platestbp_systolic = ?, platestbp_diastolic = ?, platestheartrate = ?, platestrespiratoryrate = ?, platestoxygensaturation = ?, platestglucoselevel = ?, platestpainlevel_lkey = ?, platestweight = ?, platestheight = ?, platestheadcircumference = ?, platestlength = ?, platestbmi = ?, page = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, latestnotes = ?, platestnotes = ?, latestpaindescription = ?, platestpaindescription = ?, latestpainlevel = ?, platestpainlevel = ?, platesthearingtest = ?, latesthearingtest = ?, latest_dehydration = ?, platest_dehydration = ?, latest_nasal_flaring = ?, platest_nasal_flaring = ?, latest_response_to_light = ?, platest_response_to_light = ?, latest_pupil_response = ?, platest_pupil_response = ?, latest_ability_to_follow_target = ?, platest_ability_to_follow_target = ?, latest_color_testing = ?, platest_color_testing = ?, latest_fall_risk = ?, platest_fall_risk = ?, latest_fall_risk_details = ?, platest_fall_risk_details = ?, latest_action_to_take = ?, platest_action_to_take = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -143,7 +163,27 @@ ps.setString(44, record.getLatestpaindescription());
 ps.setString(45, record.getPlatestpaindescription());
 ps.setBigDecimal(46, record.getLatestpainlevel());
 ps.setBigDecimal(47, record.getPlatestpainlevel());
-ps.setString(48, record.getKey());
+ps.setString(48, record.getPlatesthearingtest());
+ps.setString(49, record.getLatesthearingtest());
+ps.setBoolean(50, record.getLatestDehydration());
+ps.setBoolean(51, record.getPlatestDehydration());
+ps.setBoolean(52, record.getLatestNasalFlaring());
+ps.setBoolean(53, record.getPlatestNasalFlaring());
+ps.setBoolean(54, record.getLatestResponseToLight());
+ps.setBoolean(55, record.getPlatestResponseToLight());
+ps.setBoolean(56, record.getLatestPupilResponse());
+ps.setBoolean(57, record.getPlatestPupilResponse());
+ps.setBoolean(58, record.getLatestAbilityToFollowTarget());
+ps.setBoolean(59, record.getPlatestAbilityToFollowTarget());
+ps.setBoolean(60, record.getLatestColorTesting());
+ps.setBoolean(61, record.getPlatestColorTesting());
+ps.setBoolean(62, record.getLatestFallRisk());
+ps.setBoolean(63, record.getPlatestFallRisk());
+ps.setString(64, record.getLatestFallRiskDetails());
+ps.setString(65, record.getPlatestFallRiskDetails());
+ps.setString(66, record.getLatestActionToTake());
+ps.setString(67, record.getPlatestActionToTake());
+ps.setString(68, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -212,6 +252,26 @@ record.setLatestpaindescription(rs.getString("latestpaindescription"));
 record.setPlatestpaindescription(rs.getString("platestpaindescription"));
 record.setLatestpainlevel(rs.getBigDecimal("latestpainlevel"));
 record.setPlatestpainlevel(rs.getBigDecimal("platestpainlevel"));
+record.setPlatesthearingtest(rs.getString("platesthearingtest"));
+record.setLatesthearingtest(rs.getString("latesthearingtest"));
+record.setLatestDehydration(rs.getBoolean("latest_dehydration"));
+record.setPlatestDehydration(rs.getBoolean("platest_dehydration"));
+record.setLatestNasalFlaring(rs.getBoolean("latest_nasal_flaring"));
+record.setPlatestNasalFlaring(rs.getBoolean("platest_nasal_flaring"));
+record.setLatestResponseToLight(rs.getBoolean("latest_response_to_light"));
+record.setPlatestResponseToLight(rs.getBoolean("platest_response_to_light"));
+record.setLatestPupilResponse(rs.getBoolean("latest_pupil_response"));
+record.setPlatestPupilResponse(rs.getBoolean("platest_pupil_response"));
+record.setLatestAbilityToFollowTarget(rs.getBoolean("latest_ability_to_follow_target"));
+record.setPlatestAbilityToFollowTarget(rs.getBoolean("platest_ability_to_follow_target"));
+record.setLatestColorTesting(rs.getBoolean("latest_color_testing"));
+record.setPlatestColorTesting(rs.getBoolean("platest_color_testing"));
+record.setLatestFallRisk(rs.getBoolean("latest_fall_risk"));
+record.setPlatestFallRisk(rs.getBoolean("platest_fall_risk"));
+record.setLatestFallRiskDetails(rs.getString("latest_fall_risk_details"));
+record.setPlatestFallRiskDetails(rs.getString("platest_fall_risk_details"));
+record.setLatestActionToTake(rs.getString("latest_action_to_take"));
+record.setPlatestActionToTake(rs.getString("platest_action_to_take"));
 list.add(record);
 }
 return list;
@@ -220,7 +280,7 @@ return list;
 public String saveRecord(ApPatientObservationSummary record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_patient_observation_summary values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_patient_observation_summary values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -276,6 +336,26 @@ ps.setString(44, record.getLatestpaindescription());
 ps.setString(45, record.getPlatestpaindescription());
 ps.setBigDecimal(46, record.getLatestpainlevel());
 ps.setBigDecimal(47, record.getPlatestpainlevel());
+ps.setString(48, record.getPlatesthearingtest());
+ps.setString(49, record.getLatesthearingtest());
+ps.setBoolean(50, record.getLatestDehydration());
+ps.setBoolean(51, record.getPlatestDehydration());
+ps.setBoolean(52, record.getLatestNasalFlaring());
+ps.setBoolean(53, record.getPlatestNasalFlaring());
+ps.setBoolean(54, record.getLatestResponseToLight());
+ps.setBoolean(55, record.getPlatestResponseToLight());
+ps.setBoolean(56, record.getLatestPupilResponse());
+ps.setBoolean(57, record.getPlatestPupilResponse());
+ps.setBoolean(58, record.getLatestAbilityToFollowTarget());
+ps.setBoolean(59, record.getPlatestAbilityToFollowTarget());
+ps.setBoolean(60, record.getLatestColorTesting());
+ps.setBoolean(61, record.getPlatestColorTesting());
+ps.setBoolean(62, record.getLatestFallRisk());
+ps.setBoolean(63, record.getPlatestFallRisk());
+ps.setString(64, record.getLatestFallRiskDetails());
+ps.setString(65, record.getPlatestFallRiskDetails());
+ps.setString(66, record.getLatestActionToTake());
+ps.setString(67, record.getPlatestActionToTake());
 ps.executeUpdate();
 return key;
 }

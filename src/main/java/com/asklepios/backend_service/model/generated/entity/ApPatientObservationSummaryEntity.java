@@ -63,6 +63,26 @@ public class ApPatientObservationSummaryEntity implements Serializable {
 	private String platestpaindescription;
 	private BigDecimal latestpainlevel;
 	private BigDecimal platestpainlevel;
+	private String platesthearingtest;
+	private String latesthearingtest;
+	private Boolean latestDehydration = false;
+	private Boolean platestDehydration = false;
+	private Boolean latestNasalFlaring = false;
+	private Boolean platestNasalFlaring = false;
+	private Boolean latestResponseToLight = false;
+	private Boolean platestResponseToLight = false;
+	private Boolean latestPupilResponse = false;
+	private Boolean platestPupilResponse = false;
+	private Boolean latestAbilityToFollowTarget = false;
+	private Boolean platestAbilityToFollowTarget = false;
+	private Boolean latestColorTesting = false;
+	private Boolean platestColorTesting = false;
+	private Boolean latestFallRisk = false;
+	private Boolean platestFallRisk = false;
+	private String latestFallRiskDetails;
+	private String platestFallRiskDetails;
+	private String latestActionToTake;
+	private String platestActionToTake;
 	private ApPatientObservationSummaryEntity translatedObject;
 
 }

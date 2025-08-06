@@ -59,6 +59,7 @@ public class ApOperationRequestsEntity implements Serializable {
 	private BigDecimal monitorSlot;
 	private String recoveryStatusLkey;
 	private ApLovValues recoveryStatusLvalue;
+	private String cancellationReason;
 	private ApOperationRequestsEntity translatedObject;
 
 }

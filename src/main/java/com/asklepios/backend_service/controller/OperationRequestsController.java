@@ -44,6 +44,9 @@ public class OperationRequestsController {
    private final ApOperationPreMedicationService apOperationPreMedicationService;
    private final ApOperationIntraoperativeMonitoringService apOperationIntraoperativeMonitoringService;
    private final ApPreOperativeTimeoutService apPreOperativeTimeoutService;
+   private final ApOperationSetupService apOperationSetupService;
+   private final ApDepartmentService apDepartmentService;
+   private final ApFacilityService apFacilityService;
    private final ApLovValuesService apLovValuesService;
 
     private final ApOperationSurgicalPreparationIncisionService apOperationSurgicalPreparationIncisionService;
@@ -53,7 +56,7 @@ public class OperationRequestsController {
     public OperationRequestsController(
             ApOperationRequestsService apOperationRequestsService, ApOperationSetupService operationSetupService,
             ApOperationCodingService operationCodingService,
-            ApOperationPriceListService operationPriceListService, ApOperationAnesthesiaCarePlanService operationAnesthesiaCarePlanService, ApPreOperationChecklistService apPreOperationChecklistService, ApPatientService apPatientService, ApEncounterService apEncounterService, ApIcdCodeService apIcdCodeService, ApOperationStaffService apOperationStaffService, ApUserService apUserService, ApOperationAnesthesiaInductionMonitoringService apOperationAnesthesiaInductionMonitoringService, ApOperationNameLogService apOperationNameLogService, ApOperationInductionService apOperationInductionService, ApOperationPatientArrivalService apOperationPatientArrivalService, ApOperationPreMedicationService apOperationPreMedicationService, ApOperationIntraoperativeMonitoringService apOperationIntraoperativeMonitoringService, ApPreOperativeTimeoutService apPreOperativeTimeoutService, ApLovValuesService apLovValuesService, ApOperationSurgicalPreparationIncisionService apOperationSurgicalPreparationIncisionService, ApOperationIntraoperativeEventsService apOperationIntraoperativeEventsService, ApOperationPostOpNotesHandoverService apOperationPostOpNotesHandoverService, ApOperationAntimicrobialProphylaxisGivenService apOperationAntimicrobialProphylaxisGivenService
+            ApOperationPriceListService operationPriceListService, ApOperationAnesthesiaCarePlanService operationAnesthesiaCarePlanService, ApPreOperationChecklistService apPreOperationChecklistService, ApPatientService apPatientService, ApEncounterService apEncounterService, ApIcdCodeService apIcdCodeService, ApOperationStaffService apOperationStaffService, ApUserService apUserService, ApOperationAnesthesiaInductionMonitoringService apOperationAnesthesiaInductionMonitoringService, ApOperationNameLogService apOperationNameLogService, ApOperationInductionService apOperationInductionService, ApOperationPatientArrivalService apOperationPatientArrivalService, ApOperationPreMedicationService apOperationPreMedicationService, ApOperationIntraoperativeMonitoringService apOperationIntraoperativeMonitoringService, ApPreOperativeTimeoutService apPreOperativeTimeoutService, ApOperationSetupService apOperationSetupService, ApDepartmentService apDepartmentService, ApFacilityService apFacilityService, ApLovValuesService apLovValuesService, ApOperationSurgicalPreparationIncisionService apOperationSurgicalPreparationIncisionService, ApOperationIntraoperativeEventsService apOperationIntraoperativeEventsService, ApOperationPostOpNotesHandoverService apOperationPostOpNotesHandoverService, ApOperationAntimicrobialProphylaxisGivenService apOperationAntimicrobialProphylaxisGivenService
     ) {
         this.apOperationRequestsService = apOperationRequestsService;
         this.operationSetupService = operationSetupService;
@@ -73,6 +76,9 @@ public class OperationRequestsController {
         this.apOperationPreMedicationService = apOperationPreMedicationService;
         this.apOperationIntraoperativeMonitoringService = apOperationIntraoperativeMonitoringService;
         this.apPreOperativeTimeoutService = apPreOperativeTimeoutService;
+        this.apOperationSetupService = apOperationSetupService;
+        this.apDepartmentService = apDepartmentService;
+        this.apFacilityService = apFacilityService;
         this.apLovValuesService = apLovValuesService;
         this.apOperationSurgicalPreparationIncisionService = apOperationSurgicalPreparationIncisionService;
         this.apOperationIntraoperativeEventsService = apOperationIntraoperativeEventsService;
@@ -135,6 +141,9 @@ public class OperationRequestsController {
                 item.setEncounter(apEncounterService.getRecord(item.getEncounterKey()));
                 apEncounterService.populateLovFields(item.getEncounter(), lang);
                 item.setDiagnosis(apIcdCodeService.getRecord(item.getDiagnosisKey()));
+                item.setOperation(apOperationSetupService.getRecord(item.getOperationKey()));
+                item.setDepartment(apDepartmentService.getRecord(item.getDepartmentKey()));
+                item.setFacility(apFacilityService.getRecord(item.getFacilityKey()));
                 apIcdCodeService.populateLovFields(item.getDiagnosis(), lang);
                 apOperationRequestsService.populateLovFields(item, lang);
             }

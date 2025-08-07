@@ -1,6 +1,7 @@
 package com.asklepios.backend_service.service;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.List;
 
@@ -31,7 +32,16 @@ public class ApAdmitOutpatientInpatientService extends ApAdmitOutpatientInpatien
         String where = "resource_key = '" + admitOutpatientInpatient.getInpatientDepartmentKey() + "'";
         List<ApResources> list = apResourcesService.getList(where);
 
+        BigDecimal lastVisitId = DS.executeDecimalResultQuery("select max(visit_id) from ap_encounter");
 
+        BigDecimal newVisitId;
+        if (lastVisitId == null) {
+            newVisitId = BigDecimal.valueOf(100);
+        } else {
+            newVisitId = lastVisitId.add(BigDecimal.ONE);
+        }
+
+        newEncounter.setVisitId(newVisitId.toString());
 
         newEncounter.setResourceTypeLkey("4217389643435490");  // TODO replace with redis by lov code
         newEncounter.setEncounterStatusLkey("5256965920133084");  // TODO replace with redis by lov code (ENC_STATUS/WAIT)

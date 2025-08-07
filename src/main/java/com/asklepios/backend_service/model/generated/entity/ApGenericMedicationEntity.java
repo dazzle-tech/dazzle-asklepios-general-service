@@ -41,6 +41,10 @@ public class ApGenericMedicationEntity implements Serializable {
 	private String roaLkey;
 	private ApLovValues roaLvalue;
 	private String marketingAuthorizationHolder;
+	private String costCategoryLkey;
+	private ApLovValues costCategoryLvalue;
+	private String uomGroupKey;
+	private String uomGroupUnitKey;
 	private ApGenericMedicationEntity translatedObject;
 
 }

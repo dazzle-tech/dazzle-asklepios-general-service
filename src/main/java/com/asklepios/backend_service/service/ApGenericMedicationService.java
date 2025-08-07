@@ -1,10 +1,7 @@
 package com.asklepios.backend_service.service;
 
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,23 +16,32 @@ import com.asklepios.backend_service.model.generated.dao.ApGenericMedicationDAO;
 @Service
 @Slf4j
 public class ApGenericMedicationService extends ApGenericMedicationDAO implements Serializable {
-    public List<ApGenericMedication> getListapv(String active ,String  where) throws SQLException {
+    public List<ApGenericMedication> getListapv(String active, String where) throws SQLException {
         if (where == null || where.isEmpty()) where = "1=1";
-        String result = where .replaceAll("_(?=\\.)", "");
-        String query = "SELECT g.*,  " +
-                "STRING_AGG(a.name, ', ') AS active_ingredients  " +
-                "FROM ap_generic_medication g  " +
-                "LEFT JOIN ap_generic_medication_active_ingredient ga ON g.key = ga.generic_medication_key " +
-                "LEFT JOIN ap_active_ingredient a ON ga.active_ingredient_key = a.key  " +
-                "WHERE LOWER(a.name) LIKE LOWER('%"+active+"%') OR LOWER(g.generic_name) LIKE LOWER('%"+active+"%')" +
-                "GROUP BY  g.key ";
 
+        String query = "SELECT g.*, " +
+                "STRING_AGG(a.name || ' (' || a.atc_code || ')', ', ') AS active_ingredients " +
+                "FROM ap_generic_medication g " +
+                "LEFT JOIN ap_generic_medication_active_ingredient ga ON g.key = ga.generic_medication_key " +
+                "LEFT JOIN ap_active_ingredient a ON ga.active_ingredient_key = a.key " +
+                "WHERE (" +
+                "  LOWER(a.name) LIKE ? " +
+                "  OR LOWER(a.atc_code) LIKE ? " +
+                "  OR LOWER(g.generic_name) LIKE ?" +
+                ") " +
+                "GROUP BY g.key";
 
         try (
                 Connection con = DS.getConnection();
-                Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery(query);
+                PreparedStatement ps = con.prepareStatement(query)
         ) {
+            String likeValue = "%" + active.toLowerCase() + "%";
+            ps.setString(1, likeValue);
+            ps.setString(2, likeValue);
+            ps.setString(3, likeValue);
+
+            ResultSet rs = ps.executeQuery();
+
             List<ApGenericMedication> list = new ArrayList<>();
 
             while (rs.next()) {
@@ -62,12 +68,13 @@ public class ApGenericMedicationService extends ApGenericMedicationDAO implement
                 record.setIsValid(rs.getBoolean("is_valid"));
                 record.setCode(rs.getString("code"));
                 record.setRoaLkey(rs.getString("roa_lkey"));
-                record.setActiveIngredients((rs.getString("active_ingredients")));
+                record.setActiveIngredients(rs.getString("active_ingredients"));
                 list.add(record);
-
             }
 
             return list;
         }
     }
+
+
 }

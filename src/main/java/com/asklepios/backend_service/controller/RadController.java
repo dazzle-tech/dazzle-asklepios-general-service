@@ -96,6 +96,7 @@ public class RadController {
                 o.getTest().setTest( apDiagnosticTestService.getRecord(o.getMedicalTestKey()));
                 o.getTest().setOrder(apDiagnosticOrdersService.getRecord(o.getOrderKey()));
                 o.getTest().getOrder().setPatient(apPatientService.getRecord(o.getPatientKey()));
+                o.setHasComments(apDiagnosticOrderTestsService.hasComments("ap_diagnostic_order_tests_report_notes","report_key",o.getKey()));
                 apDiagnosticOrderTestsRadReportService.populateLovFields(o, lang);
 
             }

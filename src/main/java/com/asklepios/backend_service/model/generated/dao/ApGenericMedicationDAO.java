@@ -60,6 +60,9 @@ record.setIsValid(rs.getBoolean("is_valid"));
 record.setCode(rs.getString("code"));
 record.setRoaLkey(rs.getString("roa_lkey"));
 record.setMarketingAuthorizationHolder(rs.getString("marketing_authorization_holder"));
+record.setCostCategoryLkey(rs.getString("cost_category_lkey"));
+record.setUomGroupKey(rs.getString("uom_group_key"));
+record.setUomGroupUnitKey(rs.getString("uom_group_unit_key"));
 } else { record = null; }
 return record;
 }
@@ -67,7 +70,7 @@ return record;
 public void updateRecord(ApGenericMedication record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_generic_medication set key = ?, generic_name = ?, manufacturer_lkey = ?, usage_instructions = ?, dosage_form_lkey = ?, expires_after_opening = ?, expires_after_opening_value = ?, single_patient_use = ?, price = ?, currency_lkey = ?, price_list_key = ?, cost = ?, storage_requirements = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, code = ?, roa_lkey = ?, marketing_authorization_holder = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_generic_medication set key = ?, generic_name = ?, manufacturer_lkey = ?, usage_instructions = ?, dosage_form_lkey = ?, expires_after_opening = ?, expires_after_opening_value = ?, single_patient_use = ?, price = ?, currency_lkey = ?, price_list_key = ?, cost = ?, storage_requirements = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, code = ?, roa_lkey = ?, marketing_authorization_holder = ?, cost_category_lkey = ?, uom_group_key = ?, uom_group_unit_key = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -93,7 +96,10 @@ ps.setBoolean(20, record.getIsValid());
 ps.setString(21, record.getCode());
 ps.setString(22, record.getRoaLkey());
 ps.setString(23, record.getMarketingAuthorizationHolder());
-ps.setString(24, record.getKey());
+ps.setString(24, record.getCostCategoryLkey());
+ps.setString(25, record.getUomGroupKey());
+ps.setString(26, record.getUomGroupUnitKey());
+ps.setString(27, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -138,6 +144,9 @@ record.setIsValid(rs.getBoolean("is_valid"));
 record.setCode(rs.getString("code"));
 record.setRoaLkey(rs.getString("roa_lkey"));
 record.setMarketingAuthorizationHolder(rs.getString("marketing_authorization_holder"));
+record.setCostCategoryLkey(rs.getString("cost_category_lkey"));
+record.setUomGroupKey(rs.getString("uom_group_key"));
+record.setUomGroupUnitKey(rs.getString("uom_group_unit_key"));
 list.add(record);
 }
 return list;
@@ -146,7 +155,7 @@ return list;
 public String saveRecord(ApGenericMedication record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_generic_medication values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_generic_medication values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -176,6 +185,9 @@ ps.setBoolean(20, record.getIsValid());
 ps.setString(21, record.getCode());
 ps.setString(22, record.getRoaLkey());
 ps.setString(23, record.getMarketingAuthorizationHolder());
+ps.setString(24, record.getCostCategoryLkey());
+ps.setString(25, record.getUomGroupKey());
+ps.setString(26, record.getUomGroupUnitKey());
 ps.executeUpdate();
 return key;
 }

@@ -288,6 +288,8 @@ public class LabController {
                     o.getTest().setOrderId(apDiagnosticOrdersService.getRecord(o.getOrderKey()).getOrderId());
                     o.getTest().setOrder(apDiagnosticOrdersService.getRecord(o.getOrderKey()));
                    o.getTest().getOrder().setPatient(apPatientService.getRecord(o.getPatientKey()));
+                   o.setHasComments(apDiagnosticOrderTestsService.hasComments("ap_diagnostic_order_tests_result_notes","result_key",o.getKey()));
+
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }

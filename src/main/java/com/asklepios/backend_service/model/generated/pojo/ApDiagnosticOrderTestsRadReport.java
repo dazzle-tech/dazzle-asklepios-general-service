@@ -12,5 +12,6 @@ import com.asklepios.backend_service.model.generated.entity.ApDiagnosticOrderTes
 public class ApDiagnosticOrderTestsRadReport extends ApDiagnosticOrderTestsRadReportEntity implements Serializable {
     ApDiagnosticOrderTests test;
     private ApUser reviewByUser;
+    private boolean hasComments;
 
 }

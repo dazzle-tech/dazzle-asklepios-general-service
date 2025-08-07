@@ -1597,6 +1597,7 @@ public class EncounterController {
                  o.setTest( apDiagnosticTestService.getRecord(o.getTestKey()));
                  o.setProfileList(apDiagnosticTestProfileService.getList("diagnostic_test_key= '"+o.getTestKey()+"'"));
                  o.setOrderId(apDiagnosticOrdersService.getRecord(o.getOrderKey()).getOrderId());
+                 o.setHasComments(apDiagnosticOrderTestsService.hasComments("ap_diagnostic_order_tests_notes","test_key",o.getKey()));
                 apDiagnosticOrderTestsService.populateLovFields(o, lang);
                 apDiagnosticTestService.populateLovFields(o.getTest(),lang );
             }

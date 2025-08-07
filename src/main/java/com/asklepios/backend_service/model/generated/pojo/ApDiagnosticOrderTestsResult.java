@@ -13,4 +13,5 @@ public class ApDiagnosticOrderTestsResult extends ApDiagnosticOrderTestsResultEn
  ApDiagnosticTestNormalRange normalRange;
  ApDiagnosticOrderTests test;
  private ApUser reviewByUser;
+ private boolean hasComments;
 }

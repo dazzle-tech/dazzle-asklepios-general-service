@@ -5,8 +5,8 @@ import com.asklepios.backend_service.model.generated.entity.ApPatientEntity;
 import com.asklepios.backend_service.model.generated.pojo.*;
 import com.asklepios.backend_service.model.pojo.ValidationResult;
 import com.asklepios.backend_service.model.pojo.request.ListRequest;
+import com.asklepios.backend_service.model.pojo.request.PatientRoleRequest;
 import com.asklepios.backend_service.model.pojo.response.ApAllergiesResponse;
-import com.asklepios.backend_service.model.pojo.response.ApPatientSecondaryDocsResponce;
 import com.asklepios.backend_service.model.pojo.response.LoginResponse;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
 import com.asklepios.backend_service.service.*;
@@ -17,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -50,7 +49,8 @@ public class PatientController {
     private final ApFacilityService apFacilityService;
     private final ApPractitionerService apPractitionerService;
     private final ApAttachmentService apAttachmentService;
-    public PatientController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApPatientAllergiesService apPatientAllergiesService, ApAllergensService apAllergensService, ApPatientRelationService apPatientRelationService, ApPatientInsuranceService apPatientInsuranceService, ApPatientSecondaryDocumentsService apPatientSecondaryDocumentsService, ApPatientInsuranceCoverageService apPatientInsuranceCoverageService, ApPatientAdministrativeWarningsService apPatientAdministrativeWarningsService, ApAgeGroupService apAgeGroupService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApUserAccessPrivatePatientService apUserAccessPrivatePatientService, ApPatientPreferredHealthProfessionalService apPatientPreferredHealthProfessionalService, ApFacilityService apFacilityService, ApPractitionerService apPractitionerService, ApAttachmentService apAttachmentService) {
+    private final ApDuplicationCandidateSetupService apDuplicationCandidateSetupService;
+    public PatientController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApPatientAllergiesService apPatientAllergiesService, ApAllergensService apAllergensService, ApPatientRelationService apPatientRelationService, ApPatientInsuranceService apPatientInsuranceService, ApPatientSecondaryDocumentsService apPatientSecondaryDocumentsService, ApPatientInsuranceCoverageService apPatientInsuranceCoverageService, ApPatientAdministrativeWarningsService apPatientAdministrativeWarningsService, ApAgeGroupService apAgeGroupService, ApLovValuesService apLovValuesService, ApUserService apUserService, ApUserAccessPrivatePatientService apUserAccessPrivatePatientService, ApPatientPreferredHealthProfessionalService apPatientPreferredHealthProfessionalService, ApFacilityService apFacilityService, ApPractitionerService apPractitionerService, ApAttachmentService apAttachmentService, ApDuplicationCandidateSetupService apDuplicationCandidateSetupService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -69,6 +69,7 @@ public class PatientController {
         this.apFacilityService = apFacilityService;
         this.apPractitionerService = apPractitionerService;
         this.apAttachmentService = apAttachmentService;
+        this.apDuplicationCandidateSetupService = apDuplicationCandidateSetupService;
     }
     @GetMapping("/get-patient-by-id")
     public ResponseEntity<?> getPatientById(
@@ -110,6 +111,43 @@ public class PatientController {
         }
 
     }
+
+    @PostMapping(value = "/patient-list-by-role-candidate", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> patientList(@RequestBody PatientRoleRequest request,
+                                         @Nullable @RequestHeader String facility_id,
+                                         @Nullable @RequestHeader String access_token,
+                                         @Nullable @RequestHeader Integer access_level,
+                                         @Nullable @RequestHeader String lang) {
+        try {
+            ApPatient patient = request.getPatient();
+            ApDuplicationCandidateSetup role = request.getRole();
+
+            ParentResponse<List<ApPatient>> response = new ParentResponse<>();
+            String where = apDuplicationCandidateSetupService.buildWhereClause(role, patient);
+          
+
+            List<ApPatient> patients = apPatientService.getList(where);
+
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_patient where " + where);
+
+            for (ApPatient patientt : patients) {
+                List<ApAttachment> exising = apAttachmentService.getList("attachment_type = 'PATIENT_PROFILE_PICTURE' and reference_object_key = '" + patient.getKey() + "' and deleted_at is null");
+                if (!exising.isEmpty()) {
+                    patientt.setAttachmentProfilePicture(exising.get(0));
+                }
+                apPatientService.populateLovFields(patientt, lang);
+            }
+            response.setObject(patients);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
 
     @GetMapping(value = "/patient-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> patientList(@RequestParam Map<String, String> queryParams,
@@ -176,6 +214,8 @@ public class PatientController {
         }
 
     }
+
+
 
     @PostMapping(value = "/save-patient", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveLovValue(@RequestBody ApPatient apPatient,

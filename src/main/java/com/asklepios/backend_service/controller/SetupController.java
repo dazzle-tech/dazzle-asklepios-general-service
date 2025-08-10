@@ -61,7 +61,7 @@ public class SetupController implements Serializable {
     private final ApAddressesService apAddressesService;
     private final ApUserFacilitiyDepartmentsService apUserFacilitiyDepartmentsService;
     private final EmailService emailService;
-    private final  ApAgeGroupService apAgeGroupService;
+    private final ApAgeGroupService apAgeGroupService;
     private final ApDiagnosticTestLaboratoryService apDiagnosticTestLaboratoryService;
     private final ApDiagnosticTestPathologyService apDiagnosticTestPathologyService;
     private final ApVaccineService apVaccineService;
@@ -69,16 +69,16 @@ public class SetupController implements Serializable {
     private final ApVaccineDoseService apVaccineDoseService;
     private final ApVaccineDosesIntervalService apVaccineDosesIntervalService;
     private final ApProcedureSetupService apProcedureSetupService;
-    private  final ApProcedureCodingService apProcedureCodingService;
+    private final ApProcedureCodingService apProcedureCodingService;
     private final ApProcedurePriceListService apProcedurePriceListService;
-    private  final ApDuplicationCandidateSetupService apDuplicationCandidateSetupService;
-    private final  ApCptService apCptService;
-    private final  ApLoincService apLoincService;
+    private final ApDuplicationCandidateSetupService apDuplicationCandidateSetupService;
+    private final ApCptService apCptService;
+    private final ApLoincService apLoincService;
     private final ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService;
     private final ApDiagnosticTestNormalRangeLovService apDiagnosticTestNormalRangeLovService;
     private final ApDiagnosticTestProfileService apDiagnosticTestProfileService;
-    private  final ApMedicalSheetsService apMedicalSheetsService;
-    private  final ApDiagnosticCodingService apDiagnosticCodingService;
+    private final ApMedicalSheetsService apMedicalSheetsService;
+    private final ApDiagnosticCodingService apDiagnosticCodingService;
     private final ApRoomService apRoomService;
     private final ApBedService apBedService;
     private final ApRoomServicesService apRoomServicesService;
@@ -556,11 +556,11 @@ public class SetupController implements Serializable {
                 newPassword.append(allowedChars.charAt(random.nextInt(allowedChars.length())));
             }
             String body = "Dear " + existingUser.getFullName() + ",\n\n" +
-                    "A request to reset your password has been processed.\n\n"+
+                    "A request to reset your password has been processed.\n\n" +
                     "For security reasons," +
                     " we’ve generated a temporary password for you to use to access your account." +
-                    " Please use this password to log in and remember to update it immediately to secure your account.\n\n"+
-                    " Temporary Password : " + newPassword.toString()  +" \n\n"+
+                    " Please use this password to log in and remember to update it immediately to secure your account.\n\n" +
+                    " Temporary Password : " + newPassword.toString() + " \n\n" +
                     "Please contact our support team immediately if you didn’t request this change, or have any issues.";
 
             emailService.sendSimpleEmail(existingUser.getEmail(), "Your Password Has Been Reset", body);
@@ -758,7 +758,7 @@ public class SetupController implements Serializable {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-            List<ApUomGroupsUnits> list = apUomGroupsUnitsService.getList( where);
+            List<ApUomGroupsUnits> list = apUomGroupsUnitsService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_uom_groups_units where " + whereForTotal);
             for (ApUomGroupsUnits uom : list) {
                 apUomGroupsUnitsService.populateLovFields(uom, lang);
@@ -828,7 +828,7 @@ public class SetupController implements Serializable {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-            List<ApUomGroupsRelation> list = apUomGroupsRelationService.getList( where);
+            List<ApUomGroupsRelation> list = apUomGroupsRelationService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_uom_groups_relation where " + whereForTotal);
             for (ApUomGroupsRelation uom : list) {
                 apUomGroupsRelationService.populateLovFields(uom, lang);
@@ -897,7 +897,7 @@ public class SetupController implements Serializable {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-            List<ApUomGroups> list = apUomGroupsService.getList( where);
+            List<ApUomGroups> list = apUomGroupsService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_uom_groups where " + whereForTotal);
             for (ApUomGroups uom : list) {
                 apUomGroupsService.populateLovFields(uom, lang);
@@ -1083,7 +1083,7 @@ public class SetupController implements Serializable {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-            List<ApPractitioner> list = apPractitionerService.getList(" deleted_at is null and "+where);
+            List<ApPractitioner> list = apPractitionerService.getList(" deleted_at is null and " + where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_practitioner where " + whereForTotal);
             for (ApPractitioner practitioner : list) {
                 apPractitionerService.populateLovFields(practitioner, lang);
@@ -1297,6 +1297,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/department-list-by-type", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> departmentListByType(@RequestHeader String departmentTypeKey,
                                                   @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -1305,8 +1306,8 @@ public class SetupController implements Serializable {
                                                   @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApDepartment>> response = new ParentResponse<>();
-            List<ApDepartment> list = apDepartmentService.getList("department_type_lkey = '"+departmentTypeKey +"'");
-            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_department where department_type_lkey = '"+departmentTypeKey +"'");
+            List<ApDepartment> list = apDepartmentService.getList("department_type_lkey = '" + departmentTypeKey + "'");
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_department where department_type_lkey = '" + departmentTypeKey + "'");
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);
@@ -1626,7 +1627,6 @@ public class SetupController implements Serializable {
     }
 
 
-
     @PostMapping(value = "/save-allergens", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveAllergens(@RequestBody ApAllergens allergens,
                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -1685,14 +1685,13 @@ public class SetupController implements Serializable {
                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
-            if(ageGroup.getKey()!=null){
+            if (ageGroup.getKey() != null) {
                 ParentResponse<ApAgeGroup> response = new ParentResponse<>();
                 apAgeGroupService.saveRecord(ageGroup);
                 response.setObject(ageGroup);
                 response.setMsg("Edit Successfully");
                 return ResponseEntity.ok(response);
-            }
-            else{
+            } else {
                 BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_age_group where  age_group_lkey='" + ageGroup.getAgeGroupLkey() + "'");
                 if (totalRecord != null && totalRecord.intValue() > 0) {
 
@@ -1707,14 +1706,14 @@ public class SetupController implements Serializable {
                     response.setObject(ageGroup);
 
                     return ResponseEntity.ok(response);
-                }}
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
             return ResponseEntity.status(500).body(e);
         }
     }
-
 
 
     @GetMapping(value = "/age-group-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1748,7 +1747,6 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
-
 
 
     @GetMapping(value = "/icd-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -2093,7 +2091,7 @@ public class SetupController implements Serializable {
             for (ApDiagnosticTestNormalRange all : list) {
                 apDiagnosticTestNormalRangeService.populateLovFields(all, lang);
                 List<ApDiagnosticTestNormalRangeLov> lovList = new ApDiagnosticTestNormalRangeLovService().getList("normal_range_key = '" + all.getKey() + "' and deleted_at is null");
-                if(!lovList.isEmpty()){
+                if (!lovList.isEmpty()) {
                     List<String> lovIds = new ArrayList<>();
                     lovList.forEach(lov -> lovIds.add(lov.getLovLkey()));
                     all.setLovList(lovIds);
@@ -2215,12 +2213,12 @@ public class SetupController implements Serializable {
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_diagnostic_test where " + whereForTotal);
             for (ApDiagnosticTest all : list) {
                 apDiagnosticTestService.populateLovFields(all, lang);
-                if(all.getTestTypeLkey().equals("862810597620632")){ //TODO Lab key
-                    List<ApDiagnosticTestLaboratory> listLab = apDiagnosticTestLaboratoryService.getList("test_key = '"+all.getKey()+"'");
-                    if(listLab != null && listLab.size() > 0){
+                if (all.getTestTypeLkey().equals("862810597620632")) { //TODO Lab key
+                    List<ApDiagnosticTestLaboratory> listLab = apDiagnosticTestLaboratoryService.getList("test_key = '" + all.getKey() + "'");
+                    if (listLab != null && listLab.size() > 0) {
                         all.setProfile(listLab.get(0).getIsProfile());
                     }
-                }else{
+                } else {
                     all.setProfile(false);
                 }
             }
@@ -2271,7 +2269,6 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
-
 
 
     @GetMapping(value = "/diagnostic-test-laboratory-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -2539,6 +2536,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/deactive-avtice-vaccine", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deactive_avtice_Vaccine(@RequestBody ApVaccine vaccine,
                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -2556,6 +2554,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-vaccine-brands", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveVaccine(@RequestBody ApVaccineBrands vaccineBrand,
                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -2573,6 +2572,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/vaccine-brands-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> vaccineBrandsList(@RequestParam Map<String, String> queryParams,
                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -2603,6 +2603,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/deactive-avtice-vaccine-brand", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deactive_avtice_Vaccine_Brand(@RequestBody ApVaccineBrands vaccineBrand,
                                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -2645,7 +2646,6 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
-
 
 
     @GetMapping(value = "/vaccine-doses-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -2711,14 +2711,16 @@ public class SetupController implements Serializable {
                 apVaccineDose.setApLovValues(apLovValues);
                 response.setObject(apVaccineDose);
                 return ResponseEntity.ok(response);
+            } else {
+                return ResponseEntity.status(500).body("faild");
             }
-            else{return ResponseEntity.status(500).body("faild");}
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
+
     @PostMapping(value = "/save-vaccine-doses-interval", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveVaccineDosesInterval(@RequestBody ApVaccineDosesInterval vaccineDosesInterval,
                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -2796,8 +2798,7 @@ public class SetupController implements Serializable {
                                            @jakarta.annotation.Nullable @RequestHeader String lang,
                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level)
-    {
+                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level) {
         try {
             ParentResponse<List<ApProcedureSetup>> response = new ParentResponse<>();
             if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
@@ -2830,7 +2831,7 @@ public class SetupController implements Serializable {
                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                            @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
-            ParentResponse<ApProcedureSetup > response = new ParentResponse<>();
+            ParentResponse<ApProcedureSetup> response = new ParentResponse<>();
             apProcedureSetupService.saveRecord(apProcedureSetup);
             response.setObject(apProcedureSetup);
             return ResponseEntity.ok(response);
@@ -2840,13 +2841,13 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/procedure-coding-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> procedureCodingList(@RequestParam Map<String, String> queryParams,
                                                  @jakarta.annotation.Nullable @RequestHeader String lang,
                                                  @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                                  @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level)
-    {
+                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level) {
         try {
             ParentResponse<List<ApProcedureCoding>> response = new ParentResponse<>();
             if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
@@ -2871,6 +2872,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/remove-procedure", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeProcedure(@RequestBody ApProcedureSetup apProcedureSetup,
                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -2906,6 +2908,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/remove-coding", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteProcedurePriceList(@RequestBody ApProcedureCoding apProcedureCoding,
                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -2923,13 +2926,13 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/procedure-price-list-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> procedurePriceListList(@RequestParam Map<String, String> queryParams,
                                                     @jakarta.annotation.Nullable @RequestHeader String lang,
                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level)
-    {
+                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level) {
         try {
             ParentResponse<List<ApProcedurePriceList>> response = new ParentResponse<>();
             if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
@@ -2972,6 +2975,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/remove-price-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteProcedurePriceList(@RequestBody ApProcedurePriceList apProcedurePriceList,
                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -2989,6 +2993,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-duplication_candidate_setup", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDuplicationCandidateSetup(@RequestBody ApDuplicationCandidateSetup request,
                                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -2997,8 +3002,8 @@ public class SetupController implements Serializable {
                                                            @jakarta.annotation.Nullable @RequestHeader String lang
     ) {
         try {
-            if(request.getKey()==null){
-                String lastRole  = DS.executeStringResultQuery("select max(role) from ap_duplication_candidate_setup");
+            if (request.getKey() == null) {
+                String lastRole = DS.executeStringResultQuery("select max(role) from ap_duplication_candidate_setup");
 
                 String newRole;
 
@@ -3022,13 +3027,13 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/duplication_candidate_setup-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?>duplicationCandidateSetupList(@RequestParam Map<String, String> queryParams,
-                                                          @jakarta.annotation.Nullable @RequestHeader String lang,
-                                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level)
-    {
+    public ResponseEntity<?> duplicationCandidateSetupList(@RequestParam Map<String, String> queryParams,
+                                                           @jakarta.annotation.Nullable @RequestHeader String lang,
+                                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level) {
         try {
             ParentResponse<List<ApDuplicationCandidateSetup>> response = new ParentResponse<>();
             if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
@@ -3047,6 +3052,33 @@ public class SetupController implements Serializable {
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(value = "/duplication-candidate-by-department", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getCandidatesByDepartmentKey(
+            @RequestParam String departmentKey,
+            @jakarta.annotation.Nullable @RequestHeader String lang,
+            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+            @jakarta.annotation.Nullable @RequestHeader String access_token,
+            @jakarta.annotation.Nullable @RequestHeader Integer access_level) {
+
+        try {
+            ParentResponse<ApDuplicationCandidateSetup> response = new ParentResponse<>();
+
+
+
+            ApDepartment department = apDepartmentService.getRecord(departmentKey);
+            ApFacility facility = apFacilityService.getRecord(department.getFacilityKey());
+            ApDuplicationCandidateSetup candidate = apDuplicationCandidateSetupService.getRecord(facility.getRoolKey());
+
+            apDuplicationCandidateSetupService.populateLovFields(candidate, lang);
+            response.setObject(candidate);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
@@ -3082,20 +3114,20 @@ public class SetupController implements Serializable {
     }
 
     @GetMapping(value = "/loinc-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?>loincList(@RequestParam Map<String, String> queryParams,
-                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                      @jakarta.annotation.Nullable @RequestHeader String lang) {
+    public ResponseEntity<?> loincList(@RequestParam Map<String, String> queryParams,
+                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                       @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                       @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                       @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApLoinc>> response = new ParentResponse<>();
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-            List<ApLoinc> list = apLoincService .getList(where);
+            List<ApLoinc> list = apLoincService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_loinc where " + whereForTotal);
             for (ApLoinc all : list) {
-                apLoincService .populateLovFields(all, lang);
+                apLoincService.populateLovFields(all, lang);
             }
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
@@ -3106,6 +3138,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-medical-sheet", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveMedicalSheet(@RequestBody ApMedicalSheets medicalSheet,
                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -3123,6 +3156,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/medical-sheets-by-department-id", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ParentResponse<ApMedicalSheets>> getMedicalSheetsByDepartmentId(
             @RequestHeader String departmentid,
@@ -3156,13 +3190,13 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
     @GetMapping(value = "/diagnostics-coding-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> diagnosticsCodingList(@RequestParam Map<String, String> queryParams,
                                                    @jakarta.annotation.Nullable @RequestHeader String lang,
                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                                    @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                   @jakarta.annotation.Nullable @RequestHeader Integer access_level)
-    {
+                                                   @jakarta.annotation.Nullable @RequestHeader Integer access_level) {
         try {
             ParentResponse<List<ApDiagnosticCoding>> response = new ParentResponse<>();
             if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
@@ -3172,7 +3206,7 @@ public class SetupController implements Serializable {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false);
-            List<ApDiagnosticCoding> list =apDiagnosticCodingService.getList(where);
+            List<ApDiagnosticCoding> list = apDiagnosticCodingService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_diagnostic_coding where " + whereForTotal);
             for (ApDiagnosticCoding all : list) {
                 apDiagnosticCodingService.populateLovFields(all, lang);
@@ -3205,6 +3239,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/remove-diagnostics-coding", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteProcedurePriceList(@RequestBody ApDiagnosticCoding apDiagnosticCoding,
                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -3222,6 +3257,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-room", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveRoom(
             @RequestBody ApRoom room,
@@ -3290,6 +3326,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/deactive-active-room", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deactiveActiveRoom(@RequestBody ApRoom room,
                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -3307,6 +3344,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-bed", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveBed(
             @RequestBody ApBed bed,
@@ -3326,6 +3364,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body("Internal Server Error: " + e.getMessage());
         }
     }
+
     @GetMapping(value = "/bed-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> BedList(@RequestParam Map<String, String> queryParams,
                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -3356,6 +3395,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/deactive-active-bed", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deactiveActiveBed(@RequestBody ApBed bed,
                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -3373,6 +3413,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-room-service", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveRoomService(
             @RequestBody ApRoomServices services,
@@ -3392,6 +3433,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body("Internal Server Error: " + e.getMessage());
         }
     }
+
     @GetMapping(value = "/room-services-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> RoomServicesList(@RequestParam Map<String, String> queryParams,
                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -3426,6 +3468,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/deactive-active-room-services", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deactiveActiveBed(@RequestBody ApRoomServices services,
                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -3443,6 +3486,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/room-beds-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> roomBedsList(@RequestHeader("resourceKey") String resourceKey,
                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -3452,8 +3496,8 @@ public class SetupController implements Serializable {
         try {
             ParentResponse<List<Map<String, Object>>> response = new ParentResponse<>();
 
-           // ApResources resources = apResourcesService.getRecord(resourceKey);
-            List<Map<String, Object>> roomBedsMap = apBedService.getBedsByDepartmentKey(resourceKey , lang);
+            // ApResources resources = apResourcesService.getRecord(resourceKey);
+            List<Map<String, Object>> roomBedsMap = apBedService.getBedsByDepartmentKey(resourceKey, lang);
 
             response.setObject(roomBedsMap);
             return ResponseEntity.ok(response);
@@ -3480,7 +3524,7 @@ public class SetupController implements Serializable {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-            List<ApProducts> list = apProductsService.getList( where);
+            List<ApProducts> list = apProductsService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_products where " + whereForTotal);
             for (ApProducts product : list) {
                 apProductsService.populateLovFields(product, lang);
@@ -3534,6 +3578,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/warehouses-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> warehousesList(@RequestParam Map<String, String> queryParams,
                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -3549,7 +3594,7 @@ public class SetupController implements Serializable {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-            List<ApWarehouse> list = apWarehouseService.getList( where);
+            List<ApWarehouse> list = apWarehouseService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_warehouse where " + whereForTotal);
             for (ApWarehouse warehouse : list) {
                 apWarehouseService.populateLovFields(warehouse, lang);
@@ -3603,6 +3648,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/warehouses-user-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> warehousesUserList(@RequestParam Map<String, String> queryParams,
                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -3618,7 +3664,7 @@ public class SetupController implements Serializable {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-            List<ApWarehouseUser> list = apWarehouseUserService.getList( where);
+            List<ApWarehouseUser> list = apWarehouseUserService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_warehouse_user where " + whereForTotal);
             for (ApWarehouseUser warehouseUser : list) {
                 apWarehouseUserService.populateLovFields(warehouseUser, lang);
@@ -3671,6 +3717,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/get-bed-count-by-department", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getBedCountByDepartment(@RequestHeader("department_key") String key,
                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -3689,12 +3736,13 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/warehouses-products-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> warehousesProductsList(@RequestParam Map<String, String> queryParams,
-                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                            @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                    @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                    @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApWarehouseProduct>> response = new ParentResponse<>();
             if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
@@ -3704,7 +3752,7 @@ public class SetupController implements Serializable {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-            List<ApWarehouseProduct> list = apWarehouseProductService.getList( where);
+            List<ApWarehouseProduct> list = apWarehouseProductService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_warehouse_product where " + whereForTotal);
             for (ApWarehouseProduct warehouseProduct : list) {
                 apWarehouseProductService.populateLovFields(warehouseProduct, lang);
@@ -3730,10 +3778,10 @@ public class SetupController implements Serializable {
 
     @PostMapping(value = "/save-warehouse-products", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveWarehouseProducts(@RequestBody ApWarehouseProduct warehouseProduct,
-                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                                   @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                   @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                   @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApWarehouseProduct> response = new ParentResponse<>();
             apWarehouseProductService.saveRecord(warehouseProduct);
@@ -3748,10 +3796,10 @@ public class SetupController implements Serializable {
 
     @PostMapping(value = "/remove-warehouse-products", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeWarehouseProducts(@RequestBody ApWarehouseProduct warehouseProduct,
-                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                             @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                     @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApWarehouseProduct> response = new ParentResponse<>();
             apWarehouseProductService.deleteRecord(warehouseProduct);
@@ -3767,10 +3815,10 @@ public class SetupController implements Serializable {
 
     @GetMapping(value = "/warehouses-products-details-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> warehousesProductsDetailsList(@RequestParam Map<String, String> queryParams,
-                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                    @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                    @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApWarehouseProductDetails>> response = new ParentResponse<>();
             if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
@@ -3780,11 +3828,11 @@ public class SetupController implements Serializable {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-            List<ApWarehouseProductDetails> list = apWarehouseProductDetailsService.getList( where);
+            List<ApWarehouseProductDetails> list = apWarehouseProductDetailsService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_warehouse_product_details where " + whereForTotal);
             for (ApWarehouseProductDetails warehouseProductDetails : list) {
                 apWarehouseProductDetailsService.populateLovFields(warehouseProductDetails, lang);
-               }
+            }
 
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
@@ -3800,10 +3848,10 @@ public class SetupController implements Serializable {
 
     @PostMapping(value = "/save-warehouse-products-details", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveWarehouseProductsDetails(@RequestBody ApWarehouseProductDetails warehouseProductDetails,
-                                                   @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                   @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                   @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                          @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApWarehouseProductDetails> response = new ParentResponse<>();
             apWarehouseProductDetailsService.saveRecord(warehouseProductDetails);
@@ -3818,10 +3866,10 @@ public class SetupController implements Serializable {
 
     @PostMapping(value = "/remove-warehouse-products-details", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeWarehouseProductsDetails(@RequestBody ApWarehouseProductDetails warehouseProductDetails,
-                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                     @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                            @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApWarehouseProductDetails> response = new ParentResponse<>();
             apWarehouseProductDetailsService.deleteRecord(warehouseProductDetails);
@@ -3838,10 +3886,10 @@ public class SetupController implements Serializable {
     //Return warehouses that contain products only
     @GetMapping(value = "/warehouses-contain-products-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> warehousesContainProductsList(@RequestParam Map<String, String> queryParams,
-                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                    @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                    @jakarta.annotation.Nullable @RequestHeader String lang) {
+                                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApWarehouse>> response = new ParentResponse<>();
             if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
@@ -3851,8 +3899,8 @@ public class SetupController implements Serializable {
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
-            List<ApWarehouseProduct> list = apWarehouseProductService.getList( where);
-            List <ApWarehouse> warehouseList = apWarehouseProductService.warehouseList(list);
+            List<ApWarehouseProduct> list = apWarehouseProductService.getList(where);
+            List<ApWarehouse> warehouseList = apWarehouseProductService.warehouseList(list);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_warehouse where " + whereForTotal);
             for (ApWarehouse warehouse : warehouseList) {
                 apWarehouseService.populateLovFields(warehouse, lang);

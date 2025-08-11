@@ -2374,15 +2374,18 @@ public class EncounterController {
                 encounter.setHasAllergy(apEncounterService.getHasAllergy(encounter.getKey()));
                 encounter.setHasObservation(apEncounterService.getHasObservation(encounter.getKey()));
                 apEncounterService.populateLovFields(encounter, lang);
+                List<ApAdmitOutpatientInpatient> admitList =
+                        apAdmitOutpatientInpatientService.getList("to_encounter_key = '" + encounter.getKey() + "'");
 
-                ApAdmitOutpatientInpatient admitObject = apAdmitOutpatientInpatientService
-                        .getList("to_encounter_key = '" + encounter.getKey() + "'").get(0);
+                if (!admitList.isEmpty()) {
+                    ApAdmitOutpatientInpatient admitObject = admitList.get(0);
 
-                encounter.setApBed(apBedService.getRecord(admitObject.getBedKey()));
-                apBedService.populateLovFields(encounter.getApBed(), lang);
+                    encounter.setApBed(apBedService.getRecord(admitObject.getBedKey()));
+                    apBedService.populateLovFields(encounter.getApBed(), lang);
 
-                encounter.setApRoom(apRoomService.getRecord(admitObject.getRoomKey()));
-                apRoomService.populateLovFields(encounter.getApRoom(), lang);
+                    encounter.setApRoom(apRoomService.getRecord(admitObject.getRoomKey()));
+                    apRoomService.populateLovFields(encounter.getApRoom(), lang);
+                }
 
                 filteredEncounters.add(encounter);
                 ApAdmitOutpatientInpatient admit =
@@ -3741,6 +3744,28 @@ public class EncounterController {
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/cancel-encounter", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> cancelEncounter(@RequestBody ApEncounter apEncounter,
+                                               @Nullable @RequestHeader String facility_id,
+                                               @Nullable @RequestHeader String access_token,
+                                               @Nullable @RequestHeader Integer access_level,
+                                               @Nullable @RequestHeader String lang,
+                                               @Nullable @RequestHeader String screenKey
+    ) {
+        try {
+            ParentResponse<ApEncounter> response = new ParentResponse<>();
+            apEncounter.setEncounterStatusLkey("91098528988200"); // TODO replace with redis by lov code (ENC_STATUS/CANCEL)
+            apEncounterService.saveRecord(apEncounter);
+            apEncounterService.populateLovFields(apEncounter, lang);
+            response.setObject(apEncounter);
+            response.setMsg("Visit Cancelled");
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());

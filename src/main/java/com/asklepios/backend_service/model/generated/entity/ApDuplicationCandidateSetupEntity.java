@@ -16,7 +16,6 @@ public class ApDuplicationCandidateSetupEntity implements Serializable {
 
 	private String key;
 	private String role;
-	private Boolean dateOfBirth = false;
 	private Boolean dob = false;
 	private Boolean lastName = false;
 	private Boolean documentNo = false;

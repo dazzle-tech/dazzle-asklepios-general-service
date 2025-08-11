@@ -39,7 +39,6 @@ ApDuplicationCandidateSetup record = new ApDuplicationCandidateSetup();
 if(rs.next()){
 record.setKey(rs.getString("key"));
 record.setRole(rs.getString("role"));
-record.setDateOfBirth(rs.getBoolean("date_of_birth"));
 record.setDob(rs.getBoolean("dob"));
 record.setLastName(rs.getBoolean("last_name"));
 record.setDocumentNo(rs.getBoolean("document_no"));
@@ -58,24 +57,23 @@ return record;
 public void updateRecord(ApDuplicationCandidateSetup record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_duplication_candidate_setup set key = ?, role = ?, date_of_birth = ?, dob = ?, last_name = ?, document_no = ?, mobile_number = ?, gender = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_duplication_candidate_setup set key = ?, role = ?, dob = ?, last_name = ?, document_no = ?, mobile_number = ?, gender = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
 ps.setString(2, record.getRole());
-ps.setBoolean(3, record.getDateOfBirth());
-ps.setBoolean(4, record.getDob());
-ps.setBoolean(5, record.getLastName());
-ps.setBoolean(6, record.getDocumentNo());
-ps.setBoolean(7, record.getMobileNumber());
-ps.setBoolean(8, record.getGender());
-ps.setString(9, record.getCreatedBy());
-ps.setString(10, record.getUpdatedBy());
-ps.setString(11, record.getDeletedBy());
-ps.setBigDecimal(12, record.getCreatedAt());
-ps.setBigDecimal(13, record.getUpdatedAt());
-ps.setBigDecimal(14, record.getDeletedAt());
-ps.setString(15, record.getKey());
+ps.setBoolean(3, record.getDob());
+ps.setBoolean(4, record.getLastName());
+ps.setBoolean(5, record.getDocumentNo());
+ps.setBoolean(6, record.getMobileNumber());
+ps.setBoolean(7, record.getGender());
+ps.setString(8, record.getCreatedBy());
+ps.setString(9, record.getUpdatedBy());
+ps.setString(10, record.getDeletedBy());
+ps.setBigDecimal(11, record.getCreatedAt());
+ps.setBigDecimal(12, record.getUpdatedAt());
+ps.setBigDecimal(13, record.getDeletedAt());
+ps.setString(14, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -99,7 +97,6 @@ while(rs.next()){
 ApDuplicationCandidateSetup record = new ApDuplicationCandidateSetup();
 record.setKey(rs.getString("key"));
 record.setRole(rs.getString("role"));
-record.setDateOfBirth(rs.getBoolean("date_of_birth"));
 record.setDob(rs.getBoolean("dob"));
 record.setLastName(rs.getBoolean("last_name"));
 record.setDocumentNo(rs.getBoolean("document_no"));
@@ -119,7 +116,7 @@ return list;
 public String saveRecord(ApDuplicationCandidateSetup record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_duplication_candidate_setup values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_duplication_candidate_setup values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -128,18 +125,17 @@ record.setKey(key);
 
 ps.setString(1, key);
 ps.setString(2, record.getRole());
-ps.setBoolean(3, record.getDateOfBirth());
-ps.setBoolean(4, record.getDob());
-ps.setBoolean(5, record.getLastName());
-ps.setBoolean(6, record.getDocumentNo());
-ps.setBoolean(7, record.getMobileNumber());
-ps.setBoolean(8, record.getGender());
-ps.setString(9, record.getCreatedBy());
-ps.setString(10, record.getUpdatedBy());
-ps.setString(11, record.getDeletedBy());
-ps.setBigDecimal(12, record.getCreatedAt());
-ps.setBigDecimal(13, record.getUpdatedAt());
-ps.setBigDecimal(14, record.getDeletedAt());
+ps.setBoolean(3, record.getDob());
+ps.setBoolean(4, record.getLastName());
+ps.setBoolean(5, record.getDocumentNo());
+ps.setBoolean(6, record.getMobileNumber());
+ps.setBoolean(7, record.getGender());
+ps.setString(8, record.getCreatedBy());
+ps.setString(9, record.getUpdatedBy());
+ps.setString(10, record.getDeletedBy());
+ps.setBigDecimal(11, record.getCreatedAt());
+ps.setBigDecimal(12, record.getUpdatedAt());
+ps.setBigDecimal(13, record.getDeletedAt());
 ps.executeUpdate();
 return key;
 }

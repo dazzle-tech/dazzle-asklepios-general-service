@@ -90,6 +90,15 @@ record.setBradenScaleForPressureUlcer(rs.getBoolean("braden_scale_for_pressure_u
 record.setGlasgowComaScale(rs.getBoolean("glasgow_coma_scale"));
 record.setVteRiskAssessment(rs.getBoolean("vte_risk_assessment"));
 record.setProgressNotes(rs.getBoolean("progress_notes"));
+record.setMedicationAdministrationRecord (rs.getBoolean("medication_administration_record "));
+record.setIvFluidAdministration(rs.getBoolean("iv_fluid_administration"));
+record.setDietaryRequest(rs.getBoolean("dietary_request"));
+record.setPediatric(rs.getBoolean("pediatric"));
+record.setGynecology(rs.getBoolean("gynecology"));
+record.setSpeechTherapy(rs.getBoolean("speech_therapy"));
+record.setRehabilitationPlan(rs.getBoolean("rehabilitation_plan"));
+record.setOccupationalTherapy(rs.getBoolean("occupational_therapy"));
+record.setPhysiotherapyPlan(rs.getBoolean("physiotherapy_plan"));
 } else { record = null; }
 return record;
 }
@@ -97,7 +106,7 @@ return record;
 public void updateRecord(ApMedicalSheets record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_medical_sheets set key = ?, department_key = ?, facility_key = ?, patient_dashboard = ?, clinical_visit = ?, diagnostics_order = ?, prescription = ?, drug_order = ?, consultation = ?, procedures = ?, patient_history = ?, allergies = ?, medical_warnings = ?, medications_record = ?, psychological_exam = ?, audiometry_puretone = ?, optometric_exam = ?, vaccine_reccord = ?, diagnostics_result = ?, dental_care = ?, cardiology = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, observation = ?, vaccination = ?, operation_requests = ?, doctor_round = ?, day_case = ?, bedside_procedures_request = ?, referral_request = ?, blood_order = ?, iv_fluid_order = ?, intake_output_balance = ?, risk_assessments = ?, multidisciplinary_team_notes = ?, nutrition_state_assessment = ?, physician_order_summary = ?, care_plan_and_goals = ?, discharge_planning = ?, pregnancy_follow_up = ?, morse_fall_scale = ?, hendrich_fall_risk = ?, stratify_scale = ?, johns_hopkins_fall_risk_assessment_tool = ?, braden_scale_for_pressure_ulcer = ?, glasgow_coma_scale = ?, vte_risk_assessment = ?, progress_notes = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_medical_sheets set key = ?, department_key = ?, facility_key = ?, patient_dashboard = ?, clinical_visit = ?, diagnostics_order = ?, prescription = ?, drug_order = ?, consultation = ?, procedures = ?, patient_history = ?, allergies = ?, medical_warnings = ?, medications_record = ?, psychological_exam = ?, audiometry_puretone = ?, optometric_exam = ?, vaccine_reccord = ?, diagnostics_result = ?, dental_care = ?, cardiology = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, observation = ?, vaccination = ?, operation_requests = ?, doctor_round = ?, day_case = ?, bedside_procedures_request = ?, referral_request = ?, blood_order = ?, iv_fluid_order = ?, intake_output_balance = ?, risk_assessments = ?, multidisciplinary_team_notes = ?, nutrition_state_assessment = ?, physician_order_summary = ?, care_plan_and_goals = ?, discharge_planning = ?, pregnancy_follow_up = ?, morse_fall_scale = ?, hendrich_fall_risk = ?, stratify_scale = ?, johns_hopkins_fall_risk_assessment_tool = ?, braden_scale_for_pressure_ulcer = ?, glasgow_coma_scale = ?, vte_risk_assessment = ?, progress_notes = ?, medication_administration_record  = ?, iv_fluid_administration = ?, dietary_request = ?, pediatric = ?, gynecology = ?, speech_therapy = ?, rehabilitation_plan = ?, occupational_therapy = ?, physiotherapy_plan = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -153,7 +162,16 @@ ps.setBoolean(50, record.getBradenScaleForPressureUlcer());
 ps.setBoolean(51, record.getGlasgowComaScale());
 ps.setBoolean(52, record.getVteRiskAssessment());
 ps.setBoolean(53, record.getProgressNotes());
-ps.setString(54, record.getKey());
+ps.setBoolean(54, record.getMedicationAdministrationRecord ());
+ps.setBoolean(55, record.getIvFluidAdministration());
+ps.setBoolean(56, record.getDietaryRequest());
+ps.setBoolean(57, record.getPediatric());
+ps.setBoolean(58, record.getGynecology());
+ps.setBoolean(59, record.getSpeechTherapy());
+ps.setBoolean(60, record.getRehabilitationPlan());
+ps.setBoolean(61, record.getOccupationalTherapy());
+ps.setBoolean(62, record.getPhysiotherapyPlan());
+ps.setString(63, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -228,6 +246,15 @@ record.setBradenScaleForPressureUlcer(rs.getBoolean("braden_scale_for_pressure_u
 record.setGlasgowComaScale(rs.getBoolean("glasgow_coma_scale"));
 record.setVteRiskAssessment(rs.getBoolean("vte_risk_assessment"));
 record.setProgressNotes(rs.getBoolean("progress_notes"));
+record.setMedicationAdministrationRecord (rs.getBoolean("medication_administration_record "));
+record.setIvFluidAdministration(rs.getBoolean("iv_fluid_administration"));
+record.setDietaryRequest(rs.getBoolean("dietary_request"));
+record.setPediatric(rs.getBoolean("pediatric"));
+record.setGynecology(rs.getBoolean("gynecology"));
+record.setSpeechTherapy(rs.getBoolean("speech_therapy"));
+record.setRehabilitationPlan(rs.getBoolean("rehabilitation_plan"));
+record.setOccupationalTherapy(rs.getBoolean("occupational_therapy"));
+record.setPhysiotherapyPlan(rs.getBoolean("physiotherapy_plan"));
 list.add(record);
 }
 return list;
@@ -236,7 +263,7 @@ return list;
 public String saveRecord(ApMedicalSheets record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_medical_sheets values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_medical_sheets values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -296,6 +323,15 @@ ps.setBoolean(50, record.getBradenScaleForPressureUlcer());
 ps.setBoolean(51, record.getGlasgowComaScale());
 ps.setBoolean(52, record.getVteRiskAssessment());
 ps.setBoolean(53, record.getProgressNotes());
+ps.setBoolean(54, record.getMedicationAdministrationRecord ());
+ps.setBoolean(55, record.getIvFluidAdministration());
+ps.setBoolean(56, record.getDietaryRequest());
+ps.setBoolean(57, record.getPediatric());
+ps.setBoolean(58, record.getGynecology());
+ps.setBoolean(59, record.getSpeechTherapy());
+ps.setBoolean(60, record.getRehabilitationPlan());
+ps.setBoolean(61, record.getOccupationalTherapy());
+ps.setBoolean(62, record.getPhysiotherapyPlan());
 ps.executeUpdate();
 return key;
 }

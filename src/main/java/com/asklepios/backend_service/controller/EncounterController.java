@@ -92,8 +92,9 @@ public class EncounterController {
     private final ApEmergencyTriageService apEmergencyTriageService;
     private final ApEncounterAssignToBedService apEncounterAssignToBedService;
     private final ApProgressNotesService apProgressNotesService;
+    private final ApPatientTemporaryDischargeService apPatientTemporaryDischargeService;
 
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService, ApDoctorRoundStaffService apDoctorRoundStaffService, ApDoctorRoundService apDoctorRoundService, ApNurseNotesService apNurseNotesService, ApRepositioningService apRepositioningService, ApDayCaseEncountersService apDayCaseEncountersService, ApPreOperationAdministeredMedicationsService apPreOperationAdministeredMedicationsService, ApEmergencyTriageService apEmergencyTriageService, ApEncounterAssignToBedService apEncounterAssignToBedService, ApProgressNotesService apProgressNotesService) {
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService, ApDoctorRoundStaffService apDoctorRoundStaffService, ApDoctorRoundService apDoctorRoundService, ApNurseNotesService apNurseNotesService, ApRepositioningService apRepositioningService, ApDayCaseEncountersService apDayCaseEncountersService, ApPreOperationAdministeredMedicationsService apPreOperationAdministeredMedicationsService, ApEmergencyTriageService apEmergencyTriageService, ApEncounterAssignToBedService apEncounterAssignToBedService, ApProgressNotesService apProgressNotesService, ApPatientTemporaryDischargeService apPatientTemporaryDischargeService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -157,6 +158,7 @@ public class EncounterController {
         this.apEmergencyTriageService = apEmergencyTriageService;
         this.apEncounterAssignToBedService = apEncounterAssignToBedService;
         this.apProgressNotesService = apProgressNotesService;
+        this.apPatientTemporaryDischargeService = apPatientTemporaryDischargeService;
     }
 
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -3765,6 +3767,108 @@ public class EncounterController {
             apEncounterService.populateLovFields(apEncounter, lang);
             response.setObject(apEncounter);
             response.setMsg("Visit Cancelled");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/patient-temporary-discharge", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> patientTemporaryDischarge(@RequestBody ApPatientTemporaryDischarge apPatientTemporaryDischarge,
+                                             @Nullable @RequestHeader String facility_id,
+                                             @Nullable @RequestHeader String access_token,
+                                             @Nullable @RequestHeader Integer access_level,
+                                             @Nullable @RequestHeader String lang,
+                                             @Nullable @RequestHeader String screenKey
+    ) {
+        try {
+            ParentResponse<ApPatientTemporaryDischarge> response = new ParentResponse<>();
+            ApEncounter apEncounter = apEncounterService.getRecord(apPatientTemporaryDischarge.getEncounterKey());
+            apEncounter.setEncounterStatusLkey("6130571996160318"); // TODO replace with redis by lov code (TEMP_DC)
+            apEncounterService.saveRecord(apEncounter);
+            if (!apPatientTemporaryDischarge.getBedRetained()){
+                ApBed apBed = apBedService.getRecord(apPatientTemporaryDischarge.getFromBed());
+                apBed.setStatusLkey("5258572711068224");
+                apBedService.saveRecord(apBed);
+                List<ApAdmitOutpatientInpatient> list = apAdmitOutpatientInpatientService.getList(
+                        "to_encounter_key = '" + apEncounter.getKey() + "'"
+                );
+
+                if (list == null || list.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                            .body(Map.of("message", "No admission record found for the given encounter key"));
+                }
+
+                ApAdmitOutpatientInpatient admitOutpatientInpatient = list.get(0);
+                admitOutpatientInpatient.setBedKey(null);
+                admitOutpatientInpatient.setRoomKey(null);
+                apAdmitOutpatientInpatientService.saveRecord(admitOutpatientInpatient);
+            }
+            apPatientTemporaryDischargeService.saveRecord(apPatientTemporaryDischarge);
+            response.setObject(apPatientTemporaryDischarge);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @PostMapping(value = "/return-from-temporary-discharge", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> ReturnFromTemporaryDischarge(@RequestBody ApPatientTemporaryDischarge apPatientTemporaryDischarge,
+                                                          @RequestHeader("department_key") String depKey,
+                                                          @Nullable @RequestHeader String facility_id,
+                                                          @Nullable @RequestHeader String access_token,
+                                                          @Nullable @RequestHeader Integer access_level,
+                                                          @Nullable @RequestHeader String lang,
+                                                          @Nullable @RequestHeader String screenKey
+    ) {
+        try {
+            ParentResponse<ApPatientTemporaryDischarge> response = new ParentResponse<>();
+            List<ApPatientTemporaryDischarge> list = apPatientTemporaryDischargeService
+                    .getList(" encounter_key = '" + apPatientTemporaryDischarge.getEncounterKey() + "' ORDER BY created_at DESC");
+
+            ApPatientTemporaryDischarge patientTemporaryDischarge = list.isEmpty() ? null : list.get(0);
+
+            assert patientTemporaryDischarge != null;
+            patientTemporaryDischarge.setReturnAt(apPatientTemporaryDischarge.getReturnAt());
+            patientTemporaryDischarge.setRoomKey(apPatientTemporaryDischarge.getRoomKey());
+            patientTemporaryDischarge.setBedKey(apPatientTemporaryDischarge.getBedKey());
+            patientTemporaryDischarge.setNotes(apPatientTemporaryDischarge.getNotes());
+            ApEncounter apEncounter = apEncounterService.getRecord(apPatientTemporaryDischarge.getEncounterKey());
+            apEncounter.setEncounterStatusLkey("91084250213000"); // TODO replace with redis by lov code (ONGOING)
+            apEncounterService.saveRecord(apEncounter);
+
+            if (!apPatientTemporaryDischarge.getBedRetained()){
+                ApBed apBed = apBedService.getRecord(apPatientTemporaryDischarge.getBedKey());
+                apBed.setStatusLkey("5258252390107597"); // TODO replace with redis by lov code (BED_OCC)
+                apBedService.saveRecord(apBed);
+                ApBedTransactions bedTransactions = new ApBedTransactions();
+                bedTransactions.setEncounterKey(patientTemporaryDischarge.getEncounterKey());
+                bedTransactions.setPatientKey(patientTemporaryDischarge.getPatientKey());
+                bedTransactions.setFromRoomKey(patientTemporaryDischarge.getFromRoom());
+                bedTransactions.setFromBedKey(patientTemporaryDischarge.getFromBed());
+                bedTransactions.setToRoomKey(patientTemporaryDischarge.getRoomKey());
+                bedTransactions.setToBedKey(patientTemporaryDischarge.getBedKey());
+                bedTransactions.setDepartmentKey(depKey);
+                apBedTransactionsService.saveRecord(bedTransactions);
+                List<ApAdmitOutpatientInpatient> admit = apAdmitOutpatientInpatientService.getList(
+                        "to_encounter_key = '" + bedTransactions.getEncounterKey() + "'"
+                );
+
+                if (list == null || list.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                            .body(Map.of("message", "No admission record found for the given encounter key"));
+                }
+
+                ApAdmitOutpatientInpatient admitOutpatientInpatient = admit.get(0);
+                admitOutpatientInpatient.setBedKey(bedTransactions.getToBedKey());
+                admitOutpatientInpatient.setRoomKey(bedTransactions.getToRoomKey());
+                apAdmitOutpatientInpatientService.saveRecord(admitOutpatientInpatient);
+            }
+            apPatientTemporaryDischargeService.saveRecord(apPatientTemporaryDischarge);
+            response.setObject(apPatientTemporaryDischarge);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();

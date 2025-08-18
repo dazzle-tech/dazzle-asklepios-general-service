@@ -252,8 +252,51 @@ public class InventoryTransactionController  implements Serializable {
                                                       @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApInventoryTransactionProduct> response = new ParentResponse<>();
+            inventoryTransactionProduct.setStatusLkey("5959341154465084"); //Requested status //TODO Convert LOV key to code
             apInventoryTransactionProductService.saveRecord(inventoryTransactionProduct);
             response.setObject(inventoryTransactionProduct);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @PostMapping(value = "/save-inventory-transaction-product-list", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveInventoryTransactionPtroductList(@RequestBody List<ApInventoryTransactionProduct> request,
+                                               @Nullable @RequestHeader String facility_id,
+                                               @Nullable @RequestHeader String access_token,
+                                               @Nullable @RequestHeader Integer access_level,
+                                               @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApInventoryTransactionProduct>> response = new ParentResponse<>();
+            String inv_key= null ;
+            for (ApInventoryTransactionProduct p : request) {
+                inv_key = p.getInventoryTransKey();
+                if (p.getKey() == null ) {
+                    p.setCreatedBy("Administrator"); // TODO change to actual user from access token
+                    p.setStatusLkey("5959341154465084"); //Requested status //TODO Convert LOV key to code
+                    ApProducts apProduct = apProductsService.getRecord(p.getProductKey());
+                    String uomGroup= apProduct.getUomGroupKey();
+                    p.setNewQuentityBaseUom( apInventoryTransactionProductService.convert( p.getNewQuentity() , p.getTransUomKey() , apProduct.getBaseUomKey() ,uomGroup));
+
+                    apInventoryTransactionProductService.saveRecord(p);
+                } else if (p.getKey() != null ) {
+                        p.setUpdatedBy("Administrator"); // TODO change to actual user from access token
+                        p.setStatusLkey("5959341154465084"); //Requested status //TODO Convert LOV key to code
+                    ApProducts apProduct = apProductsService.getRecord(p.getProductKey());
+                    String uomGroup= apProduct.getUomGroupKey();
+                    p.setNewQuentityBaseUom( apInventoryTransactionProductService.convert( p.getNewQuentity() , p.getTransUomKey() , apProduct.getBaseUomKey() ,uomGroup));
+                    apInventoryTransactionProductService.saveRecord(p);
+                    }
+
+            }
+
+            List<ApInventoryTransactionProduct> updatedList = apInventoryTransactionProductService.getList("inventory_trans_key = '" + inv_key + "' " +
+                    " and deleted_at is null order by created_at desc");
+            response.setObject(updatedList);
+            response.setMsg("Products save successfully");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -306,7 +349,12 @@ public class InventoryTransactionController  implements Serializable {
                                                         @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<ApInventoryTransaction> response = new ParentResponse<>();
-            apInventoryTransactionProductService.confirmProductTransactionOutWarehouse(Key);
+            boolean isSave = apInventoryTransactionProductService.confirmProductTransactionOutWarehouse(Key);
+            if(!isSave){
+                response.setMsg("Transaction quantity exceeds available stock.");
+            }else{
+                response.setMsg("Transaction successfully confirmed.");
+            }
             response.setObject(apInventoryTransactionService.getRecord(Key));
             return ResponseEntity.ok(response);
         } catch (Exception e) {

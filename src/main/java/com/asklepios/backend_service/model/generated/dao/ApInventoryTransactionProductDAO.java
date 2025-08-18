@@ -56,6 +56,10 @@ record.setExpiryDate(rs.getDate("expiry_date"));
 record.setNotes(rs.getString("notes"));
 record.setTransUomKey(rs.getString("trans_uom_key"));
 record.setNewQuentityBaseUom(rs.getBigDecimal("new_quentity_base_uom"));
+record.setTotalCost(rs.getBigDecimal("total_cost"));
+record.setNewAvgCost(rs.getBigDecimal("new_avg_cost"));
+record.setOldAvgCost(rs.getBigDecimal("old_avg_cost"));
+record.setStatusLkey(rs.getString("status_lkey"));
 } else { record = null; }
 return record;
 }
@@ -63,7 +67,7 @@ return record;
 public void updateRecord(ApInventoryTransactionProduct record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_inventory_transaction_product set key = ?, inventory_trans_key = ?, product_key = ?, new_quentity = ?, lotserialnumber = ?, new_cost = ?, currency_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, is_effected_warehouse = ?, expiry_date = ?, notes = ?, trans_uom_key = ?, new_quentity_base_uom = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_inventory_transaction_product set key = ?, inventory_trans_key = ?, product_key = ?, new_quentity = ?, lotserialnumber = ?, new_cost = ?, currency_lkey = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, is_effected_warehouse = ?, expiry_date = ?, notes = ?, trans_uom_key = ?, new_quentity_base_uom = ?, total_cost = ?, new_avg_cost = ?, old_avg_cost = ?, status_lkey = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -86,7 +90,11 @@ else ps.setDate(16, null);
 ps.setString(17, record.getNotes());
 ps.setString(18, record.getTransUomKey());
 ps.setBigDecimal(19, record.getNewQuentityBaseUom());
-ps.setString(20, record.getKey());
+ps.setBigDecimal(20, record.getTotalCost());
+ps.setBigDecimal(21, record.getNewAvgCost());
+ps.setBigDecimal(22, record.getOldAvgCost());
+ps.setString(23, record.getStatusLkey());
+ps.setString(24, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -127,6 +135,10 @@ record.setExpiryDate(rs.getDate("expiry_date"));
 record.setNotes(rs.getString("notes"));
 record.setTransUomKey(rs.getString("trans_uom_key"));
 record.setNewQuentityBaseUom(rs.getBigDecimal("new_quentity_base_uom"));
+record.setTotalCost(rs.getBigDecimal("total_cost"));
+record.setNewAvgCost(rs.getBigDecimal("new_avg_cost"));
+record.setOldAvgCost(rs.getBigDecimal("old_avg_cost"));
+record.setStatusLkey(rs.getString("status_lkey"));
 list.add(record);
 }
 return list;
@@ -135,7 +147,7 @@ return list;
 public String saveRecord(ApInventoryTransactionProduct record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_inventory_transaction_product values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_inventory_transaction_product values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -162,6 +174,10 @@ else ps.setDate(16, null);
 ps.setString(17, record.getNotes());
 ps.setString(18, record.getTransUomKey());
 ps.setBigDecimal(19, record.getNewQuentityBaseUom());
+ps.setBigDecimal(20, record.getTotalCost());
+ps.setBigDecimal(21, record.getNewAvgCost());
+ps.setBigDecimal(22, record.getOldAvgCost());
+ps.setString(23, record.getStatusLkey());
 ps.executeUpdate();
 return key;
 }

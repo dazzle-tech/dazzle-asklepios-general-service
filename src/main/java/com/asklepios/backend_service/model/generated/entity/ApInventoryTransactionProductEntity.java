@@ -34,6 +34,11 @@ public class ApInventoryTransactionProductEntity implements Serializable {
 	private String notes;
 	private String transUomKey;
 	private BigDecimal newQuentityBaseUom;
+	private BigDecimal totalCost;
+	private BigDecimal newAvgCost;
+	private BigDecimal oldAvgCost;
+	private String statusLkey;
+	private ApLovValues statusLvalue;
 	private ApInventoryTransactionProductEntity translatedObject;
 
 }

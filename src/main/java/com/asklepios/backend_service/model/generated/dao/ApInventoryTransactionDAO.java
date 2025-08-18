@@ -51,6 +51,11 @@ record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setTransId(rs.getString("trans_id"));
 record.setDocNum(rs.getBigDecimal("doc_num"));
+record.setVendor(rs.getString("vendor"));
+record.setSerialNum(rs.getString("serial_num"));
+record.setApprovedBy(rs.getString("approved_by"));
+record.setInvoiceNum(rs.getString("invoice_num"));
+record.setApprovalStatus(rs.getString("approval_status"));
 } else { record = null; }
 return record;
 }
@@ -58,7 +63,7 @@ return record;
 public void updateRecord(ApInventoryTransaction record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_inventory_transaction set key = ?, trans_type_lkey = ?, warehouse_key = ?, trans_reason_lkey = ?, remarks = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, trans_id = ?, doc_num = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_inventory_transaction set key = ?, trans_type_lkey = ?, warehouse_key = ?, trans_reason_lkey = ?, remarks = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, is_valid = ?, trans_id = ?, doc_num = ?, vendor = ?, serial_num = ?, approved_by = ?, invoice_num = ?, approval_status = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
@@ -75,7 +80,12 @@ ps.setBigDecimal(11, record.getDeletedAt());
 ps.setBoolean(12, record.getIsValid());
 ps.setString(13, record.getTransId());
 ps.setBigDecimal(14, record.getDocNum());
-ps.setString(15, record.getKey());
+ps.setString(15, record.getVendor());
+ps.setString(16, record.getSerialNum());
+ps.setString(17, record.getApprovedBy());
+ps.setString(18, record.getInvoiceNum());
+ps.setString(19, record.getApprovalStatus());
+ps.setString(20, record.getKey());
 ps.executeUpdate();
 }
 }
@@ -111,6 +121,11 @@ record.setDeletedAt(rs.getBigDecimal("deleted_at"));
 record.setIsValid(rs.getBoolean("is_valid"));
 record.setTransId(rs.getString("trans_id"));
 record.setDocNum(rs.getBigDecimal("doc_num"));
+record.setVendor(rs.getString("vendor"));
+record.setSerialNum(rs.getString("serial_num"));
+record.setApprovedBy(rs.getString("approved_by"));
+record.setInvoiceNum(rs.getString("invoice_num"));
+record.setApprovalStatus(rs.getString("approval_status"));
 list.add(record);
 }
 return list;
@@ -119,7 +134,7 @@ return list;
 public String saveRecord(ApInventoryTransaction record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_inventory_transaction values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_inventory_transaction values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
 if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
@@ -140,6 +155,11 @@ ps.setBigDecimal(11, record.getDeletedAt());
 ps.setBoolean(12, record.getIsValid());
 ps.setString(13, record.getTransId());
 ps.setBigDecimal(14, record.getDocNum());
+ps.setString(15, record.getVendor());
+ps.setString(16, record.getSerialNum());
+ps.setString(17, record.getApprovedBy());
+ps.setString(18, record.getInvoiceNum());
+ps.setString(19, record.getApprovalStatus());
 ps.executeUpdate();
 return key;
 }

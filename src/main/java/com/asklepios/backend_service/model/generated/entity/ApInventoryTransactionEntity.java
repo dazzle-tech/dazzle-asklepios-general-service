@@ -30,6 +30,11 @@ public class ApInventoryTransactionEntity implements Serializable {
 	private Boolean isValid = true;
 	private String transId;
 	private BigDecimal docNum;
+	private String vendor;
+	private String serialNum;
+	private String approvedBy;
+	private String invoiceNum;
+	private String approvalStatus;
 	private ApInventoryTransactionEntity translatedObject;
 
 }

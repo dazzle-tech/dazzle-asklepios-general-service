@@ -3777,21 +3777,33 @@ public class EncounterController {
 
     @PostMapping(value = "/patient-temporary-discharge", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> patientTemporaryDischarge(@RequestBody ApPatientTemporaryDischarge apPatientTemporaryDischarge,
-                                             @Nullable @RequestHeader String facility_id,
-                                             @Nullable @RequestHeader String access_token,
-                                             @Nullable @RequestHeader Integer access_level,
-                                             @Nullable @RequestHeader String lang,
-                                             @Nullable @RequestHeader String screenKey
+                                                       @Nullable @RequestHeader String facility_id,
+                                                       @Nullable @RequestHeader String access_token,
+                                                       @Nullable @RequestHeader Integer access_level,
+                                                       @Nullable @RequestHeader String lang,
+                                                       @Nullable @RequestHeader String screenKey
     ) {
         try {
             ParentResponse<ApPatientTemporaryDischarge> response = new ParentResponse<>();
+
             ApEncounter apEncounter = apEncounterService.getRecord(apPatientTemporaryDischarge.getEncounterKey());
+            if (apEncounter == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("message", "Encounter not found for key: " + apPatientTemporaryDischarge.getEncounterKey()));
+            }
             apEncounter.setEncounterStatusLkey("6130571996160318"); // TODO replace with redis by lov code (TEMP_DC)
             apEncounterService.saveRecord(apEncounter);
-            if (!apPatientTemporaryDischarge.getBedRetained()){
+
+            if (!apPatientTemporaryDischarge.getBedRetained()) {
                 ApBed apBed = apBedService.getRecord(apPatientTemporaryDischarge.getFromBed());
+                if (apBed == null) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                            .body(Map.of("message", "Bed not found for key: " + apPatientTemporaryDischarge.getFromBed()));
+                }
+
                 apBed.setStatusLkey("5258572711068224");
                 apBedService.saveRecord(apBed);
+
                 List<ApAdmitOutpatientInpatient> list = apAdmitOutpatientInpatientService.getList(
                         "to_encounter_key = '" + apEncounter.getKey() + "'"
                 );
@@ -3806,44 +3818,73 @@ public class EncounterController {
                 admitOutpatientInpatient.setRoomKey(null);
                 apAdmitOutpatientInpatientService.saveRecord(admitOutpatientInpatient);
             }
+
             apPatientTemporaryDischargeService.saveRecord(apPatientTemporaryDischarge);
             response.setObject(apPatientTemporaryDischarge);
+
             return ResponseEntity.ok(response);
+
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            return ResponseEntity.status(500).body(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", e.getMessage()));
         }
     }
+
     @PostMapping(value = "/return-from-temporary-discharge", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> ReturnFromTemporaryDischarge(@RequestBody ApPatientTemporaryDischarge apPatientTemporaryDischarge,
-                                                          @RequestHeader("department_key") String depKey,
-                                                          @Nullable @RequestHeader String facility_id,
-                                                          @Nullable @RequestHeader String access_token,
-                                                          @Nullable @RequestHeader Integer access_level,
-                                                          @Nullable @RequestHeader String lang,
-                                                          @Nullable @RequestHeader String screenKey
+    public ResponseEntity<?> ReturnFromTemporaryDischarge(
+            @RequestBody ApPatientTemporaryDischarge apPatientTemporaryDischarge,
+            @RequestHeader("department_key") String depKey,
+            @Nullable @RequestHeader String facility_id,
+            @Nullable @RequestHeader String access_token,
+            @Nullable @RequestHeader Integer access_level,
+            @Nullable @RequestHeader String lang,
+            @Nullable @RequestHeader String screenKey
     ) {
         try {
             ParentResponse<ApPatientTemporaryDischarge> response = new ParentResponse<>();
+
             List<ApPatientTemporaryDischarge> list = apPatientTemporaryDischargeService
                     .getList(" encounter_key = '" + apPatientTemporaryDischarge.getEncounterKey() + "' ORDER BY created_at DESC");
 
             ApPatientTemporaryDischarge patientTemporaryDischarge = list.isEmpty() ? null : list.get(0);
 
-            assert patientTemporaryDischarge != null;
+            if (patientTemporaryDischarge == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("message", "No temporary discharge record found for encounter key: "
+                                + apPatientTemporaryDischarge.getEncounterKey()));
+            }
+
             patientTemporaryDischarge.setReturnAt(apPatientTemporaryDischarge.getReturnAt());
             patientTemporaryDischarge.setRoomKey(apPatientTemporaryDischarge.getRoomKey());
             patientTemporaryDischarge.setBedKey(apPatientTemporaryDischarge.getBedKey());
             patientTemporaryDischarge.setNotes(apPatientTemporaryDischarge.getNotes());
+
             ApEncounter apEncounter = apEncounterService.getRecord(apPatientTemporaryDischarge.getEncounterKey());
-            apEncounter.setEncounterStatusLkey("91084250213000"); // TODO replace with redis by lov code (ONGOING)
+            if (apEncounter == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("message", "No encounter found for the given encounter key"));
+            }
+            apEncounter.setEncounterStatusLkey("91084250213000"); // TODO: replace with redis by lov code (ONGOING)
             apEncounterService.saveRecord(apEncounter);
 
-            if (!apPatientTemporaryDischarge.getBedRetained()){
-                ApBed apBed = apBedService.getRecord(apPatientTemporaryDischarge.getBedKey());
-                apBed.setStatusLkey("5258252390107597"); // TODO replace with redis by lov code (BED_OCC)
+            if (!patientTemporaryDischarge.getBedRetained()) {
+
+                if (patientTemporaryDischarge.getBedKey() == null) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(Map.of("message", "Bed key is required when bedRetained = false"));
+                }
+
+                ApBed apBed = apBedService.getRecord(patientTemporaryDischarge.getBedKey());
+                if (apBed == null) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                            .body(Map.of("message", "No bed found for the given bed key: " + patientTemporaryDischarge.getBedKey()));
+                }
+
+                apBed.setStatusLkey("5258252390107597"); // TODO: replace with redis by lov code (BED_OCC)
                 apBedService.saveRecord(apBed);
+
                 ApBedTransactions bedTransactions = new ApBedTransactions();
                 bedTransactions.setEncounterKey(patientTemporaryDischarge.getEncounterKey());
                 bedTransactions.setPatientKey(patientTemporaryDischarge.getPatientKey());
@@ -3853,11 +3894,12 @@ public class EncounterController {
                 bedTransactions.setToBedKey(patientTemporaryDischarge.getBedKey());
                 bedTransactions.setDepartmentKey(depKey);
                 apBedTransactionsService.saveRecord(bedTransactions);
+
                 List<ApAdmitOutpatientInpatient> admit = apAdmitOutpatientInpatientService.getList(
                         "to_encounter_key = '" + bedTransactions.getEncounterKey() + "'"
                 );
 
-                if (list == null || list.isEmpty()) {
+                if (admit == null || admit.isEmpty()) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND)
                             .body(Map.of("message", "No admission record found for the given encounter key"));
                 }
@@ -3867,13 +3909,17 @@ public class EncounterController {
                 admitOutpatientInpatient.setRoomKey(bedTransactions.getToRoomKey());
                 apAdmitOutpatientInpatientService.saveRecord(admitOutpatientInpatient);
             }
-            apPatientTemporaryDischargeService.saveRecord(apPatientTemporaryDischarge);
-            response.setObject(apPatientTemporaryDischarge);
+
+            apPatientTemporaryDischargeService.saveRecord(patientTemporaryDischarge);
+            response.setObject(patientTemporaryDischarge);
+
             return ResponseEntity.ok(response);
+
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            return ResponseEntity.status(500).body(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "Internal server error", "error", e.getMessage()));
         }
     }
 

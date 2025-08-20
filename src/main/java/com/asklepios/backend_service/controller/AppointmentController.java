@@ -1,6 +1,7 @@
 package com.asklepios.backend_service.controller;
 
 import com.asklepios.backend_service.database.DS;
+import com.asklepios.backend_service.model.DTO.ResourceAvailabilityDTO;
 import com.asklepios.backend_service.model.generated.pojo.*;
 import com.asklepios.backend_service.model.pojo.request.ListRequest;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
@@ -12,11 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.time.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -32,7 +31,9 @@ public class AppointmentController {
     private final ApPatientService apPatientService;
     private final ApDiagnosticTestService apDiagnosticTestService;
     private final ApProcedureSetupService apProcedureSetupService;
-    public AppointmentController(ApResourcesService apResourcesService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApAppointmentService apAppointmentService, ApResourcesAvailabilityTimeService apResourcesAvailabilityTimeService, ApDiagnosticTestService apDiagnosticTestService, ApProcedureService apProcedureService, ApProcedureSetupService apProcedureSetupService) {
+    private final ApResourceAvailabilitySliceService apResourceAvailabilitySliceService;
+
+    public AppointmentController(ApResourceAvailabilitySliceService apResourceAvailabilitySliceService, ApResourcesService apResourcesService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApAppointmentService apAppointmentService, ApResourcesAvailabilityTimeService apResourcesAvailabilityTimeService, ApDiagnosticTestService apDiagnosticTestService, ApProcedureService apProcedureService, ApProcedureSetupService apProcedureSetupService) {
         this.apResourcesService = apResourcesService;
         this.apPractitionerService = apPractitionerService;
         this.apDepartmentService = apDepartmentService;
@@ -41,6 +42,7 @@ public class AppointmentController {
         this.apProcedureSetupService = apProcedureSetupService;
         this.apPatientService = new ApPatientService();
         this.apDiagnosticTestService = apDiagnosticTestService;
+        this.apResourceAvailabilitySliceService = apResourceAvailabilitySliceService;
     }
 
     @GetMapping(value = "/resources-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -88,7 +90,7 @@ public class AppointmentController {
             ParentResponse<ApResources> response = new ParentResponse<>();
 
             String where = "key = '" + resourceKey + "'";
-             List<ApResources> list = apResourcesService.getList(where);
+            List<ApResources> list = apResourcesService.getList(where);
             if (list.isEmpty()) {
                 return ResponseEntity.status(404).body("Resource not found");
             }
@@ -176,7 +178,6 @@ public class AppointmentController {
     }
 
 
-
     @PostMapping(value = "/change-appointment-status", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changeAppointmentStatus(@RequestBody ApAppointment appointment,
                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -205,7 +206,7 @@ public class AppointmentController {
                                               @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApResources>> response = new ParentResponse<>();
-             // TODO update status to be a LOV value
+            // TODO update status to be a LOV value
             if (resource_type.equals("2039534205961578")) //Practitioner
             {
                 ParentResponse<List<ApPractitioner>> responsePra = new ParentResponse<>();
@@ -434,5 +435,249 @@ public class AppointmentController {
         }
     }
 
+
+    @GetMapping(value = "/resources-with-availability", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> resourcesWithAvailability(
+            @RequestParam Map<String, String> queryParams,
+            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+            @jakarta.annotation.Nullable @RequestHeader String access_token,
+            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+            @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            log.info("Received request for /resources-with-availability");
+            log.debug("Query params: {}", queryParams);
+            ParentResponse<List<ResourceAvailabilityDTO>> response = new ParentResponse<>();
+
+            if ("true".equalsIgnoreCase(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            String resourceId = queryParams.get("id");
+            log.info("Requested resource ID: {}", resourceId);
+
+            List<ResourceAvailabilityDTO> dtoList = new ArrayList<>();
+
+            if (resourceId != null && !resourceId.isEmpty()) {
+                log.info("Fetching single resource with id: {}", resourceId);
+                ApResources resource = apResourcesService.getRecord(resourceId);
+
+                if (resource == null) {
+                    log.warn("Resource with id {} not found", resourceId);
+                    return ResponseEntity.notFound().build();
+                }
+
+                resource.setResourceName(apResourcesService.getResourceName(resource.getResourceTypeLkey(), resource.getResourceKey()));
+                apResourcesService.populateLovFields(resource, lang);
+
+                ResourceAvailabilityDTO dto = new ResourceAvailabilityDTO();
+                dto.setKey(resource.getKey());
+                dto.setResourceKey(resource.getResourceKey());
+                dto.setResourceName(resource.getResourceName());
+                dto.setResourceTypeLkey(resource.getResourceTypeLkey());
+                dto.setFacilityKey(resource.getFacilityKey());
+                dto.setAvailability(getRealAvailability(resource.getResourceKey()));
+
+                log.info("Fetching availability slices with resource key: {}", resource.getKey());
+                String whereClause = "resource_key = '" + resourceId + "'";
+                List<ApResourceAvailabilitySlice> rawSlices = apResourceAvailabilitySliceService.getList("resource_key = '"+resource.getKey()+"' and deleted_at is null");
+                System.out.println(rawSlices);
+
+                rawSlices.forEach(slice -> log.info(
+                        "Slice -> key: {}, facilityKey: {}, dayOfWeek: {}, start: {}, end: {}",
+                        slice.getKey(),
+                        slice.getFacilityKey(),
+                        slice.getDayOfWeek(),
+                        slice.getStartTimeMinutes(),
+                        slice.getEndTimeMinutes()
+                ));
+
+                List<ResourceAvailabilityDTO.RowAvailabilitySlice> availabilitySlices = rawSlices.stream()
+                        .map(raw -> {
+                            ResourceAvailabilityDTO.RowAvailabilitySlice slice = new ResourceAvailabilityDTO.RowAvailabilitySlice();
+
+                            slice.setKey(raw.getKey());
+                            slice.setDayOfWeek(raw.getDayOfWeek());
+                            slice.setStartHour(Integer.parseInt(raw.getStartTimeMinutes()));
+                          //  slice.setStartMinute(raw.getStartTimeMinutes() % 60);
+                            slice.setEndHour(Integer.parseInt(raw.getEndTimeMinutes()));
+                         ///   slice.setEndMinute(raw.getEndTimeMinutes() % 60);
+                            slice.setBreak(raw.getIsbreak());
+                            return slice;
+                        })
+                        .collect(Collectors.toList());
+
+//                dto.setAvailabilitySlices(availabilitySlices);
+
+                dto.setAvailabilitySlices(availabilitySlices);
+//                log.debug("Fetched {} availability slices", availabilitySlices.size());
+
+                // dto.setEventSlices(getEventSlices(resource.getResourceKey()));
+
+                dtoList.add(dto);
+
+                response.setObject(dtoList);
+                response.setExtraNumeric(BigDecimal.ONE);
+                log.info("Returning single resource response successfully");
+                return ResponseEntity.ok(response);
+
+            } else {
+                log.info("Fetching all resources (no specific id provided)");
+
+                ListRequest listRequest = new ListRequest(queryParams);
+                String where = listRequest.buildWhereStatement();
+                String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+                log.debug("Where clause: {}", where);
+                log.debug("Where clause for total count: {}", whereForTotal);
+
+                List<ApResources> resources = apResourcesService.getList(where);
+                BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_resources where " + whereForTotal);
+
+                log.info("Number of resources fetched: {}", resources.size());
+                log.info("Total records count: {}", totalRecord);
+
+                for (ApResources resource : resources) {
+                    resource.setResourceName(apResourcesService.getResourceName(resource.getResourceTypeLkey(), resource.getResourceKey()));
+                    apResourcesService.populateLovFields(resource, lang);
+
+                    ResourceAvailabilityDTO dto = new ResourceAvailabilityDTO();
+                    dto.setKey(resource.getKey());
+                    dto.setResourceKey(resource.getResourceKey());
+                    dto.setResourceName(resource.getResourceName());
+                    dto.setResourceTypeLkey(resource.getResourceTypeLkey());
+                    dto.setFacilityKey(resource.getFacilityKey());
+
+                    List<ResourceAvailabilityDTO.Availability> slots = getRealAvailability(resource.getKey());
+                    dto.setAvailability(slots);
+
+                    List<ResourceAvailabilityDTO.Availability> aggregated = buildAvailability(slots);
+                    dto.setAvailability(aggregated);
+
+                    dtoList.add(dto);
+                }
+
+                response.setObject(dtoList);
+                response.setExtraNumeric(totalRecord);
+                log.info("Returning all resources response successfully");
+                return ResponseEntity.ok(response);
+            }
+
+        } catch (Exception e) {
+            log.error("Exception in /resources-with-availability: ", e);
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+
+    private List<ResourceAvailabilityDTO.Availability> getRealAvailability(String resourceKey) {
+        // Log the start of the method execution
+        log.info("Starting to fetch real availability for resource with key: {}", resourceKey);
+
+        List<ResourceAvailabilityDTO.Availability> slots = new ArrayList<>();
+
+        String query = "SELECT day_of_week, start_time_minutes, end_time_minutes " +
+                "FROM ap_resource_availability_slice " +
+                "WHERE resource_key = ? AND is_valid = true AND isbreak = false AND deleted_at Is NULL " +
+                "ORDER BY day_of_week, start_time_minutes";
+
+        try {
+            log.debug("Executing query: {} with resourceKey: {}", query, resourceKey);
+
+            List<Map<String, Object>> result = DS.executeListQuery(query, resourceKey);
+
+            // Check if the result list is not empty before logging
+            if (!result.isEmpty()) {
+                log.info("Successfully retrieved {} availability records for resource: {}", result.size(), resourceKey);
+            } else {
+                log.info("No availability records found for resource: {}", resourceKey);
+            }
+
+            for (Map<String, Object> row : result) {
+                int dayOfWeek = Integer.parseInt((String) row.get("day_of_week"));
+                int startMinutes = Integer.parseInt((String) row.get("start_time_minutes"));
+                int endMinutes = Integer.parseInt((String) row.get("end_time_minutes"));
+
+                ResourceAvailabilityDTO.Availability slot = new ResourceAvailabilityDTO.Availability();
+                slot.setDayOfWeek(dayOfWeek);
+                slot.setStartHour(startMinutes / 60);
+                slot.setStartMinute(startMinutes % 60);
+                slot.setEndHour(endMinutes / 60);
+                slot.setEndMinute(endMinutes % 60);
+
+                slots.add(slot);
+            }
+
+            log.info("Finished processing availability for resource: {}", resourceKey);
+
+        } catch (SQLException e) {
+            log.error("Failed to fetch availability for resource {}. SQL Exception: {}", resourceKey, e.getMessage(), e);
+        }
+
+        return slots;
+    }
+
+    private List<ResourceAvailabilityDTO.Availability> buildAvailability(List<ResourceAvailabilityDTO.Availability> slots) {
+        List<ResourceAvailabilityDTO.Availability> aggregatedSlots = new ArrayList<>();
+
+        // Group by dayOfWeek
+        Map<Integer, List<ResourceAvailabilityDTO.Availability>> groupedByDay =
+                slots.stream().collect(Collectors.groupingBy(ResourceAvailabilityDTO.Availability::getDayOfWeek));
+
+        for (Map.Entry<Integer, List<ResourceAvailabilityDTO.Availability>> entry : groupedByDay.entrySet()) {
+            int day = entry.getKey();
+            List<ResourceAvailabilityDTO.Availability> daySlots = entry.getValue();
+
+            // Sort by start time
+            daySlots.sort(Comparator.comparingInt(s -> s.getStartHour() * 60 + s.getStartMinute()));
+
+            // Merge consecutive or overlapping slots
+            int currentStartHour = daySlots.get(0).getStartHour();
+            int currentStartMinute = daySlots.get(0).getStartMinute();
+            int currentEndHour = daySlots.get(0).getEndHour();
+            int currentEndMinute = daySlots.get(0).getEndMinute();
+
+            for (int i = 1; i < daySlots.size(); i++) {
+                ResourceAvailabilityDTO.Availability slot = daySlots.get(i);
+                int slotStartMinutes = slot.getStartHour() * 60 + slot.getStartMinute();
+                int currentEndMinutes = currentEndHour * 60 + currentEndMinute;
+
+                if (slotStartMinutes <= currentEndMinutes) {
+                    // Extend current end if overlapping or touching
+                    int slotEndMinutes = slot.getEndHour() * 60 + slot.getEndMinute();
+                    if (slotEndMinutes > currentEndMinutes) {
+                        currentEndHour = slot.getEndHour();
+                        currentEndMinute = slot.getEndMinute();
+                    }
+                } else {
+                    // Save current aggregated slot
+                    ResourceAvailabilityDTO.Availability agg = new ResourceAvailabilityDTO.Availability();
+                    agg.setDayOfWeek(day);
+                    agg.setStartHour(currentStartHour);
+                    agg.setStartMinute(currentStartMinute);
+                    agg.setEndHour(currentEndHour);
+                    agg.setEndMinute(currentEndMinute);
+                    aggregatedSlots.add(agg);
+
+                    // Start new aggregation
+                    currentStartHour = slot.getStartHour();
+                    currentStartMinute = slot.getStartMinute();
+                    currentEndHour = slot.getEndHour();
+                    currentEndMinute = slot.getEndMinute();
+                }
+            }
+
+            // Add last aggregated slot
+            ResourceAvailabilityDTO.Availability agg = new ResourceAvailabilityDTO.Availability();
+            agg.setDayOfWeek(day);
+            agg.setStartHour(currentStartHour);
+            agg.setStartMinute(currentStartMinute);
+            agg.setEndHour(currentEndHour);
+            agg.setEndMinute(currentEndMinute);
+            aggregatedSlots.add(agg);
+        }
+
+        return aggregatedSlots;
+    }
 
 }

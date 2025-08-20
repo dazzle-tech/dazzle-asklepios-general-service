@@ -1,0 +1,26 @@
+{
+  "tableName": "event_slice",
+  "columns": [
+
+    {
+      "name": "slice_key",
+      "type": "text"
+    },
+    {
+      "name": "event_type",
+      "type": "text"
+    },
+    {
+      "name": "linked_event_key",
+      "type": "text"
+    },
+    {
+      "name": "day_of_week",
+      "type": "text"
+    },
+    {
+      "name": "event_date",
+      "type": "date"
+    }
+  ]
+}

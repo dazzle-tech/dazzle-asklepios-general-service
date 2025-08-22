@@ -1,0 +1,42 @@
+{
+  "tableName": "resource_availability_slice",
+  "columns": [
+
+    {
+      "name": "resource_key",
+      "type": "text"
+    },
+    {
+      "name": "facility_key",
+      "type": "text"
+    },
+    {
+      "name": "department_key",
+      "type": "text"
+    },
+    {
+      "name": "day_of_week",
+      "type": "text"
+    },
+    {
+      "name": "start_time_minutes",
+      "type": "text"
+    },
+    {
+      "name": "end_time_minutes",
+      "type": "text"
+    },
+    {
+      "name": "slice_duration_minutes",
+      "type": "text"
+    },
+    {
+      "name": "isBocked",
+      "type": "text"
+    },
+    {
+      "name": "isBreak",
+      "type": "boolean"
+    }
+  ]
+}

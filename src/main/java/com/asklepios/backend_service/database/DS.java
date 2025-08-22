@@ -6,11 +6,8 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Properties;
+import java.sql.*;
+import java.util.*;
 
 @Component
 public class DS {
@@ -81,4 +78,34 @@ public class DS {
         return result;
     }
 
+    public static List<Map<String, Object>> executeListQuery(String query, Object... params) throws SQLException {
+        List<Map<String, Object>> results = new ArrayList<>();
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            System.out.println(query);
+
+            // Set parameters if they exist
+            if (params != null) {
+                for (int i = 0; i < params.length; i++) {
+                    ps.setObject(i + 1, params[i]);
+                }
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                // Get column names from the ResultSet metadata
+                ResultSetMetaData metaData = rs.getMetaData();
+                int columnCount = metaData.getColumnCount();
+
+                // Iterate through the rows and populate the list of maps
+                while (rs.next()) {
+                    Map<String, Object> row = new LinkedHashMap<>();
+                    for (int i = 1; i <= columnCount; i++) {
+                        row.put(metaData.getColumnLabel(i), rs.getObject(i));
+                    }
+                    results.add(row);
+                }
+            }
+        }
+        return results;
+    }
 }

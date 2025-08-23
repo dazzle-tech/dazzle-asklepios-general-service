@@ -44,12 +44,10 @@ public class GeneralController {
     }
 
     @GetMapping(value = "/get-tenant", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getTenant(@RequestParam String tenantId, @RequestHeader(value = "access_token", required = true) String accessToken) {
+    public ResponseEntity getTenant(@RequestParam String tenantId) {
         ParentResponse<ApTenant> response = new ParentResponse<>();
         try {
-            if (!authService.validateTenantToken(accessToken, tenantId)) {
-                return ResponseEntity.status(401).build();
-            }
+
             ApTenant tenant = apTenantService.getRecord(tenantId);
             if (tenant == null) {
                 response.addGeneralError("Tenant not found");
@@ -63,5 +61,6 @@ public class GeneralController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
 
 }

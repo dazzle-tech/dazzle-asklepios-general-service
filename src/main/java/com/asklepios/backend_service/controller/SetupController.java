@@ -156,7 +156,7 @@ public class SetupController implements Serializable {
     }
 
     @GetMapping(value = "/navigation-map", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity navigationMap(@Nullable @RequestHeader String access_token,
+    public ResponseEntity navigationMap(@RequestParam String userId,
                                         @Nullable @RequestHeader String facility_id,
                                         @Nullable @RequestHeader Integer access_level,
                                         @Nullable @RequestHeader String lang) {
@@ -164,22 +164,17 @@ public class SetupController implements Serializable {
         try {
             NavigationMap navigationMap = new NavigationMap();
 
-            ApAccessToken token = authService.validateToken(access_token);
-
-            // TODO validating tokens should not be done within this service layer, rather in the api gateway
-            if (token == null) {
-                response.setMsg("Invalid Token");
+            ApUser user = apUserService.getRecord(userId);
+            if(user == null){
+                response.setMsg("Invalid user");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
 
-            ApUser user = apUserService.getRecord(token.getUserKey());
-
-
-            // TODO conduct a more rich screen access structure, and build queries within services when that is done
             List<ApScreen> directScreens = apScreenService.getList("module_key is null " +
                     " and key in (select screen_key from ap_access_role_screen where can_read = true and access_role_key = '" + user.getAccessRoleKey() + "') " +
                     " order by view_order");
             navigationMap.setScreens(directScreens);
+
             List<ApModule> modules = apModuleService.getList("1=1 order by view_order");
             List<ApModule> finalModules = new ArrayList<>();
             for (ApModule module : modules) {
@@ -192,7 +187,6 @@ public class SetupController implements Serializable {
             }
 
             navigationMap.setModules(finalModules);
-
             response.setObject(navigationMap);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -201,6 +195,7 @@ public class SetupController implements Serializable {
             return ResponseEntity.internalServerError().body(response);
         }
     }
+
 
     @GetMapping(value = "/facility-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> facilityList(@RequestParam Map<String, String> queryParams,

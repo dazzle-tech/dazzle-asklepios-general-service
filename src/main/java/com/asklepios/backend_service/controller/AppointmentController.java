@@ -6,6 +6,7 @@ import com.asklepios.backend_service.model.generated.pojo.*;
 import com.asklepios.backend_service.model.pojo.request.ListRequest;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
 import com.asklepios.backend_service.service.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,6 +33,7 @@ public class AppointmentController {
     private final ApDiagnosticTestService apDiagnosticTestService;
     private final ApProcedureSetupService apProcedureSetupService;
     private final ApResourceAvailabilitySliceService apResourceAvailabilitySliceService;
+    private final ApEventSliceService apEventSliceService;
 
     public AppointmentController(ApResourceAvailabilitySliceService apResourceAvailabilitySliceService, ApResourcesService apResourcesService, ApPractitionerService apPractitionerService, ApDepartmentService apDepartmentService, ApAppointmentService apAppointmentService, ApResourcesAvailabilityTimeService apResourcesAvailabilityTimeService, ApDiagnosticTestService apDiagnosticTestService, ApProcedureService apProcedureService, ApProcedureSetupService apProcedureSetupService) {
         this.apResourcesService = apResourcesService;
@@ -43,6 +45,7 @@ public class AppointmentController {
         this.apPatientService = new ApPatientService();
         this.apDiagnosticTestService = apDiagnosticTestService;
         this.apResourceAvailabilitySliceService = apResourceAvailabilitySliceService;
+        this.apEventSliceService = new ApEventSliceService();
     }
 
     @GetMapping(value = "/resources-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -134,19 +137,22 @@ public class AppointmentController {
                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                              @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
-            String appointmentDate = appointment.getAppointmentStart();
+            ObjectMapper mapper = new ObjectMapper();
+            System.out.println("Received appointment payload: " + mapper.writeValueAsString(appointment));
+
+            Date appointmentDateRaw = appointment.getAppointmentDate();
+            System.out.println("Original appointmentDate: " + appointmentDateRaw);
+            System.out.println("Original appointmentStart: " + appointment.getAppointmentStart());
+            System.out.println("Original appointmentEnd: " + appointment.getAppointmentEnd());
 
             if (appointment.getKey() == null) {
                 String condition = "patient_key = '" + appointment.getPatientKey() + "'" +
-                        " and DATE('" + appointmentDate + "'::timestamp) = DATE(appointment_start)" +
+                        " and DATE('" + appointmentDateRaw + "'::timestamp) = DATE(appointment_start)" +
                         " and (resource_type_lkey = '" + appointment.getResourceTypeLkey() + "'" +
                         " and resource_key = '" + appointment.getResourceKey() + "')";
 
-                if (appointment.getKey() != null) {
-                    condition += " and key <> '" + appointment.getKey() + "'";
-                }
-
                 List<ApAppointment> existingAppointment = apAppointmentService.getList(condition);
+                System.out.println("Existing appointments count: " + existingAppointment.size());
 
                 if (!existingAppointment.isEmpty()) {
                     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -154,28 +160,82 @@ public class AppointmentController {
                 }
             }
 
-            OffsetDateTime localStart = OffsetDateTime.parse(appointment.getAppointmentStart())
-                    .withOffsetSameInstant(ZoneOffset.of("+03:00"));
-            OffsetDateTime localEnd = OffsetDateTime.parse(appointment.getAppointmentEnd())
-                    .withOffsetSameInstant(ZoneOffset.of("+03:00"));
+            // إذا كانت هناك سلايسز مختارة، استخدمها لتحديد وقت البداية والنهاية قبل الحفظ
+            if (appointment.getSelectedSlices() != null && !appointment.getSelectedSlices().isEmpty()) {
+                List<ApEventSlice> slicesToBook = appointment.getSelectedSlices().stream()
+                        .map(sliceKey -> {
+                            ApEventSlice slice = new ApEventSlice();
+                            slice.setSliceKey(sliceKey);
+                            return slice;
+                        })
+                        .collect(Collectors.toList());
 
-            System.out.println(localStart);
-            System.out.println(localEnd);
+                List<ApResourceAvailabilitySlice> availabilitySlices = slicesToBook.stream()
+                        .map(slice -> {
+                            try {
+                                return apResourceAvailabilitySliceService.getRecord(slice.getSliceKey());
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                        })
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
 
-            appointment.setAppointmentStart(localStart.toString());
-            appointment.setAppointmentEnd(localEnd.toString());
+                System.out.println("Availability slices count: " + availabilitySlices.size());
 
+                // حدّد وقت الأبويمنت بناءً على أول وآخر سلايس
+                apEventSliceService.updateAppointmentTimes(appointment, availabilitySlices);
+            } else if (appointmentDateRaw != null && appointment.getAppointmentStart() != null) {
+                // إذا لم يكن هناك سلايسز، دمج التاريخ مع الوقت من payload
+                LocalDate date = appointmentDateRaw.toInstant().atZone(ZoneOffset.UTC).toLocalDate();
+                LocalTime startTime = OffsetDateTime.parse(appointment.getAppointmentStart()).toLocalTime();
+                LocalTime endTime = OffsetDateTime.parse(appointment.getAppointmentEnd()).toLocalTime();
+
+                OffsetDateTime localStart = date.atTime(startTime).atOffset(ZoneOffset.of("+03:00"));
+                OffsetDateTime localEnd = date.atTime(endTime).atOffset(ZoneOffset.of("+03:00"));
+
+                appointment.setAppointmentStart(localStart.toString());
+                appointment.setAppointmentEnd(localEnd.toString());
+            }
+
+            // حفظ الأبويمنت بعد تحديث الأوقات
             apAppointmentService.saveRecord(appointment);
+            System.out.println("Appointment saved with key: " + appointment.getKey());
+
+            // بعد الحفظ، قم بحجز السلايسز
+            if (appointment.getSelectedSlices() != null && !appointment.getSelectedSlices().isEmpty()) {
+                List<ApEventSlice> slicesToBook = appointment.getSelectedSlices().stream()
+                        .map(sliceKey -> {
+                            ApEventSlice slice = new ApEventSlice();
+                            slice.setSliceKey(sliceKey);
+                            return slice;
+                        })
+                        .collect(Collectors.toList());
+
+                apEventSliceService.bookSlicesForAppointment(
+                        appointment.getKey(),
+                        slicesToBook,
+                        appointment.getCreatedBy(),
+                        "Appointment",
+                        Optional.empty(),
+                        appointment.getAppointmentDate()
+                );
+
+                System.out.println("Booked slices for appointment key: " + appointment.getKey());
+            }
 
             ParentResponse<ApAppointment> response = new ParentResponse<>();
             response.setObject(appointment);
             return ResponseEntity.ok(response);
+
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }
     }
+
+
 
 
     @PostMapping(value = "/change-appointment-status", produces = MediaType.APPLICATION_JSON_VALUE)

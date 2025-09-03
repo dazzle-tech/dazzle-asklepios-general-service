@@ -76,6 +76,19 @@ public class ApMedicalSheetsEntity implements Serializable {
 	private Boolean occupationalTherapy = false;
 	private Boolean physiotherapyPlan = false;
 	private Boolean medicationAdministrationRecord = false;
+	private Boolean continuousObservations = false;
+	private Boolean dialysisRequest = false;
+	private Boolean slidingScale = false;
+	private Boolean pointOfCareCests = false;
+	private Boolean hospitalCourse = false;
+	private Boolean childGrowth  = false;
+	private Boolean flaccNeonatesPainAssessment = false;
+	private Boolean universalPainAssessment = false;
+	private Boolean patientRestraint  = false;
+	private Boolean infectionControl = false;
+	private Boolean sofa = false;
+	private Boolean medicalCalculators = false;
+	private Boolean cpoeResultsManager = false;
 	private ApMedicalSheetsEntity translatedObject;
 
 }

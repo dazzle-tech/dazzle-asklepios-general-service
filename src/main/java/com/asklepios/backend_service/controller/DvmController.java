@@ -40,7 +40,7 @@ public class DvmController implements Serializable {
 
     @GetMapping(value = "/metadata-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity listMetadata(@RequestParam Map<String, String> queryParams,
-                                       @Nullable @RequestHeader String access_token,
+                                       // @Nullable @RequestHeader String access_token,
                                        @Nullable @RequestHeader String facility_id,
                                        @Nullable @RequestHeader Integer access_level,
                                        @Nullable @RequestHeader String lang) {
@@ -95,7 +95,7 @@ public class DvmController implements Serializable {
 
     @GetMapping(value = "/screen-metadata-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity listScreenMetadata(@RequestParam Map<String, String> queryParams,
-                                             @Nullable @RequestHeader String access_token,
+                                             // @Nullable @RequestHeader String access_token,
                                              @Nullable @RequestHeader String facility_id,
                                              @Nullable @RequestHeader Integer access_level,
                                              @Nullable @RequestHeader String lang) {
@@ -146,7 +146,7 @@ public class DvmController implements Serializable {
 
     @GetMapping(value = "/dvm-rule-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity listDvmRules(@RequestParam Map<String, String> queryParams,
-                                             @Nullable @RequestHeader String access_token,
+                                             // @Nullable @RequestHeader String access_token,
                                              @Nullable @RequestHeader String facility_id,
                                              @Nullable @RequestHeader Integer access_level,
                                              @Nullable @RequestHeader String lang) {

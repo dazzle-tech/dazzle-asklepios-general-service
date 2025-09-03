@@ -41,7 +41,7 @@ public class AttachmentController {
     public ResponseEntity<?> fetchAttachment(@RequestHeader("type") String type,
                                              @RequestHeader("ref_key") String refKey,
                                              @Nullable @RequestHeader String facility_id,
-                                             @Nullable @RequestHeader String access_token,
+                                            // @Nullable @RequestHeader String access_token,
                                              @Nullable @RequestHeader Integer access_level,
                                              @Nullable @RequestHeader String lang) {
         try {
@@ -72,7 +72,7 @@ public class AttachmentController {
             @RequestHeader("type") String type,
             @RequestBody List<String> refKeys,
             @Nullable @RequestHeader String facility_id,
-            @Nullable @RequestHeader String access_token,
+           // @Nullable @RequestHeader String access_token,
             @Nullable @RequestHeader Integer access_level,
             @Nullable @RequestHeader String lang) {
         try {
@@ -95,7 +95,7 @@ public class AttachmentController {
     public ResponseEntity<?> fetchAttachmentByKey(
             @RequestHeader("Key") String Key,
             @Nullable @RequestHeader String facility_id,
-            @Nullable @RequestHeader String access_token,
+           // @Nullable @RequestHeader String access_token,
             @Nullable @RequestHeader Integer access_level,
             @Nullable @RequestHeader String lang) {
         try {
@@ -121,7 +121,7 @@ public class AttachmentController {
     public ResponseEntity<?> fetchAttachmentLight(
             @Nullable @RequestHeader("ref_key") String refKey,
             @Nullable @RequestHeader String facility_id,
-            @Nullable @RequestHeader String access_token,
+           // @Nullable @RequestHeader String access_token,
             @Nullable @RequestHeader Integer access_level,
             @Nullable @RequestHeader String lang) {
         try {
@@ -143,7 +143,7 @@ public class AttachmentController {
     @GetMapping(value = "/patient-attachment-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> patientAttachmentList(@RequestParam Map<String, String> queryParams,
                                                    @Nullable @RequestHeader String key,
-                                                   @Nullable @RequestHeader String access_token,
+                                                  // @Nullable @RequestHeader String access_token,
                                                    @Nullable @RequestHeader Integer access_level,
                                                    @Nullable @RequestHeader String lang) {
         try {
@@ -190,7 +190,7 @@ public class AttachmentController {
                                     @Nullable @RequestHeader("access_type") String accessType,
                                     @Nullable @RequestHeader("created_by") String createdBy,
                                     @Nullable @RequestHeader String facility_id,
-                                    @Nullable @RequestHeader String access_token,
+                                   // @Nullable @RequestHeader String access_token,
                                     @Nullable @RequestHeader Integer access_level,
                                     @Nullable @RequestHeader String lang) {
         try {
@@ -239,7 +239,7 @@ public class AttachmentController {
     @DeleteMapping(value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteAttachment(@RequestHeader("key") String key,
                                               @Nullable @RequestHeader String facility_id,
-                                              @Nullable @RequestHeader String access_token,
+                                             // @Nullable @RequestHeader String access_token,
                                               @Nullable @RequestHeader Integer access_level,
                                               @Nullable @RequestHeader String lang) {
         try {
@@ -270,7 +270,7 @@ public class AttachmentController {
             @RequestHeader("updatedBy") String updatedBy,
             @RequestHeader("accessType") String accessType,
             @Nullable @RequestHeader String facility_id,
-            @Nullable @RequestHeader String access_token,
+           // @Nullable @RequestHeader String access_token,
             @Nullable @RequestHeader Integer access_level,
             @Nullable @RequestHeader String lang) {
         System.out.println("attachmentDetails :"+extraDetails);

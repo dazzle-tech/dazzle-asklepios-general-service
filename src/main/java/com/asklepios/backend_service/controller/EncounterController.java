@@ -164,7 +164,7 @@ public class EncounterController {
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> encounterList(@RequestParam Map<String, String> queryParams,
                                            @Nullable @RequestHeader String facility_id,
-                                           @Nullable @RequestHeader String access_token,
+                                           // @Nullable @RequestHeader String access_token,
                                            @Nullable @RequestHeader Integer access_level,
                                            @Nullable @RequestHeader String lang) {
         try {
@@ -303,7 +303,7 @@ public class EncounterController {
     @GetMapping(value = "/encounter-service-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> encounterServiceList(@RequestParam Map<String, String> queryParams,
                                                   @Nullable @RequestHeader String facility_id,
-                                                  @Nullable @RequestHeader String access_token,
+                                                  // @Nullable @RequestHeader String access_token,
                                                   @Nullable @RequestHeader Integer access_level,
                                                   @Nullable @RequestHeader String lang) {
         try {
@@ -338,7 +338,7 @@ public class EncounterController {
     @PostMapping(value = "/complete-encounter-registration", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> completeEncounterRegistration(@RequestBody ApEncounter apEncounter,
                                                            @Nullable @RequestHeader String facility_id,
-                                                           @Nullable @RequestHeader String access_token,
+                                                           // @Nullable @RequestHeader String access_token,
                                                            @Nullable @RequestHeader Integer access_level,
                                                            @Nullable @RequestHeader String lang,
                                                            @Nullable @RequestHeader String screenKey
@@ -426,7 +426,7 @@ public class EncounterController {
     @PostMapping(value = "/start-encounter", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> startEncounter(@RequestBody ApEncounter apEncounter,
                                             @Nullable @RequestHeader String facility_id,
-                                            @Nullable @RequestHeader String access_token,
+                                            // @Nullable @RequestHeader String access_token,
                                             @Nullable @RequestHeader Integer access_level,
                                             @Nullable @RequestHeader String lang,
                                             @Nullable @RequestHeader String screenKey
@@ -464,7 +464,7 @@ public class EncounterController {
     @PostMapping(value = "/complete-encounter", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> completeEncounter(@RequestBody ApEncounter apEncounter,
                                                @Nullable @RequestHeader String facility_id,
-                                               @Nullable @RequestHeader String access_token,
+                                               // @Nullable @RequestHeader String access_token,
                                                @Nullable @RequestHeader Integer access_level,
                                                @Nullable @RequestHeader String lang,
                                                @Nullable @RequestHeader String screenKey
@@ -490,7 +490,7 @@ public class EncounterController {
     @PostMapping(value = "/save-encounter-changes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveEncounterChanges(@RequestBody ApEncounter apEncounter,
                                                   @Nullable @RequestHeader String facility_id,
-                                                  @Nullable @RequestHeader String access_token,
+                                                  // @Nullable @RequestHeader String access_token,
                                                   @Nullable @RequestHeader Integer access_level,
                                                   @Nullable @RequestHeader String lang,
                                                   @Nullable @RequestHeader String screenKey
@@ -522,7 +522,7 @@ public class EncounterController {
     @GetMapping(value = "/encounter-review-of-systems", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> encounterReviewOfSystems(@Nullable @RequestHeader String encounterKey,
                                                       @Nullable @RequestHeader String facility_id,
-                                                      @Nullable @RequestHeader String access_token,
+                                                      // @Nullable @RequestHeader String access_token,
                                                       @Nullable @RequestHeader Integer access_level,
                                                       @Nullable @RequestHeader String lang) {
         try {
@@ -549,7 +549,7 @@ public class EncounterController {
     @PostMapping(value = "/save-review-of-system", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveReviewOfSystems(@RequestBody ReviewOfSystemRequest request,
                                                  @Nullable @RequestHeader String facility_id,
-                                                 @Nullable @RequestHeader String access_token,
+                                                 // @Nullable @RequestHeader String access_token,
                                                  @Nullable @RequestHeader Integer access_level,
                                                  @Nullable @RequestHeader String lang) {
         try {
@@ -593,7 +593,7 @@ public class EncounterController {
     @PostMapping(value = "/remove-review-of-system", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeReviewOfSystems(@RequestBody ReviewOfSystemRequest request,
                                                    @Nullable @RequestHeader String facility_id,
-                                                   @Nullable @RequestHeader String access_token,
+                                                   // @Nullable @RequestHeader String access_token,
                                                    @Nullable @RequestHeader Integer access_level,
                                                    @Nullable @RequestHeader String lang) {
         try {
@@ -632,7 +632,7 @@ public class EncounterController {
     @GetMapping(value = "/encounter-physical-exam-areas", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> encounterPhysicalExamAreas(@Nullable @RequestHeader String encounterKey,
                                                         @Nullable @RequestHeader String facility_id,
-                                                        @Nullable @RequestHeader String access_token,
+                                                        // @Nullable @RequestHeader String access_token,
                                                         @Nullable @RequestHeader Integer access_level,
                                                         @Nullable @RequestHeader String lang) {
         try {
@@ -656,7 +656,7 @@ public class EncounterController {
     @PostMapping(value = "/save-physical-exam-area", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePhysicalExamArea(@RequestBody PhysicalExamAreaRequest request,
                                                   @Nullable @RequestHeader String facility_id,
-                                                  @Nullable @RequestHeader String access_token,
+                                                  // @Nullable @RequestHeader String access_token,
                                                   @Nullable @RequestHeader Integer access_level,
                                                   @Nullable @RequestHeader String lang) {
         try {
@@ -705,7 +705,7 @@ public class EncounterController {
     @PostMapping(value = "/remove-physical-exam-area", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removePhysicalExamArea(@RequestBody PhysicalExamAreaRequest request,
                                                     @Nullable @RequestHeader String facility_id,
-                                                    @Nullable @RequestHeader String access_token,
+                                                    // @Nullable @RequestHeader String access_token,
                                                     @Nullable @RequestHeader Integer access_level,
                                                     @Nullable @RequestHeader String lang) {
         try {
@@ -744,7 +744,7 @@ public class EncounterController {
     @GetMapping(value = "/patient-diagnosis-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> patientDiagnosisList(@RequestParam Map<String, String> queryParams,
                                                   @Nullable @RequestHeader String facility_id,
-                                                  @Nullable @RequestHeader String access_token,
+                                                  // @Nullable @RequestHeader String access_token,
                                                   @Nullable @RequestHeader Integer access_level,
                                                   @Nullable @RequestHeader String lang) {
         try {
@@ -846,7 +846,7 @@ public class EncounterController {
     @GetMapping(value = "/patient-plan-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPatientPlanList(@RequestParam Map<String, String> queryParams,
                                                 @Nullable @RequestHeader String facility_id,
-                                                @Nullable @RequestHeader String access_token,
+                                                // @Nullable @RequestHeader String access_token,
                                                 @Nullable @RequestHeader Integer access_level,
                                                 @Nullable @RequestHeader String lang) {
         try {
@@ -909,7 +909,7 @@ public class EncounterController {
     @GetMapping(value = "/patient-encounter-order-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPatientEncounterOrderList(@RequestParam Map<String, String> queryParams,
                                                           @Nullable @RequestHeader String facility_id,
-                                                          @Nullable @RequestHeader String access_token,
+                                                          // @Nullable @RequestHeader String access_token,
                                                           @Nullable @RequestHeader Integer access_level,
                                                           @Nullable @RequestHeader String lang) {
         try {
@@ -971,7 +971,7 @@ public class EncounterController {
     @GetMapping(value = "/prescription-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPrescriptionList(@RequestParam Map<String, String> queryParams,
                                                  @Nullable @RequestHeader String facility_id,
-                                                 @Nullable @RequestHeader String access_token,
+                                                 // @Nullable @RequestHeader String access_token,
                                                  @Nullable @RequestHeader Integer access_level,
                                                  @Nullable @RequestHeader String lang) {
         try {
@@ -1009,7 +1009,7 @@ public class EncounterController {
     @GetMapping(value = "/prescription-medic-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPrescriptionMedicationList(@RequestParam Map<String, String> queryParams,
                                                            @Nullable @RequestHeader String facility_id,
-                                                           @Nullable @RequestHeader String access_token,
+                                                           // @Nullable @RequestHeader String access_token,
                                                            @Nullable @RequestHeader Integer access_level,
                                                            @Nullable @RequestHeader String lang) {
         try {
@@ -1080,7 +1080,7 @@ public class EncounterController {
     @GetMapping(value = "/custome-instructions-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getCustomeInstructionsList(@RequestParam Map<String, String> queryParams,
                                                         @Nullable @RequestHeader String facility_id,
-                                                        @Nullable @RequestHeader String access_token,
+                                                        // @Nullable @RequestHeader String access_token,
                                                         @Nullable @RequestHeader Integer access_level,
                                                         @Nullable @RequestHeader String lang) {
         try {
@@ -1174,7 +1174,7 @@ public class EncounterController {
     @GetMapping(value = "/consultation-orders-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getConsultationOrdersList(@RequestParam Map<String, String> queryParams,
                                                        @Nullable @RequestHeader String facility_id,
-                                                       @Nullable @RequestHeader String access_token,
+                                                       // @Nullable @RequestHeader String access_token,
                                                        @Nullable @RequestHeader Integer access_level,
                                                        @Nullable @RequestHeader String lang) {
         try {
@@ -1267,7 +1267,7 @@ public class EncounterController {
     @GetMapping(value = "/drug_order-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDrugOrderList(@RequestParam Map<String, String> queryParams,
                                                  @Nullable @RequestHeader String facility_id,
-                                                 @Nullable @RequestHeader String access_token,
+                                                 // @Nullable @RequestHeader String access_token,
                                                  @Nullable @RequestHeader Integer access_level,
                                                  @Nullable @RequestHeader String lang) {
         try {
@@ -1304,7 +1304,7 @@ public class EncounterController {
     @GetMapping(value = "/drug-order-medic-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDrugOrderMedicationList(@RequestParam Map<String, String> queryParams,
                                                            @Nullable @RequestHeader String facility_id,
-                                                           @Nullable @RequestHeader String access_token,
+                                                           // @Nullable @RequestHeader String access_token,
                                                            @Nullable @RequestHeader Integer access_level,
                                                            @Nullable @RequestHeader String lang) {
         try {
@@ -1362,7 +1362,7 @@ public class EncounterController {
     @GetMapping(value = "/procedures-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProcedureList(@RequestParam Map<String, String> queryParams,
                                                         @Nullable @RequestHeader String facility_id,
-                                                        @Nullable @RequestHeader String access_token,
+                                                        // @Nullable @RequestHeader String access_token,
                                                         @Nullable @RequestHeader Integer access_level,
                                                         @Nullable @RequestHeader String lang) {
         try {
@@ -1476,7 +1476,7 @@ public class EncounterController {
     @GetMapping(value = "/diagnostic-order-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDiagnosticOrderList(@RequestParam Map<String, String> queryParams,
                                                     @Nullable @RequestHeader String facility_id,
-                                                    @Nullable @RequestHeader String access_token,
+                                                    // @Nullable @RequestHeader String access_token,
                                                     @Nullable @RequestHeader Integer access_level,
                                                     @Nullable @RequestHeader String lang) {
         try {
@@ -1578,7 +1578,7 @@ public class EncounterController {
     @GetMapping(value = "/diagnostic-order-test-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDiagnosticOrderTestList(@RequestParam Map<String, String> queryParams,
                                                     @Nullable @RequestHeader String facility_id,
-                                                    @Nullable @RequestHeader String access_token,
+                                                    // @Nullable @RequestHeader String access_token,
                                                     @Nullable @RequestHeader Integer access_level,
                                                     @Nullable @RequestHeader String lang) {
         try {
@@ -1636,7 +1636,7 @@ public class EncounterController {
     @GetMapping(value = "/diagnostic-order-test-notes-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDiagnosticOrderTestNotesList(@RequestHeader  String testid,
                                                              @Nullable @RequestHeader String facility_id,
-                                                             @Nullable @RequestHeader String access_token,
+                                                             // @Nullable @RequestHeader String access_token,
                                                              @Nullable @RequestHeader Integer access_level,
                                                              @Nullable @RequestHeader String lang) {
         try {
@@ -1685,7 +1685,7 @@ public class EncounterController {
     @GetMapping(value = "/diagnostic-order-test-samples-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDiagnosticOrderTestSamplesList(@RequestHeader  String testid,
                                                                @Nullable @RequestHeader String facility_id,
-                                                               @Nullable @RequestHeader String access_token,
+                                                               // @Nullable @RequestHeader String access_token,
                                                                @Nullable @RequestHeader Integer access_level,
                                                                @Nullable @RequestHeader String lang) {
         try {
@@ -1733,7 +1733,7 @@ public class EncounterController {
     @GetMapping(value = "/psychological-exam-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPsychologicaExamsList(@RequestParam Map<String, String> queryParams,
                                                         @Nullable @RequestHeader String facility_id,
-                                                        @Nullable @RequestHeader String access_token,
+                                                        // @Nullable @RequestHeader String access_token,
                                                         @Nullable @RequestHeader Integer access_level,
                                                         @Nullable @RequestHeader String lang) {
         try {
@@ -1796,7 +1796,7 @@ public class EncounterController {
     @GetMapping(value = "/audiometry-puretone-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAudiometryPuretoneList(@RequestParam Map<String, String> queryParams,
                                                       @Nullable @RequestHeader String facility_id,
-                                                      @Nullable @RequestHeader String access_token,
+                                                      // @Nullable @RequestHeader String access_token,
                                                       @Nullable @RequestHeader Integer access_level,
                                                       @Nullable @RequestHeader String lang) {
         try {
@@ -1859,7 +1859,7 @@ public class EncounterController {
     @GetMapping(value = "/optometric-exam-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getOptometricExamList(@RequestParam Map<String, String> queryParams,
                                                    @Nullable @RequestHeader String facility_id,
-                                                   @Nullable @RequestHeader String access_token,
+                                                   // @Nullable @RequestHeader String access_token,
                                                    @Nullable @RequestHeader Integer access_level,
                                                    @Nullable @RequestHeader String lang) {
         try {
@@ -1929,7 +1929,7 @@ public class EncounterController {
     @GetMapping(value = "/treadmill-stress-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getTreadmillStressList(@RequestParam Map<String, String> queryParams,
                                                    @Nullable @RequestHeader String facility_id,
-                                                   @Nullable @RequestHeader String access_token,
+                                                   // @Nullable @RequestHeader String access_token,
                                                    @Nullable @RequestHeader Integer access_level,
                                                    @Nullable @RequestHeader String lang) {
         try {
@@ -1995,7 +1995,7 @@ public class EncounterController {
     @GetMapping(value = "/complaint-symptoms-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getComplaintSymptomsList(@RequestParam Map<String, String> queryParams,
                                                     @Nullable @RequestHeader String facility_id,
-                                                    @Nullable @RequestHeader String access_token,
+                                                    // @Nullable @RequestHeader String access_token,
                                                     @Nullable @RequestHeader Integer access_level,
                                                     @Nullable @RequestHeader String lang) {
         try {
@@ -2056,7 +2056,7 @@ public class EncounterController {
     @GetMapping(value = "/electrocardiogram-ecg-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getElectrocardiogramEcgList(@RequestParam Map<String, String> queryParams,
                                                     @Nullable @RequestHeader String facility_id,
-                                                    @Nullable @RequestHeader String access_token,
+                                                    // @Nullable @RequestHeader String access_token,
                                                     @Nullable @RequestHeader Integer access_level,
                                                     @Nullable @RequestHeader String lang) {
         try {
@@ -2101,7 +2101,7 @@ public class EncounterController {
     @PostMapping(value = "/discharge-encounter", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> DischargeEncounter(@RequestBody ApEncounter apEncounter,
                                                          @Nullable @RequestHeader String facility_id,
-                                                         @Nullable @RequestHeader String access_token,
+                                                         // @Nullable @RequestHeader String access_token,
                                                          @Nullable @RequestHeader Integer access_level,
                                                          @Nullable @RequestHeader String lang,
                                                          @Nullable @RequestHeader String screenKey
@@ -2177,7 +2177,7 @@ public class EncounterController {
     @GetMapping(value = "/waiting_encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> waitingEncounterList(@RequestParam Map<String, String> queryParams,
                                                   @Nullable @RequestHeader String facility_id,
-                                                  @Nullable @RequestHeader String access_token,
+                                                  // @Nullable @RequestHeader String access_token,
                                                   @Nullable @RequestHeader Integer access_level,
                                                   @Nullable @RequestHeader String lang) {
 
@@ -2325,7 +2325,7 @@ public class EncounterController {
     public ResponseEntity<?> inpatientEncounterList(@RequestParam Map<String, String> queryParams,
                                                     @RequestHeader("department_key") String depKey,
                                                     @Nullable @RequestHeader String facility_id,
-                                                    @Nullable @RequestHeader String access_token,
+                                                    // @Nullable @RequestHeader String access_token,
                                                     @Nullable @RequestHeader Integer access_level,
                                                     @Nullable @RequestHeader String lang) {
         try {
@@ -2478,7 +2478,7 @@ public class EncounterController {
     @GetMapping(value = "/bed-transactions-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> bedTransactionsList(@RequestParam Map<String, String> queryParams,
                                                  @Nullable @RequestHeader String facility_id,
-                                                 @Nullable @RequestHeader String access_token,
+                                                 // @Nullable @RequestHeader String access_token,
                                                  @Nullable @RequestHeader Integer access_level,
                                                  @Nullable @RequestHeader String lang) {
         try {
@@ -2562,7 +2562,7 @@ public class EncounterController {
     @GetMapping(value = "/pain-assessment-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPainAssessmentList(@RequestParam Map<String, String> queryParams,
                                                       @Nullable @RequestHeader String facility_id,
-                                                      @Nullable @RequestHeader String access_token,
+                                                      // @Nullable @RequestHeader String access_token,
                                                       @Nullable @RequestHeader Integer access_level,
                                                       @Nullable @RequestHeader String lang) {
         try {
@@ -2616,7 +2616,7 @@ public class EncounterController {
     @GetMapping(value = "/inpatient-chief-complain-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getInpatientChiefComplainList(@RequestParam Map<String, String> queryParams,
                                                    @Nullable @RequestHeader String facility_id,
-                                                   @Nullable @RequestHeader String access_token,
+                                                   // @Nullable @RequestHeader String access_token,
                                                    @Nullable @RequestHeader Integer access_level,
                                                    @Nullable @RequestHeader String lang) {
         try {
@@ -2672,7 +2672,7 @@ public class EncounterController {
     @GetMapping(value = "/general-assessment-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getGeneralAssessmentList(@RequestParam Map<String, String> queryParams,
                                                            @Nullable @RequestHeader String facility_id,
-                                                           @Nullable @RequestHeader String access_token,
+                                                           // @Nullable @RequestHeader String access_token,
                                                            @Nullable @RequestHeader Integer access_level,
                                                            @Nullable @RequestHeader String lang) {
         try {
@@ -2727,7 +2727,7 @@ public class EncounterController {
     @GetMapping(value = "/functional-assessment-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> geFunctionalAssessmentList(@RequestParam Map<String, String> queryParams,
                                                       @Nullable @RequestHeader String facility_id,
-                                                      @Nullable @RequestHeader String access_token,
+                                                      // @Nullable @RequestHeader String access_token,
                                                       @Nullable @RequestHeader Integer access_level,
                                                       @Nullable @RequestHeader String lang) {
         try {
@@ -2782,7 +2782,7 @@ public class EncounterController {
     @GetMapping(value = "/medication-reconciliation-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getMedicationReconciliationList(@RequestParam Map<String, String> queryParams,
                                                              @Nullable @RequestHeader String facility_id,
-                                                             @Nullable @RequestHeader String access_token,
+                                                             // @Nullable @RequestHeader String access_token,
                                                              @Nullable @RequestHeader Integer access_level,
                                                              @Nullable @RequestHeader String lang) {
         try {
@@ -2837,7 +2837,7 @@ public class EncounterController {
     @GetMapping(value = "/transfer-requests-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getTransferRequestsList(@RequestParam Map<String, String> queryParams,
                                                              @Nullable @RequestHeader String facility_id,
-                                                             @Nullable @RequestHeader String access_token,
+                                                             // @Nullable @RequestHeader String access_token,
                                                              @Nullable @RequestHeader Integer access_level,
                                                              @Nullable @RequestHeader String lang) {
         try {
@@ -2963,7 +2963,7 @@ public class EncounterController {
     @GetMapping(value = "/transfer-transactions-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getTransferTransactionsList(@RequestParam Map<String, String> queryParams,
                                                      @Nullable @RequestHeader String facility_id,
-                                                     @Nullable @RequestHeader String access_token,
+                                                     // @Nullable @RequestHeader String access_token,
                                                      @Nullable @RequestHeader Integer access_level,
                                                      @Nullable @RequestHeader String lang) {
         try {
@@ -3130,7 +3130,7 @@ public class EncounterController {
     @GetMapping(value = "/doctor-round-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDoctorRoundList(@RequestParam Map<String, String> queryParams,
                                                              @Nullable @RequestHeader String facility_id,
-                                                             @Nullable @RequestHeader String access_token,
+                                                             // @Nullable @RequestHeader String access_token,
                                                              @Nullable @RequestHeader Integer access_level,
                                                              @Nullable @RequestHeader String lang) {
         try {
@@ -3184,7 +3184,7 @@ public class EncounterController {
     @GetMapping(value = "/nurse-notes-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getNurseNotesList(@RequestParam Map<String, String> queryParams,
                                                 @Nullable @RequestHeader String facility_id,
-                                                @Nullable @RequestHeader String access_token,
+                                                // @Nullable @RequestHeader String access_token,
                                                 @Nullable @RequestHeader Integer access_level,
                                                 @Nullable @RequestHeader String lang) {
         try {
@@ -3238,7 +3238,7 @@ public class EncounterController {
     @GetMapping(value = "/repositioning-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getRepositioningList(@RequestParam Map<String, String> queryParams,
                                                @Nullable @RequestHeader String facility_id,
-                                               @Nullable @RequestHeader String access_token,
+                                               // @Nullable @RequestHeader String access_token,
                                                @Nullable @RequestHeader Integer access_level,
                                                @Nullable @RequestHeader String lang) {
         try {
@@ -3314,7 +3314,7 @@ public class EncounterController {
     @GetMapping(value = "/pre-operation-administered-medications-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getOperationInductionList(@RequestParam Map<String, String> queryParams,
                                                        @Nullable @RequestHeader String facility_id,
-                                                       @Nullable @RequestHeader String access_token,
+                                                       // @Nullable @RequestHeader String access_token,
                                                        @Nullable @RequestHeader Integer access_level,
                                                        @Nullable @RequestHeader String lang) {
         try {
@@ -3361,7 +3361,7 @@ public class EncounterController {
     @GetMapping(value = "/emergency-triage-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getEmergencyTriageList(@RequestParam Map<String, String> queryParams,
                                                   @Nullable @RequestHeader String facility_id,
-                                                  @Nullable @RequestHeader String access_token,
+                                                  // @Nullable @RequestHeader String access_token,
                                                   @Nullable @RequestHeader Integer access_level,
                                                   @Nullable @RequestHeader String lang) {
         try {
@@ -3396,7 +3396,7 @@ public class EncounterController {
     @GetMapping(value = "/er-waiting-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> ERWaitingList(@RequestParam Map<String, String> queryParams,
                                                   @Nullable @RequestHeader String facility_id,
-                                                  @Nullable @RequestHeader String access_token,
+                                                  // @Nullable @RequestHeader String access_token,
                                                   @Nullable @RequestHeader Integer access_level,
                                                   @Nullable @RequestHeader String lang) {
 
@@ -3481,7 +3481,7 @@ public class EncounterController {
                                                  @RequestHeader("triage_key") String triageKey,
                                                  @RequestHeader("destination_key") String destinationKey,
                                                  @Nullable @RequestHeader String facility_id,
-                                                 @Nullable @RequestHeader String access_token,
+                                                 // @Nullable @RequestHeader String access_token,
                                                  @Nullable @RequestHeader Integer access_level,
                                                  @Nullable @RequestHeader String lang
     ) {
@@ -3514,7 +3514,7 @@ public class EncounterController {
                                       @RequestHeader("triage_key") String triageKey,
                                       @RequestHeader("destination_key") String destinationKey,
                                                   @Nullable @RequestHeader String facility_id,
-                                                  @Nullable @RequestHeader String access_token,
+                                                  // @Nullable @RequestHeader String access_token,
                                                   @Nullable @RequestHeader Integer access_level,
                                                   @Nullable @RequestHeader String lang,
                                                   @Nullable @RequestHeader String screenKey
@@ -3544,7 +3544,7 @@ public class EncounterController {
     @GetMapping(value = "/er-triage-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> ERTriageList(@RequestParam Map<String, String> queryParams,
                                            @Nullable @RequestHeader String facility_id,
-                                           @Nullable @RequestHeader String access_token,
+                                           // @Nullable @RequestHeader String access_token,
                                            @Nullable @RequestHeader Integer access_level,
                                            @Nullable @RequestHeader String lang) {
         try {
@@ -3611,7 +3611,7 @@ public class EncounterController {
     public ResponseEntity<?> emergencyEncounterList(@RequestParam Map<String, String> queryParams,
                                                     @RequestHeader("department_key") String depKey,
                                                     @Nullable @RequestHeader String facility_id,
-                                                    @Nullable @RequestHeader String access_token,
+                                                    // @Nullable @RequestHeader String access_token,
                                                     @Nullable @RequestHeader Integer access_level,
                                                     @Nullable @RequestHeader String lang) {
         try {
@@ -3712,7 +3712,7 @@ public class EncounterController {
     @GetMapping(value = "/progress-notes-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProgressNotesList(@RequestParam Map<String, String> queryParams,
                                                    @Nullable @RequestHeader String facility_id,
-                                                   @Nullable @RequestHeader String access_token,
+                                                   // @Nullable @RequestHeader String access_token,
                                                    @Nullable @RequestHeader Integer access_level,
                                                    @Nullable @RequestHeader String lang) {
         try {
@@ -3755,7 +3755,7 @@ public class EncounterController {
     @PostMapping(value = "/cancel-encounter", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> cancelEncounter(@RequestBody ApEncounter apEncounter,
                                                @Nullable @RequestHeader String facility_id,
-                                               @Nullable @RequestHeader String access_token,
+                                               // @Nullable @RequestHeader String access_token,
                                                @Nullable @RequestHeader Integer access_level,
                                                @Nullable @RequestHeader String lang,
                                                @Nullable @RequestHeader String screenKey
@@ -3778,7 +3778,7 @@ public class EncounterController {
     @PostMapping(value = "/patient-temporary-discharge", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> patientTemporaryDischarge(@RequestBody ApPatientTemporaryDischarge apPatientTemporaryDischarge,
                                                        @Nullable @RequestHeader String facility_id,
-                                                       @Nullable @RequestHeader String access_token,
+                                                       // @Nullable @RequestHeader String access_token,
                                                        @Nullable @RequestHeader Integer access_level,
                                                        @Nullable @RequestHeader String lang,
                                                        @Nullable @RequestHeader String screenKey
@@ -3837,7 +3837,7 @@ public class EncounterController {
             @RequestBody ApPatientTemporaryDischarge apPatientTemporaryDischarge,
             @RequestHeader("department_key") String depKey,
             @Nullable @RequestHeader String facility_id,
-            @Nullable @RequestHeader String access_token,
+            // @Nullable @RequestHeader String access_token,
             @Nullable @RequestHeader Integer access_level,
             @Nullable @RequestHeader String lang,
             @Nullable @RequestHeader String screenKey
@@ -3927,7 +3927,7 @@ public class EncounterController {
     public ResponseEntity<?> dayCaseEncounterList(@RequestParam Map<String, String> queryParams,
                                                   @RequestHeader("department_key") String depKey,
                                                   @Nullable @RequestHeader String facility_id,
-                                                  @Nullable @RequestHeader String access_token,
+                                                  // @Nullable @RequestHeader String access_token,
                                                   @Nullable @RequestHeader Integer access_level,
                                                   @Nullable @RequestHeader String lang) {
         try {

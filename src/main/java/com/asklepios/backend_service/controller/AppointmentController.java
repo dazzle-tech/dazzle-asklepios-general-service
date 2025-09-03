@@ -51,7 +51,7 @@ public class AppointmentController {
     @GetMapping(value = "/resources-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> resourcesList(@RequestParam Map<String, String> queryParams,
                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                          // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                            @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -86,7 +86,7 @@ public class AppointmentController {
     public ResponseEntity<?> getResourceByKey(
             @RequestParam String resourceKey,
             @jakarta.annotation.Nullable @RequestHeader String facility_id,
-            @jakarta.annotation.Nullable @RequestHeader String access_token,
+           // @jakarta.annotation.Nullable @RequestHeader String access_token,
             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
             @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -115,7 +115,7 @@ public class AppointmentController {
     @PostMapping(value = "/save-resources", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveResources(@RequestBody ApResources resources,
                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                          // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                            @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -133,7 +133,7 @@ public class AppointmentController {
     @PostMapping(value = "/save-appointment", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveAppointment(@RequestBody ApAppointment appointment,
                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                            // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                              @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -241,7 +241,7 @@ public class AppointmentController {
     @PostMapping(value = "/change-appointment-status", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changeAppointmentStatus(@RequestBody ApAppointment appointment,
                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                    // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                      @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -261,7 +261,7 @@ public class AppointmentController {
     @GetMapping(value = "/resource-type-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> resourceTypeList(@RequestHeader String resource_type,
                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                             // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                               @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                               @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -400,7 +400,7 @@ public class AppointmentController {
     public ResponseEntity<?> resourcesAvailabilityList(
             @RequestParam String resource_key,
             @jakarta.annotation.Nullable @RequestHeader String facility_id,
-            @jakarta.annotation.Nullable @RequestHeader String access_token,
+           // @jakarta.annotation.Nullable @RequestHeader String access_token,
             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
             @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -429,7 +429,7 @@ public class AppointmentController {
     @PostMapping(value = "/remove-resource", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeResource(@RequestBody ApResources resource,
                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                           // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                             @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -447,7 +447,7 @@ public class AppointmentController {
     @GetMapping(value = "/resources-availability-time-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> resourcesAvailabilityTimeList(@RequestParam Map<String, String> queryParams,
                                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                          // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                            @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -480,7 +480,7 @@ public class AppointmentController {
     @PostMapping(value = "/save-resources-availability-time", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveResourcesAvailabilityTime(@RequestBody ApResourcesAvailabilityTime resourcesAvailabilityTime,
                                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                          // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                            @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -500,7 +500,7 @@ public class AppointmentController {
     public ResponseEntity<?> resourcesWithAvailability(
             @RequestParam Map<String, String> queryParams,
             @jakarta.annotation.Nullable @RequestHeader String facility_id,
-            @jakarta.annotation.Nullable @RequestHeader String access_token,
+           // @jakarta.annotation.Nullable @RequestHeader String access_token,
             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
             @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {

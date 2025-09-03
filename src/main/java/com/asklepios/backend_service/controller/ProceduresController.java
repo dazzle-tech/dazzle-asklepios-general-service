@@ -60,7 +60,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @GetMapping(value = "/procedures-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProcedureList(@RequestParam Map<String, String> queryParams,
                                               @Nullable @RequestHeader String facility_id,
-                                              @Nullable @RequestHeader String access_token,
+                                              //  @Nullable @RequestHeader String access_token,
                                               @Nullable @RequestHeader Integer access_level,
                                               @Nullable @RequestHeader String lang) {
         try {
@@ -119,7 +119,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @PostMapping(value = "/save-procedures", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveProcedure(@RequestBody ApProcedure request,
                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                           // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                            @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -147,7 +147,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @GetMapping(value = "/procedures-registration-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProcedureRegistrationList(@RequestParam Map<String, String> queryParams,
                                                           @Nullable @RequestHeader String facility_id,
-                                                          @Nullable @RequestHeader String access_token,
+                                                          //  @Nullable @RequestHeader String access_token,
                                                           @Nullable @RequestHeader Integer access_level,
                                                           @Nullable @RequestHeader String lang) {
         try {
@@ -188,7 +188,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @PostMapping(value = "/save-registration-procedures", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveProcedureRegistration(@RequestBody ApProcedureRegistration request,
                                                        @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                       @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                       // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                        @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                        @jakarta.annotation.Nullable @RequestHeader String lang
 

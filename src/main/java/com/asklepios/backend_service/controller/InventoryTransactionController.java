@@ -47,7 +47,7 @@ public class InventoryTransactionController  implements Serializable {
     @GetMapping(value = "/inventory-transaction-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> inventoryTransactionList(@RequestParam Map<String, String> queryParams,
                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                    @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                    // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                     @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -80,7 +80,7 @@ public class InventoryTransactionController  implements Serializable {
     @PostMapping(value = "/save-inventory-transaction", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveInventoryTransaction(@RequestBody ApInventoryTransaction inventoryTransaction,
                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                   // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                    @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -98,7 +98,7 @@ public class InventoryTransactionController  implements Serializable {
     @PostMapping(value = "/remove-inventory-transaction", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeInventoryTransaction(@RequestBody ApInventoryTransaction inventoryTransaction,
                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                     // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                      @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -117,7 +117,7 @@ public class InventoryTransactionController  implements Serializable {
     @GetMapping(value = "/inventory-transaction-attachment-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> inventoryTransactionAttachmentList(@RequestParam Map<String, String> queryParams,
                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                      // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                       @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                       @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -150,7 +150,7 @@ public class InventoryTransactionController  implements Serializable {
     @PostMapping(value = "/save-inventory-transaction-attachment", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveInventoryTransactionAttachment(@RequestBody ApInventoryTransactionAttachment inventoryTransactionAttachment,
                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                      // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                       @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                       @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -168,7 +168,7 @@ public class InventoryTransactionController  implements Serializable {
     @PostMapping(value = "/remove-inventory-transaction-attachment", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeInventoryTransactionAttachment(@RequestBody ApInventoryTransactionAttachment inventoryTransactionAttachment,
                                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                        @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                        // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                         @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -209,7 +209,7 @@ public class InventoryTransactionController  implements Serializable {
     @GetMapping(value = "/inventory-transaction-product-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> inventoryTransactionProductList(@RequestParam Map<String, String> queryParams,
                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                      // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                       @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                       @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -247,7 +247,7 @@ public class InventoryTransactionController  implements Serializable {
     @PostMapping(value = "/save-inventory-transaction-product", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveInventoryTransactionProduct(@RequestBody ApInventoryTransactionProduct inventoryTransactionProduct,
                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                      // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                       @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                       @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -308,7 +308,7 @@ public class InventoryTransactionController  implements Serializable {
     @PostMapping(value = "/remove-inventory-transaction-Product", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeInventoryTransactionProduct(@RequestBody ApInventoryTransactionProduct inventoryTransactionProduct,
                                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                        @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                        // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                         @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -326,7 +326,7 @@ public class InventoryTransactionController  implements Serializable {
     @PostMapping(value = "/confirm-trans-product-stock-in", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> confirmTransProductStockIn(@RequestHeader("Key") String Key,
                                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                             // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                              @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -344,7 +344,7 @@ public class InventoryTransactionController  implements Serializable {
     @PostMapping(value = "/confirm-trans-product-stock-out", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> confirmTransProductStockOut(@RequestHeader("Key") String Key,
                                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                        @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                        // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                         @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -368,7 +368,7 @@ public class InventoryTransactionController  implements Serializable {
     @GetMapping(value = "/inventory-transfer-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> inventoryTransferList(@RequestParam Map<String, String> queryParams,
                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                      // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                       @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                       @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -401,7 +401,7 @@ public class InventoryTransactionController  implements Serializable {
     @PostMapping(value = "/save-inventory-transfer", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveInventoryTransfer(@RequestBody ApInventoryTransfer inventoryTransfer,
                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                      // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                       @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                       @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -419,7 +419,7 @@ public class InventoryTransactionController  implements Serializable {
     @PostMapping(value = "/remove-inventory-transfer", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeInventoryTransfer(@RequestBody ApInventoryTransfer inventoryTransfer,
                                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                        @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                        // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                         @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -438,7 +438,7 @@ public class InventoryTransactionController  implements Serializable {
     @GetMapping(value = "/inventory-transfer-product-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> inventoryTransferProductList(@RequestParam Map<String, String> queryParams,
                                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                             // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                              @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -477,7 +477,7 @@ public class InventoryTransactionController  implements Serializable {
     @PostMapping(value = "/save-inventory-transfer-product", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveInventoryTransferProduct(@RequestBody ApInventoryTransferProduct inventoryTransferProduct,
                                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                             // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                              @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -498,7 +498,7 @@ public class InventoryTransactionController  implements Serializable {
     @PostMapping(value = "/save-inventory-transfer-product-approved", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveApprovedTransferProduct(@RequestBody List<ApInventoryTransferProduct> transferProducts,
                                                        @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                       @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                       // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                        @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                        @jakarta.annotation.Nullable @RequestHeader String lang) {
 
@@ -528,7 +528,7 @@ public class InventoryTransactionController  implements Serializable {
     @PostMapping(value = "/save-inventory-transfer-product-rejected", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveRejectedTransferProduct(@RequestBody List<ApInventoryTransferProduct> transferProducts,
                                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                         @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                         // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                          @jakarta.annotation.Nullable @RequestHeader String lang) {
 
@@ -555,7 +555,7 @@ public class InventoryTransactionController  implements Serializable {
     @PostMapping(value = "/remove-inventory-transfer-Product", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeInventoryTransferProduct(@RequestBody ApInventoryTransferProduct inventoryTransferProduct,
                                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                               @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                               // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                                @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -576,7 +576,7 @@ public class InventoryTransactionController  implements Serializable {
                                                @RequestParam String toBaseUnit,
                                                @RequestParam String uomGroup,
                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                               @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                               // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {

@@ -3137,7 +3137,7 @@ public class SetupController implements Serializable {
     @PostMapping(value = "/save-medical-sheet", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveMedicalSheet(@RequestBody ApMedicalSheets medicalSheet,
                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
                                               @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                               @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -3156,7 +3156,7 @@ public class SetupController implements Serializable {
     public ResponseEntity<ParentResponse<ApMedicalSheets>> getMedicalSheetsByDepartmentId(
             @RequestHeader String departmentid,
             @RequestHeader(required = false) String facility_id,
-            @RequestHeader(required = false) String access_token,
+//            @RequestHeader(required = false) String access_token,
             @RequestHeader(required = false) Integer access_level,
             @RequestHeader(required = false) String lang) {
         try {

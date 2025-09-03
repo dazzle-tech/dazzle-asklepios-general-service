@@ -70,7 +70,10 @@ public class ReferenceDataController implements Serializable {
 
 
     @PostMapping(value = "/get-facility", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getFacility(@RequestParam("message_id") String message_id, @Nullable @RequestHeader String facility_id, @Nullable @RequestHeader String access_token, @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang) {
+    public ResponseEntity<?> getFacility(@RequestParam("message_id") String message_id,
+                                         @Nullable @RequestHeader String facility_id,
+//                                         @Nullable @RequestHeader String access_token,
+                                         @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang) {
 
         try {
             List<ApFacility> record = apFacilityService.getList(" facility_id='" + facility_id + "'");
@@ -87,7 +90,9 @@ public class ReferenceDataController implements Serializable {
     }
 
     @PostMapping(value = "/get-message", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getMessage(@Nullable @RequestHeader String facility_id, @Nullable @RequestHeader String access_token, @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang, @RequestParam("message_id") String message_id, @RequestParam("message_id") String expectedMessage) {
+    public ResponseEntity<?> getMessage(@Nullable @RequestHeader String facility_id,
+//                                        @Nullable @RequestHeader String access_token,
+                                        @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang, @RequestParam("message_id") String message_id, @RequestParam("message_id") String expectedMessage) {
 
         try {
 
@@ -102,7 +107,9 @@ public class ReferenceDataController implements Serializable {
     }
 
     @PostMapping(value = "/get-lov", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getLov(@Nullable @RequestHeader String facility_id, @Nullable @RequestHeader String access_token, @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang, @RequestParam("key") String key) {
+    public ResponseEntity<?> getLov(@Nullable @RequestHeader String facility_id,
+//                                    @Nullable @RequestHeader String access_token,
+                                    @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang, @RequestParam("key") String key) {
         try {
 
             return ResponseEntity.ok(redisTemplateLov.opsForValue().get("apLov:" + key));
@@ -116,7 +123,9 @@ public class ReferenceDataController implements Serializable {
 
 
     @PostMapping(value = "/get-lov-values", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getLovValues(@Nullable @RequestHeader String facility_id, @Nullable @RequestHeader String access_token, @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang, @RequestParam("key") String key) {
+    public ResponseEntity<?> getLovValues(@Nullable @RequestHeader String facility_id,
+//                                          @Nullable @RequestHeader String access_token,
+                                          @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang, @RequestParam("key") String key) {
         try {
             String lovJson = radisTemplateValues.opsForValue().get("apLovValues:" + key);
             publicServices.getTranslationFromRedisLovValues(lovJson, "eng");
@@ -137,7 +146,9 @@ public class ReferenceDataController implements Serializable {
     }
 
     @PostMapping(value = "/get-lov-value", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getLovValue(@Nullable @RequestHeader String facility_id, @Nullable @RequestHeader String access_token, @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang, @RequestParam("lov_value_key") String key) {
+    public ResponseEntity<?> getLovValue(@Nullable @RequestHeader String facility_id,
+//                                         @Nullable @RequestHeader String access_token,
+                                         @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang, @RequestParam("lov_value_key") String key) {
 
         try {
             ApLovValues lovrecord = (ApLovValues) redisTemplateLovValuesList.opsForValue().get("apLovValuesList:" + key);
@@ -159,7 +170,9 @@ public class ReferenceDataController implements Serializable {
     }
 
     @PostMapping(value = "/get-translation", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getTranslation(@Nullable @RequestHeader String facility_id, @Nullable @RequestHeader String access_token, @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang, @RequestParam("trans_for") String trans_for, @RequestParam("word_key") String word_key) {
+    public ResponseEntity<?> getTranslation(@Nullable @RequestHeader String facility_id,
+//                                            @Nullable @RequestHeader String access_token,
+                                            @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang, @RequestParam("trans_for") String trans_for, @RequestParam("word_key") String word_key) {
         try {
 
             String catchkey = "Trans:" + trans_for + lang + word_key;
@@ -174,7 +187,9 @@ public class ReferenceDataController implements Serializable {
     }
 
     @PostMapping(value = "/load-ui-translations")
-    public ResponseEntity loadUiTranslations(@Nullable @RequestHeader String facility_id, @Nullable @RequestHeader String access_token, @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang) {
+    public ResponseEntity loadUiTranslations(@Nullable @RequestHeader String facility_id,
+//                                             @Nullable @RequestHeader String access_token,
+                                             @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang) {
         ParentResponse<UITranslationResponse> response = new ParentResponse<>();
 
         try {
@@ -196,7 +211,9 @@ public class ReferenceDataController implements Serializable {
 
 
     @PostMapping(value = "/get-setting", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getSetting(@Nullable @RequestHeader String facility_id, @Nullable @RequestHeader String access_token, @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang, @RequestParam("setting_key") String setting_key) {
+    public ResponseEntity<?> getSetting(@Nullable @RequestHeader String facility_id,
+//                                        @Nullable @RequestHeader String access_token,
+                                        @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang, @RequestParam("setting_key") String setting_key) {
         try {
 
             return ResponseEntity.ok(redisTemplateGlobalSettings.opsForValue().get("Setting:" + setting_key + facility_id));
@@ -211,7 +228,7 @@ public class ReferenceDataController implements Serializable {
     @GetMapping(value = "/get-lov-values-by-code", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> lovValueList(@RequestParam String code, @Nullable String parentValueKey,
                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -234,7 +251,7 @@ public class ReferenceDataController implements Serializable {
     @GetMapping(value="/get-lov-defult-value", produces = MediaType.APPLICATION_JSON_VALUE)
      public ResponseEntity<?> getLovDefult(@RequestHeader String code,
                                            @Nullable @RequestHeader String facility_id,
-                                           @Nullable @RequestHeader String access_token,
+//                                           @Nullable @RequestHeader String access_token,
                                            @Nullable @RequestHeader Integer access_level,
                                            @Nullable @RequestHeader String lang) {
         {
@@ -257,7 +274,7 @@ public class ReferenceDataController implements Serializable {
     @GetMapping(value = "/get-lov-all-values", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getLovAllValues(@RequestParam Map<String, String> queryParams,
                                                               @Nullable @RequestHeader String facility_id,
-                                                              @Nullable @RequestHeader String access_token,
+//                                                              @Nullable @RequestHeader String access_token,
                                                               @Nullable @RequestHeader Integer access_level,
                                                               @Nullable @RequestHeader String lang) {
         try {

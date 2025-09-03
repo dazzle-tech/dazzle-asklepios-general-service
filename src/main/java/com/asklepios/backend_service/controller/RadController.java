@@ -52,7 +52,7 @@ public class RadController {
     @PostMapping(value = "/save-diagnostic-order-tests-rad-report", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTestsRadReport(@RequestBody ApDiagnosticOrderTestsRadReport request,
                                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                             @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -73,7 +73,7 @@ public class RadController {
     @GetMapping(value = "/diagnostic-order-test-rad-report-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDiagnosticOrderTestResultList(@RequestParam Map<String, String> queryParams,
                                                               @Nullable @RequestHeader String facility_id,
-                                                              @Nullable @RequestHeader String access_token,
+//                                                              @Nullable @RequestHeader String access_token,
                                                               @Nullable @RequestHeader Integer access_level,
                                                               @Nullable @RequestHeader String lang) {
         try {
@@ -113,7 +113,7 @@ public class RadController {
     @GetMapping(value = "/diagnostic-order-tests-report-notes-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDiagnosticOrderTestsReportNotesList(@RequestHeader  String reportid,
                                                                     @Nullable @RequestHeader String facility_id,
-                                                                    @Nullable @RequestHeader String access_token,
+//                                                                    @Nullable @RequestHeader String access_token,
                                                                     @Nullable @RequestHeader Integer access_level,
                                                                     @Nullable @RequestHeader String lang) {
         try {
@@ -142,7 +142,7 @@ public class RadController {
     @PostMapping(value = "/save-diagnostic-order-tests-report-notes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTestsReportNotes(@RequestBody ApDiagnosticOrderTestsReportNotes request,
                                                                  @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                                  @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                                  @jakarta.annotation.Nullable @RequestHeader String lang
 

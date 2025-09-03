@@ -88,7 +88,9 @@ public class PatientController {
         }
     }
     @PostMapping(value = "/get-patient", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getPatient(@RequestParam("patient_id") String patient_id, @Nullable @RequestHeader String facility_id, @Nullable @RequestHeader String access_token, @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang) {
+    public ResponseEntity<?> getPatient(@RequestParam("patient_id") String patient_id, @Nullable @RequestHeader String facility_id,
+                                       // @Nullable @RequestHeader String access_token,
+                                        @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang) {
         try {
             List<ApPatient> patientList = apPatientService.getList("key='" + patient_id + "' ");
             if (patientList.isEmpty()) {
@@ -115,7 +117,7 @@ public class PatientController {
     @PostMapping(value = "/patient-list-by-role-candidate", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> patientList(@RequestBody PatientRoleRequest request,
                                          @Nullable @RequestHeader String facility_id,
-                                         @Nullable @RequestHeader String access_token,
+                                        // @Nullable @RequestHeader String access_token,
                                          @Nullable @RequestHeader Integer access_level,
                                          @Nullable @RequestHeader String lang) {
         try {
@@ -124,7 +126,7 @@ public class PatientController {
 
             ParentResponse<List<ApPatient>> response = new ParentResponse<>();
             String where = apDuplicationCandidateSetupService.buildWhereClause(role, patient);
-          
+
 
             List<ApPatient> patients = apPatientService.getList(where);
 
@@ -152,7 +154,7 @@ public class PatientController {
     @GetMapping(value = "/patient-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> patientList(@RequestParam Map<String, String> queryParams,
                                          @Nullable @RequestHeader String facility_id,
-                                         @Nullable @RequestHeader String access_token,
+//                                         @Nullable @RequestHeader String access_token,
                                          @Nullable @RequestHeader Integer access_level,
                                          @Nullable @RequestHeader String lang) {
         try {
@@ -220,7 +222,7 @@ public class PatientController {
     @PostMapping(value = "/save-patient", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveLovValue(@RequestBody ApPatient apPatient,
                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                           @jakarta.annotation.Nullable @RequestHeader String lang,
                                           @jakarta.annotation.Nullable @RequestHeader String screenKey) {
@@ -282,7 +284,7 @@ public class PatientController {
     @GetMapping(value = "/patient-allergy-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> patientAllergyList(@RequestParam Map<String, String> queryParams,
                                                 @Nullable @RequestHeader String facility_id,
-                                                @Nullable @RequestHeader String access_token,
+//                                                @Nullable @RequestHeader String access_token,
                                                 @Nullable @RequestHeader Integer access_level,
                                                 @Nullable @RequestHeader String lang) {
         try {
@@ -320,7 +322,7 @@ public class PatientController {
     public ResponseEntity<?> patientAllergyViewList(
             @Nullable @RequestHeader("key") String patientKey,
             @Nullable @RequestHeader String facility_id,
-            @Nullable @RequestHeader String access_token,
+//            @Nullable @RequestHeader String access_token,
             @Nullable @RequestHeader Integer access_level,
             @Nullable @RequestHeader String lang) {
         try {
@@ -343,7 +345,7 @@ public class PatientController {
     @PostMapping(value = "/save-patient-allergy", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePatientAllergy(@RequestBody ApPatientAllergies request,
                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                 @jakarta.annotation.Nullable @RequestHeader String lang,
                                                 @jakarta.annotation.Nullable @RequestHeader String screenKey
@@ -387,7 +389,7 @@ public class PatientController {
     @PostMapping(value = "/remove-patient-allergy", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removePatientAllergy(@RequestBody ApPatientAllergies request,
                                                   @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                  @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                  @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                   @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                   @jakarta.annotation.Nullable @RequestHeader String lang,
                                                   @jakarta.annotation.Nullable @RequestHeader String screenKey
@@ -413,7 +415,7 @@ public class PatientController {
     @PostMapping(value = "/send-verification-otp", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> sendVerificationOtp(@RequestHeader String patientId,
                                                  @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                  @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                  @jakarta.annotation.Nullable @RequestHeader String lang,
                                                  @jakarta.annotation.Nullable @RequestHeader String screenKey
@@ -443,7 +445,7 @@ public class PatientController {
     @PostMapping(value = "/verify-verification-otp", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> verifyVerificationOtp(@RequestHeader String patientId, @RequestHeader String otp,
                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                    @jakarta.annotation.Nullable @RequestHeader String lang,
                                                    @jakarta.annotation.Nullable @RequestHeader String screenKey
@@ -479,7 +481,7 @@ public class PatientController {
     @GetMapping(value = "/patient-relation-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> patientRelationList(@RequestParam Map<String, String> queryParams,
                                                  @Nullable @RequestHeader String key,
-                                                 @Nullable @RequestHeader String access_token,
+//                                                 @Nullable @RequestHeader String access_token,
                                                  @Nullable @RequestHeader Integer access_level,
                                                  @Nullable @RequestHeader String lang) {
         try {
@@ -519,7 +521,7 @@ public class PatientController {
     public ResponseEntity<?> patientSecondaryDocumentsList(
             @Nullable @RequestHeader("key") String patientKey,
             @Nullable @RequestHeader String facility_id,
-            @Nullable @RequestHeader String access_token,
+//            @Nullable @RequestHeader String access_token,
             @Nullable @RequestHeader Integer access_level,
             @Nullable @RequestHeader String lang) {
         try {
@@ -543,7 +545,7 @@ public class PatientController {
     @GetMapping(value = "/patient-secondary_document_list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> patientSecondaryDocumentList(@RequestParam Map<String, String> queryParams,
                                                           @Nullable @RequestHeader String key,
-                                                          @Nullable @RequestHeader String access_token,
+//                                                          @Nullable @RequestHeader String access_token,
                                                           @Nullable @RequestHeader Integer access_level,
                                                           @Nullable @RequestHeader String lang) {
         try {
@@ -618,7 +620,7 @@ public class PatientController {
     @PostMapping(value = "/save-patient-relation", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePatientRelation(@RequestBody ApPatientRelation relation,
                                                  @Nullable @RequestHeader String facility_id,
-                                                 @Nullable @RequestHeader String access_token,
+//                                                 @Nullable @RequestHeader String access_token,
                                                  @Nullable @RequestHeader Integer access_level,
                                                  @Nullable @RequestHeader String lang) {
         try {
@@ -703,7 +705,7 @@ public class PatientController {
     @PostMapping(value = "/save-patient-insurance", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePatientInsurance(@RequestBody ApPatientInsurance Insurance,
                                                   @Nullable @RequestHeader String facility_id,
-                                                  @Nullable @RequestHeader String access_token,
+//                                                  @Nullable @RequestHeader String access_token,
                                                   @Nullable @RequestHeader Integer access_level,
                                                   @Nullable @RequestHeader String lang) {
         try {
@@ -740,7 +742,7 @@ public class PatientController {
     @DeleteMapping(value = "/delete-patient-insurance", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removePatientInsurance(@RequestHeader("key") String key,
                                                     @Nullable @RequestHeader String facility_id,
-                                                    @Nullable @RequestHeader String access_token,
+//                                                    @Nullable @RequestHeader String access_token,
                                                     @Nullable @RequestHeader Integer access_level,
                                                     @Nullable @RequestHeader String lang) {
         try {
@@ -840,7 +842,7 @@ public class PatientController {
     @PostMapping(value = "/save-patient-insurance-covg", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePatientInsuranceCovg(@RequestBody ApPatientInsuranceCoverage Coverage,
                                                       @Nullable @RequestHeader String facility_id,
-                                                      @Nullable @RequestHeader String access_token,
+//                                                      @Nullable @RequestHeader String access_token,
                                                       @Nullable @RequestHeader Integer access_level,
                                                       @Nullable @RequestHeader String lang) {
         try {
@@ -864,7 +866,7 @@ public class PatientController {
     @DeleteMapping(value = "/remove-patient-insurance-covg", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removePatientInsuranceCovg(@RequestHeader("key") String key,
                                                         @Nullable @RequestHeader String facility_id,
-                                                        @Nullable @RequestHeader String access_token,
+//                                                        @Nullable @RequestHeader String access_token,
                                                         @Nullable @RequestHeader Integer access_level,
                                                         @Nullable @RequestHeader String lang) {
         try {
@@ -892,7 +894,7 @@ public class PatientController {
     public ResponseEntity<?> savePatientAdministrativeWarnings(
             @RequestBody ApPatientAdministrativeWarnings administrativeWarnings,
             @Nullable @RequestHeader String facility_id,
-            @Nullable @RequestHeader String access_token,
+//            @Nullable @RequestHeader String access_token,
             @Nullable @RequestHeader Integer access_level,
             @Nullable @RequestHeader String lang) {
 
@@ -918,7 +920,7 @@ public class PatientController {
     public ResponseEntity<?> fetchPatientAdministrativeWarnings(
             @RequestParam Map<String, String> queryParams,
             @jakarta.annotation.Nullable @RequestHeader String facility_id,
-            @jakarta.annotation.Nullable @RequestHeader String access_token,
+//            @jakarta.annotation.Nullable @RequestHeader String access_token,
             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
             @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -1001,7 +1003,7 @@ public class PatientController {
     @GetMapping(value = "/age-group-value", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAgeGroupDate(@Nullable @RequestHeader("dob") String date,
                                              @Nullable @RequestHeader String facility_id,
-                                             @Nullable @RequestHeader String access_token,
+//                                             @Nullable @RequestHeader String access_token,
                                              @Nullable @RequestHeader Integer access_level,
                                              @Nullable @RequestHeader String lang) {
         try {
@@ -1024,7 +1026,7 @@ public class PatientController {
                                                    @Nullable @RequestHeader("reason") String reason,
                                                    @Nullable @RequestHeader("patientKey") String patientKey,
                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                    @jakarta.annotation.Nullable @RequestHeader String lang,
                                                    @jakarta.annotation.Nullable @RequestHeader String screenKey) {
@@ -1059,7 +1061,7 @@ public class PatientController {
     @PostMapping(value = "/save-patient-preferred-health", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePreferredHealthProfessional(@RequestBody ApPatientPreferredHealthProfessional patientPH,
                                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                              @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -1077,7 +1079,7 @@ public class PatientController {
     @GetMapping(value = "/patient-preferred-health-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> preferredHealthProfessionalList(@RequestParam Map<String, String> queryParams,
                                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                              @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -1118,7 +1120,7 @@ public class PatientController {
     @PostMapping(value = "/remove-patient-preferred-health", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removePreferredHealthProfessional(@RequestBody ApPatientPreferredHealthProfessional patientPH,
                                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                               @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                               @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                                @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {

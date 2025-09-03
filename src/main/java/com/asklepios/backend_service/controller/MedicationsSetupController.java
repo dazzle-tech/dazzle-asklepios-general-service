@@ -67,7 +67,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/save-generic-medication", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveGenericMedication(@RequestBody ApGenericMedication genericMedication,
                                                          @Nullable @RequestHeader String facility_id,
-                                                         @Nullable @RequestHeader String access_token,
+                                                         //  @Nullable @RequestHeader String access_token,
                                                          @Nullable @RequestHeader Integer access_level,
                                                          @Nullable @RequestHeader String lang) {
         try {
@@ -86,7 +86,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/remove-generic-medication", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeGenericMedication(@RequestBody ApGenericMedication genericMedication,
                                                            @Nullable @RequestHeader String facility_id,
-                                                           @Nullable @RequestHeader String access_token,
+                                                           //  @Nullable @RequestHeader String access_token,
                                                            @Nullable @RequestHeader Integer access_level,
                                                            @Nullable @RequestHeader String lang) {
         try {
@@ -111,7 +111,7 @@ public class MedicationsSetupController {
     @GetMapping(value = "/generic-medication-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> genericMedicationList(@RequestParam Map<String, String> queryParams,
                                                          @Nullable @RequestHeader String facility_id,
-                                                         @Nullable @RequestHeader String access_token,
+                                                         //  @Nullable @RequestHeader String access_token,
                                                          @Nullable @RequestHeader Integer access_level,
                                                          @Nullable @RequestHeader String lang) {
         try {
@@ -148,7 +148,7 @@ public class MedicationsSetupController {
     @GetMapping(value = "/medication-categories-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> medicationCategoriesList(@RequestParam Map<String, String> queryParams,
                                                       @Nullable @RequestHeader String facility_id,
-                                                      @Nullable @RequestHeader String access_token,
+                                                      //  @Nullable @RequestHeader String access_token,
                                                       @Nullable @RequestHeader Integer access_level,
                                                       @Nullable @RequestHeader String lang) {
         try {
@@ -179,7 +179,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/save-medication-categories", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveMedicationCategories(@RequestBody ApMedicationCategories medicationCategories,
                                                       @Nullable @RequestHeader String facility_id,
-                                                      @Nullable @RequestHeader String access_token,
+                                                      //  @Nullable @RequestHeader String access_token,
                                                       @Nullable @RequestHeader Integer access_level,
                                                       @Nullable @RequestHeader String lang) {
         try {
@@ -196,7 +196,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/remove-medication-categories", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeMedicationCategories(@RequestBody ApMedicationCategories medicationCategories,
                                                         @Nullable @RequestHeader String facility_id,
-                                                        @Nullable @RequestHeader String access_token,
+                                                        //  @Nullable @RequestHeader String access_token,
                                                         @Nullable @RequestHeader Integer access_level,
                                                         @Nullable @RequestHeader String lang) {
         try {
@@ -213,7 +213,7 @@ public class MedicationsSetupController {
     @GetMapping(value = "/medication-categories-class-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> medicationCategoriesClassList(@RequestParam Map<String, String> queryParams,
                                                            @Nullable @RequestHeader String facility_id,
-                                                           @Nullable @RequestHeader String access_token,
+                                                           //  @Nullable @RequestHeader String access_token,
                                                            @Nullable @RequestHeader Integer access_level,
                                                            @Nullable @RequestHeader String lang) {
         try {
@@ -244,7 +244,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/save-medication-categories-class", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveMedicationCategoriesClass(@RequestBody ApMedicationCategoriesClass medicationCategoriesClass,
                                                            @Nullable @RequestHeader String facility_id,
-                                                           @Nullable @RequestHeader String access_token,
+                                                           //  @Nullable @RequestHeader String access_token,
                                                            @Nullable @RequestHeader Integer access_level,
                                                            @Nullable @RequestHeader String lang) {
         try {
@@ -261,7 +261,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/remove-medication-categories-class", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeMedicationCategoriesClass(@RequestBody ApMedicationCategoriesClass medicationCategoriesClass,
                                                              @Nullable @RequestHeader String facility_id,
-                                                             @Nullable @RequestHeader String access_token,
+                                                             //  @Nullable @RequestHeader String access_token,
                                                              @Nullable @RequestHeader Integer access_level,
                                                              @Nullable @RequestHeader String lang) {
         try {
@@ -279,7 +279,7 @@ public class MedicationsSetupController {
     @GetMapping(value = "/medication-categories-active-ingredient-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> medicationCategoriesActiveIngredientList(@RequestParam Map<String, String> queryParams,
                                                                       @Nullable @RequestHeader String facility_id,
-                                                                      @Nullable @RequestHeader String access_token,
+                                                                      //  @Nullable @RequestHeader String access_token,
                                                                       @Nullable @RequestHeader Integer access_level,
                                                                       @Nullable @RequestHeader String lang) {
         try {
@@ -310,7 +310,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/save-medication-categories-active-ingredient", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savemedicationCategoriesActiveIngredient(@RequestBody ApMedicationCategoriesActiveIngredient medicationCategoriesActiveIngredient,
                                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                                      // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                                       @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                                       @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -328,7 +328,7 @@ public class MedicationsSetupController {
     @GetMapping(value = "/generic-medication_act-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> genericMedicationByActiveIngredientList(@RequestHeader  String active,
                                                    @Nullable @RequestHeader String facility_id,
-                                                   @Nullable @RequestHeader String access_token,
+                                                   //  @Nullable @RequestHeader String access_token,
                                                    @Nullable @RequestHeader Integer access_level,
                                                    @Nullable @RequestHeader String lang) {
         try {
@@ -361,7 +361,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/save-generic-medication-active-ingredient", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveGenericMedicationActiveIngredient(@RequestBody ApGenericMedicationActiveIngredient genericMedicationActiveIngredient,
                                                    @Nullable @RequestHeader String facility_id,
-                                                   @Nullable @RequestHeader String access_token,
+                                                   //  @Nullable @RequestHeader String access_token,
                                                    @Nullable @RequestHeader Integer access_level,
                                                    @Nullable @RequestHeader String lang) {
         try {
@@ -378,7 +378,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/remove-generic-medication-active-ingredient", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeGenericMedicationActiveIngredient(@RequestBody ApGenericMedicationActiveIngredient genericMedicationActiveIngredient,
                                                      @Nullable @RequestHeader String facility_id,
-                                                     @Nullable @RequestHeader String access_token,
+                                                     //  @Nullable @RequestHeader String access_token,
                                                      @Nullable @RequestHeader Integer access_level,
                                                      @Nullable @RequestHeader String lang) {
         try {
@@ -395,7 +395,7 @@ public class MedicationsSetupController {
     @GetMapping(value = "/generic-medication-active-ingredient-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> genericMedicationActiveIngredientList(@RequestParam Map<String, String> queryParams,
                                                    @Nullable @RequestHeader String facility_id,
-                                                   @Nullable @RequestHeader String access_token,
+                                                   //  @Nullable @RequestHeader String access_token,
                                                    @Nullable @RequestHeader Integer access_level,
                                                    @Nullable @RequestHeader String lang) {
         try {
@@ -425,7 +425,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/save-prescription-instruction", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePrescriptionInstruction(@RequestBody ApPrescriptionInstruction prescriptionInstruction,
                                                                    @Nullable @RequestHeader String facility_id,
-                                                                   @Nullable @RequestHeader String access_token,
+                                                                   //  @Nullable @RequestHeader String access_token,
                                                                    @Nullable @RequestHeader Integer access_level,
                                                                    @Nullable @RequestHeader String lang) {
         try {
@@ -443,7 +443,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/remove-prescription-instruction", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removePrescriptionInstruction(@RequestBody ApPrescriptionInstruction prescriptionInstruction,
                                                                      @Nullable @RequestHeader String facility_id,
-                                                                     @Nullable @RequestHeader String access_token,
+                                                                     //  @Nullable @RequestHeader String access_token,
                                                                      @Nullable @RequestHeader Integer access_level,
                                                                      @Nullable @RequestHeader String lang) {
         try {
@@ -461,7 +461,7 @@ public class MedicationsSetupController {
     @GetMapping(value = "/prescription-instruction-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> prescriptionInstructionList(@RequestParam Map<String, String> queryParams,
                                                                    @Nullable @RequestHeader String facility_id,
-                                                                   @Nullable @RequestHeader String access_token,
+                                                                   //  @Nullable @RequestHeader String access_token,
                                                                    @Nullable @RequestHeader Integer access_level,
                                                                    @Nullable @RequestHeader String lang) {
         try {
@@ -492,7 +492,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/save-active-ingredient-synonym", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveActiveIngredientSynonym(@RequestBody ApActiveIngredientSynonym activeIngredientSynonym,
                                                          @Nullable @RequestHeader String facility_id,
-                                                         @Nullable @RequestHeader String access_token,
+                                                         //  @Nullable @RequestHeader String access_token,
                                                          @Nullable @RequestHeader Integer access_level,
                                                          @Nullable @RequestHeader String lang) {
         try {
@@ -510,7 +510,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/remove-active-ingredient-synonym", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeActiveIngredientSynonym(@RequestBody ApActiveIngredientSynonym activeIngredientSynonym,
                                                            @Nullable @RequestHeader String facility_id,
-                                                           @Nullable @RequestHeader String access_token,
+                                                           //  @Nullable @RequestHeader String access_token,
                                                            @Nullable @RequestHeader Integer access_level,
                                                            @Nullable @RequestHeader String lang) {
         try {
@@ -528,7 +528,7 @@ public class MedicationsSetupController {
     @GetMapping(value = "/active-ingredient-synonym-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> activeIngredientSynonymList(@RequestParam Map<String, String> queryParams,
                                                          @Nullable @RequestHeader String facility_id,
-                                                         @Nullable @RequestHeader String access_token,
+                                                         //  @Nullable @RequestHeader String access_token,
                                                          @Nullable @RequestHeader Integer access_level,
                                                          @Nullable @RequestHeader String lang) {
         try {
@@ -557,7 +557,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/save-active-ingredient-special-population", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveActiveIngredientSpecialPopulation(@RequestBody ApActiveIngredientSpecialPopulation activeIngredientSpecialPopulation,
                                                                  @Nullable @RequestHeader String facility_id,
-                                                                 @Nullable @RequestHeader String access_token,
+                                                                 //  @Nullable @RequestHeader String access_token,
                                                                  @Nullable @RequestHeader Integer access_level,
                                                                  @Nullable @RequestHeader String lang) {
         try {
@@ -575,7 +575,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/remove-active-ingredient-special-population", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeActiveIngredientSpecialPopulation(@RequestBody ApActiveIngredientSpecialPopulation activeIngredientSpecialPopulation,
                                                                    @Nullable @RequestHeader String facility_id,
-                                                                   @Nullable @RequestHeader String access_token,
+                                                                   //  @Nullable @RequestHeader String access_token,
                                                                    @Nullable @RequestHeader Integer access_level,
                                                                    @Nullable @RequestHeader String lang) {
         try {
@@ -593,7 +593,7 @@ public class MedicationsSetupController {
     @GetMapping(value = "/active-ingredient-special-population-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> activeIngredientSpecialPopulationList(@RequestParam Map<String, String> queryParams,
                                                                  @Nullable @RequestHeader String facility_id,
-                                                                 @Nullable @RequestHeader String access_token,
+                                                                 //  @Nullable @RequestHeader String access_token,
                                                                  @Nullable @RequestHeader Integer access_level,
                                                                  @Nullable @RequestHeader String lang) {
         try {
@@ -625,7 +625,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/save-active-ingredient-adverse-effect", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveActiveIngredientAdverseEffect(@RequestBody ApActiveIngredientAdverseEffect activeIngredientAdverseEffect,
                                                                @Nullable @RequestHeader String facility_id,
-                                                               @Nullable @RequestHeader String access_token,
+                                                               //  @Nullable @RequestHeader String access_token,
                                                                @Nullable @RequestHeader Integer access_level,
                                                                @Nullable @RequestHeader String lang) {
         try {
@@ -643,7 +643,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/remove-active-ingredient-adverse-effect", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeActiveIngredientAdverseEffect(@RequestBody ApActiveIngredientAdverseEffect activeIngredientAdverseEffect,
                                                                  @Nullable @RequestHeader String facility_id,
-                                                                 @Nullable @RequestHeader String access_token,
+                                                                 //  @Nullable @RequestHeader String access_token,
                                                                  @Nullable @RequestHeader Integer access_level,
                                                                  @Nullable @RequestHeader String lang) {
         try {
@@ -661,7 +661,7 @@ public class MedicationsSetupController {
     @GetMapping(value = "/active-ingredient-adverse-effect-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> activeIngredientAdverseEffectList(@RequestParam Map<String, String> queryParams,
                                                                @Nullable @RequestHeader String facility_id,
-                                                               @Nullable @RequestHeader String access_token,
+                                                               //  @Nullable @RequestHeader String access_token,
                                                                @Nullable @RequestHeader Integer access_level,
                                                                @Nullable @RequestHeader String lang) {
         try {
@@ -692,7 +692,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/save-active-ingredient-food-interaction", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveActiveIngredientFoodInteraction(@RequestBody ApActiveIngredientFoodInteraction activeIngredientFoodInteraction,
                                                                  @Nullable @RequestHeader String facility_id,
-                                                                 @Nullable @RequestHeader String access_token,
+                                                                 //  @Nullable @RequestHeader String access_token,
                                                                  @Nullable @RequestHeader Integer access_level,
                                                                  @Nullable @RequestHeader String lang) {
         try {
@@ -710,7 +710,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/remove-active-ingredient-food-interaction", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeActiveIngredientFoodInteraction(@RequestBody ApActiveIngredientFoodInteraction activeIngredientFoodInteraction,
                                                                    @Nullable @RequestHeader String facility_id,
-                                                                   @Nullable @RequestHeader String access_token,
+                                                                   //  @Nullable @RequestHeader String access_token,
                                                                    @Nullable @RequestHeader Integer access_level,
                                                                    @Nullable @RequestHeader String lang) {
         try {
@@ -728,7 +728,7 @@ public class MedicationsSetupController {
     @GetMapping(value = "/active-ingredient-food-interaction-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> activeIngredientFoodInteractionList(@RequestParam Map<String, String> queryParams,
                                                                  @Nullable @RequestHeader String facility_id,
-                                                                 @Nullable @RequestHeader String access_token,
+                                                                 //  @Nullable @RequestHeader String access_token,
                                                                  @Nullable @RequestHeader Integer access_level,
                                                                  @Nullable @RequestHeader String lang) {
         try {
@@ -759,7 +759,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/save-active-ingredient-drug-interaction", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveActiveIngredientDrugInteraction(@RequestBody ApActiveIngredientDrugInteraction activeIngredientDrugInteraction,
                                                                  @Nullable @RequestHeader String facility_id,
-                                                                 @Nullable @RequestHeader String access_token,
+                                                                 //  @Nullable @RequestHeader String access_token,
                                                                  @Nullable @RequestHeader Integer access_level,
                                                                  @Nullable @RequestHeader String lang) {
         try {
@@ -777,7 +777,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/remove-active-ingredient-drug-interaction", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeActiveIngredientDrugInteraction(@RequestBody ApActiveIngredientDrugInteraction activeIngredientDrugInteraction,
                                                                    @Nullable @RequestHeader String facility_id,
-                                                                   @Nullable @RequestHeader String access_token,
+                                                                   //  @Nullable @RequestHeader String access_token,
                                                                    @Nullable @RequestHeader Integer access_level,
                                                                    @Nullable @RequestHeader String lang) {
         try {
@@ -796,7 +796,7 @@ public class MedicationsSetupController {
     @GetMapping(value = "/active-ingredient-drug-interaction-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> activeIngredientDrugInteractionList(@RequestHeader Map<String, String> queryParams,
                                                                  @Nullable @RequestHeader String facility_id,
-                                                                 @Nullable @RequestHeader String access_token,
+                                                                 //  @Nullable @RequestHeader String access_token,
                                                                  @Nullable @RequestHeader Integer access_level,
                                                                  @Nullable @RequestHeader String lang) {
         try {
@@ -827,7 +827,7 @@ public class MedicationsSetupController {
     @GetMapping(value = "/active-ingredient-drug-interaction-by-key-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> activeIngredientDrugInteractionByKeyList(@RequestHeader String activeKey,
                                                                  @Nullable @RequestHeader String facility_id,
-                                                                 @Nullable @RequestHeader String access_token,
+                                                                 //  @Nullable @RequestHeader String access_token,
                                                                  @Nullable @RequestHeader Integer access_level,
                                                                  @Nullable @RequestHeader String lang) {
         try {
@@ -849,7 +849,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/save-active-ingredient-recommended-dosage", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveActiveIngredientRecommendedDosage(@RequestBody ApActiveIngredientRecommendedDosage activeIngredientRecommendedDosage,
                                                                   @Nullable @RequestHeader String facility_id,
-                                                                  @Nullable @RequestHeader String access_token,
+                                                                  //  @Nullable @RequestHeader String access_token,
                                                                   @Nullable @RequestHeader Integer access_level,
                                                                   @Nullable @RequestHeader String lang) {
         try {
@@ -867,7 +867,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/remove-active-ingredient-recommended-dosage", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeActiveIngredientRecommendedDosage(@RequestBody ApActiveIngredientRecommendedDosage activeIngredientRecommendedDosage,
                                                                     @Nullable @RequestHeader String facility_id,
-                                                                    @Nullable @RequestHeader String access_token,
+                                                                    //  @Nullable @RequestHeader String access_token,
                                                                     @Nullable @RequestHeader Integer access_level,
                                                                     @Nullable @RequestHeader String lang) {
         try {
@@ -885,7 +885,7 @@ public class MedicationsSetupController {
     @GetMapping(value = "/active-ingredient-recommended-dosage-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> activeIngredientRecommendedDosageList(@RequestParam Map<String, String> queryParams,
                                                                    @Nullable @RequestHeader String facility_id,
-                                                                   @Nullable @RequestHeader String access_token,
+                                                                   //  @Nullable @RequestHeader String access_token,
                                                                    @Nullable @RequestHeader Integer access_level,
                                                                    @Nullable @RequestHeader String lang) {
         try {
@@ -917,7 +917,7 @@ public class MedicationsSetupController {
     @GetMapping(value = "/active-ingredient-contraindication-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> activeIngredientContraindicationList(@RequestParam Map<String, String> queryParams,
                                                                   @Nullable @RequestHeader String facility_id,
-                                                                  @Nullable @RequestHeader String access_token,
+                                                                  //  @Nullable @RequestHeader String access_token,
                                                                   @Nullable @RequestHeader Integer access_level,
                                                                   @Nullable @RequestHeader String lang) {
         try {
@@ -951,7 +951,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/save-active-ingredient-contraindication", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveActiveIngredientContraindication(@RequestBody ApActiveIngredientContraindication activeIngredientContraindication,
                                                                   @Nullable @RequestHeader String facility_id,
-                                                                  @Nullable @RequestHeader String access_token,
+                                                                  //  @Nullable @RequestHeader String access_token,
                                                                   @Nullable @RequestHeader Integer access_level,
                                                                   @Nullable @RequestHeader String lang) {
         try {
@@ -969,7 +969,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/remove-active-ingredient-contraindication", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeActiveIngredientContraindication(@RequestBody ApActiveIngredientContraindication activeIngredientContraindication,
                                                                     @Nullable @RequestHeader String facility_id,
-                                                                    @Nullable @RequestHeader String access_token,
+                                                                    //  @Nullable @RequestHeader String access_token,
                                                                     @Nullable @RequestHeader Integer access_level,
                                                                     @Nullable @RequestHeader String lang) {
         try {
@@ -988,7 +988,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/save-active-ingredient-indication", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveActiveIngredientIndication(@RequestBody ApActiveIngredientIndication activeIngredientIndication,
                                                             @Nullable @RequestHeader String facility_id,
-                                                            @Nullable @RequestHeader String access_token,
+                                                            //  @Nullable @RequestHeader String access_token,
                                                             @Nullable @RequestHeader Integer access_level,
                                                             @Nullable @RequestHeader String lang) {
         try {
@@ -1006,7 +1006,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/remove-active-ingredient-indication", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeActiveIngredientIndication(@RequestBody ApActiveIngredientIndication activeIngredientIndication,
                                                               @Nullable @RequestHeader String facility_id,
-                                                              @Nullable @RequestHeader String access_token,
+                                                              //  @Nullable @RequestHeader String access_token,
                                                               @Nullable @RequestHeader Integer access_level,
                                                               @Nullable @RequestHeader String lang) {
         try {
@@ -1024,7 +1024,7 @@ public class MedicationsSetupController {
     @GetMapping(value = "/active-ingredient-indication-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> activeIngredientIndicationList(@RequestParam Map<String, String> queryParams,
                                                             @Nullable @RequestHeader String facility_id,
-                                                            @Nullable @RequestHeader String access_token,
+                                                            //  @Nullable @RequestHeader String access_token,
                                                             @Nullable @RequestHeader Integer access_level,
                                                             @Nullable @RequestHeader String lang) {
         try {
@@ -1057,7 +1057,7 @@ public class MedicationsSetupController {
     @PostMapping(value = "/save-active-ingredient", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveActiveIngredient(@RequestBody ApActiveIngredient activeIngredient,
                                                   @Nullable @RequestHeader String facility_id,
-                                                  @Nullable @RequestHeader String access_token,
+                                                  //  @Nullable @RequestHeader String access_token,
                                                   @Nullable @RequestHeader Integer access_level,
                                                   @Nullable @RequestHeader String lang) {
         try {
@@ -1090,7 +1090,7 @@ public class MedicationsSetupController {
     @GetMapping(value = "/active-ingredient-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> activeIngredientList(@RequestParam Map<String, String> queryParams,
                                                   @Nullable @RequestHeader String facility_id,
-                                                  @Nullable @RequestHeader String access_token,
+                                                  //  @Nullable @RequestHeader String access_token,
                                                   @Nullable @RequestHeader Integer access_level,
                                                   @Nullable @RequestHeader String lang) {
         try {
@@ -1121,7 +1121,7 @@ public class MedicationsSetupController {
     public ResponseEntity<?> saveLinkedBrandMedication(
             @RequestBody ApBrandMedicationSubstitutes request,
             @jakarta.annotation.Nullable @RequestHeader String facility_id,
-            @jakarta.annotation.Nullable @RequestHeader String access_token,
+            // @jakarta.annotation.Nullable @RequestHeader String access_token,
             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
             @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -1154,7 +1154,7 @@ public class MedicationsSetupController {
     @GetMapping(value = "/brands-linked-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> brandsLinkedsList(@RequestHeader  String key,
                                                   @Nullable @RequestHeader String facility_id,
-                                                  @Nullable @RequestHeader String access_token,
+                                                  //  @Nullable @RequestHeader String access_token,
                                                   @Nullable @RequestHeader Integer access_level,
                                                   @Nullable @RequestHeader String lang) {
         try {
@@ -1185,7 +1185,7 @@ public class MedicationsSetupController {
     public ResponseEntity<?> deleteLinkedBrandMedication(
             @RequestBody ApBrandMedicationSubstitutes request,
             @jakarta.annotation.Nullable @RequestHeader String facility_id,
-            @jakarta.annotation.Nullable @RequestHeader String access_token,
+            // @jakarta.annotation.Nullable @RequestHeader String access_token,
             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
             @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {

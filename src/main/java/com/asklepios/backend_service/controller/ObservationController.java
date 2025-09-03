@@ -59,7 +59,7 @@ public class ObservationController {
     @GetMapping(value = "/observation-summary-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> observationSummaryList(@RequestParam Map<String, String> queryParams,
                                                     @Nullable @RequestHeader String facility_id,
-                                                    @Nullable @RequestHeader String access_token,
+                                                    // // @Nullable @RequestHeader String access_token,
                                                     @Nullable @RequestHeader Integer access_level,
                                                     @Nullable @RequestHeader String lang) {
         try {
@@ -95,7 +95,7 @@ public class ObservationController {
     public ResponseEntity<?> saveRoomService(
             @RequestBody ApPatientObservationSummary observationSummary,
             @jakarta.annotation.Nullable @RequestHeader String facility_id,
-            @jakarta.annotation.Nullable @RequestHeader String access_token,
+//            @jakarta.annotation.Nullable @RequestHeader String access_token,
             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
             @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -113,7 +113,7 @@ public class ObservationController {
     @PostMapping(value = "/remove-observation-summary", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeObservationSummary( @RequestBody ApPatientObservationSummary observationSummary,
                                                      @Nullable @RequestHeader String facility_id,
-                                                     @Nullable @RequestHeader String access_token,
+                                                     // // @Nullable @RequestHeader String access_token,
                                                      @Nullable @RequestHeader Integer access_level,
                                                      @Nullable @RequestHeader String lang) {
         try {
@@ -150,7 +150,7 @@ public class ObservationController {
     @GetMapping(value = "/allergies-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getVisitAllergies(@RequestParam Map<String, String> queryParams,
                                                @Nullable @RequestHeader String facility_id,
-                                               @Nullable @RequestHeader String access_token,
+                                               // // @Nullable @RequestHeader String access_token,
                                                @Nullable @RequestHeader Integer access_level,
                                                @Nullable @RequestHeader String lang) {
         try {
@@ -206,7 +206,7 @@ public class ObservationController {
     @GetMapping(value = "/warnings-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getVisitWarning(@RequestParam Map<String, String> queryParams,
                                                @Nullable @RequestHeader String facility_id,
-                                               @Nullable @RequestHeader String access_token,
+                                               // // @Nullable @RequestHeader String access_token,
                                                @Nullable @RequestHeader Integer access_level,
                                                @Nullable @RequestHeader String lang) {
         try {
@@ -325,7 +325,7 @@ public class ObservationController {
     public ResponseEntity<?> getPatientVaccinationRecord(@RequestHeader("patient_key") String patientKey,
                                                          @RequestHeader("is_cancelled") String isCancelled,
                                              @Nullable @RequestHeader String facility_id,
-                                             @Nullable @RequestHeader String access_token,
+                                             // // @Nullable @RequestHeader String access_token,
                                              @Nullable @RequestHeader Integer access_level,
                                              @Nullable @RequestHeader String lang) {
         try {

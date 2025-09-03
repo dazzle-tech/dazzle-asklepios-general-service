@@ -78,7 +78,7 @@ public class DentalController {
     @GetMapping(value = "/dental-action-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> dentalActionList(@RequestParam Map<String, String> queryParams,
                                               @Nullable @RequestHeader String facility_id,
-                                              @Nullable @RequestHeader String access_token,
+                                              // @Nullable @RequestHeader String access_token,
                                               @Nullable @RequestHeader Integer access_level,
                                               @Nullable @RequestHeader String lang) {
         try {
@@ -107,7 +107,7 @@ public class DentalController {
     @GetMapping(value = "/dental-charts-by-encounter", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> fetchDentalCharts(@RequestHeader String encounterKey,
                                                @Nullable @RequestHeader String facility_id,
-                                               @Nullable @RequestHeader String access_token,
+                                               // @Nullable @RequestHeader String access_token,
                                                @Nullable @RequestHeader Integer access_level,
                                                @Nullable @RequestHeader String lang) {
         try {
@@ -306,7 +306,7 @@ public class DentalController {
     @GetMapping(value = "/fetch-chart-data", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> fetchChartData(@RequestHeader String chartKey,
                                             @Nullable @RequestHeader String facility_id,
-                                            @Nullable @RequestHeader String access_token,
+                                            // @Nullable @RequestHeader String access_token,
                                             @Nullable @RequestHeader Integer access_level,
                                             @Nullable @RequestHeader String lang) {
         try {
@@ -367,7 +367,7 @@ public class DentalController {
     @PostMapping(value = "/modify-tooth-action", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> modifyToothAction(@RequestBody ToothActionRequest request,
                                                @Nullable @RequestHeader String facility_id,
-                                               @Nullable @RequestHeader String access_token,
+                                               // @Nullable @RequestHeader String access_token,
                                                @Nullable @RequestHeader Integer access_level,
                                                @Nullable @RequestHeader String lang) {
         try {
@@ -574,7 +574,7 @@ public class DentalController {
     @GetMapping(value = "/fetch-treatment-plan", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> fetchTreatmentPlan(@RequestHeader String encounterKey,
                                                 @Nullable @RequestHeader String facility_id,
-                                                @Nullable @RequestHeader String access_token,
+                                                // @Nullable @RequestHeader String access_token,
                                                 @Nullable @RequestHeader Integer access_level,
                                                 @Nullable @RequestHeader String lang) {
 
@@ -617,7 +617,7 @@ public class DentalController {
     @PostMapping(value = "/save-planned-treatment", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePlannedTreatment(@RequestBody ApDentalPlannedTreatment request,
                                                   @Nullable @RequestHeader String facility_id,
-                                                  @Nullable @RequestHeader String access_token,
+                                                  // @Nullable @RequestHeader String access_token,
                                                   @Nullable @RequestHeader Integer access_level,
                                                   @Nullable @RequestHeader String lang) {
         try {
@@ -645,7 +645,7 @@ public class DentalController {
     @PostMapping(value = "/delete-planned-treatment", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deletePlannedTreatment(@RequestBody ApDentalPlannedTreatment request,
                                                     @Nullable @RequestHeader String facility_id,
-                                                    @Nullable @RequestHeader String access_token,
+                                                    // @Nullable @RequestHeader String access_token,
                                                     @Nullable @RequestHeader Integer access_level,
                                                     @Nullable @RequestHeader String lang) {
         try {
@@ -678,7 +678,7 @@ public class DentalController {
     @PostMapping(value = "/modify-tooth-service", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> modifyToothService(@RequestBody ToothServiceRequest request,
                                                 @Nullable @RequestHeader String facility_id,
-                                                @Nullable @RequestHeader String access_token,
+                                                // @Nullable @RequestHeader String access_token,
                                                 @Nullable @RequestHeader Integer access_level,
                                                 @Nullable @RequestHeader String lang) {
         try {
@@ -778,7 +778,7 @@ public class DentalController {
     @PostMapping(value = "/save-chart", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveChart(@RequestBody ApDentalChart request,
                                        @Nullable @RequestHeader String facility_id,
-                                       @Nullable @RequestHeader String access_token,
+                                       // @Nullable @RequestHeader String access_token,
                                        @Nullable @RequestHeader Integer access_level,
                                        @Nullable @RequestHeader String lang) {
         try {
@@ -797,7 +797,7 @@ public class DentalController {
     @PostMapping(value = "/save-progress-notes", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveProgressNotes(@RequestBody List<ApDentalChartProgressNote> request,
                                                @Nullable @RequestHeader String facility_id,
-                                               @Nullable @RequestHeader String access_token,
+                                               // @Nullable @RequestHeader String access_token,
                                                @Nullable @RequestHeader Integer access_level,
                                                @Nullable @RequestHeader String lang) {
         try {
@@ -836,7 +836,7 @@ public class DentalController {
     @PostMapping(value = "/delete-progress-note", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteProgressNote(@RequestBody ApDentalChartProgressNote request,
                                                 @Nullable @RequestHeader String facility_id,
-                                                @Nullable @RequestHeader String access_token,
+                                                // @Nullable @RequestHeader String access_token,
                                                 @Nullable @RequestHeader Integer access_level,
                                                 @Nullable @RequestHeader String lang) {
         try {

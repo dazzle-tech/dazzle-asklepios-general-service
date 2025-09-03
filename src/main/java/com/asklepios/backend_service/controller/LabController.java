@@ -75,7 +75,7 @@ public class LabController {
     @PostMapping(value = "/save-diagnostic-order-tests-notes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTestsNotes(@RequestBody ApDiagnosticOrderTestsNotes request,
                                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                           // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                            @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -124,7 +124,7 @@ public class LabController {
     @PostMapping(value = "/save-diagnostic-order-tests-sample", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTestsSample(@RequestBody ApDiagnosticOrderTestsSamples request,
                                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                            // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                             @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -172,7 +172,7 @@ public class LabController {
     @PostMapping(value = "/save-diagnostic-order-tests-result", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTestsResult(@RequestBody ApDiagnosticOrderTestsResult request,
                                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                            // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                             @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -199,7 +199,7 @@ public class LabController {
     public ResponseEntity<?> saveDiagnosticTestsResult(@RequestBody ApDiagnosticOrderTestsResult request,
 
                                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                            // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                             @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -335,7 +335,7 @@ public class LabController {
     @PostMapping(value = "/save-diagnostic-order-tests-result-notes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTestsResultNotes(@RequestBody ApDiagnosticOrderTestsResultNotes request,
                                                                  @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                                 // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                                  @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                                  @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -418,7 +418,7 @@ public class LabController {
     @PostMapping(value = "/save-lab-result-log", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveLabResultLog(@RequestBody ApLabResultLog request,
                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                              // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                               @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                               @jakarta.annotation.Nullable @RequestHeader String lang
 

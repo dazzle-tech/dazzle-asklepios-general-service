@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/setup")
-//@CrossOrigin
+@CrossOrigin
 @Slf4j
 public class SetupController implements Serializable {
 

@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/appointment")
-@CrossOrigin
+//@CrossOrigin
 @Slf4j
 public class AppointmentController {
     private final ApResourcesService apResourcesService;

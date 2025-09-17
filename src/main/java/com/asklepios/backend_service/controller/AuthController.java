@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 @RestController
 @RequestMapping("/auth")
-//@CrossOrigin
+@CrossOrigin
 public class AuthController implements Serializable {
 
     private final AuthService authService;

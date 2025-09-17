@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/attachment")
-//@CrossOrigin
+@CrossOrigin
 @Slf4j
 public class AttachmentController {
 

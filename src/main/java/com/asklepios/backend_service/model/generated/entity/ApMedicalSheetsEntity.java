@@ -89,7 +89,7 @@ public class ApMedicalSheetsEntity implements Serializable {
 	private Boolean sofa = false;
 	private Boolean medicalCalculators = false;
 	private Boolean cpoeResultsManager = false;
-	private Boolean orderDetails = false;
+	private Boolean icu = false;
 	private ApMedicalSheetsEntity translatedObject;
 
 }

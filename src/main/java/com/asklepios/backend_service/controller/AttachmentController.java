@@ -39,7 +39,7 @@ public class AttachmentController {
 
     @GetMapping(value = "/fetch-attachment", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> fetchAttachment(@RequestHeader("type") String type,
-                                             @RequestHeader("ref_key") String refKey,
+                                             @RequestHeader("refKey") String refKey,
                                              @Nullable @RequestHeader String facility_id,
                                             // @Nullable @RequestHeader String access_token,
                                              @Nullable @RequestHeader Integer access_level,
@@ -119,7 +119,7 @@ public class AttachmentController {
 
     @GetMapping(value = "/fetch-attachment-light", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> fetchAttachmentLight(
-            @Nullable @RequestHeader("ref_key") String refKey,
+            @Nullable @RequestHeader("refKey") String refKey,
             @Nullable @RequestHeader String facility_id,
            // @Nullable @RequestHeader String access_token,
             @Nullable @RequestHeader Integer access_level,
@@ -184,11 +184,11 @@ public class AttachmentController {
     @PostMapping(value = "/upload", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file,
                                     @RequestHeader("type") String type,
-                                    @RequestHeader("ref_key") String refKey,
-                                    @RequestHeader("patient_key") String patientKey,
+                                    @RequestHeader("refKey") String refKey,
+                                    @RequestHeader("patientKey") String patientKey,
                                     @Nullable @RequestHeader("details") String details,
-                                    @Nullable @RequestHeader("access_type") String accessType,
-                                    @Nullable @RequestHeader("created_by") String createdBy,
+                                    @Nullable @RequestHeader("accessType") String accessType,
+                                    @Nullable @RequestHeader("createdBy") String createdBy,
                                     @Nullable @RequestHeader String facility_id,
                                    // @Nullable @RequestHeader String access_token,
                                     @Nullable @RequestHeader Integer access_level,

@@ -2323,7 +2323,7 @@ public class EncounterController {
     }
     @GetMapping(value = "/inpatient-encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> inpatientEncounterList(@RequestParam Map<String, String> queryParams,
-                                                    @RequestHeader("department_key") String depKey,
+                                                    @RequestHeader("departmentKey") String depKey,
                                                     @Nullable @RequestHeader String facility_id,
                                                     // @Nullable @RequestHeader String access_token,
                                                     @Nullable @RequestHeader Integer access_level,

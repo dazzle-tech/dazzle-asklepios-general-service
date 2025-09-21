@@ -84,7 +84,7 @@ public class AppointmentController {
 
     @GetMapping(value = "/resource-by-key", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getResourceByKey(
-            @RequestParam String resourceKey,
+            @RequestParam ("resource-key") String resourceKey,
             @jakarta.annotation.Nullable @RequestHeader String facility_id,
            // @jakarta.annotation.Nullable @RequestHeader String access_token,
             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -259,7 +259,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value = "/resource-type-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> resourceTypeList(@RequestHeader String resource_type,
+    public ResponseEntity<?> resourceTypeList(@RequestHeader ("resource-type") String resource_type,
                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                              // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                               @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -341,10 +341,10 @@ public class AppointmentController {
 
     @GetMapping(value = "/appointments-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAppointments(
-            @RequestParam String resource_type,
-            @RequestParam String facility_id,
+            @RequestParam ("resource-type") String resource_type,
+            @RequestParam ("facility-id") String facility_id,
             @RequestParam List<String> resources,
-            @RequestHeader(required = false) String access_token,
+//            @RequestHeader(required = false) String access_token,
             @RequestHeader(required = false) String lang) {
         try {
             log.info("Fetching appointments for resource_type: {}, facility_id: {}, resources: {}",

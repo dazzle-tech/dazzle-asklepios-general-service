@@ -111,7 +111,7 @@ public class RadController {
         }
     }
     @GetMapping(value = "/diagnostic-order-tests-report-notes-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getDiagnosticOrderTestsReportNotesList(@RequestHeader  String reportid,
+    public ResponseEntity<?> getDiagnosticOrderTestsReportNotesList(@RequestHeader ("report-id")  String reportid,
                                                                     @Nullable @RequestHeader String facility_id,
 //                                                                    @Nullable @RequestHeader String access_token,
                                                                     @Nullable @RequestHeader Integer access_level,

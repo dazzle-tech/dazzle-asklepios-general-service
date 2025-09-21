@@ -186,7 +186,7 @@ public class InventoryTransactionController  implements Serializable {
     @GetMapping(value = "/attachment-bykey", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAttachmentByKey( @RequestHeader("Key") String Key,
                                                  @Nullable @RequestHeader String facility_id,
-                                                 @Nullable @RequestHeader String access_token,
+//                                                 @Nullable @RequestHeader String access_token,
                                                  @Nullable @RequestHeader Integer access_level,
                                                  @Nullable @RequestHeader String lang) {
         try {
@@ -266,7 +266,7 @@ public class InventoryTransactionController  implements Serializable {
     @PostMapping(value = "/save-inventory-transaction-product-list", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveInventoryTransactionPtroductList(@RequestBody List<ApInventoryTransactionProduct> request,
                                                @Nullable @RequestHeader String facility_id,
-                                               @Nullable @RequestHeader String access_token,
+//                                               @Nullable @RequestHeader String access_token,
                                                @Nullable @RequestHeader Integer access_level,
                                                @Nullable @RequestHeader String lang) {
         try {
@@ -572,9 +572,9 @@ public class InventoryTransactionController  implements Serializable {
 
     @GetMapping(value = "/qty_in_base_uom", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> QuantityInBaseUom(@RequestParam BigDecimal quantity,
-                                               @RequestParam String transUnit,
-                                               @RequestParam String toBaseUnit,
-                                               @RequestParam String uomGroup,
+                                               @RequestParam ("trans-unit") String transUnit,
+                                               @RequestParam ("to-base-unit") String toBaseUnit,
+                                               @RequestParam ("uom-group") String uomGroup,
                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                                // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,

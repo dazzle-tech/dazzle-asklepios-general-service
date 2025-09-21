@@ -825,7 +825,7 @@ public class MedicationsSetupController {
     }
 
     @GetMapping(value = "/active-ingredient-drug-interaction-by-key-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> activeIngredientDrugInteractionByKeyList(@RequestHeader String activeKey,
+    public ResponseEntity<?> activeIngredientDrugInteractionByKeyList(@RequestHeader ("active-key") String activeKey,
                                                                  @Nullable @RequestHeader String facility_id,
                                                                  //  @Nullable @RequestHeader String access_token,
                                                                  @Nullable @RequestHeader Integer access_level,

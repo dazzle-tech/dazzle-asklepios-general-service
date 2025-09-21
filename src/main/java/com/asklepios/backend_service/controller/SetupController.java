@@ -442,7 +442,7 @@ public class SetupController implements Serializable {
 
     @GetMapping(value = "/get-user-record", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUserRecord(
-            @jakarta.annotation.Nullable @RequestHeader String userId,
+            @jakarta.annotation.Nullable @RequestHeader ("user-id") String userId,
             @jakarta.annotation.Nullable @RequestHeader String facility_id,
             // @jakarta.annotation.Nullable @RequestHeader String access_token,
             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -1294,7 +1294,7 @@ public class SetupController implements Serializable {
     }
 
     @GetMapping(value = "/department-list-by-type", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> departmentListByType(@RequestHeader String departmentTypeKey,
+    public ResponseEntity<?> departmentListByType(@RequestHeader ("department-type-key") String departmentTypeKey,
                                                   @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                                   // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                   @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -1500,7 +1500,7 @@ public class SetupController implements Serializable {
     }
 
     @GetMapping(value = "/cdt-list-by-treatment", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> cdtListByTreatment(@RequestHeader String treatmentKey,
+    public ResponseEntity<?> cdtListByTreatment(@RequestHeader ("treatment-key") String treatmentKey,
                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                                 // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -1891,7 +1891,7 @@ public class SetupController implements Serializable {
 
     @PostMapping(value = "/remove-catalog-diagnostic-test", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeCatalogDiagnosticTest(@RequestBody ApDiagnosticTest diagnosticTest,
-                                                         @RequestHeader String catalogKey,
+                                                         @RequestHeader ("catalog-key") String catalogKey,
                                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                                          // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -1915,7 +1915,7 @@ public class SetupController implements Serializable {
     }
 
     @GetMapping(value = "/catalog-diagnostic-test-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> catalogDiagnosticTestList(@jakarta.annotation.Nullable @RequestHeader String catalogKey,
+    public ResponseEntity<?> catalogDiagnosticTestList(@jakarta.annotation.Nullable @RequestHeader ("catalog-key") String catalogKey,
                                                        @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                                        // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                        @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -2348,7 +2348,7 @@ public class SetupController implements Serializable {
     }
 
     @GetMapping(value = "/diagnostic-test-type", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> diagnosticTestType(@RequestHeader String testTypeKey,
+    public ResponseEntity<?> diagnosticTestType(@RequestHeader ("test-type-key") String testTypeKey,
                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                                 // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -2369,7 +2369,7 @@ public class SetupController implements Serializable {
     }
 
     @GetMapping(value = "/diagnostic-test-no-catalog-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> diagnosticTestNotSelectOnCatalogList(@jakarta.annotation.Nullable @RequestHeader String catalogKey,
+    public ResponseEntity<?> diagnosticTestNotSelectOnCatalogList(@jakarta.annotation.Nullable @RequestHeader ("catalog-key") String catalogKey,
                                                                   @jakarta.annotation.Nullable @RequestHeader String type,
                                                                   @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                                                   // @jakarta.annotation.Nullable @RequestHeader String access_token,
@@ -3154,7 +3154,7 @@ public class SetupController implements Serializable {
 
     @GetMapping(value = "/medical-sheets-by-department-id", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ParentResponse<ApMedicalSheets>> getMedicalSheetsByDepartmentId(
-            @RequestHeader String departmentid,
+            @RequestHeader ("department-id") String departmentid,
             @RequestHeader(required = false) String facility_id,
 //            @RequestHeader(required = false) String access_token,
             @RequestHeader(required = false) Integer access_level,
@@ -3483,7 +3483,7 @@ public class SetupController implements Serializable {
     }
 
     @GetMapping(value = "/room-beds-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> roomBedsList(@RequestHeader("resourceKey") String resourceKey,
+    public ResponseEntity<?> roomBedsList(@RequestHeader("resource-key") String resourceKey,
                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                           // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -3714,7 +3714,7 @@ public class SetupController implements Serializable {
     }
 
     @GetMapping(value = "/get-bed-count-by-department", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getBedCountByDepartment(@RequestHeader("department_key") String key,
+    public ResponseEntity<?> getBedCountByDepartment(@RequestHeader("department-key") String key,
                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                                      // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,

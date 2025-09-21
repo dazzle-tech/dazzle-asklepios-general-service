@@ -131,7 +131,7 @@ public class ObservationController {
     @PostMapping(value = "/save-allergies", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveVisitAllergies(@RequestBody ApVisitAllergies request,
                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                 @jakarta.annotation.Nullable @RequestHeader String lang,
                                                 @jakarta.annotation.Nullable @RequestHeader String screenKey
@@ -187,7 +187,7 @@ public class ObservationController {
     @PostMapping(value = "/save-warnings", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveVisitWarninig(@RequestBody ApVisitWarning request,
                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                 @jakarta.annotation.Nullable @RequestHeader String lang,
                                                 @jakarta.annotation.Nullable @RequestHeader String screenKey
@@ -242,7 +242,7 @@ public class ObservationController {
     @PostMapping(value = "/save-encounter-vaccine", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveEncounterVaccine(@RequestBody ApEncounterVaccination encounterVaccination,
                                                   @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                  @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                  @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                   @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                   @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -259,7 +259,7 @@ public class ObservationController {
     @GetMapping(value = "/encounter-vaccine-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> vaccineDosesList(@RequestParam Map<String, String> queryParams,
                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
                                               @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                               @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -322,12 +322,12 @@ public class ObservationController {
         }
     }
     @GetMapping(value = "/patient-vaccination-record", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getPatientVaccinationRecord(@RequestHeader("patient_key") String patientKey,
-                                                         @RequestHeader("is_cancelled") String isCancelled,
-                                             @Nullable @RequestHeader String facility_id,
-                                             // // @Nullable @RequestHeader String access_token,
-                                             @Nullable @RequestHeader Integer access_level,
-                                             @Nullable @RequestHeader String lang) {
+    public ResponseEntity<?> getPatientVaccinationRecord(@RequestHeader("patient-key") String patientKey,
+                                                         @RequestHeader("is-cancelled") String isCancelled,
+                                                         @Nullable @RequestHeader String facility_id,
+                                                          // // @Nullable @RequestHeader String access_token,
+                                                         @Nullable @RequestHeader Integer access_level,
+                                                         @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApVaccine>>response = new ParentResponse<>();
             String where = "patient_key = CAST(" + patientKey + " AS TEXT) AND deleted_at IS " + isCancelled ;

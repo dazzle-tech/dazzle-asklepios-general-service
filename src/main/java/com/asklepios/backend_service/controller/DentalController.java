@@ -105,7 +105,7 @@ public class DentalController {
     }
 
     @GetMapping(value = "/dental-charts-by-encounter", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> fetchDentalCharts(@RequestHeader String encounterKey,
+    public ResponseEntity<?> fetchDentalCharts(@RequestHeader ("encounter-key") String encounterKey,
                                                @Nullable @RequestHeader String facility_id,
                                                // @Nullable @RequestHeader String access_token,
                                                @Nullable @RequestHeader Integer access_level,
@@ -304,7 +304,7 @@ public class DentalController {
     }
 
     @GetMapping(value = "/fetch-chart-data", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> fetchChartData(@RequestHeader String chartKey,
+    public ResponseEntity<?> fetchChartData(@RequestHeader ("chart-key") String chartKey,
                                             @Nullable @RequestHeader String facility_id,
                                             // @Nullable @RequestHeader String access_token,
                                             @Nullable @RequestHeader Integer access_level,
@@ -572,7 +572,7 @@ public class DentalController {
     }
 
     @GetMapping(value = "/fetch-treatment-plan", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> fetchTreatmentPlan(@RequestHeader String encounterKey,
+    public ResponseEntity<?> fetchTreatmentPlan(@RequestHeader ("encounter-key") String encounterKey,
                                                 @Nullable @RequestHeader String facility_id,
                                                 // @Nullable @RequestHeader String access_token,
                                                 @Nullable @RequestHeader Integer access_level,

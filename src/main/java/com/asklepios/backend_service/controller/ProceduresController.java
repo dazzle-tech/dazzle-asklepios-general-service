@@ -208,7 +208,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @GetMapping(value = "/procedure-staff-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProcedureStaffList(@RequestParam Map<String, String> queryParams,
                                                    @RequestHeader(required = false) String facility_id,
-                                                   @RequestHeader(required = false) String access_token,
+//                                                   @RequestHeader(required = false) String access_token,
                                                    @RequestHeader(required = false) Integer access_level,
                                                    @RequestHeader(required = false) String lang) {
         try {
@@ -244,7 +244,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @PostMapping(value = "/save-procedure-staff", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveProcedureStaff(@RequestBody ApProcedureStaff request,
                                                 @RequestHeader(required = false) String facility_id,
-                                                @RequestHeader(required = false) String ap_icd_codeaccess_token,
+//                                                @RequestHeader(required = false) String ap_icd_codeaccess_token,
                                                 @RequestHeader(required = false) Integer access_level,
                                                 @RequestHeader(required = false) String lang) {
         try {
@@ -289,7 +289,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @GetMapping(value = "/post-procedure-vitals-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPostProcedureVitals(@RequestParam Map<String, String> queryParams,
                                                     @RequestHeader(required = false) String facility_id,
-                                                    @RequestHeader(required = false) String access_token,
+//                                                    @RequestHeader(required = false) String access_token,
                                                     @RequestHeader(required = false) Integer access_level,
                                                     @RequestHeader(required = false) String lang) {
         try {
@@ -324,7 +324,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @PostMapping(value = "/save-post-procedure-vitals", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePostProcedureVitals(@RequestBody ApPostProcedureVitals request,
                                                      @RequestHeader(required = false) String facility_id,
-                                                     @RequestHeader(required = false) String access_token,
+//                                                     @RequestHeader(required = false) String access_token,
                                                      @RequestHeader(required = false) Integer access_level,
                                                      @RequestHeader(required = false) String lang) {
         try {
@@ -344,7 +344,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @GetMapping(value = "/pre-procedure-assessment-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPreProcedureAssessment(@RequestParam Map<String, String> queryParams,
                                                        @RequestHeader(required = false) String facility_id,
-                                                       @RequestHeader(required = false) String access_token,
+//                                                       @RequestHeader(required = false) String access_token,
                                                        @RequestHeader(required = false) Integer access_level,
                                                        @RequestHeader(required = false) String lang) {
         try {
@@ -379,7 +379,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @PostMapping(value = "/save-pre-procedure-assessment", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePreProcedureAssessment(@RequestBody ApPreProcedureAssessment request,
                                                         @RequestHeader(required = false) String facility_id,
-                                                        @RequestHeader(required = false) String access_token,
+//                                                        @RequestHeader(required = false) String access_token,
                                                         @RequestHeader(required = false) Integer access_level,
                                                         @RequestHeader(required = false) String lang) {
         try {
@@ -400,7 +400,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @GetMapping(value = "/procedure-performance-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProcedurePerformance(@RequestParam Map<String, String> queryParams,
                                                      @RequestHeader(required = false) String facility_id,
-                                                     @RequestHeader(required = false) String access_token,
+//                                                     @RequestHeader(required = false) String access_token,
                                                      @RequestHeader(required = false) Integer access_level,
                                                      @RequestHeader(required = false) String lang) {
         try {
@@ -435,7 +435,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @PostMapping(value = "/save-procedure-performance", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveProcedurePerformance(@RequestBody ApProcedurePerformance request,
                                                       @RequestHeader(required = false) String facility_id,
-                                                      @RequestHeader(required = false) String access_token,
+//                                                      @RequestHeader(required = false) String access_token,
                                                       @RequestHeader(required = false) Integer access_level,
                                                       @RequestHeader(required = false) String lang) {
         try {
@@ -455,7 +455,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @GetMapping(value = "/procedure-administered-medications-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProcedureMedications(@RequestParam Map<String, String> queryParams,
                                                      @RequestHeader(required = false) String facility_id,
-                                                     @RequestHeader(required = false) String access_token,
+//                                                     @RequestHeader(required = false) String access_token,
                                                      @RequestHeader(required = false) Integer access_level,
                                                      @RequestHeader(required = false) String lang) {
         try {
@@ -491,7 +491,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @PostMapping(value = "/save-procedure-administered-medications", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveProcedureMedications(@RequestBody ApProcedureAdministeredMedications request,
                                                       @RequestHeader(required = false) String facility_id,
-                                                      @RequestHeader(required = false) String access_token,
+//                                                      @RequestHeader(required = false) String access_token,
                                                       @RequestHeader(required = false) Integer access_level,
                                                       @RequestHeader(required = false) String lang) {
         try {
@@ -511,7 +511,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @GetMapping(value = "/post-procedure-care-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPostProcedureCareList(@RequestParam Map<String, String> queryParams,
                                                      @RequestHeader(required = false) String facility_id,
-                                                     @RequestHeader(required = false) String access_token,
+//                                                     @RequestHeader(required = false) String access_token,
                                                      @RequestHeader(required = false) Integer access_level,
                                                      @RequestHeader(required = false) String lang) {
         try {
@@ -546,7 +546,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @PostMapping(value = "/save-post-procedure-care", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePostProcedureCare(@RequestBody ApPostProcedureCare request,
                                                       @RequestHeader(required = false) String facility_id,
-                                                      @RequestHeader(required = false) String access_token,
+//                                                      @RequestHeader(required = false) String access_token,
                                                       @RequestHeader(required = false) Integer access_level,
                                                       @RequestHeader(required = false) String lang) {
         try {
@@ -566,7 +566,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @GetMapping(value = "/procedure-service-equipment-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProcedurServiceEquipmentList(@RequestParam Map<String, String> queryParams,
                                                       @RequestHeader(required = false) String facility_id,
-                                                      @RequestHeader(required = false) String access_token,
+//                                                      @RequestHeader(required = false) String access_token,
                                                       @RequestHeader(required = false) Integer access_level,
                                                       @RequestHeader(required = false) String lang) {
         try {
@@ -603,7 +603,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @PostMapping(value = "/save-procedure-service-equipment", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePostProcedureEquipmentService(@RequestBody ApProcedureServiceEquipment request,
                                                    @RequestHeader(required = false) String facility_id,
-                                                   @RequestHeader(required = false) String access_token,
+//                                                   @RequestHeader(required = false) String access_token,
                                                    @RequestHeader(required = false) Integer access_level,
                                                    @RequestHeader(required = false) String lang) {
         try {
@@ -647,7 +647,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @GetMapping(value = "/post-procedure-anesthesia-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPostProcedurAnesthesiaList(@RequestParam Map<String, String> queryParams,
                                                              @RequestHeader(required = false) String facility_id,
-                                                             @RequestHeader(required = false) String access_token,
+//                                                             @RequestHeader(required = false) String access_token,
                                                              @RequestHeader(required = false) Integer access_level,
                                                              @RequestHeader(required = false) String lang) {
         try {
@@ -684,7 +684,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @PostMapping(value = "/save-post-procedure-anesthesia", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePostProcedurAnesthesia(@RequestBody ApPostProcedureAnesthesia request,
                                                                @RequestHeader(required = false) String facility_id,
-                                                               @RequestHeader(required = false) String access_token,
+//                                                               @RequestHeader(required = false) String access_token,
                                                                @RequestHeader(required = false) Integer access_level,
                                                                @RequestHeader(required = false) String lang) {
         try {
@@ -705,7 +705,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @GetMapping(value = "/post-procedure-checklist-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPostProcedureCheckListList(@RequestParam Map<String, String> queryParams,
                                                              @RequestHeader(required = false) String facility_id,
-                                                             @RequestHeader(required = false) String access_token,
+//                                                             @RequestHeader(required = false) String access_token,
                                                              @RequestHeader(required = false) Integer access_level,
                                                              @RequestHeader(required = false) String lang) {
         try {
@@ -741,7 +741,7 @@ private final ApPostProcedureChecklistService apPostProcedureChecklistService;
     @PostMapping(value = "/save-post-procedure-checklist", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePostProcedureCheckList(@RequestBody ApPostProcedureChecklist request,
                                                                @RequestHeader(required = false) String facility_id,
-                                                               @RequestHeader(required = false) String access_token,
+//                                                               @RequestHeader(required = false) String access_token,
                                                                @RequestHeader(required = false) Integer access_level,
                                                                @RequestHeader(required = false) String lang) {
         try {

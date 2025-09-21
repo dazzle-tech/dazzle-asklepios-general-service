@@ -92,9 +92,9 @@ public class LabController {
         }
     }
     @GetMapping(value = "/diagnostic-order-test-notes-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getDiagnosticOrderTestNotesList(@RequestHeader  String testid,
+    public ResponseEntity<?> getDiagnosticOrderTestNotesList(@RequestHeader ("test-id") String testid,
                                                              @Nullable @RequestHeader String facility_id,
-                                                             @Nullable @RequestHeader String access_token,
+//                                                             @Nullable @RequestHeader String access_token,
                                                              @Nullable @RequestHeader Integer access_level,
                                                              @Nullable @RequestHeader String lang) {
         try {
@@ -141,9 +141,9 @@ public class LabController {
         }
     }
     @GetMapping(value = "/diagnostic-order-test-samples-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getDiagnosticOrderTestSamplesList(@RequestHeader  String testid,
+    public ResponseEntity<?> getDiagnosticOrderTestSamplesList(@RequestHeader ("test-id") String testid,
                                                                @Nullable @RequestHeader String facility_id,
-                                                               @Nullable @RequestHeader String access_token,
+//                                                               @Nullable @RequestHeader String access_token,
                                                                @Nullable @RequestHeader Integer access_level,
                                                                @Nullable @RequestHeader String lang) {
         try {
@@ -197,7 +197,6 @@ public class LabController {
     }
     @PostMapping(value = "/save-diagnostic-tests-result", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticTestsResult(@RequestBody ApDiagnosticOrderTestsResult request,
-
                                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
                                                             // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -255,7 +254,7 @@ public class LabController {
     @GetMapping(value = "/diagnostic-order-test-result-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDiagnosticOrderTestResultList(@RequestParam Map<String, String> queryParams,
                                                               @Nullable @RequestHeader String facility_id,
-                                                              @Nullable @RequestHeader String access_token,
+//                                                            @Nullable @RequestHeader String access_token,
                                                               @Nullable @RequestHeader Integer access_level,
                                                               @Nullable @RequestHeader String lang) {
         try {
@@ -353,9 +352,9 @@ public class LabController {
         }
     }
     @GetMapping(value = "/diagnostic-order-tests-result-notes-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getDiagnosticOrderTestsResultNotesList(@RequestHeader  String resultid,
+    public ResponseEntity<?> getDiagnosticOrderTestsResultNotesList(@RequestHeader ("result-id") String resultid,
                                                                     @Nullable @RequestHeader String facility_id,
-                                                                    @Nullable @RequestHeader String access_token,
+//                                                                    @Nullable @RequestHeader String access_token,
                                                                     @Nullable @RequestHeader Integer access_level,
                                                                     @Nullable @RequestHeader String lang) {
         try {
@@ -387,7 +386,7 @@ public class LabController {
                                                   @RequestParam String testProfileKey,
                                                   @RequestParam Boolean isProfile,
                                                   @Nullable @RequestHeader String facility_id,
-                                                  @Nullable @RequestHeader String access_token,
+//                                                  @Nullable @RequestHeader String access_token,
                                                   @Nullable @RequestHeader Integer access_level,
                                                   @Nullable @RequestHeader String lang) {
         try {
@@ -441,7 +440,7 @@ public class LabController {
     @GetMapping(value = "/lab-order-test-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getLabResultLogList(@RequestParam Map<String, String> queryParams,
                                                  @Nullable @RequestHeader String facility_id,
-                                                 @Nullable @RequestHeader String access_token,
+//                                                 @Nullable @RequestHeader String access_token,
                                                  @Nullable @RequestHeader Integer access_level,
                                                  @Nullable @RequestHeader String lang) {
         try {

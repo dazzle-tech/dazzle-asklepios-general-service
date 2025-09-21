@@ -39,7 +39,7 @@ public class AttachmentController {
 
     @GetMapping(value = "/fetch-attachment", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> fetchAttachment(@RequestHeader("type") String type,
-                                             @RequestHeader("refKey") String refKey,
+                                             @RequestHeader("ref-key") String refKey,
                                              @Nullable @RequestHeader String facility_id,
                                             // @Nullable @RequestHeader String access_token,
                                              @Nullable @RequestHeader Integer access_level,
@@ -119,7 +119,7 @@ public class AttachmentController {
 
     @GetMapping(value = "/fetch-attachment-light", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> fetchAttachmentLight(
-            @Nullable @RequestHeader("refKey") String refKey,
+            @Nullable @RequestHeader("ref-key") String refKey,
             @Nullable @RequestHeader String facility_id,
            // @Nullable @RequestHeader String access_token,
             @Nullable @RequestHeader Integer access_level,
@@ -184,11 +184,11 @@ public class AttachmentController {
     @PostMapping(value = "/upload", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file,
                                     @RequestHeader("type") String type,
-                                    @RequestHeader("refKey") String refKey,
-                                    @RequestHeader("patientKey") String patientKey,
+                                    @RequestHeader("ref-key") String refKey,
+                                    @RequestHeader("patient-key") String patientKey,
                                     @Nullable @RequestHeader("details") String details,
-                                    @Nullable @RequestHeader("accessType") String accessType,
-                                    @Nullable @RequestHeader("createdBy") String createdBy,
+                                    @Nullable @RequestHeader("access-type") String accessType,
+                                    @Nullable @RequestHeader("created-by") String createdBy,
                                     @Nullable @RequestHeader String facility_id,
                                    // @Nullable @RequestHeader String access_token,
                                     @Nullable @RequestHeader Integer access_level,
@@ -266,9 +266,9 @@ public class AttachmentController {
     @PutMapping(value = "/update-Attachment-details", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateAttachmentDetails(
             @RequestHeader("key") String key,
-            @RequestHeader("attachmentDetails") String extraDetails,
-            @RequestHeader("updatedBy") String updatedBy,
-            @RequestHeader("accessType") String accessType,
+            @RequestHeader("attachment-details") String extraDetails,
+            @RequestHeader("updated-by") String updatedBy,
+            @RequestHeader("access-type") String accessType,
             @Nullable @RequestHeader String facility_id,
            // @Nullable @RequestHeader String access_token,
             @Nullable @RequestHeader Integer access_level,

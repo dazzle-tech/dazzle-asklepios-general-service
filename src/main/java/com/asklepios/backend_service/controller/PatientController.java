@@ -88,7 +88,8 @@ public class PatientController {
         }
     }
     @PostMapping(value = "/get-patient", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getPatient(@RequestParam("patient_id") String patient_id, @Nullable @RequestHeader String facility_id,
+    public ResponseEntity<?> getPatient(@RequestParam("patient-id") String patient_id,
+                                        @Nullable @RequestHeader String facility_id,
                                        // @Nullable @RequestHeader String access_token,
                                         @Nullable @RequestHeader Integer access_level, @Nullable @RequestHeader String lang) {
         try {
@@ -413,7 +414,7 @@ public class PatientController {
     }
 
     @PostMapping(value = "/send-verification-otp", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> sendVerificationOtp(@RequestHeader String patientId,
+    public ResponseEntity<?> sendVerificationOtp(@RequestHeader ("patient-id") String patientId,
                                                  @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                  @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -443,7 +444,8 @@ public class PatientController {
     }
 
     @PostMapping(value = "/verify-verification-otp", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> verifyVerificationOtp(@RequestHeader String patientId, @RequestHeader String otp,
+    public ResponseEntity<?> verifyVerificationOtp(@RequestHeader ("patient-id") String patientId,
+                                                   @RequestHeader String otp,
                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -677,7 +679,7 @@ public class PatientController {
 
     @GetMapping(value = "/fetch-patient-insurance", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> fetchPatientInsurance(
-            @Nullable @RequestHeader("patientKey") String patientKey,
+            @Nullable @RequestHeader("patient-key") String patientKey,
             @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApPatientInsurance>> response = new ParentResponse<>();
@@ -1024,7 +1026,7 @@ public class PatientController {
     @PostMapping(value = "/user-access-private-patient", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> employeePortalConfirm(@RequestBody ApUser apUser,
                                                    @Nullable @RequestHeader("reason") String reason,
-                                                   @Nullable @RequestHeader("patientKey") String patientKey,
+                                                   @Nullable @RequestHeader("patient-key") String patientKey,
                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,

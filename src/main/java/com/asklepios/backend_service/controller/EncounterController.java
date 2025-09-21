@@ -520,7 +520,7 @@ public class EncounterController {
     }
 
     @GetMapping(value = "/encounter-review-of-systems", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> encounterReviewOfSystems(@Nullable @RequestHeader String encounterKey,
+    public ResponseEntity<?> encounterReviewOfSystems(@Nullable @RequestHeader("encounter-key") String encounterKey,
                                                       @Nullable @RequestHeader String facility_id,
                                                       // @Nullable @RequestHeader String access_token,
                                                       @Nullable @RequestHeader Integer access_level,
@@ -630,7 +630,7 @@ public class EncounterController {
     }
 
     @GetMapping(value = "/encounter-physical-exam-areas", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> encounterPhysicalExamAreas(@Nullable @RequestHeader String encounterKey,
+    public ResponseEntity<?> encounterPhysicalExamAreas(@Nullable @RequestHeader ("encounter-key") String encounterKey,
                                                         @Nullable @RequestHeader String facility_id,
                                                         // @Nullable @RequestHeader String access_token,
                                                         @Nullable @RequestHeader Integer access_level,
@@ -782,7 +782,7 @@ public class EncounterController {
     @PostMapping(value = "/save-patient-diagnose", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePatientDiagnose(@RequestBody ApPatientDiagnose request,
                                                  @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                  @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                  @jakarta.annotation.Nullable @RequestHeader String lang,
                                                  @jakarta.annotation.Nullable @RequestHeader String screenKey
@@ -802,7 +802,7 @@ public class EncounterController {
     @PostMapping(value = "/remove-patient-diagnose", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removePatientDiagnose(@RequestBody ApPatientDiagnose request,
                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                    @jakarta.annotation.Nullable @RequestHeader String lang,
                                                    @jakarta.annotation.Nullable @RequestHeader String screenKey
@@ -827,7 +827,7 @@ public class EncounterController {
     @PostMapping(value = "/save-patient-plan", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePatientPlan(@RequestBody ApPatientPlan request,
                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                              @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -886,7 +886,7 @@ public class EncounterController {
     @PostMapping(value = "/save-patient-encounter-order", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePatientEncounterOrder(@RequestBody ApPatientEncounterOrder request,
                                                        @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                       @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                       @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                        @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                        @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -952,7 +952,7 @@ public class EncounterController {
     @PostMapping(value = "/remove-encounter-order", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteOrder(@RequestBody ApPatientEncounterOrder Order,
                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                         @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                         @jakarta.annotation.Nullable @RequestHeader String access_token,
                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                          @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -1047,7 +1047,7 @@ public class EncounterController {
     @PostMapping(value = "/save-prescription-medication", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePrescriptionMedication(@RequestBody ApPrescriptionMedications request,
                                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                        @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                        @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                         @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -1065,7 +1065,7 @@ public class EncounterController {
                 customeInstructions.setDose(request.getDose());
                 customeInstructions.setUnitLkey(request.getUnitLkey());
                 customeInstructions.setRoaLkey(request.getRoaLkey());
-                saveCustomeInstructions(customeInstructions,facility_id,access_token,access_level,lang);
+                saveCustomeInstructions(customeInstructions,facility_id,access_level,lang);
             }
             return ResponseEntity.ok(response);
 
@@ -1116,7 +1116,7 @@ public class EncounterController {
     @PostMapping(value = "/save-custome-instructions", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveCustomeInstructions(@RequestBody ApCustomeInstructions request,
                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                      @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -1135,7 +1135,7 @@ public class EncounterController {
     @PostMapping(value = "/remove-prescription-medication", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deletePrescriptionMedication(@RequestBody ApPrescriptionMedications prescriptionMedications,
                                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                           @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -1155,7 +1155,7 @@ public class EncounterController {
     @PostMapping(value = "/save-consultation-orders", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveConsultationOrders(@RequestBody ApConsultationOrder request,
                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                    @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                    @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                     @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -1213,7 +1213,7 @@ public class EncounterController {
     @PostMapping(value = "/save-prescription", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePrescription(@RequestBody ApPrescription request,
                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
                                               @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                               @jakarta.annotation.Nullable @RequestHeader String lang
     ) {
@@ -1240,7 +1240,7 @@ public class EncounterController {
     @PostMapping(value = "/save-drug-order", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDrugOrder(@RequestBody ApDrugOrder request,
                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
                                               @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                               @jakarta.annotation.Nullable @RequestHeader String lang
     ) {
@@ -1342,7 +1342,7 @@ public class EncounterController {
     @PostMapping(value = "/save-drug-order-medic", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDrugOrderMedication(@RequestBody ApDrugOrderMedications request,
                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                      @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -1421,7 +1421,7 @@ public class EncounterController {
     @PostMapping(value = "/save-procedures", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveProcedure(@RequestBody ApProcedure request,
                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                      @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -1449,7 +1449,7 @@ public class EncounterController {
     @PostMapping(value = "/save-diagnostic-order", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrder(@RequestBody ApDiagnosticOrders request,
                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
                                               @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                               @jakarta.annotation.Nullable @RequestHeader String lang
     ) {
@@ -1524,7 +1524,7 @@ public class EncounterController {
     @PostMapping(value = "/save-diagnostic-order-tests", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTests(@RequestBody ApDiagnosticOrderTests request,
                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                       @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                       @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -1617,7 +1617,7 @@ public class EncounterController {
     @PostMapping(value = "/save-diagnostic-order-tests-notes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTestsNotes(@RequestBody ApDiagnosticOrderTestsNotes request,
                                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                           @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                            @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -1634,7 +1634,7 @@ public class EncounterController {
         }
     }
     @GetMapping(value = "/diagnostic-order-test-notes-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getDiagnosticOrderTestNotesList(@RequestHeader  String testid,
+    public ResponseEntity<?> getDiagnosticOrderTestNotesList(@RequestHeader ("test-id") String testid,
                                                              @Nullable @RequestHeader String facility_id,
                                                              // @Nullable @RequestHeader String access_token,
                                                              @Nullable @RequestHeader Integer access_level,
@@ -1666,7 +1666,7 @@ public class EncounterController {
     @PostMapping(value = "/save-diagnostic-order-tests-sample", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTestsSample(@RequestBody ApDiagnosticOrderTestsSamples request,
                                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                             @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -1683,7 +1683,7 @@ public class EncounterController {
         }
     }
     @GetMapping(value = "/diagnostic-order-test-samples-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getDiagnosticOrderTestSamplesList(@RequestHeader  String testid,
+    public ResponseEntity<?> getDiagnosticOrderTestSamplesList(@RequestHeader ("test-id")  String testid,
                                                                @Nullable @RequestHeader String facility_id,
                                                                // @Nullable @RequestHeader String access_token,
                                                                @Nullable @RequestHeader Integer access_level,
@@ -1714,7 +1714,7 @@ public class EncounterController {
     @PostMapping(value = "/save-psychological-exam", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePsychologicalExam(@RequestBody ApPsychologicalExam psychologicalExam ,
                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                      @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -1777,7 +1777,7 @@ public class EncounterController {
     @PostMapping(value = "/save-audiometry-puretone", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveAudiometryPuretone(@RequestBody ApAudiometryPuretone audiometryPuretone ,
                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                    @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -1840,7 +1840,7 @@ public class EncounterController {
     @PostMapping(value = "/save-optometric-exam", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveOptometricExam(@RequestBody ApOptometricExam optometricExam ,
                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                 @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -1910,7 +1910,7 @@ public class EncounterController {
     @PostMapping(value = "/save-treadmill-stress", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveTreadmillStressTest(@RequestBody ApTreadmillStress treadmillStress ,
                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                 @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -1975,7 +1975,7 @@ public class EncounterController {
     @PostMapping(value = "/save-complaint-symptoms", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveComplaintSymptoms(@RequestBody ApComplaintSymptoms complaintSymptoms ,
                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                      @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -2037,7 +2037,7 @@ public class EncounterController {
     @PostMapping(value = "/save-electrocardiogram-ecg", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveElectrocardiogramEcg(@RequestBody ApElectrocardiogramEcg electrocardiogramEcg ,
                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                      @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -2138,7 +2138,7 @@ public class EncounterController {
     @PostMapping(value = "/admit-outpatient-inpatient", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> admitOutpatientInpatient(@RequestBody ApAdmitOutpatientInpatient admitOutpatientInpatient,
                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                      @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                       @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                       @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -2249,7 +2249,7 @@ public class EncounterController {
     @PostMapping(value = "/patient_admission_from_waiting_list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePatientAdmissionFromWaitingList(@RequestBody ApAdmitOutpatientInpatient admitOutpatientInpatient ,
                                                                  @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                                  @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                                  @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -2323,7 +2323,7 @@ public class EncounterController {
     }
     @GetMapping(value = "/inpatient-encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> inpatientEncounterList(@RequestParam Map<String, String> queryParams,
-                                                    @RequestHeader("departmentKey") String depKey,
+                                                    @RequestHeader("department-key") String depKey,
                                                     @Nullable @RequestHeader String facility_id,
                                                     // @Nullable @RequestHeader String access_token,
                                                     @Nullable @RequestHeader Integer access_level,
@@ -2416,7 +2416,7 @@ public class EncounterController {
     public ResponseEntity<?> saveBedTransaction(
             @RequestBody ApBedTransactions bedTransactions,
             @jakarta.annotation.Nullable @RequestHeader String facility_id,
-            @jakarta.annotation.Nullable @RequestHeader String access_token,
+//            @jakarta.annotation.Nullable @RequestHeader String access_token,
             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
             @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -2543,7 +2543,7 @@ public class EncounterController {
     @PostMapping(value = "/save-pain-assessment", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePainAssessment(@RequestBody ApPainAssessment painAssessment ,
                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                    @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -2597,7 +2597,7 @@ public class EncounterController {
     @PostMapping(value = "/save-inpatient-chief-complain", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveChiefComplain(@RequestBody ApInpatientChiefComplain chiefComplain ,
                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                 @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -2653,7 +2653,7 @@ public class EncounterController {
     @PostMapping(value = "/save-general-assessment", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveGeneralAssessment(@RequestBody ApGeneralAssessment generalAssessment ,
                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                               @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                               @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -2708,7 +2708,7 @@ public class EncounterController {
     @PostMapping(value = "/save-functional-assessment", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveFunctionalAssessment(@RequestBody ApFunctionalAssessment functionalAssessment ,
                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                    @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -2763,7 +2763,7 @@ public class EncounterController {
     @PostMapping(value = "/save-medication-reconciliation", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveMedicationReconciliation(@RequestBody ApMedicationReconciliation medicationReconciliation ,
                                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                           @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -2818,7 +2818,7 @@ public class EncounterController {
     @PostMapping(value = "/save-transfer-patient", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveTransferPatient(@RequestBody ApTransferPatient apTransferPatient ,
                                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                           @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -2896,7 +2896,7 @@ public class EncounterController {
     @PostMapping(value = "/approval-transfer-patient", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveApprovalTransferPatient(@RequestBody ApTransferPatient apTransferPatient ,
                                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                           @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -3038,7 +3038,7 @@ public class EncounterController {
     @GetMapping(value = "/doctor-round-staff-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDoctorRoundStaffList(@RequestParam Map<String, String> queryParams,
                                                    @RequestHeader(required = false) String facility_id,
-                                                   @RequestHeader(required = false) String access_token,
+//                                                 @RequestHeader(required = false) String access_token,
                                                    @RequestHeader(required = false) Integer access_level,
                                                    @RequestHeader(required = false) String lang) {
         try {
@@ -3072,7 +3072,7 @@ public class EncounterController {
     @PostMapping(value = "/save-doctor-round-staff", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDoctorRoundStaff(@RequestBody ApDoctorRoundStaff request,
                                                 @RequestHeader(required = false) String facility_id,
-                                                @RequestHeader(required = false) String access_token,
+//                                                @RequestHeader(required = false) String access_token,
                                                 @RequestHeader(required = false) Integer access_level,
                                                 @RequestHeader(required = false) String lang) {
         try {
@@ -3111,7 +3111,7 @@ public class EncounterController {
     @PostMapping(value = "/save-new-round", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveNewRound(@RequestBody ApDoctorRound apDoctorRound ,
                                                  @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                  @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                  @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -3165,7 +3165,7 @@ public class EncounterController {
     @PostMapping(value = "/save-nurse-notes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveNurseNotes(@RequestBody ApNurseNotes apNurseNotes ,
                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                           @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -3219,7 +3219,7 @@ public class EncounterController {
     @PostMapping(value = "/save-new-position", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveNewPosition(@RequestBody ApRepositioning apRepositioning ,
                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                             @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -3272,7 +3272,7 @@ public class EncounterController {
     @PostMapping(value = "/save-assign-to-bed", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveNewDayCaseEncounters(@RequestBody ApEncounterAssignToBed apEncounterAssignToBed ,
                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                              @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -3297,7 +3297,7 @@ public class EncounterController {
     @PostMapping(value = "/save-pre-operation-administered-medications", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveOperationInduction(@RequestBody ApPreOperationAdministeredMedications apPreOperationAdministeredMedications,
                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                    @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                    @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                     @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -3338,7 +3338,7 @@ public class EncounterController {
     @PostMapping(value = "/save-new-triage", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveNewTriage(@RequestBody ApEmergencyTriage apEmergencyTriage ,
                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                              @jakarta.annotation.Nullable @RequestHeader String lang
 
@@ -3478,8 +3478,8 @@ public class EncounterController {
     }
     @PostMapping(value = "/er-complete-encounter", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> ERCompleteEncounter(@RequestBody ApEncounter apEncounter,
-                                                 @RequestHeader("triage_key") String triageKey,
-                                                 @RequestHeader("destination_key") String destinationKey,
+                                                 @RequestHeader("triage-key") String triageKey,
+                                                 @RequestHeader("destination-key") String destinationKey,
                                                  @Nullable @RequestHeader String facility_id,
                                                  // @Nullable @RequestHeader String access_token,
                                                  @Nullable @RequestHeader Integer access_level,
@@ -3511,8 +3511,8 @@ public class EncounterController {
 
     @PostMapping(value = "/sent-to-er", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> sentToER(@RequestBody ApEncounter apEncounter,
-                                      @RequestHeader("triage_key") String triageKey,
-                                      @RequestHeader("destination_key") String destinationKey,
+                                      @RequestHeader("triage-key") String triageKey,
+                                      @RequestHeader("destination-key") String destinationKey,
                                                   @Nullable @RequestHeader String facility_id,
                                                   // @Nullable @RequestHeader String access_token,
                                                   @Nullable @RequestHeader Integer access_level,
@@ -3609,7 +3609,7 @@ public class EncounterController {
     }
     @GetMapping(value = "/emergency-encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> emergencyEncounterList(@RequestParam Map<String, String> queryParams,
-                                                    @RequestHeader("department_key") String depKey,
+                                                    @RequestHeader("department-key") String depKey,
                                                     @Nullable @RequestHeader String facility_id,
                                                     // @Nullable @RequestHeader String access_token,
                                                     @Nullable @RequestHeader Integer access_level,
@@ -3693,8 +3693,8 @@ public class EncounterController {
     @PostMapping(value = "/save-progress-notes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveProgressNotes(@RequestBody ApProgressNotes progressNotes ,
                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+//                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                 @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
@@ -3835,7 +3835,7 @@ public class EncounterController {
     @PostMapping(value = "/return-from-temporary-discharge", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> ReturnFromTemporaryDischarge(
             @RequestBody ApPatientTemporaryDischarge apPatientTemporaryDischarge,
-            @RequestHeader("department_key") String depKey,
+            @RequestHeader("department-key") String depKey,
             @Nullable @RequestHeader String facility_id,
             // @Nullable @RequestHeader String access_token,
             @Nullable @RequestHeader Integer access_level,
@@ -3925,7 +3925,7 @@ public class EncounterController {
 
     @GetMapping(value = "/day-case-encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> dayCaseEncounterList(@RequestParam Map<String, String> queryParams,
-                                                  @RequestHeader("department_key") String depKey,
+                                                  @RequestHeader("department-key") String depKey,
                                                   @Nullable @RequestHeader String facility_id,
                                                   // @Nullable @RequestHeader String access_token,
                                                   @Nullable @RequestHeader Integer access_level,

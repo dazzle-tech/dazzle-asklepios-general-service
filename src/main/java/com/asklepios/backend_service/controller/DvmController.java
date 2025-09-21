@@ -68,7 +68,7 @@ public class DvmController implements Serializable {
     @GetMapping(value = "/metadata-fields-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> listMetadataFields(@RequestParam Map<String, String> queryParams,
                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                 @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -128,7 +128,7 @@ public class DvmController implements Serializable {
     @PostMapping(value = "/save-screen-metadata", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveScreenMetadata(@RequestBody ApScreenMetadata screenMetadata,
                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                 @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
@@ -174,7 +174,7 @@ public class DvmController implements Serializable {
     @PostMapping(value = "/save-dvm-rule", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDvmRule(@RequestBody ApDvmRule apDvmRule,
                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
+//                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                 @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {

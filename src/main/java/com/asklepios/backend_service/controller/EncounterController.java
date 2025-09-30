@@ -95,8 +95,9 @@ public class EncounterController {
     private final ApPatientTemporaryDischargeService apPatientTemporaryDischargeService;
    private  final ApTeleConsultationService apTeleConsultationService;
     private final ApTeleConsultationProgressNoteService apTeleConsultationProgressNoteService;
+    private final ApTeleConsultationCallLogService apTeleConsultationCallLogService;
 
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService, ApDoctorRoundStaffService apDoctorRoundStaffService, ApDoctorRoundService apDoctorRoundService, ApNurseNotesService apNurseNotesService, ApRepositioningService apRepositioningService, ApDayCaseEncountersService apDayCaseEncountersService, ApPreOperationAdministeredMedicationsService apPreOperationAdministeredMedicationsService, ApEmergencyTriageService apEmergencyTriageService, ApEncounterAssignToBedService apEncounterAssignToBedService, ApProgressNotesService apProgressNotesService, ApPatientTemporaryDischargeService apPatientTemporaryDischargeService, ApTeleConsultationService apTeleConsultationService, ApTeleConsultationProgressNoteService apTeleConsultationProgressNoteService) {
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService, ApDoctorRoundStaffService apDoctorRoundStaffService, ApDoctorRoundService apDoctorRoundService, ApNurseNotesService apNurseNotesService, ApRepositioningService apRepositioningService, ApDayCaseEncountersService apDayCaseEncountersService, ApPreOperationAdministeredMedicationsService apPreOperationAdministeredMedicationsService, ApEmergencyTriageService apEmergencyTriageService, ApEncounterAssignToBedService apEncounterAssignToBedService, ApProgressNotesService apProgressNotesService, ApPatientTemporaryDischargeService apPatientTemporaryDischargeService, ApTeleConsultationService apTeleConsultationService, ApTeleConsultationProgressNoteService apTeleConsultationProgressNoteService, ApTeleConsultationCallLogService apTeleConsultationCallLogService) {
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -164,6 +165,7 @@ public class EncounterController {
 
         this.apTeleConsultationService = apTeleConsultationService;
         this.apTeleConsultationProgressNoteService = apTeleConsultationProgressNoteService;
+        this.apTeleConsultationCallLogService = apTeleConsultationCallLogService;
     }
 
     @GetMapping(value = "/encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -4055,6 +4057,7 @@ public class EncounterController {
             for (ApTeleConsultation  item : tele) {
                 item.setPatient(apPatientService.getRecord(item.getPatientId()));
                 apTeleConsultationService.populateLovFields( item, lang);
+                apPatientService.populateLovFields(item.getPatient(), lang);
             }
             response.setObject(tele);
             response.setExtraNumeric(totalRecord);
@@ -4100,6 +4103,40 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
+    @GetMapping(value = "/tele-consultation-call-log-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getTeleConsultationCallLogList(@RequestParam Map<String, String> queryParams,
+
+                                                                  @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApTeleConsultationCallLog>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApTeleConsultationCallLog> logs = apTeleConsultationCallLogService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_tele_consultation_call_log where " + whereForTotal);
+
+            for (ApTeleConsultationCallLog  item : logs) {
+                apTeleConsultationCallLogService.populateLovFields(item, lang);
+            }
+            response.setObject(logs);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
     @PostMapping(value = "/save-tele-consultation", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveTeleConsultation(@RequestBody ApTeleConsultation request ,
 
@@ -4135,5 +4172,26 @@ public class EncounterController {
            return ResponseEntity.status(500).body(e);
         }
     }
+
+
+    @PostMapping(value = "/save-tele-consultation-call-log", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveTeleConsultationCallLog(@RequestBody ApTeleConsultationCallLog request,
+
+                                                  @jakarta.annotation.Nullable @RequestHeader String lang
+
+    ) {
+        try {
+            ParentResponse<ApTeleConsultationCallLog> response = new ParentResponse<>();
+            apTeleConsultationCallLogService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+
 
 }

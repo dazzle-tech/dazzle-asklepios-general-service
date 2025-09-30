@@ -36,6 +36,10 @@ public class ApTeleConsultationEntity implements Serializable {
 	private String startedBy;
 	private BigDecimal requestedAt;
 	private String requestedBy;
+	private BigDecimal callStartedAt;
+	private String callStartedBy;
+	private BigDecimal callColsedAt;
+	private String callColsedBy;
 	private ApTeleConsultationEntity translatedObject;
 
 }

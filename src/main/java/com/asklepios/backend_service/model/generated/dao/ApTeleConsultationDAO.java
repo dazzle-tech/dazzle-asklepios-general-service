@@ -56,6 +56,10 @@ record.setRejectedBy(rs.getString("rejected_by"));
 record.setStartedBy(rs.getString("started_by"));
 record.setRequestedAt(rs.getBigDecimal("requested_at"));
 record.setRequestedBy(rs.getString("requested_by"));
+record.setCallStartedAt(rs.getBigDecimal("call_started_at"));
+record.setCallStartedBy(rs.getString("call_started_by"));
+record.setCallColsedAt(rs.getBigDecimal("call_colsed_at"));
+record.setCallColsedBy(rs.getString("call_colsed_by"));
 } else { record = null; }
 return record;
 }
@@ -63,7 +67,7 @@ return record;
 public void updateRecord(ApTeleConsultation record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_tele_consultation set id = ?, question_to_consultant = ?, consultant_facility_id = ?, consultant_department_id = ?, specialty_lkey = ?, urgency_lkey = ?, expected_response = ?, notes = ?, expected_response_time = ?, started_at = ?, rejected_at = ?, status_lkey = ?, rejected_reason = ?, patient_id = ?, encounter_id = ?, rejected_by = ?, started_by = ?, requested_at = ?, requested_by = ? where id = ?");
+PreparedStatement ps = con.prepareStatement("update ap_tele_consultation set id = ?, question_to_consultant = ?, consultant_facility_id = ?, consultant_department_id = ?, specialty_lkey = ?, urgency_lkey = ?, expected_response = ?, notes = ?, expected_response_time = ?, started_at = ?, rejected_at = ?, status_lkey = ?, rejected_reason = ?, patient_id = ?, encounter_id = ?, rejected_by = ?, started_by = ?, requested_at = ?, requested_by = ?, call_started_at = ?, call_started_by = ?, call_colsed_at = ?, call_colsed_by = ? where id = ?");
 ) {
 
 ps.setString(1, record.getId());
@@ -85,7 +89,11 @@ ps.setString(16, record.getRejectedBy());
 ps.setString(17, record.getStartedBy());
 ps.setBigDecimal(18, record.getRequestedAt());
 ps.setString(19, record.getRequestedBy());
-ps.setString(20, record.getId());
+ps.setBigDecimal(20, record.getCallStartedAt());
+ps.setString(21, record.getCallStartedBy());
+ps.setBigDecimal(22, record.getCallColsedAt());
+ps.setString(23, record.getCallColsedBy());
+ps.setString(24, record.getId());
 ps.executeUpdate();
 }
 }
@@ -126,6 +134,10 @@ record.setRejectedBy(rs.getString("rejected_by"));
 record.setStartedBy(rs.getString("started_by"));
 record.setRequestedAt(rs.getBigDecimal("requested_at"));
 record.setRequestedBy(rs.getString("requested_by"));
+record.setCallStartedAt(rs.getBigDecimal("call_started_at"));
+record.setCallStartedBy(rs.getString("call_started_by"));
+record.setCallColsedAt(rs.getBigDecimal("call_colsed_at"));
+record.setCallColsedBy(rs.getString("call_colsed_by"));
 list.add(record);
 }
 return list;
@@ -134,7 +146,7 @@ return list;
 public String saveRecord(ApTeleConsultation record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_tele_consultation values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_tele_consultation values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
 if(record.getId() != null && !record.getId().isEmpty()) {updateRecord(record); return record.getId();}
 String key = "" + System.nanoTime();
@@ -159,6 +171,10 @@ ps.setString(16, record.getRejectedBy());
 ps.setString(17, record.getStartedBy());
 ps.setBigDecimal(18, record.getRequestedAt());
 ps.setString(19, record.getRequestedBy());
+ps.setBigDecimal(20, record.getCallStartedAt());
+ps.setString(21, record.getCallStartedBy());
+ps.setBigDecimal(22, record.getCallColsedAt());
+ps.setString(23, record.getCallColsedBy());
 ps.executeUpdate();
 return key;
 }

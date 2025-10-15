@@ -38,8 +38,6 @@ public class ApPatientEntity implements Serializable {
 	private String specialCourtesyLkey;
 	private ApLovValues specialCourtesyLvalue;
 	private String unknown;
-	private String genderLkey;
-	private ApLovValues genderLvalue;
 	private String phoneNumber;
 	private String mobileNumber;
 	private String email;
@@ -69,7 +67,6 @@ public class ApPatientEntity implements Serializable {
 	private ApLovValues cityLvalue;
 	private String postalCode;
 	private String additionalInfo;
-	private BigDecimal latitude;
 	private String longitude;
 	private String isActive;
 	private Date deathDatetime = new Date();
@@ -123,6 +120,8 @@ public class ApPatientEntity implements Serializable {
 	private String countryId;
 	private String bloodGroupLkey;
 	private ApLovValues bloodGroupLvalue;
+	private String genderLkey;
+	private ApLovValues genderLvalue;
 	private ApPatientEntity translatedObject;
 
 }

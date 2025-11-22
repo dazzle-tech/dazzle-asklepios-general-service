@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
-
+import java.util.Objects;
 @RestController
 @RequestMapping("/setup")
 //@CrossOrigin
@@ -2189,34 +2189,46 @@ public class SetupController implements Serializable {
     }
 
 
+
+
     @GetMapping(value = "/diagnostic-test-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> diagnosticTestList(@RequestParam Map<String, String> queryParams,
                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
-                                                // @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                 @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApDiagnosticTest>> response = new ParentResponse<>();
-            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+            if ("true".equals(queryParams.get("ignore"))) {
                 response.setObject(new ArrayList<>());
                 return ResponseEntity.ok(response);
             }
+
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false);
+
             List<ApDiagnosticTest> list = apDiagnosticTestService.getList(where);
-            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_diagnostic_test where " + whereForTotal);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery(
+                    "select count(0) from ap_diagnostic_test where " + whereForTotal
+            );
+
             for (ApDiagnosticTest all : list) {
                 apDiagnosticTestService.populateLovFields(all, lang);
-                if (all.getTestTypeLkey().equals("862810597620632")) { //TODO Lab key
-                    List<ApDiagnosticTestLaboratory> listLab = apDiagnosticTestLaboratoryService.getList("test_key = '" + all.getKey() + "'");
-                    if (listLab != null && listLab.size() > 0) {
+
+                // null-safe compare
+                if (Objects.equals(all.getTestTypeLkey(), "862810597620632")) { // TODO Lab key
+                    List<ApDiagnosticTestLaboratory> listLab =
+                            apDiagnosticTestLaboratoryService.getList("test_key = '" + all.getKey() + "'");
+                    if (listLab != null && !listLab.isEmpty()) {
                         all.setProfile(listLab.get(0).getIsProfile());
+                    } else {
+                        all.setProfile(false);
                     }
                 } else {
                     all.setProfile(false);
                 }
             }
+
             response.setObject(list);
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);

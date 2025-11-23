@@ -10,18 +10,19 @@ import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
 public class ApServiceService extends ApServiceDAO implements Serializable {
 
-
-    public byte[] generateDischargePdf() {
+    public byte[] generateDischargePdf(Map<String, Object> dischargeData) {
         try {
-            log.info("Building HTML content for Discharge PDF generation with static data");
+            log.info("Building HTML content for Discharge PDF generation with data from frontend");
 
-            // Build HTML content with static data
-            String html = buildHtmlContent();
+            // Build HTML content with data from frontend
+            String html = buildHtmlContent(dischargeData);
 
             log.debug("Generated HTML length: {} characters", html.length());
 
@@ -46,12 +47,24 @@ public class ApServiceService extends ApServiceDAO implements Serializable {
         }
     }
 
-    private String buildHtmlContent() {
-        log.debug("Building HTML content with static sample data");
+    private String buildHtmlContent(Map<String, Object> dischargeData) {
+        log.debug("Building HTML content with data from frontend");
+
+        // Extract data from the map
+        Map<String, Object> patient = (Map<String, Object>) dischargeData.get("patient");
+        Map<String, Object> encounter = (Map<String, Object>) dischargeData.get("encounter");
+        Map<String, Object> user = (Map<String, Object>) dischargeData.get("user");
+        Map<String, Object> facility = (Map<String, Object>) dischargeData.get("facility");
+        List<Map<String, Object>> diagnoses = (List<Map<String, Object>>) dischargeData.get("diagnoses");
+        List<Map<String, Object>> reviewSystems = (List<Map<String, Object>>) dischargeData.get("reviewSystems");
+        List<Map<String, Object>> procedures = (List<Map<String, Object>>) dischargeData.get("procedures");
+        List<Map<String, Object>> prescriptions = (List<Map<String, Object>>) dischargeData.get("prescriptions");
+        List<Map<String, Object>> diagnosticTests = (List<Map<String, Object>>) dischargeData.get("diagnosticTests");
 
         // Current date for generation timestamp
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        String currentDate = sdf.format(new Date());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdfTime = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String currentDate = sdfTime.format(new Date());
 
         StringBuilder html = new StringBuilder();
         html.append("<!DOCTYPE html><html><head>");
@@ -61,95 +74,201 @@ public class ApServiceService extends ApServiceDAO implements Serializable {
         html.append("<style>").append(getCssStyles()).append("</style>");
         html.append("</head><body>");
 
-        // ===== HEADER =====
+        // ===== HEADER WITH PATIENT INFO =====
         html.append("<div class='header'>");
+        html.append("<div class='header-main'>");
         html.append("<h1>Discharge Summary Report</h1>");
-        html.append("<p class='hospital-name'>Health Organization</p>");
+        html.append("<p class='hospital-name'>").append(safeGet(facility, "name", "Health Organization")).append("</p>");
         html.append("</div>");
 
-        // ===== PATIENT INFORMATION =====
-        html.append("<div class='section'>");
-        html.append("<h2 class='section-number'>1. Patient Information</h2>");
-        html.append("<div class='info-grid'>");
-        html.append("<div class='info-item'><span class='info-label'>Name:</span> <span class='info-value'>Emergency Testing Patient</span></div>");
-        html.append("<div class='info-item'><span class='info-label'>Age:</span> <span class='info-value'>57</span></div>");
-        html.append("<div class='info-item'><span class='info-label'>Sex:</span> <span class='info-value'>Male</span></div>");
-        html.append("<div class='info-item'><span class='info-label'>Medical Record Number:</span> <span class='info-value'>1003</span></div>");
-        html.append("</div></div>");
+        // Patient info in header
+        html.append("<div class='patient-header-info'>");
+        html.append("<div class='patient-header-row'>");
+        html.append("<span class='patient-header-label'>Patient:</span> ");
+        html.append("<span class='patient-header-value'>").append(safeGet(patient, "fullName", "")).append("</span>");
+        html.append("</div>");
+        html.append("<div class='patient-header-row'>");
+        html.append("<span class='patient-header-label'>MRN:</span> ");
+        html.append("<span class='patient-header-value'>").append(safeGet(patient, "patientMrn", "")).append("</span>");
+        html.append("<span class='patient-header-label' style='margin-left: 30px;'>DOB:</span> ");
+        html.append("<span class='patient-header-value'>").append(safeGet(patient, "dob", "")).append("</span>");
+        html.append("<span class='patient-header-label' style='margin-left: 30px;'>Age:</span> ");
+        html.append("<span class='patient-header-value'>") .append(safeGet(patient, "age", "")).append("</span>");
+        html.append("</div>");
+        html.append("</div>");
+        html.append("</div>");
 
-        // ===== ADMISSION DETAILS =====
+
+        // ===== 2. ADMISSION DETAILS =====
         html.append("<div class='section'>");
         html.append("<h2 class='section-number'>2. Admission Details</h2>");
         html.append("<div class='info-grid'>");
-        html.append("<div class='info-item'><span class='info-label'>Date of Admission:</span> <span class='info-value'>2025-09-02</span></div>");
-        html.append("<div class='info-item'><span class='info-label'>Admitting Facility:</span> <span class='info-value'>Health Organization</span></div>");
-        html.append("<div class='info-item'><span class='info-label'>Admitting Physician:</span> <span class='info-value'>System Administrator</span></div>");
+
+        html.append("<div class='info-item'><span class='info-label'>Date of Admission:</span> <span class='info-value'>")
+                .append(safeGet(encounter, "admissionDate", "")).append("</span></div>");
+
+        html.append("<div class='info-item'><span class='info-label'>Admitting Facility:</span> <span class='info-value'>")
+                .append(safeGet(facility, "name", "")).append("</span></div>");
+
+        html.append("<div class='info-item'><span class='info-label'>Admitting Physician:</span> <span class='info-value'>")
+                .append(safeGet(user, "fullName", "")).append("</span></div>");
+
         html.append("</div></div>");
 
-        // ===== DISCHARGE DETAILS =====
+        // ===== 3. DISCHARGE DETAILS =====
         html.append("<div class='section'>");
         html.append("<h2 class='section-number'>3. Discharge Details</h2>");
         html.append("<div class='info-grid'>");
-        html.append("<div class='info-item'><span class='info-label'>Date of Discharge:</span> <span class='info-value'>2025-09-06</span></div>");
-        html.append("<div class='info-item'><span class='info-label'>Discharging Physician:</span> <span class='info-value'>System Administrator</span></div>");
-        html.append("<div class='info-item'><span class='info-label'>Disposition:</span> <span class='info-value'>Discharged home</span></div>");
+
+        String dischargeDate = sdf.format(new Date());
+        html.append("<div class='info-item'><span class='info-label'>Date of Discharge:</span> <span class='info-value'>")
+                .append("</span></div>");
+
+        html.append("<div class='info-item'><span class='info-label'>Discharging Physician:</span> <span class='info-value'>")
+                .append("</span></div>");
+
+        html.append("<div class='info-item'><span class='info-label'>Disposition:</span> <span class='info-value'>")
+                .append("</span></div>");
+
         html.append("</div></div>");
 
-        // ===== REASON FOR ADMISSION =====
+        // ===== 4. REASON FOR ADMISSION =====
         html.append("<div class='section'>");
         html.append("<h2 class='section-number'>4. Reason for Admission</h2>");
         html.append("<div class='content-box'>");
-        html.append("<p>Acute shortness of breath and chest discomfort</p>");
+        html.append("<p>").append(safeGet(encounter, "chiefComplain", "Not specified")).append("</p>");
         html.append("</div></div>");
 
-        // ===== SIGNIFICANT FINDINGS / DIAGNOSIS =====
+        // ===== 5. SIGNIFICANT FINDINGS / DIAGNOSIS =====
         html.append("<div class='section'>");
         html.append("<h2 class='section-number'>5. Significant Findings / Diagnosis</h2>");
         html.append("<div class='content-box'>");
-        html.append("<div class='diagnosis-item'><strong>Primary Diagnosis:</strong> J44.1 Acute exacerbation of chronic obstructive pulmonary disease (COPD)</div>");
-        html.append("<div class='diagnosis-item'><strong>Secondary Diagnoses:</strong>");
-        html.append("<ul>");
-        html.append("<li>I10 Hypertension</li>");
-        html.append("<li>E78.5 Hyperlipidemia</li>");
-        html.append("</ul>");
-        html.append("</div></div></div>");
 
-        // ===== HOSPITAL COURSE =====
-        html.append("<div class='section'>");
-        html.append("<h2 class='section-number'>6. Hospital Course</h2>");
-        html.append("<div class='content-box'>");
-        html.append("<ul class='course-list'>");
-        html.append("<li>Patient admitted for COPD exacerbation, treated with steroids, nebulizers, and antibiotics.</li>");
-        html.append("<li>Oxygen therapy initiated and gradually weaned.</li>");
-        html.append("<li>Clinical symptoms improved steadily with treatment.</li>");
-        html.append("</ul>");
+        if (diagnoses != null && !diagnoses.isEmpty()) {
+            Map<String, Object> primaryDiag = null;
+            List<Map<String, Object>> secondaryDiags = new java.util.ArrayList<>();
+
+            for (Map<String, Object> diag : diagnoses) {
+                String diagType = safeGet(diag, "diagnoseType", "");
+                if ("Primary".equalsIgnoreCase(diagType)) {
+                    primaryDiag = diag;
+                } else if ("Secondary".equalsIgnoreCase(diagType)) {
+                    secondaryDiags.add(diag);
+                }
+            }
+
+            if (primaryDiag != null) {
+                html.append("<div class='diagnosis-item'><strong>Primary Diagnosis:</strong> ")
+                        .append(safeGet(primaryDiag, "icdCode", "")).append(" ")
+                        .append(safeGet(primaryDiag, "description", "")).append("</div>");
+            }
+
+            if (!secondaryDiags.isEmpty()) {
+                html.append("<div class='diagnosis-item'><strong>Secondary Diagnoses:</strong>");
+                html.append("<ul>");
+                for (Map<String, Object> diag : secondaryDiags) {
+                    html.append("<li>").append(safeGet(diag, "icdCode", "")).append(" ")
+                            .append(safeGet(diag, "description", "")).append("</li>");
+                }
+                html.append("</ul>");
+                html.append("</div>");
+            }
+        } else {
+            html.append("<p>No diagnosis recorded</p>");
+        }
         html.append("</div></div>");
 
-        // ===== PROCEDURES AND TREATMENTS =====
+        // ===== 6. SIGNIFICANT FINDINGS (Review of Systems) =====
+        html.append("<div class='section'>");
+        html.append("<h2 class='section-number'>6. Review of Systems - Significant Findings</h2>");
+        html.append("<div class='content-box'>");
+
+        if (reviewSystems != null && !reviewSystems.isEmpty()) {
+            html.append("<ul class='course-list'>");
+            for (Map<String, Object> item : reviewSystems) {
+                String system = safeGet(item, "system", "");
+                String detail = safeGet(item, "systemDetail", "");
+                String notes = safeGet(item, "notes", "");
+
+                html.append("<li><strong>").append(system).append(":</strong> ");
+                if (detail != null && !detail.isEmpty()) {
+                    html.append(detail);
+                }
+                if (notes != null && !notes.isEmpty()) {
+                    html.append(" - ").append(notes);
+                }
+                html.append("</li>");
+            }
+            html.append("</ul>");
+        } else {
+            html.append("<p>No significant findings recorded</p>");
+        }
+
+        html.append("</div></div>");
+
+        // ===== 7. PROCEDURES AND TREATMENTS =====
         html.append("<div class='section'>");
         html.append("<h2 class='section-number'>7. Procedures and Treatments</h2>");
         html.append("<div class='content-box'>");
         html.append("<ul class='procedures-list'>");
-        html.append("<li>Chest X-ray</li>");
-        html.append("<li>Nebulized bronchodilators</li>");
-        html.append("<li>IV corticosteroids</li>");
-        html.append("<li>IV antibiotics</li>");
+
+        // Procedures
+        if (procedures != null && !procedures.isEmpty()) {
+            for (Map<String, Object> proc : procedures) {
+                String procName = safeGet(proc, "procedureName", "");
+                String procId = safeGet(proc, "procedureId", "");
+                if (!procName.isEmpty()) {
+                    html.append("<li>").append(procName);
+                    if (!procId.isEmpty()) html.append(" (ID: ").append(procId).append(")");
+                    html.append("</li>");
+                }
+            }
+        }
+
+        // Diagnostic Tests (Treatments)
+        if (diagnosticTests != null && !diagnosticTests.isEmpty()) {
+            for (Map<String, Object> test : diagnosticTests) {
+                String testName = safeGet(test, "testName", "");
+                if (!testName.isEmpty()) {
+                    html.append("<li>").append(testName).append("</li>");
+                }
+            }
+        }
+
+        if ((procedures == null || procedures.isEmpty()) && (diagnosticTests == null || diagnosticTests.isEmpty())) {
+            html.append("<li>No procedures or treatments recorded</li>");
+        }
+
         html.append("</ul>");
         html.append("</div></div>");
 
-        // ===== MEDICATIONS AT DISCHARGE =====
+        // ===== 8. MEDICATIONS AT DISCHARGE =====
         html.append("<div class='section'>");
         html.append("<h2 class='section-number'>8. Medications at Discharge</h2>");
         html.append("<div class='content-box medications-box'>");
         html.append("<ul class='medications-list'>");
-        html.append("<li>Prednisone 20 mg PO daily × 5 days</li>");
-        html.append("<li>Albuterol inhaler: 2 puffs every 6 hours PRN</li>");
-        html.append("<li>Lisinopril 10 mg PO daily</li>");
-        html.append("<li>Atorvastatin 20 mg PO daily</li>");
+
+        if (prescriptions != null && !prescriptions.isEmpty()) {
+            for (Map<String, Object> med : prescriptions) {
+                String medName = safeGet(med, "medicationName", "");
+                String instructions = safeGet(med, "instructions", "");
+
+                if (!medName.isEmpty()) {
+                    html.append("<li>").append(medName);
+                    if (!instructions.isEmpty()) {
+                        html.append(": ").append(instructions);
+                    }
+                    html.append("</li>");
+                }
+            }
+        } else {
+            html.append("<li>No medications prescribed</li>");
+        }
+
         html.append("</ul>");
         html.append("</div></div>");
 
-        // ===== DISCHARGE INSTRUCTIONS =====
+        // ===== 9-11. STATIC SECTIONS =====
         html.append("<div class='section'>");
         html.append("<h2 class='section-number'>9. Discharge Instructions</h2>");
         html.append("<div class='content-box instructions-box'>");
@@ -161,7 +280,6 @@ public class ApServiceService extends ApServiceDAO implements Serializable {
         html.append("</ul>");
         html.append("</div></div>");
 
-        // ===== FOLLOW-UP PLAN =====
         html.append("<div class='section'>");
         html.append("<h2 class='section-number'>10. Follow-up Plan</h2>");
         html.append("<div class='content-box'>");
@@ -171,38 +289,68 @@ public class ApServiceService extends ApServiceDAO implements Serializable {
         html.append("</ul>");
         html.append("</div></div>");
 
-        // ===== CONDITION AT DISCHARGE =====
         html.append("<div class='section'>");
         html.append("<h2 class='section-number'>11. Condition at Discharge</h2>");
         html.append("<div class='content-box'>");
-        html.append("<p>Improved; stable on room air</p>");
+        html.append("<p>Improved</p>");
         html.append("</div></div>");
 
-        // ===== PENDING RESULTS / RECOMMENDATIONS =====
+        // ===== 12. PENDING RESULTS =====
         html.append("<div class='section'>");
         html.append("<h2 class='section-number'>12. Pending Results / Recommendations</h2>");
         html.append("<div class='content-box'>");
-        html.append("<p>Sputum culture pending, to be reviewed at follow-up.</p>");
+
+        if (diagnosticTests != null && !diagnosticTests.isEmpty()) {
+            boolean hasPending = false;
+            html.append("<ul>");
+            for (Map<String, Object> test : diagnosticTests) {
+                String status = safeGet(test, "processingStatus", "");
+                String testName = safeGet(test, "testName", "");
+
+                if (!status.equalsIgnoreCase("Completed") && !testName.isEmpty()) {
+                    html.append("<li>").append(testName).append(" - Status: ").append(status).append("</li>");
+                    hasPending = true;
+                }
+            }
+            html.append("</ul>");
+
+            if (!hasPending) {
+                html.append("<p>No pending results</p>");
+            }
+        } else {
+            html.append("<p>No pending results</p>");
+        }
+
         html.append("</div></div>");
 
-        // ===== PROVIDER INFORMATION =====
+        // ===== 13. PROVIDER INFORMATION =====
         html.append("<div class='section'>");
         html.append("<h2 class='section-number'>13. Provider Information</h2>");
         html.append("<div class='info-grid'>");
-        html.append("<div class='info-item'><span class='info-label'>Prepared by:</span> <span class='info-value'>System Administrator</span></div>");
-        html.append("<div class='info-item'><span class='info-label'>License No.:</span> <span class='info-value'>A47922</span></div>");
+        html.append("<div class='info-item'><span class='info-label'>Prepared by:</span> <span class='info-value'>")
+                .append(safeGet(user, "fullName", "")).append("</span></div>");
+        html.append("<div class='info-item'><span class='info-label'>Email:</span> <span class='info-value'>")
+                .append(safeGet(user, "email", "")).append("</span></div>");
         html.append("</div></div>");
 
         // ===== FOOTER =====
         html.append("<div class='footer'>");
-        html.append("<p class='footer-text'>This is an automated confidential medical record - Health Organization</p>");
+        html.append("<p class='footer-text'>This is a confidential medical record - ")
+                .append(safeGet(facility, "name", "Health Organization")).append("</p>");
         html.append("<p class='footer-date'>Report Generated: ").append(currentDate).append("</p>");
         html.append("</div>");
 
         html.append("</body></html>");
 
-        log.debug("HTML content built successfully with static data");
+        log.debug("HTML content built successfully with data from frontend");
         return html.toString();
+    }
+
+    // Helper method to safely get values from map
+    private String safeGet(Map<String, Object> map, String key, String defaultValue) {
+        if (map == null) return defaultValue;
+        Object value = map.get(key);
+        return value != null ? value.toString() : defaultValue;
     }
 
     private String getCssStyles() {
@@ -223,10 +371,14 @@ public class ApServiceService extends ApServiceDAO implements Serializable {
             }
             
             .header {
-                text-align: center;
                 margin-bottom: 20px;
-                padding-bottom: 12px;
+                padding-bottom: 15px;
                 border-bottom: 2px solid #000000;
+            }
+            
+            .header-main {
+                text-align: center;
+                margin-bottom: 15px;
             }
             
             .header h1 {
@@ -238,6 +390,34 @@ public class ApServiceService extends ApServiceDAO implements Serializable {
             
             .hospital-name {
                 font-size: 10pt;
+                color: #333333;
+                font-weight: 600;
+            }
+            
+            .patient-header-info {
+                background: #f5f5f5;
+                padding: 10px 15px;
+                border-radius: 5px;
+                border-left: 4px solid #4a90e2;
+            }
+            
+            .patient-header-row {
+                margin-bottom: 5px;
+                font-size: 9.5pt;
+            }
+            
+            .patient-header-row:last-child {
+                margin-bottom: 0;
+            }
+            
+            .patient-header-label {
+                font-weight: bold;
+                color: #000000;
+                display: inline-block;
+                min-width: 45px;
+            }
+            
+            .patient-header-value {
                 color: #333333;
                 font-weight: 600;
             }

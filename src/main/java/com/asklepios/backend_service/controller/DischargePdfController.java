@@ -20,17 +20,31 @@ import java.util.Map;
 @Slf4j
 public class DischargePdfController {
 
-    private final ApServiceService dischargePdfService;
+    private final ApServiceService apServiceService;
 
     @PostMapping("/generate-discharge-pdf")
-    public ResponseEntity<?> generateDischargePdf() {
+    public ResponseEntity<?> generateDischargePdf(@RequestBody Map<String, Object> dischargeData) {
         try {
             log.info("=== Received Discharge PDF generation request ===");
-            log.info("Generating Discharge Summary Report with static sample data");
+            log.info("Generating Discharge Summary Report with data from frontend");
 
-            // Generate PDF with static data
+            // Log received data for debugging
+            if (dischargeData != null) {
+                log.info("Received discharge data with keys: {}", dischargeData.keySet());
+                Map<String, Object> patient = (Map<String, Object>) dischargeData.get("patient");
+                if (patient != null) {
+                    log.info("Patient: {}", patient.get("fullName"));
+                    log.info("MRN: {}", patient.get("patientMrn"));
+                }
+            } else {
+                log.warn("Received null discharge data");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(createErrorResponse("Discharge data is required"));
+            }
+
+            // Generate PDF with data from frontend
             log.info("Starting PDF generation...");
-            byte[] pdfBytes = dischargePdfService.generateDischargePdf();
+            byte[] pdfBytes = apServiceService.generateDischargePdf(dischargeData);
 
             if (pdfBytes == null || pdfBytes.length == 0) {
                 log.error("Generated PDF is empty");
@@ -38,10 +52,17 @@ public class DischargePdfController {
                         .body(createErrorResponse("Failed to generate PDF - empty result"));
             }
 
-            // Generate filename with timestamp
+            // Generate filename with timestamp and patient MRN if available
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
             String timestamp = sdf.format(new Date());
-            String fileName = String.format("Discharge_Summary_Report_%s.pdf", timestamp);
+
+            String patientMrn = "";
+            Map<String, Object> patient = (Map<String, Object>) dischargeData.get("patient");
+            if (patient != null && patient.get("patientMrn") != null) {
+                patientMrn = "_" + patient.get("patientMrn").toString();
+            }
+
+            String fileName = String.format("Discharge_Summary%s_%s.pdf", patientMrn, timestamp);
 
             // Set response headers
             HttpHeaders headers = new HttpHeaders();
@@ -66,6 +87,14 @@ public class DischargePdfController {
         }
     }
 
+    // Helper method to create error response
+    private Map<String, Object> createErrorResponse(String message) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("error", message);
+        error.put("timestamp", new Date());
+        return error;
+    }
+
     @GetMapping("/discharge-health")
     public ResponseEntity<Map<String, String>> healthCheck() {
         Map<String, String> response = new HashMap<>();
@@ -75,10 +104,4 @@ public class DischargePdfController {
         return ResponseEntity.ok(response);
     }
 
-    private Map<String, String> createErrorResponse(String message) {
-        Map<String, String> error = new HashMap<>();
-        error.put("error", message);
-        error.put("timestamp", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-        return error;
-    }
 }

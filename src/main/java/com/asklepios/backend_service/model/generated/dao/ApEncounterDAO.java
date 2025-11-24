@@ -1,6 +1,8 @@
 package com.asklepios.backend_service.model.generated.dao;
 
 import java.io.Serializable;
+
+import com.asklepios.backend_service.service.ApEncounterServiceService;
 import lombok.extern.slf4j.Slf4j;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +17,8 @@ import java.util.UUID;
 import java.util.ArrayList;
 import java.lang.System;
 import java.math.BigDecimal;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.asklepios.backend_service.controller.PublicServices;
@@ -30,7 +34,13 @@ import com.asklepios.backend_service.database.DS;
 public class ApEncounterDAO implements Serializable {
 
 @Autowired private PublicServices publicServices;
-public ApEncounter getRecord(String key) throws SQLException {
+    @Qualifier("apEncounterServiceDAO")
+    @Autowired
+    private ApEncounterServiceDAO apEncounterServiceDAO;
+    @Autowired
+    private ApEncounterServiceService apEncounterServiceService;
+
+    public ApEncounter getRecord(String key) throws SQLException {
 try (
 Connection con = DS.getConnection();
 Statement st = con.createStatement();
@@ -441,6 +451,20 @@ ps.setBoolean(85, record.getDischarge());
 ps.setString(86, record.getEmergencyLevelLkey());
 ps.setBigDecimal(87, record.getDischargeAt());
 ps.executeUpdate();
+    // If new encounter AND resource type is clinic department (2039516279378421),
+    // auto add all department services to ap_encounter_service
+    if ("2039516279378421".equals(record.getResourceTypeLkey())
+            && record.getResourceKey() != null && !record.getResourceKey().isEmpty()
+            && record.getPatientKey() != null && !record.getPatientKey().isEmpty()) {
+
+        apEncounterServiceService.addDepartmentServicesToEncounter(
+                record.getKey(),            // encounter_key
+                record.getPatientKey(),      // patient_key
+                record.getResourceKey(),
+                record.getCreatedBy(),
+                record.getCreatedAt()
+                );
+    }
 return key;
 }
 }

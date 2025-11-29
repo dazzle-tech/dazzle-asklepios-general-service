@@ -21,7 +21,7 @@ public class ApDiagnosticOrderTestsEntity implements Serializable {
 	private ApLovValues statusLvalue;
 	private String orderKey;
 	private String testKey;
-	private String receivedLabKey;
+	private BigDecimal receivedLabId;
 	private String reasonLkey;
 	private ApLovValues reasonLvalue;
 	private String priorityLkey;
@@ -49,6 +49,9 @@ public class ApDiagnosticOrderTestsEntity implements Serializable {
 	private BigDecimal readyAt;
 	private BigDecimal approvedAt;
 	private String cancellationReason;
+	private BigDecimal fromDepartmentId;
+	private BigDecimal fromFacilityId;
+	private BigDecimal toFacilityId;
 	private ApDiagnosticOrderTestsEntity translatedObject;
 
 }

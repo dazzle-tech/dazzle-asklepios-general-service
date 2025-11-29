@@ -492,6 +492,7 @@ private final static String ModelTypesFilePath = "C:\\Users\\user\\Documents\\Gi
             case "numeric":
             case "decimal":
             case "bigint":
+            case "int8" :
                 return "BigDecimal";
             case "bit":
             case "bool":

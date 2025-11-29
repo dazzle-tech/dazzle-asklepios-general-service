@@ -622,13 +622,12 @@ public class PatientController {
     @PostMapping(value = "/save-patient-relation", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePatientRelation(@RequestBody ApPatientRelation relation,
                                                  @Nullable @RequestHeader String facility_id,
-//                                                 @Nullable @RequestHeader String access_token,
                                                  @Nullable @RequestHeader Integer access_level,
                                                  @Nullable @RequestHeader String lang) {
         try {
-
             ParentResponse<ApPatientRelation> response = new ParentResponse<>();
 
+            // Validate if updating existing relation
             if (relation.getKey() != null) {
                 ApPatientRelation exists = apPatientRelationService.getRecord(relation.getKey());
                 if (exists == null) {
@@ -637,17 +636,9 @@ public class PatientController {
                 }
             }
 
-            // check for duplicate relation with same target patient key
-            String checkQuery = "select count(0) from ap_patient_relation" +
-                    " where patient_key = '" + relation.getPatientKey()
-                    + "' and relation_type_lkey = '" + relation.getRelationTypeLkey()
-                    + "' and relative_patient_key = '" + relation.getRelativePatientKey() + "' and deleted_at is null";
-            if (relation.getKey() != null) {
-                checkQuery += " and key <> '" + relation.getKey() + "'";
-            }
-            BigDecimal exists = DS.executeDecimalResultQuery(checkQuery);
-            if (exists != null && exists.intValue() > 0) {
-                response.addGeneralError("such relation already exists");
+            // Validate required fields
+            if (relation.getPatientKey() == null || relation.getPatientKey().isBlank()) {
+                response.addGeneralError("patient key is required");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
@@ -661,22 +652,49 @@ public class PatientController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
+            // Check for duplicate relation
+            String checkQuery = "SELECT COUNT(0) FROM ap_patient_relation " +
+                    "WHERE patient_key = '" + relation.getPatientKey() + "' " +
+                    "AND relation_type_lkey = '" + relation.getRelationTypeLkey() + "' " +
+                    "AND relative_patient_key = '" + relation.getRelativePatientKey() + "' " +
+                    "AND deleted_at IS NULL";
+
+            if (relation.getKey() != null) {
+                checkQuery += " AND key <> '" + relation.getKey() + "'";
+            }
+
+            BigDecimal exists = DS.executeDecimalResultQuery(checkQuery);
+            if (exists != null && exists.intValue() > 0) {
+                response.addGeneralError("such relation already exists");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+
+            // Save the main relation
             apPatientRelationService.saveRecord(relation);
-            apPatientRelationService.patientRelations(relation.getPatientKey(),relation.getRelativePatientKey(),relation.getRelationTypeLkey(),lang);
+            log.info("Saved main relation with key: {}", relation.getKey());
+
+            // Create the reverse relation automatically
+            apPatientRelationService.createReverseRelation(
+                    relation.getPatientKey(),
+                    relation.getRelativePatientKey(),
+                    relation.getRelationTypeLkey(),
+                    lang
+            );
+
+            // Populate fields and return
             apPatientRelationService.populateLovFields(relation, lang);
             relation.setRelativePatientObject(apPatientService.getRecord(relation.getRelativePatientKey()));
             response.setObject(relation);
+
+            log.info("Successfully saved patient relation and created reverse relation");
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("Error saving patient relation: {}", e.getMessage(), e);
             return ResponseEntity.status(500).body(e);
         }
-
-
     }
-
     @GetMapping(value = "/fetch-patient-insurance", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> fetchPatientInsurance(
             @Nullable @RequestHeader("patient-key") String patientKey,

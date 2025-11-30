@@ -16,8 +16,8 @@ public class ApTeleConsultationEntity implements Serializable {
 
 	private String id;
 	private String questionToConsultant;
-	private String consultantFacilityId;
-	private String consultantDepartmentId;
+	private BigDecimal fromFacilityId;
+	private BigDecimal fromDepartmentId;
 	private String specialtyLkey;
 	private ApLovValues specialtyLvalue;
 	private String urgencyLkey;
@@ -40,6 +40,8 @@ public class ApTeleConsultationEntity implements Serializable {
 	private String callStartedBy;
 	private BigDecimal callColsedAt;
 	private String callColsedBy;
+	private BigDecimal toDepartmentId;
+	private BigDecimal toFacilityId;
 	private ApTeleConsultationEntity translatedObject;
 
 }

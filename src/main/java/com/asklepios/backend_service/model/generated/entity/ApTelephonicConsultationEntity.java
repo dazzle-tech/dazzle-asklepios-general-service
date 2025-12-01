@@ -30,6 +30,7 @@ public class ApTelephonicConsultationEntity implements Serializable {
 	private BigDecimal updatedAt;
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
+	private String cancellationReason;
 	private ApTelephonicConsultationEntity translatedObject;
 
 }

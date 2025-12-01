@@ -44,22 +44,22 @@ public class EncounterController {
     private final ApPatientEncounterOrderService apPatientEncounterOrderService;
     private final ApPrescriptionService apPrescriptionService;
     private final ApPrescriptionInstructionService apPrescriptionInstructionService;
-    private final ApCustomeInstructionsService apCustomeInstructionsService ;
-    private final ApPrescriptionMedicationsService apPrescriptionMedicationsService ;
-    private final ApConsultationOrderService apConsultationOrderService ;
+    private final ApCustomeInstructionsService apCustomeInstructionsService;
+    private final ApPrescriptionMedicationsService apPrescriptionMedicationsService;
+    private final ApConsultationOrderService apConsultationOrderService;
     private final ApVisitAllergiesService apVisitAllergiesService;
-    private  final  ApDrugOrderService apDrugOrderService;
-    private  final  ApDrugOrderMedicationsService apDrugOrderMedicationsService;
-    private  final  ApProcedureService apProcedureService;
-    private  final  ApDiagnosticOrdersService apDiagnosticOrdersService;
-    private final  ApDiagnosticOrderTestsService apDiagnosticOrderTestsService;
+    private final ApDrugOrderService apDrugOrderService;
+    private final ApDrugOrderMedicationsService apDrugOrderMedicationsService;
+    private final ApProcedureService apProcedureService;
+    private final ApDiagnosticOrdersService apDiagnosticOrdersService;
+    private final ApDiagnosticOrderTestsService apDiagnosticOrderTestsService;
     private final ApDiagnosticTestService apDiagnosticTestService;
     private final ApPractitionerService apPractitionerService;
-    private  final ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService;
-    private final  ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService;
+    private final ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService;
+    private final ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService;
     private final ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService;
-    private  final  ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService;
-    private final  ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService;
+    private final ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService;
+    private final ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService;
     private final ApPsychologicalExamService apPsychologicalExamService;
     private final ApUserService apUserService;
     private final ApAudiometryPuretoneService apAudiometryPuretoneService;
@@ -94,9 +94,13 @@ public class EncounterController {
     private final ApEncounterAssignToBedService apEncounterAssignToBedService;
     private final ApProgressNotesService apProgressNotesService;
     private final ApPatientTemporaryDischargeService apPatientTemporaryDischargeService;
-   private  final ApTeleConsultationService apTeleConsultationService;
+    private final ApTeleConsultationService apTeleConsultationService;
     private final ApTeleConsultationProgressNoteService apTeleConsultationProgressNoteService;
     private final ApTeleConsultationCallLogService apTeleConsultationCallLogService;
+    private final ApTelephonicConsultationService apTelephonicConsultationService;
+
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService, ApDoctorRoundStaffService apDoctorRoundStaffService, ApDoctorRoundService apDoctorRoundService, ApNurseNotesService apNurseNotesService, ApRepositioningService apRepositioningService, ApDayCaseEncountersService apDayCaseEncountersService, ApPreOperationAdministeredMedicationsService apPreOperationAdministeredMedicationsService, ApEmergencyTriageService apEmergencyTriageService, ApEncounterAssignToBedService apEncounterAssignToBedService, ApProgressNotesService apProgressNotesService, ApPatientTemporaryDischargeService apPatientTemporaryDischargeService, ApTeleConsultationService apTeleConsultationService, ApTeleConsultationProgressNoteService apTeleConsultationProgressNoteService, ApTeleConsultationCallLogService apTeleConsultationCallLogService, ApTelephonicConsultationService apTelephonicConsultationService) {
+
     private final ApUserDashboardComponentService apUserDashboardComponentService;
 
     public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService, ApDoctorRoundStaffService apDoctorRoundStaffService, ApDoctorRoundService apDoctorRoundService, ApNurseNotesService apNurseNotesService, ApRepositioningService apRepositioningService, ApDayCaseEncountersService apDayCaseEncountersService, ApPreOperationAdministeredMedicationsService apPreOperationAdministeredMedicationsService, ApEmergencyTriageService apEmergencyTriageService, ApEncounterAssignToBedService apEncounterAssignToBedService, ApProgressNotesService apProgressNotesService, ApPatientTemporaryDischargeService apPatientTemporaryDischargeService, ApTeleConsultationService apTeleConsultationService, ApTeleConsultationProgressNoteService apTeleConsultationProgressNoteService, ApTeleConsultationCallLogService apTeleConsultationCallLogService, ApUserDashboardComponentService apUserDashboardComponentService) {
@@ -110,7 +114,7 @@ public class EncounterController {
         this.apPhysicalExamAreaService = apPhysicalExamAreaService;
         this.apIcdCodeService = apIcdCodeService;
         this.apPatientDiagnoseService = apPatientDiagnoseService;
-        this.apPatientPlanService=apPatientPlanService ;
+        this.apPatientPlanService = apPatientPlanService;
         this.apPatientEncounterOrderService = apPatientEncounterOrderService;
         this.apPrescriptionService = apPrescriptionService;
         this.apPrescriptionInstructionService = apPrescriptionInstructionService;
@@ -168,6 +172,7 @@ public class EncounterController {
         this.apTeleConsultationService = apTeleConsultationService;
         this.apTeleConsultationProgressNoteService = apTeleConsultationProgressNoteService;
         this.apTeleConsultationCallLogService = apTeleConsultationCallLogService;
+        this.apTelephonicConsultationService = apTelephonicConsultationService;
         this.apUserDashboardComponentService = apUserDashboardComponentService;
     }
 
@@ -249,21 +254,22 @@ public class EncounterController {
 
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
-            String whereForTotal = listRequest.buildWhereStatement(true, false, false,false);
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApEncounter> encounters = apEncounterService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_encounter where " + whereForTotal);
             for (ApEncounter encounter : encounters) {
                 encounter.setPractitionerObject(apPractitionerService.getRecord(encounter.getPhysicianKey()));
-               if(encounter.getResourceKey() != null){
-                 if(encounter.getResourceTypeLkey().equals("2039534205961578")){
-                     ApDepartment department = apDepartmentService.getRecord(encounter.getDepartmentKey());
-                     if(department != null){
-                     encounter.setDepartmentName(department.getName());}
-                 }
-                   encounter.setResourceObject(apEncounterService.getResource(encounter.getResourceTypeLkey(),encounter.getResourceKey(),lang));
-               }
+                if (encounter.getResourceKey() != null) {
+                    if (encounter.getResourceTypeLkey().equals("2039534205961578")) {
+                        ApDepartment department = apDepartmentService.getRecord(encounter.getDepartmentKey());
+                        if (department != null) {
+                            encounter.setDepartmentName(department.getName());
+                        }
+                    }
+                    encounter.setResourceObject(apEncounterService.getResource(encounter.getResourceTypeLkey(), encounter.getResourceKey(), lang));
+                }
                 if (encounter.getPractitionerObject() != null) {
-                    apPractitionerService.populateLovFields(encounter.getPractitionerObject(),lang);
+                    apPractitionerService.populateLovFields(encounter.getPractitionerObject(), lang);
                 }
                 if (encounter.getResourceTypeLkey().equals("5433343011954425") ||
                         encounter.getResourceTypeLkey().equals("2039548173192779")) {
@@ -294,7 +300,7 @@ public class EncounterController {
                 encounter.setHasPrescription(apEncounterService.getHasPrescription(encounter.getKey()));
                 encounter.setHasAllergy(apEncounterService.getHasAllergy(encounter.getKey()));
                 encounter.setHasObservation(apEncounterService.getHasObservation(encounter.getKey()));
-                
+
                 apEncounterService.populateLovFields(encounter, lang);
 
             }
@@ -311,6 +317,7 @@ public class EncounterController {
 
         }
     }
+
     @GetMapping("/get-encounter-by-id")
     public ResponseEntity<?> getEncounterById(
 
@@ -322,16 +329,17 @@ public class EncounterController {
 
         if (encounter != null && encounter.getKey() != null && !encounter.getKey().isEmpty()) {
             encounter.setPractitionerObject(apPractitionerService.getRecord(encounter.getPhysicianKey()));
-            if(encounter.getResourceKey() != null){
-                if(encounter.getResourceTypeLkey().equals("2039534205961578")){
+            if (encounter.getResourceKey() != null) {
+                if (encounter.getResourceTypeLkey().equals("2039534205961578")) {
                     ApDepartment department = apDepartmentService.getRecord(encounter.getDepartmentKey());
-                    if(department != null){
-                        encounter.setDepartmentName(department.getName());}
+                    if (department != null) {
+                        encounter.setDepartmentName(department.getName());
+                    }
                 }
-                encounter.setResourceObject(apEncounterService.getResource(encounter.getResourceTypeLkey(),encounter.getResourceKey(),lang));
+                encounter.setResourceObject(apEncounterService.getResource(encounter.getResourceTypeLkey(), encounter.getResourceKey(), lang));
             }
             if (encounter.getPractitionerObject() != null) {
-                apPractitionerService.populateLovFields(encounter.getPractitionerObject(),lang);
+                apPractitionerService.populateLovFields(encounter.getPractitionerObject(), lang);
             }
             if (encounter.getResourceTypeLkey().equals("5433343011954425") ||
                     encounter.getResourceTypeLkey().equals("2039548173192779")) {
@@ -371,6 +379,7 @@ public class EncounterController {
             return ResponseEntity.ok(response);
         }
     }
+
     @GetMapping(value = "/encounter-service-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> encounterServiceList(@RequestParam Map<String, String> queryParams,
                                                   @Nullable @RequestHeader String facility_id,
@@ -388,7 +397,7 @@ public class EncounterController {
 
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
-            String whereForTotal = listRequest.buildWhereStatement(true, false, false,false);
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApEncounterAppliedService> encounters = apEncounterAppliedServiceService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_encounter_applied_service where " + whereForTotal);
             for (ApEncounterAppliedService appliedService : encounters) {
@@ -424,7 +433,7 @@ public class EncounterController {
                 }
                 String patientKey = apEncounter.getPatientKey();
 
-                Map<String, Integer> counts =apEncounterService.countNewInpatientOrOngoingVisits(patientKey);
+                Map<String, Integer> counts = apEncounterService.countNewInpatientOrOngoingVisits(patientKey);
 
                 int countOngoing = counts.getOrDefault("count_status_ongoing", 0);
                 int countResourceAndStatus = counts.getOrDefault("count_resource_and_status", 0);
@@ -438,11 +447,11 @@ public class EncounterController {
                             .body(Map.of("message", "Patient is already inpatient."));
                 }
 
-                if (countResourceAndStatus > 0 ) {
+                if (countResourceAndStatus > 0) {
                     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                             .body(Map.of("message", "This Patient Has Inpatient Encounter"));
                 }
-                if(countOutpatientNewEncounter > 0 && apEncounter.getResourceTypeLkey().equals("4217389643435490")){
+                if (countOutpatientNewEncounter > 0 && apEncounter.getResourceTypeLkey().equals("4217389643435490")) {
                     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                             .body(Map.of("message", "This Patient Has New Outpatient Encounter"));
                 }
@@ -450,7 +459,7 @@ public class EncounterController {
                 BigDecimal lastVisitId = DS.executeDecimalResultQuery("select max(visit_id) from ap_encounter");
 
                 BigDecimal newVisitId;
-                 if (lastVisitId == null) {
+                if (lastVisitId == null) {
                     newVisitId = BigDecimal.valueOf(100);
                 } else {
                     newVisitId = lastVisitId.add(BigDecimal.ONE);
@@ -507,7 +516,7 @@ public class EncounterController {
             if (apEncounter.getEncounterStatusLkey().equals("91063195286200")) { // TODO replace with redis by lov code (ENC_STATUS/NEW)
                 // update status to in-progress when encounter is new
                 apEncounter.setEncounterStatusLkey("91084250213000"); // TODO replace with redis by lov code (ENC_STATUS/IN_PROGRESS)
-                Map<String, Integer> counts =apEncounterService.countOngoingVisits(apEncounter.getPatientKey());
+                Map<String, Integer> counts = apEncounterService.countOngoingVisits(apEncounter.getPatientKey());
 
                 int countOngoing = counts.getOrDefault("count_status_ongoing", 0);
                 if (countOngoing > 0) {
@@ -701,7 +710,7 @@ public class EncounterController {
     }
 
     @GetMapping(value = "/encounter-physical-exam-areas", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> encounterPhysicalExamAreas(@Nullable @RequestHeader ("encounter-key") String encounterKey,
+    public ResponseEntity<?> encounterPhysicalExamAreas(@Nullable @RequestHeader("encounter-key") String encounterKey,
                                                         @Nullable @RequestHeader String facility_id,
                                                         // @Nullable @RequestHeader String access_token,
                                                         @Nullable @RequestHeader Integer access_level,
@@ -829,7 +838,7 @@ public class EncounterController {
 
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
-            String whereForTotal = listRequest.buildWhereStatement(true, false, false,false);
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApPatientDiagnose> patientDiagnoseList = apPatientDiagnoseService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_patient_diagnose where " + whereForTotal);
 
@@ -895,6 +904,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-patient-plan", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePatientPlan(@RequestBody ApPatientPlan request,
                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -914,6 +924,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/patient-plan-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPatientPlanList(@RequestParam Map<String, String> queryParams,
                                                 @Nullable @RequestHeader String facility_id,
@@ -954,6 +965,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-patient-encounter-order", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePatientEncounterOrder(@RequestBody ApPatientEncounterOrder request,
                                                        @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -964,7 +976,7 @@ public class EncounterController {
     ) {
         try {
             ParentResponse<ApPatientEncounterOrder> response = new ParentResponse<>();
-            if(request.getStatusLkey().equals("1804482322306061")){
+            if (request.getStatusLkey().equals("1804482322306061")) {
                 request.setSubmitDate(new BigDecimal(System.currentTimeMillis()));
             }
             apPatientEncounterOrderService.saveRecord(request);
@@ -999,13 +1011,14 @@ public class EncounterController {
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_patient_encounter_order where " + whereForTotal);
 
             for (ApPatientEncounterOrder order : patientEncounterOrders) {
-                order.setTestName(apPatientEncounterOrderService.getTest(order.getTestKey()).getTestName()) ;
+                order.setTestName(apPatientEncounterOrderService.getTest(order.getTestKey()).getTestName());
                 order.setInternalCode(apPatientEncounterOrderService.getTest(order.getTestKey()).getInternalCode());
                 order.setOrderTypeLkey(apPatientEncounterOrderService.getTest(order.getTestKey()).getTestTypeLkey());
 
                 order.setInternationalCodeOne(apPatientEncounterOrderService.getTest(order.getTestKey()).getInternationalCodeOne());
                 order.setInternationalCodeTwo(apPatientEncounterOrderService.getTest(order.getTestKey()).getInternationalCodeTwo());
-                order.setInternationalCodeThree(apPatientEncounterOrderService.getTest(order.getTestKey()).getInternationalCodeThree()); ;
+                order.setInternationalCodeThree(apPatientEncounterOrderService.getTest(order.getTestKey()).getInternationalCodeThree());
+                ;
                 apPatientEncounterOrderService.populateLovFields(order, lang);
             }
 
@@ -1095,14 +1108,14 @@ public class EncounterController {
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
 
-            List<ApPrescriptionMedications> prescriptionMedications =  apPrescriptionMedicationsService.getList(where);
+            List<ApPrescriptionMedications> prescriptionMedications = apPrescriptionMedicationsService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_prescription_medications where " + whereForTotal);
 
-            for (ApPrescriptionMedications medic: prescriptionMedications) {
+            for (ApPrescriptionMedications medic : prescriptionMedications) {
 
                 apPrescriptionMedicationsService.populateLovFields(medic, lang);
                 medic.setActiveIngredientKeys(apPrescriptionMedicationsService.getActiveIngredientKeys(medic.getGenericMedicationsKey()));
-               medic.setActiveIngredient(apPrescriptionMedicationsService.getListOfActiveIngredient(medic.getGenericMedicationsKey()));
+                medic.setActiveIngredient(apPrescriptionMedicationsService.getListOfActiveIngredient(medic.getGenericMedicationsKey()));
             }
 
             response.setObject(prescriptionMedications);
@@ -1115,6 +1128,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-prescription-medication", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePrescriptionMedication(@RequestBody ApPrescriptionMedications request,
                                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -1128,7 +1142,7 @@ public class EncounterController {
             apPrescriptionMedicationsService.saveRecord(request);
             response.setObject(request);
 
-            if(request.getInstructionsTypeLkey().equals("3010606785535008")  ){
+            if (request.getInstructionsTypeLkey().equals("3010606785535008")) {
 
                 ApCustomeInstructions customeInstructions = new ApCustomeInstructions();
                 customeInstructions.setPrescriptionMedicationsKey(response.getObject().getKey());
@@ -1136,7 +1150,7 @@ public class EncounterController {
                 customeInstructions.setDose(request.getDose());
                 customeInstructions.setUnitLkey(request.getUnitLkey());
                 customeInstructions.setRoaLkey(request.getRoaLkey());
-                saveCustomeInstructions(customeInstructions,facility_id,access_level,lang);
+                saveCustomeInstructions(customeInstructions, facility_id, access_level, lang);
             }
             return ResponseEntity.ok(response);
 
@@ -1148,6 +1162,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/custome-instructions-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getCustomeInstructionsList(@RequestParam Map<String, String> queryParams,
                                                         @Nullable @RequestHeader String facility_id,
@@ -1184,6 +1199,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-custome-instructions", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveCustomeInstructions(@RequestBody ApCustomeInstructions request,
                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -1203,6 +1219,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/remove-prescription-medication", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deletePrescriptionMedication(@RequestBody ApPrescriptionMedications prescriptionMedications,
                                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -1213,7 +1230,7 @@ public class EncounterController {
             ParentResponse<ApPrescriptionMedications> response = new ParentResponse<>();
             prescriptionMedications.setIsValid(false);
             prescriptionMedications.setStatusLkey("1804447528780744");
-           
+
             apPrescriptionMedicationsService.deleteRecord(prescriptionMedications);
             response.setObject(prescriptionMedications);
             return ResponseEntity.ok(response);
@@ -1223,6 +1240,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-consultation-orders", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveConsultationOrders(@RequestBody ApConsultationOrder request,
                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -1242,6 +1260,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/consultation-orders-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getConsultationOrdersList(@RequestParam Map<String, String> queryParams,
                                                        @Nullable @RequestHeader String facility_id,
@@ -1280,7 +1299,6 @@ public class EncounterController {
     }
 
 
-
     @PostMapping(value = "/save-prescription", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePrescription(@RequestBody ApPrescription request,
                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -1289,15 +1307,16 @@ public class EncounterController {
                                               @jakarta.annotation.Nullable @RequestHeader String lang
     ) {
         try {
-            if(request.getKey()==null){
-            BigDecimal lastpreId = DS.executeDecimalResultQuery("select max(prescription_id) from ap_prescription");
-            BigDecimal newpreId;
-            if (lastpreId == null) {
-                newpreId= BigDecimal.valueOf(100);
-            } else {
-                newpreId = lastpreId.add(BigDecimal.ONE);
+            if (request.getKey() == null) {
+                BigDecimal lastpreId = DS.executeDecimalResultQuery("select max(prescription_id) from ap_prescription");
+                BigDecimal newpreId;
+                if (lastpreId == null) {
+                    newpreId = BigDecimal.valueOf(100);
+                } else {
+                    newpreId = lastpreId.add(BigDecimal.ONE);
+                }
+                request.setPrescriptionId(newpreId.toString());
             }
-            request.setPrescriptionId(newpreId.toString());}
             ParentResponse<ApPrescription> response = new ParentResponse<>();
             apPrescriptionService.saveRecord(request);
             response.setObject(request);
@@ -1308,23 +1327,25 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-drug-order", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDrugOrder(@RequestBody ApDrugOrder request,
-                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                              @jakarta.annotation.Nullable @RequestHeader String lang
+                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                           @jakarta.annotation.Nullable @RequestHeader String lang
     ) {
         try {
-            if(request.getKey()==null){
+            if (request.getKey() == null) {
                 BigDecimal lastpreId = DS.executeDecimalResultQuery("select max(drugorder_id) from ap_drug_order");
                 BigDecimal newpreId;
                 if (lastpreId == null) {
-                    newpreId= BigDecimal.valueOf(100);
+                    newpreId = BigDecimal.valueOf(100);
                 } else {
                     newpreId = lastpreId.add(BigDecimal.ONE);
                 }
-                request.setDrugorderId(newpreId.toString());}
+                request.setDrugorderId(newpreId.toString());
+            }
             ParentResponse<ApDrugOrder> response = new ParentResponse<>();
             apDrugOrderService.saveRecord(request);
             response.setObject(request);
@@ -1335,12 +1356,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/drug_order-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDrugOrderList(@RequestParam Map<String, String> queryParams,
-                                                 @Nullable @RequestHeader String facility_id,
-                                                 // @Nullable @RequestHeader String access_token,
-                                                 @Nullable @RequestHeader Integer access_level,
-                                                 @Nullable @RequestHeader String lang) {
+                                              @Nullable @RequestHeader String facility_id,
+                                              // @Nullable @RequestHeader String access_token,
+                                              @Nullable @RequestHeader Integer access_level,
+                                              @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApDrugOrder>> response = new ParentResponse<>();
 
@@ -1355,7 +1377,7 @@ public class EncounterController {
             List<ApDrugOrder> orders = apDrugOrderService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_drug_order where " + whereForTotal);
 
-            for (ApDrugOrder o:orders) {
+            for (ApDrugOrder o : orders) {
 
                 apDrugOrderService.populateLovFields(o, lang);
                 o.setEncounter(apEncounterService.getRecord(o.getVisitKey()));
@@ -1374,10 +1396,10 @@ public class EncounterController {
 
     @GetMapping(value = "/drug-order-medic-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDrugOrderMedicationList(@RequestParam Map<String, String> queryParams,
-                                                           @Nullable @RequestHeader String facility_id,
-                                                           // @Nullable @RequestHeader String access_token,
-                                                           @Nullable @RequestHeader Integer access_level,
-                                                           @Nullable @RequestHeader String lang) {
+                                                        @Nullable @RequestHeader String facility_id,
+                                                        // @Nullable @RequestHeader String access_token,
+                                                        @Nullable @RequestHeader Integer access_level,
+                                                        @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApDrugOrderMedications>> response = new ParentResponse<>();
 
@@ -1390,10 +1412,10 @@ public class EncounterController {
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
 
-            List<ApDrugOrderMedications> orderMedications =  apDrugOrderMedicationsService.getList(where);
+            List<ApDrugOrderMedications> orderMedications = apDrugOrderMedicationsService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_drug_order_medications where " + whereForTotal);
 
-            for (ApDrugOrderMedications medic: orderMedications) {
+            for (ApDrugOrderMedications medic : orderMedications) {
 
                 apDrugOrderMedicationsService.populateLovFields(medic, lang);
                 medic.setActiveIngredientKeys(apDrugOrderMedicationsService.getActiveIngredientKeys(medic.getGenericMedicationsKey()));
@@ -1410,6 +1432,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-drug-order-medic", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDrugOrderMedication(@RequestBody ApDrugOrderMedications request,
                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -1432,10 +1455,10 @@ public class EncounterController {
 
     @GetMapping(value = "/procedures-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProcedureList(@RequestParam Map<String, String> queryParams,
-                                                        @Nullable @RequestHeader String facility_id,
-                                                        // @Nullable @RequestHeader String access_token,
-                                                        @Nullable @RequestHeader Integer access_level,
-                                                        @Nullable @RequestHeader String lang) {
+                                              @Nullable @RequestHeader String facility_id,
+                                              // @Nullable @RequestHeader String access_token,
+                                              @Nullable @RequestHeader Integer access_level,
+                                              @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApProcedure>> response = new ParentResponse<>();
 
@@ -1448,7 +1471,7 @@ public class EncounterController {
             String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
 
-            List<ApProcedure> pro =  apProcedureService.getList(where);
+            List<ApProcedure> pro = apProcedureService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_procedure where " + whereForTotal);
 
             for (ApProcedure all : pro) {
@@ -1489,24 +1512,26 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-procedures", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveProcedure(@RequestBody ApProcedure request,
-                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                     @jakarta.annotation.Nullable @RequestHeader String lang
+                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                           @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
-            if(request.getKey()==null){
+            if (request.getKey() == null) {
                 BigDecimal lastpreId = DS.executeDecimalResultQuery("select max(procedure_id) from ap_procedure");
                 BigDecimal newpreId;
                 if (lastpreId == null) {
-                    newpreId= BigDecimal.valueOf(100);
+                    newpreId = BigDecimal.valueOf(100);
                 } else {
                     newpreId = lastpreId.add(BigDecimal.ONE);
                 }
-                request.setProcedureId(newpreId.toString());}
+                request.setProcedureId(newpreId.toString());
+            }
             ParentResponse<ApProcedure> response = new ParentResponse<>();
             apProcedureService.saveRecord(request);
             response.setObject(request);
@@ -1517,23 +1542,25 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-diagnostic-order", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrder(@RequestBody ApDiagnosticOrders request,
-                                              @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                              @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                              @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                              @jakarta.annotation.Nullable @RequestHeader String lang
+                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                 @jakarta.annotation.Nullable @RequestHeader String lang
     ) {
         try {
-            if(request.getKey()==null){
+            if (request.getKey() == null) {
                 BigDecimal lastpreId = DS.executeDecimalResultQuery("select max(order_id) from ap_diagnostic_orders");
                 BigDecimal newpreId;
                 if (lastpreId == null) {
-                    newpreId= BigDecimal.valueOf(100);
+                    newpreId = BigDecimal.valueOf(100);
                 } else {
                     newpreId = lastpreId.add(BigDecimal.ONE);
                 }
-                request.setOrderId(newpreId.toString());}
+                request.setOrderId(newpreId.toString());
+            }
             ParentResponse<ApDiagnosticOrders> response = new ParentResponse<>();
             apDiagnosticOrdersService.saveRecord(request);
             response.setObject(request);
@@ -1544,6 +1571,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/diagnostic-order-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDiagnosticOrderList(@RequestParam Map<String, String> queryParams,
                                                     @Nullable @RequestHeader String facility_id,
@@ -1568,14 +1596,16 @@ public class EncounterController {
                 o.setPatient(apPatientService.getRecord(o.getPatientKey()));
                 o.setEncounter(apEncounterService.getRecord(o.getVisitKey()));
 
-                if(o.getEncounter()!=null){
-                o.getEncounter().setDiagnosis(apEncounterService.getDiagnosis( o.getEncounter().getKey()));
-                    apEncounterService.populateLovFields(o.getEncounter(), lang);}
-                if(o.getPatient()!=null){
-                o.getPatient().setHasAllergy(apPatientService.getHasAllergy(o.getPatient().getKey()));
-                o.getPatient().setHasWarning(apPatientService.getHasWarning(o.getPatient().getKey()));}
-                o.setHasLaboratory(!apDiagnosticOrderTestsService.getList("order_type_lkey = '862810597620632' and order_key = '"+o.getKey()+"'").isEmpty());
-                o.setHasRadiology(!apDiagnosticOrderTestsService.getList("order_type_lkey = '862828331135792' and order_key = '"+o.getKey()+"'").isEmpty());
+                if (o.getEncounter() != null) {
+                    o.getEncounter().setDiagnosis(apEncounterService.getDiagnosis(o.getEncounter().getKey()));
+                    apEncounterService.populateLovFields(o.getEncounter(), lang);
+                }
+                if (o.getPatient() != null) {
+                    o.getPatient().setHasAllergy(apPatientService.getHasAllergy(o.getPatient().getKey()));
+                    o.getPatient().setHasWarning(apPatientService.getHasWarning(o.getPatient().getKey()));
+                }
+                o.setHasLaboratory(!apDiagnosticOrderTestsService.getList("order_type_lkey = '862810597620632' and order_key = '" + o.getKey() + "'").isEmpty());
+                o.setHasRadiology(!apDiagnosticOrderTestsService.getList("order_type_lkey = '862828331135792' and order_key = '" + o.getKey() + "'").isEmpty());
                 apDiagnosticOrdersService.populateLovFields(o, lang);
                 apPatientService.populateLovFields(o.getPatient(), lang);
 
@@ -1592,6 +1622,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-diagnostic-order-tests", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticOrderTests(@RequestBody ApDiagnosticOrderTests request,
                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -1604,7 +1635,7 @@ public class EncounterController {
             ParentResponse<ApDiagnosticOrderTests> response = new ParentResponse<>();
 
             apDiagnosticOrderTestsService.saveRecord(request);
-            List<ApDiagnosticOrderTests> tests= apDiagnosticOrderTestsService.getList("order_key ='"+request.getOrderKey()+"'");
+            List<ApDiagnosticOrderTests> tests = apDiagnosticOrderTestsService.getList("order_key ='" + request.getOrderKey() + "'");
 
             Set<String> statusSet = tests.stream()
                     .filter(test -> "862810597620632".equals(test.getOrderTypeLkey()))
@@ -1646,12 +1677,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/diagnostic-order-test-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDiagnosticOrderTestList(@RequestParam Map<String, String> queryParams,
-                                                    @Nullable @RequestHeader String facility_id,
-                                                    // @Nullable @RequestHeader String access_token,
-                                                    @Nullable @RequestHeader Integer access_level,
-                                                    @Nullable @RequestHeader String lang) {
+                                                        @Nullable @RequestHeader String facility_id,
+                                                        // @Nullable @RequestHeader String access_token,
+                                                        @Nullable @RequestHeader Integer access_level,
+                                                        @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApDiagnosticOrderTests>> response = new ParentResponse<>();
 
@@ -1667,12 +1699,12 @@ public class EncounterController {
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_diagnostic_order_tests where " + whereForTotal);
             for (ApDiagnosticOrderTests o : orders) {
 
-                 o.setTest( apDiagnosticTestService.getRecord(o.getTestKey()));
-                 o.setProfileList(apDiagnosticTestProfileService.getList("diagnostic_test_key= '"+o.getTestKey()+"'"));
-                 o.setOrderId(apDiagnosticOrdersService.getRecord(o.getOrderKey()).getOrderId());
-                 o.setHasComments(apDiagnosticOrderTestsService.hasComments("ap_diagnostic_order_tests_notes","test_key",o.getKey()));
+                o.setTest(apDiagnosticTestService.getRecord(o.getTestKey()));
+                o.setProfileList(apDiagnosticTestProfileService.getList("diagnostic_test_key= '" + o.getTestKey() + "'"));
+                o.setOrderId(apDiagnosticOrdersService.getRecord(o.getOrderKey()).getOrderId());
+                o.setHasComments(apDiagnosticOrderTestsService.hasComments("ap_diagnostic_order_tests_notes", "test_key", o.getKey()));
                 apDiagnosticOrderTestsService.populateLovFields(o, lang);
-                apDiagnosticTestService.populateLovFields(o.getTest(),lang );
+                apDiagnosticTestService.populateLovFields(o.getTest(), lang);
             }
             response.setObject(orders);
             response.setExtraNumeric(totalRecord);
@@ -1704,8 +1736,9 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/diagnostic-order-test-notes-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getDiagnosticOrderTestNotesList(@RequestHeader ("test-id") String testid,
+    public ResponseEntity<?> getDiagnosticOrderTestNotesList(@RequestHeader("test-id") String testid,
                                                              @Nullable @RequestHeader String facility_id,
                                                              // @Nullable @RequestHeader String access_token,
                                                              @Nullable @RequestHeader Integer access_level,
@@ -1714,12 +1747,11 @@ public class EncounterController {
             ParentResponse<List<ApDiagnosticOrderTestsNotes>> response = new ParentResponse<>();
 
 
-
             List<ApDiagnosticOrderTestsNotes> list = apDiagnosticOrderTestsNotesService.getList(
                     " test_key = '" + testid + "'"
             );
 
-            for(ApDiagnosticOrderTestsNotes all : list){
+            for (ApDiagnosticOrderTestsNotes all : list) {
                 apDiagnosticOrderTestsNotesService.populateLovFields(all, lang);
 
             }
@@ -1753,8 +1785,9 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/diagnostic-order-test-samples-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getDiagnosticOrderTestSamplesList(@RequestHeader ("test-id")  String testid,
+    public ResponseEntity<?> getDiagnosticOrderTestSamplesList(@RequestHeader("test-id") String testid,
                                                                @Nullable @RequestHeader String facility_id,
                                                                // @Nullable @RequestHeader String access_token,
                                                                @Nullable @RequestHeader Integer access_level,
@@ -1763,12 +1796,11 @@ public class EncounterController {
             ParentResponse<List<ApDiagnosticOrderTestsSamples>> response = new ParentResponse<>();
 
 
-
             List<ApDiagnosticOrderTestsSamples> list = apDiagnosticOrderTestsSamplesService.getList(
                     " test_key = '" + testid + "'"
             );
 
-            for(ApDiagnosticOrderTestsSamples all : list){
+            for (ApDiagnosticOrderTestsSamples all : list) {
                 apDiagnosticOrderTestsSamplesService.populateLovFields(all, lang);
 
             }
@@ -1782,12 +1814,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-psychological-exam", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> savePsychologicalExam(@RequestBody ApPsychologicalExam psychologicalExam ,
-                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
+    public ResponseEntity<?> savePsychologicalExam(@RequestBody ApPsychologicalExam psychologicalExam,
+                                                   @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                     @jakarta.annotation.Nullable @RequestHeader String lang
+                                                   @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                   @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
@@ -1801,12 +1834,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/psychological-exam-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPsychologicaExamsList(@RequestParam Map<String, String> queryParams,
-                                                        @Nullable @RequestHeader String facility_id,
-                                                        // @Nullable @RequestHeader String access_token,
-                                                        @Nullable @RequestHeader Integer access_level,
-                                                        @Nullable @RequestHeader String lang) {
+                                                      @Nullable @RequestHeader String facility_id,
+                                                      // @Nullable @RequestHeader String access_token,
+                                                      @Nullable @RequestHeader Integer access_level,
+                                                      @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApPsychologicalExam>> response = new ParentResponse<>();
 
@@ -1845,12 +1879,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-audiometry-puretone", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveAudiometryPuretone(@RequestBody ApAudiometryPuretone audiometryPuretone ,
-                                                   @jakarta.annotation.Nullable @RequestHeader String facility_id,
+    public ResponseEntity<?> saveAudiometryPuretone(@RequestBody ApAudiometryPuretone audiometryPuretone,
+                                                    @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                   @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                   @jakarta.annotation.Nullable @RequestHeader String lang
+                                                    @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                    @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
@@ -1864,12 +1899,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/audiometry-puretone-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAudiometryPuretoneList(@RequestParam Map<String, String> queryParams,
-                                                      @Nullable @RequestHeader String facility_id,
-                                                      // @Nullable @RequestHeader String access_token,
-                                                      @Nullable @RequestHeader Integer access_level,
-                                                      @Nullable @RequestHeader String lang) {
+                                                       @Nullable @RequestHeader String facility_id,
+                                                       // @Nullable @RequestHeader String access_token,
+                                                       @Nullable @RequestHeader Integer access_level,
+                                                       @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApAudiometryPuretone>> response = new ParentResponse<>();
 
@@ -1908,8 +1944,9 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-optometric-exam", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveOptometricExam(@RequestBody ApOptometricExam optometricExam ,
+    public ResponseEntity<?> saveOptometricExam(@RequestBody ApOptometricExam optometricExam,
                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -1927,6 +1964,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/optometric-exam-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getOptometricExamList(@RequestParam Map<String, String> queryParams,
                                                    @Nullable @RequestHeader String facility_id,
@@ -1958,10 +1996,10 @@ public class EncounterController {
                 if (optometricExam.getDeletedBy() != null) {
                     optometricExam.setDeleteByUser(apUserService.getRecord(optometricExam.getDeletedBy()));
                 }
-                if(optometricExam.getVisionDiagnosis() != null) {
+                if (optometricExam.getVisionDiagnosis() != null) {
                     optometricExam.setIcdCode(icondCodeService.getRecord(optometricExam.getVisionDiagnosis()));
                 }
-                if(optometricExam.getColorVisionDiagnosis() != null) {
+                if (optometricExam.getColorVisionDiagnosis() != null) {
                     optometricExam.setIcdCode2(icondCodeService.getRecord(optometricExam.getColorVisionDiagnosis()));
                 }
                 apOptometricExamService.populateLovFields(optometricExam, lang);
@@ -1979,11 +2017,11 @@ public class EncounterController {
     }
 
     @PostMapping(value = "/save-treadmill-stress", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveTreadmillStressTest(@RequestBody ApTreadmillStress treadmillStress ,
-                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
+    public ResponseEntity<?> saveTreadmillStressTest(@RequestBody ApTreadmillStress treadmillStress,
+                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                @jakarta.annotation.Nullable @RequestHeader String lang
+                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                     @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
@@ -1997,12 +2035,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/treadmill-stress-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getTreadmillStressList(@RequestParam Map<String, String> queryParams,
-                                                   @Nullable @RequestHeader String facility_id,
-                                                   // @Nullable @RequestHeader String access_token,
-                                                   @Nullable @RequestHeader Integer access_level,
-                                                   @Nullable @RequestHeader String lang) {
+                                                    @Nullable @RequestHeader String facility_id,
+                                                    // @Nullable @RequestHeader String access_token,
+                                                    @Nullable @RequestHeader Integer access_level,
+                                                    @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApTreadmillStress>> response = new ParentResponse<>();
 
@@ -2044,11 +2083,11 @@ public class EncounterController {
     }
 
     @PostMapping(value = "/save-complaint-symptoms", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveComplaintSymptoms(@RequestBody ApComplaintSymptoms complaintSymptoms ,
-                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
+    public ResponseEntity<?> saveComplaintSymptoms(@RequestBody ApComplaintSymptoms complaintSymptoms,
+                                                   @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                     @jakarta.annotation.Nullable @RequestHeader String lang
+                                                   @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                   @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
@@ -2065,10 +2104,10 @@ public class EncounterController {
 
     @GetMapping(value = "/complaint-symptoms-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getComplaintSymptomsList(@RequestParam Map<String, String> queryParams,
-                                                    @Nullable @RequestHeader String facility_id,
-                                                    // @Nullable @RequestHeader String access_token,
-                                                    @Nullable @RequestHeader Integer access_level,
-                                                    @Nullable @RequestHeader String lang) {
+                                                      @Nullable @RequestHeader String facility_id,
+                                                      // @Nullable @RequestHeader String access_token,
+                                                      @Nullable @RequestHeader Integer access_level,
+                                                      @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApComplaintSymptoms>> response = new ParentResponse<>();
             if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
@@ -2105,12 +2144,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-electrocardiogram-ecg", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveElectrocardiogramEcg(@RequestBody ApElectrocardiogramEcg electrocardiogramEcg ,
-                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
+    public ResponseEntity<?> saveElectrocardiogramEcg(@RequestBody ApElectrocardiogramEcg electrocardiogramEcg,
+                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                     @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                     @jakarta.annotation.Nullable @RequestHeader String lang
+                                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                      @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
@@ -2124,12 +2164,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/electrocardiogram-ecg-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getElectrocardiogramEcgList(@RequestParam Map<String, String> queryParams,
-                                                    @Nullable @RequestHeader String facility_id,
-                                                    // @Nullable @RequestHeader String access_token,
-                                                    @Nullable @RequestHeader Integer access_level,
-                                                    @Nullable @RequestHeader String lang) {
+                                                         @Nullable @RequestHeader String facility_id,
+                                                         // @Nullable @RequestHeader String access_token,
+                                                         @Nullable @RequestHeader Integer access_level,
+                                                         @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApElectrocardiogramEcg>> response = new ParentResponse<>();
 
@@ -2169,13 +2210,14 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/discharge-encounter", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> DischargeEncounter(@RequestBody ApEncounter apEncounter,
-                                                         @Nullable @RequestHeader String facility_id,
-                                                         // @Nullable @RequestHeader String access_token,
-                                                         @Nullable @RequestHeader Integer access_level,
-                                                         @Nullable @RequestHeader String lang,
-                                                         @Nullable @RequestHeader String screenKey
+                                                @Nullable @RequestHeader String facility_id,
+                                                // @Nullable @RequestHeader String access_token,
+                                                @Nullable @RequestHeader Integer access_level,
+                                                @Nullable @RequestHeader String lang,
+                                                @Nullable @RequestHeader String screenKey
     ) {
         try {
             ParentResponse<ApEncounter> response = new ParentResponse<>();
@@ -2206,6 +2248,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/admit-outpatient-inpatient", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> admitOutpatientInpatient(@RequestBody ApAdmitOutpatientInpatient admitOutpatientInpatient,
                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -2217,10 +2260,10 @@ public class EncounterController {
             ApEncounter encounter = apEncounterService.getRecord(admitOutpatientInpatient.getFromEncounterKey());
 
             BigDecimal waitingEncounterCount = DS.executeDecimalResultQuery(
-                    "SELECT COUNT(0) FROM ap_encounter WHERE patient_key = " +"'"+encounter.getPatientKey()+"' AND encounter_status_lkey = "+"'5256965920133084'"
+                    "SELECT COUNT(0) FROM ap_encounter WHERE patient_key = " + "'" + encounter.getPatientKey() + "' AND encounter_status_lkey = " + "'5256965920133084'"
             );
-            System.out.println("waitingEncounterCount"+waitingEncounterCount);
-            if (waitingEncounterCount.compareTo(BigDecimal.ZERO) > 0)  {
+            System.out.println("waitingEncounterCount" + waitingEncounterCount);
+            if (waitingEncounterCount.compareTo(BigDecimal.ZERO) > 0) {
                 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                         .body(Map.of("message", "This Patient Has One More Encounter On The Waiting List."));
             }
@@ -2245,6 +2288,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }
     }
+
     @GetMapping(value = "/waiting_encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> waitingEncounterList(@RequestParam Map<String, String> queryParams,
                                                   @Nullable @RequestHeader String facility_id,
@@ -2260,9 +2304,9 @@ public class EncounterController {
                 return ResponseEntity.ok(response);
             }
 
-            ListRequest listRequest   = new ListRequest(queryParams);
-            String       where        = listRequest.buildWhereStatement();
-            String       whereForTotal= listRequest.buildWhereStatement(true, false, false, false);
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
 
             List<ApEncounter> encounters = apEncounterService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery(
@@ -2317,8 +2361,9 @@ public class EncounterController {
                     .body(e.getMessage());
         }
     }
+
     @PostMapping(value = "/patient_admission_from_waiting_list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> savePatientAdmissionFromWaitingList(@RequestBody ApAdmitOutpatientInpatient admitOutpatientInpatient ,
+    public ResponseEntity<?> savePatientAdmissionFromWaitingList(@RequestBody ApAdmitOutpatientInpatient admitOutpatientInpatient,
                                                                  @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                                  @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -2344,7 +2389,7 @@ public class EncounterController {
             }
             String patientKey = apEncounter.getPatientKey();
 
-            Map<String, Integer> counts =apEncounterService.countNewInpatientOrOngoingVisits(patientKey);
+            Map<String, Integer> counts = apEncounterService.countNewInpatientOrOngoingVisits(patientKey);
 
             int countOngoing = counts.getOrDefault("count_status_ongoing", 0);
             int countResourceAndStatus = counts.getOrDefault("count_resource_and_status", 0);
@@ -2358,24 +2403,24 @@ public class EncounterController {
                         .body(Map.of("message", "Patient is already inpatient."));
             }
 
-            if (countResourceAndStatus > 0 ) {
+            if (countResourceAndStatus > 0) {
                 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                         .body(Map.of("message", "This Patient Has Inpatient Encounter"));
             }
-            if(countOutpatientNewEncounter > 0 && apEncounter.getResourceTypeLkey().equals("4217389643435490")){
+            if (countOutpatientNewEncounter > 0 && apEncounter.getResourceTypeLkey().equals("4217389643435490")) {
                 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                         .body(Map.of("message", "This Patient Has New Outpatient Encounter"));
             }
 
-            if(admitOutpatientInpatient.getBedKey().isEmpty()){
+            if (admitOutpatientInpatient.getBedKey().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                         .body(Map.of("message", "Please Select a Bed"));
             }
-            if(admitOutpatientInpatient.getRoomKey().isEmpty()){
+            if (admitOutpatientInpatient.getRoomKey().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                         .body(Map.of("message", "Please Select a Room"));
             }
-            if(admitOutpatientInpatient.getAdmissionDepartmentKey() ==null||admitOutpatientInpatient.getAdmissionDepartmentKey().isEmpty()){
+            if (admitOutpatientInpatient.getAdmissionDepartmentKey() == null || admitOutpatientInpatient.getAdmissionDepartmentKey().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                         .body(Map.of("message", "Please Select  Admission Department"));
             }
@@ -2392,6 +2437,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/inpatient-encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> inpatientEncounterList(@RequestParam Map<String, String> queryParams,
                                                     @RequestHeader("department-key") String depKey,
@@ -2501,31 +2547,30 @@ public class EncounterController {
                 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                         .body(Map.of("message", "Please Select a Room"));
             }
-          ApEncounter encounter = apEncounterService.getRecord(bedTransactions.getKey());
-            if(encounter!=null && encounter.getResourceTypeLkey().equals("4217389643435490")){
-            List<ApAdmitOutpatientInpatient> list = apAdmitOutpatientInpatientService.getList(
-                    "to_encounter_key = '" + bedTransactions.getEncounterKey() + "'"
-            );
+            ApEncounter encounter = apEncounterService.getRecord(bedTransactions.getKey());
+            if (encounter != null && encounter.getResourceTypeLkey().equals("4217389643435490")) {
+                List<ApAdmitOutpatientInpatient> list = apAdmitOutpatientInpatientService.getList(
+                        "to_encounter_key = '" + bedTransactions.getEncounterKey() + "'"
+                );
 
-            if (list == null || list.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("message", "No admission record found for the given encounter key"));
-            }
+                if (list == null || list.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                            .body(Map.of("message", "No admission record found for the given encounter key"));
+                }
 
-            ApAdmitOutpatientInpatient admitOutpatientInpatient = list.get(0);
-            admitOutpatientInpatient.setBedKey(bedTransactions.getToBedKey());
-            admitOutpatientInpatient.setRoomKey(bedTransactions.getToRoomKey());
-            apAdmitOutpatientInpatientService.saveRecord(admitOutpatientInpatient);
-            ApBed firstBed = apBedService.getRecord(admitOutpatientInpatient.getBedKey());
-            firstBed.setStatusLkey("5258572711068224");
-            apBedService.saveRecord(firstBed);
-            }
-            else{
+                ApAdmitOutpatientInpatient admitOutpatientInpatient = list.get(0);
+                admitOutpatientInpatient.setBedKey(bedTransactions.getToBedKey());
+                admitOutpatientInpatient.setRoomKey(bedTransactions.getToRoomKey());
+                apAdmitOutpatientInpatientService.saveRecord(admitOutpatientInpatient);
+                ApBed firstBed = apBedService.getRecord(admitOutpatientInpatient.getBedKey());
+                firstBed.setStatusLkey("5258572711068224");
+                apBedService.saveRecord(firstBed);
+            } else {
                 ApBed firstBed = apBedService.getRecord(bedTransactions.getFromBedKey());
                 firstBed.setStatusLkey("5258572711068224");
                 apBedService.saveRecord(firstBed);
-                ApEncounterAssignToBed encounterAssignToBed = apEncounterAssignToBedService.getList("bed_key = '"+firstBed.getKey()+"'").get(0);
-                if(encounterAssignToBed!=null){
+                ApEncounterAssignToBed encounterAssignToBed = apEncounterAssignToBedService.getList("bed_key = '" + firstBed.getKey() + "'").get(0);
+                if (encounterAssignToBed != null) {
                     encounterAssignToBed.setRoomKey(bedTransactions.getToRoomKey());
                     encounterAssignToBed.setBedKey(bedTransactions.getToBedKey());
                     apEncounterAssignToBedService.saveRecord(encounterAssignToBed);
@@ -2612,11 +2657,11 @@ public class EncounterController {
     }
 
     @PostMapping(value = "/save-pain-assessment", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> savePainAssessment(@RequestBody ApPainAssessment painAssessment ,
-                                                   @jakarta.annotation.Nullable @RequestHeader String facility_id,
+    public ResponseEntity<?> savePainAssessment(@RequestBody ApPainAssessment painAssessment,
+                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                   @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                   @jakarta.annotation.Nullable @RequestHeader String lang
+                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
@@ -2630,12 +2675,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/pain-assessment-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPainAssessmentList(@RequestParam Map<String, String> queryParams,
-                                                      @Nullable @RequestHeader String facility_id,
-                                                      // @Nullable @RequestHeader String access_token,
-                                                      @Nullable @RequestHeader Integer access_level,
-                                                      @Nullable @RequestHeader String lang) {
+                                                   @Nullable @RequestHeader String facility_id,
+                                                   // @Nullable @RequestHeader String access_token,
+                                                   @Nullable @RequestHeader Integer access_level,
+                                                   @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApPainAssessment>> response = new ParentResponse<>();
 
@@ -2651,8 +2697,8 @@ public class EncounterController {
             List<ApPainAssessment> painAssessments = apPainAssessmentService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_pain_assessment where " + whereForTotal);
 
-            for (ApPainAssessment  painAssessment : painAssessments) {
-                apPainAssessmentService.populateLovFields( painAssessment, lang);
+            for (ApPainAssessment painAssessment : painAssessments) {
+                apPainAssessmentService.populateLovFields(painAssessment, lang);
             }
 
             response.setObject(painAssessments);
@@ -2665,12 +2711,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-inpatient-chief-complain", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveChiefComplain(@RequestBody ApInpatientChiefComplain chiefComplain ,
-                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
+    public ResponseEntity<?> saveChiefComplain(@RequestBody ApInpatientChiefComplain chiefComplain,
+                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                @jakarta.annotation.Nullable @RequestHeader String lang
+                                               @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                               @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
@@ -2684,12 +2731,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/inpatient-chief-complain-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getInpatientChiefComplainList(@RequestParam Map<String, String> queryParams,
-                                                   @Nullable @RequestHeader String facility_id,
-                                                   // @Nullable @RequestHeader String access_token,
-                                                   @Nullable @RequestHeader Integer access_level,
-                                                   @Nullable @RequestHeader String lang) {
+                                                           @Nullable @RequestHeader String facility_id,
+                                                           // @Nullable @RequestHeader String access_token,
+                                                           @Nullable @RequestHeader Integer access_level,
+                                                           @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApInpatientChiefComplain>> response = new ParentResponse<>();
 
@@ -2705,9 +2753,9 @@ public class EncounterController {
             List<ApInpatientChiefComplain> chiefComplains = apInpatientChiefComplainService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_inpatient_chief_complain where " + whereForTotal);
 
-            for (ApInpatientChiefComplain  chiefComplain : chiefComplains) {
+            for (ApInpatientChiefComplain chiefComplain : chiefComplains) {
 
-                apInpatientChiefComplainService.populateLovFields( chiefComplain, lang);
+                apInpatientChiefComplainService.populateLovFields(chiefComplain, lang);
             }
 
             response.setObject(chiefComplains);
@@ -2722,11 +2770,11 @@ public class EncounterController {
     }
 
     @PostMapping(value = "/save-general-assessment", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveGeneralAssessment(@RequestBody ApGeneralAssessment generalAssessment ,
-                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
+    public ResponseEntity<?> saveGeneralAssessment(@RequestBody ApGeneralAssessment generalAssessment,
+                                                   @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                               @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                               @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                               @jakarta.annotation.Nullable @RequestHeader String lang
+                                                   @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                   @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
@@ -2740,12 +2788,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/general-assessment-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getGeneralAssessmentList(@RequestParam Map<String, String> queryParams,
-                                                           @Nullable @RequestHeader String facility_id,
-                                                           // @Nullable @RequestHeader String access_token,
-                                                           @Nullable @RequestHeader Integer access_level,
-                                                           @Nullable @RequestHeader String lang) {
+                                                      @Nullable @RequestHeader String facility_id,
+                                                      // @Nullable @RequestHeader String access_token,
+                                                      @Nullable @RequestHeader Integer access_level,
+                                                      @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApGeneralAssessment>> response = new ParentResponse<>();
 
@@ -2761,7 +2810,7 @@ public class EncounterController {
             List<ApGeneralAssessment> generalAssessments = apGeneralAssessmentService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_general_assessment where " + whereForTotal);
 
-            for (ApGeneralAssessment  generalAssessment : generalAssessments) {
+            for (ApGeneralAssessment generalAssessment : generalAssessments) {
 
                 apGeneralAssessmentService.populateLovFields(generalAssessment, lang);
             }
@@ -2776,12 +2825,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-functional-assessment", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveFunctionalAssessment(@RequestBody ApFunctionalAssessment functionalAssessment ,
-                                                   @jakarta.annotation.Nullable @RequestHeader String facility_id,
+    public ResponseEntity<?> saveFunctionalAssessment(@RequestBody ApFunctionalAssessment functionalAssessment,
+                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                   @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                   @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                   @jakarta.annotation.Nullable @RequestHeader String lang
+                                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                      @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
@@ -2795,12 +2845,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/functional-assessment-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> geFunctionalAssessmentList(@RequestParam Map<String, String> queryParams,
-                                                      @Nullable @RequestHeader String facility_id,
-                                                      // @Nullable @RequestHeader String access_token,
-                                                      @Nullable @RequestHeader Integer access_level,
-                                                      @Nullable @RequestHeader String lang) {
+                                                        @Nullable @RequestHeader String facility_id,
+                                                        // @Nullable @RequestHeader String access_token,
+                                                        @Nullable @RequestHeader Integer access_level,
+                                                        @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApFunctionalAssessment>> response = new ParentResponse<>();
 
@@ -2816,7 +2867,7 @@ public class EncounterController {
             List<ApFunctionalAssessment> functionalAssessments = apFunctionalAssessmentService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_functional_assessment where " + whereForTotal);
 
-            for (ApFunctionalAssessment  functionalAssessment : functionalAssessments) {
+            for (ApFunctionalAssessment functionalAssessment : functionalAssessments) {
 
                 apFunctionalAssessmentService.populateLovFields(functionalAssessment, lang);
             }
@@ -2831,8 +2882,9 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-medication-reconciliation", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveMedicationReconciliation(@RequestBody ApMedicationReconciliation medicationReconciliation ,
+    public ResponseEntity<?> saveMedicationReconciliation(@RequestBody ApMedicationReconciliation medicationReconciliation,
                                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
@@ -2850,6 +2902,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/medication-reconciliation-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getMedicationReconciliationList(@RequestParam Map<String, String> queryParams,
                                                              @Nullable @RequestHeader String facility_id,
@@ -2870,7 +2923,7 @@ public class EncounterController {
 
             List<ApMedicationReconciliation> medicationReconciliations = apMedicationReconciliationService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_medication_reconciliation where " + whereForTotal);
-            for (ApMedicationReconciliation  medicationReconciliation : medicationReconciliations) {
+            for (ApMedicationReconciliation medicationReconciliation : medicationReconciliations) {
                 medicationReconciliation.setApActiveIngredient(apActiveIngredientService.getRecord(medicationReconciliation.getActiveIngredientKey()));
                 apActiveIngredientService.populateLovFields(medicationReconciliation.getApActiveIngredient(), lang);
                 apMedicationReconciliationService.populateLovFields(medicationReconciliation, lang);
@@ -2886,12 +2939,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-transfer-patient", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveTransferPatient(@RequestBody ApTransferPatient apTransferPatient ,
-                                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
+    public ResponseEntity<?> saveTransferPatient(@RequestBody ApTransferPatient apTransferPatient,
+                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                          @jakarta.annotation.Nullable @RequestHeader String lang
+                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                 @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
@@ -2905,12 +2959,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/transfer-requests-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getTransferRequestsList(@RequestParam Map<String, String> queryParams,
-                                                             @Nullable @RequestHeader String facility_id,
-                                                             // @Nullable @RequestHeader String access_token,
-                                                             @Nullable @RequestHeader Integer access_level,
-                                                             @Nullable @RequestHeader String lang) {
+                                                     @Nullable @RequestHeader String facility_id,
+                                                     // @Nullable @RequestHeader String access_token,
+                                                     @Nullable @RequestHeader Integer access_level,
+                                                     @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApTransferPatient>> response = new ParentResponse<>();
 
@@ -2964,12 +3019,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/approval-transfer-patient", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveApprovalTransferPatient(@RequestBody ApTransferPatient apTransferPatient ,
-                                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
+    public ResponseEntity<?> saveApprovalTransferPatient(@RequestBody ApTransferPatient apTransferPatient,
+                                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                          @jakarta.annotation.Nullable @RequestHeader String lang
+                                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                         @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
@@ -3031,12 +3087,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/transfer-transactions-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getTransferTransactionsList(@RequestParam Map<String, String> queryParams,
-                                                     @Nullable @RequestHeader String facility_id,
-                                                     // @Nullable @RequestHeader String access_token,
-                                                     @Nullable @RequestHeader Integer access_level,
-                                                     @Nullable @RequestHeader String lang) {
+                                                         @Nullable @RequestHeader String facility_id,
+                                                         // @Nullable @RequestHeader String access_token,
+                                                         @Nullable @RequestHeader Integer access_level,
+                                                         @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApTransferPatient>> response = new ParentResponse<>();
 
@@ -3051,7 +3108,7 @@ public class EncounterController {
 
             List<ApTransferPatient> transferPatients = apTransferPatientService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_transfer_patient  where " + whereForTotal);
-            for (ApTransferPatient  transferPatient : transferPatients) {
+            for (ApTransferPatient transferPatient : transferPatients) {
                 if (transferPatient.getFromInpatientDepartmentKey() != null) {
                     ApDepartment fromDept = apDepartmentService.getRecord(transferPatient.getFromInpatientDepartmentKey());
                     transferPatient.setFromDepartment(fromDept);
@@ -3106,12 +3163,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/doctor-round-staff-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDoctorRoundStaffList(@RequestParam Map<String, String> queryParams,
-                                                   @RequestHeader(required = false) String facility_id,
+                                                     @RequestHeader(required = false) String facility_id,
 //                                                 @RequestHeader(required = false) String access_token,
-                                                   @RequestHeader(required = false) Integer access_level,
-                                                   @RequestHeader(required = false) String lang) {
+                                                     @RequestHeader(required = false) Integer access_level,
+                                                     @RequestHeader(required = false) String lang) {
         try {
             ParentResponse<List<ApDoctorRoundStaff>> response = new ParentResponse<>();
 
@@ -3140,12 +3198,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-doctor-round-staff", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDoctorRoundStaff(@RequestBody ApDoctorRoundStaff request,
-                                                @RequestHeader(required = false) String facility_id,
+                                                  @RequestHeader(required = false) String facility_id,
 //                                                @RequestHeader(required = false) String access_token,
-                                                @RequestHeader(required = false) Integer access_level,
-                                                @RequestHeader(required = false) String lang) {
+                                                  @RequestHeader(required = false) Integer access_level,
+                                                  @RequestHeader(required = false) String lang) {
         try {
             ParentResponse<ApDoctorRoundStaff> response = new ParentResponse<>();
             apDoctorRoundStaffService.saveRecord(request);
@@ -3157,6 +3216,7 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @DeleteMapping(value = "/delete-doctor-round-staff", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteDoctorRoundStaff(@RequestParam String key) {
         try {
@@ -3179,12 +3239,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-new-round", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveNewRound(@RequestBody ApDoctorRound apDoctorRound ,
-                                                 @jakarta.annotation.Nullable @RequestHeader String facility_id,
+    public ResponseEntity<?> saveNewRound(@RequestBody ApDoctorRound apDoctorRound,
+                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                 @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                 @jakarta.annotation.Nullable @RequestHeader String lang
+                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                          @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
@@ -3198,12 +3259,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/doctor-round-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDoctorRoundList(@RequestParam Map<String, String> queryParams,
-                                                             @Nullable @RequestHeader String facility_id,
-                                                             // @Nullable @RequestHeader String access_token,
-                                                             @Nullable @RequestHeader Integer access_level,
-                                                             @Nullable @RequestHeader String lang) {
+                                                @Nullable @RequestHeader String facility_id,
+                                                // @Nullable @RequestHeader String access_token,
+                                                @Nullable @RequestHeader Integer access_level,
+                                                @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApDoctorRound>> response = new ParentResponse<>();
 
@@ -3218,7 +3280,7 @@ public class EncounterController {
 
             List<ApDoctorRound> doctorRounds = apDoctorRoundService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_doctor_round where " + whereForTotal);
-            for (ApDoctorRound  item : doctorRounds) {
+            for (ApDoctorRound item : doctorRounds) {
                 item.setPractitioner(apPractitionerService.getRecord(item.getPractitionerKey()));
                 apDoctorRoundService.populateLovFields(item, lang);
             }
@@ -3233,12 +3295,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-nurse-notes", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveNurseNotes(@RequestBody ApNurseNotes apNurseNotes ,
-                                          @jakarta.annotation.Nullable @RequestHeader String facility_id,
+    public ResponseEntity<?> saveNurseNotes(@RequestBody ApNurseNotes apNurseNotes,
+                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                          @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                          @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                          @jakarta.annotation.Nullable @RequestHeader String lang
+                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                            @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
@@ -3252,12 +3315,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/nurse-notes-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getNurseNotesList(@RequestParam Map<String, String> queryParams,
-                                                @Nullable @RequestHeader String facility_id,
-                                                // @Nullable @RequestHeader String access_token,
-                                                @Nullable @RequestHeader Integer access_level,
-                                                @Nullable @RequestHeader String lang) {
+                                               @Nullable @RequestHeader String facility_id,
+                                               // @Nullable @RequestHeader String access_token,
+                                               @Nullable @RequestHeader Integer access_level,
+                                               @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApNurseNotes>> response = new ParentResponse<>();
 
@@ -3272,7 +3336,7 @@ public class EncounterController {
 
             List<ApNurseNotes> nurseNotes = apNurseNotesService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_nurse_notes where " + whereForTotal);
-            for (ApNurseNotes  item : nurseNotes) {
+            for (ApNurseNotes item : nurseNotes) {
                 item.setApUser(apUserService.getRecord(item.getCreatedBy()));
                 apNurseNotesService.populateLovFields(item, lang);
             }
@@ -3287,12 +3351,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-new-position", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveNewPosition(@RequestBody ApRepositioning apRepositioning ,
-                                            @jakarta.annotation.Nullable @RequestHeader String facility_id,
+    public ResponseEntity<?> saveNewPosition(@RequestBody ApRepositioning apRepositioning,
+                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                            @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                            @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                            @jakarta.annotation.Nullable @RequestHeader String lang
+                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                             @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
@@ -3306,12 +3371,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/repositioning-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getRepositioningList(@RequestParam Map<String, String> queryParams,
-                                               @Nullable @RequestHeader String facility_id,
-                                               // @Nullable @RequestHeader String access_token,
-                                               @Nullable @RequestHeader Integer access_level,
-                                               @Nullable @RequestHeader String lang) {
+                                                  @Nullable @RequestHeader String facility_id,
+                                                  // @Nullable @RequestHeader String access_token,
+                                                  @Nullable @RequestHeader Integer access_level,
+                                                  @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApRepositioning>> response = new ParentResponse<>();
 
@@ -3326,7 +3392,7 @@ public class EncounterController {
 
             List<ApRepositioning> repositioningList = apRepositioningService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_repositioning where " + whereForTotal);
-            for (ApRepositioning  item : repositioningList) {
+            for (ApRepositioning item : repositioningList) {
                 apRepositioningService.populateLovFields(item, lang);
             }
 
@@ -3340,12 +3406,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-assign-to-bed", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveNewDayCaseEncounters(@RequestBody ApEncounterAssignToBed apEncounterAssignToBed ,
-                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
+    public ResponseEntity<?> saveNewDayCaseEncounters(@RequestBody ApEncounterAssignToBed apEncounterAssignToBed,
+                                                      @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                             @jakarta.annotation.Nullable @RequestHeader String lang
+                                                      @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                      @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
@@ -3364,7 +3431,8 @@ public class EncounterController {
             log.error(e.getMessage());
             return ResponseEntity.status(500).body(e);
         }
-}
+    }
+
     @PostMapping(value = "/save-pre-operation-administered-medications", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveOperationInduction(@RequestBody ApPreOperationAdministeredMedications apPreOperationAdministeredMedications,
                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -3406,12 +3474,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
+
     @PostMapping(value = "/save-new-triage", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveNewTriage(@RequestBody ApEmergencyTriage apEmergencyTriage ,
-                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,
+    public ResponseEntity<?> saveNewTriage(@RequestBody ApEmergencyTriage apEmergencyTriage,
+                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                             @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                             @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                             @jakarta.annotation.Nullable @RequestHeader String lang
+                                           @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                           @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
@@ -3431,10 +3500,10 @@ public class EncounterController {
 
     @GetMapping(value = "/emergency-triage-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getEmergencyTriageList(@RequestParam Map<String, String> queryParams,
-                                                  @Nullable @RequestHeader String facility_id,
-                                                  // @Nullable @RequestHeader String access_token,
-                                                  @Nullable @RequestHeader Integer access_level,
-                                                  @Nullable @RequestHeader String lang) {
+                                                    @Nullable @RequestHeader String facility_id,
+                                                    // @Nullable @RequestHeader String access_token,
+                                                    @Nullable @RequestHeader Integer access_level,
+                                                    @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApEmergencyTriage>> response = new ParentResponse<>();
 
@@ -3449,7 +3518,7 @@ public class EncounterController {
 
             List<ApEmergencyTriage> emergencyTriages = apEmergencyTriageService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_emergency_triage where " + whereForTotal);
-            for (ApEmergencyTriage  item : emergencyTriages) {
+            for (ApEmergencyTriage item : emergencyTriages) {
                 apEmergencyTriageService.populateLovFields(item, lang);
             }
 
@@ -3466,10 +3535,10 @@ public class EncounterController {
 
     @GetMapping(value = "/er-waiting-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> ERWaitingList(@RequestParam Map<String, String> queryParams,
-                                                  @Nullable @RequestHeader String facility_id,
-                                                  // @Nullable @RequestHeader String access_token,
-                                                  @Nullable @RequestHeader Integer access_level,
-                                                  @Nullable @RequestHeader String lang) {
+                                           @Nullable @RequestHeader String facility_id,
+                                           // @Nullable @RequestHeader String access_token,
+                                           @Nullable @RequestHeader Integer access_level,
+                                           @Nullable @RequestHeader String lang) {
 
         try {
             ParentResponse<List<ApEncounter>> response = new ParentResponse<>();
@@ -3479,9 +3548,9 @@ public class EncounterController {
                 return ResponseEntity.ok(response);
             }
 
-            ListRequest listRequest   = new ListRequest(queryParams);
-            String       where        = listRequest.buildWhereStatement();
-            String       whereForTotal= listRequest.buildWhereStatement(true, false, false, false);
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
 
             List<ApEncounter> encounters = apEncounterService.getList(where);
 
@@ -3504,10 +3573,10 @@ public class EncounterController {
             );
 
             for (ApEncounter encounter : encounters) {
-                encounter.setEmergencyTriage(apEmergencyTriageService.getList("encounter_key = '"+encounter.getKey()+"'").get(0));
-                   if( encounter.getEmergencyTriage() !=null){
-                       apEmergencyTriageService.populateLovFields(encounter.getEmergencyTriage(), lang);
-                   }
+                encounter.setEmergencyTriage(apEmergencyTriageService.getList("encounter_key = '" + encounter.getKey() + "'").get(0));
+                if (encounter.getEmergencyTriage() != null) {
+                    apEmergencyTriageService.populateLovFields(encounter.getEmergencyTriage(), lang);
+                }
                 if (encounter.getResourceKey() != null) {
                     if ("2039534205961578".equals(encounter.getResourceTypeLkey())) {
                         ApDepartment dep = apDepartmentService.getRecord(encounter.getDepartmentKey());
@@ -3523,7 +3592,7 @@ public class EncounterController {
                             )
                     );
                 }
-                if(encounter.getEmergencyTriage() != null ){
+                if (encounter.getEmergencyTriage() != null) {
                     encounter.getEmergencyTriage().setCreatedByUser(apUserService.getRecord(encounter.getEmergencyTriage().getCreatedBy()));
                 }
 
@@ -3547,6 +3616,7 @@ public class EncounterController {
                     .body(e.getMessage());
         }
     }
+
     @PostMapping(value = "/er-complete-encounter", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> ERCompleteEncounter(@RequestBody ApEncounter apEncounter,
                                                  @RequestHeader("triage-key") String triageKey,
@@ -3584,11 +3654,11 @@ public class EncounterController {
     public ResponseEntity<?> sentToER(@RequestBody ApEncounter apEncounter,
                                       @RequestHeader("triage-key") String triageKey,
                                       @RequestHeader("destination-key") String destinationKey,
-                                                  @Nullable @RequestHeader String facility_id,
-                                                  // @Nullable @RequestHeader String access_token,
-                                                  @Nullable @RequestHeader Integer access_level,
-                                                  @Nullable @RequestHeader String lang,
-                                                  @Nullable @RequestHeader String screenKey
+                                      @Nullable @RequestHeader String facility_id,
+                                      // @Nullable @RequestHeader String access_token,
+                                      @Nullable @RequestHeader Integer access_level,
+                                      @Nullable @RequestHeader String lang,
+                                      @Nullable @RequestHeader String screenKey
     ) {
         try {
             ParentResponse<ApEncounter> response = new ParentResponse<>();
@@ -3612,12 +3682,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/er-triage-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> ERTriageList(@RequestParam Map<String, String> queryParams,
-                                           @Nullable @RequestHeader String facility_id,
-                                           // @Nullable @RequestHeader String access_token,
-                                           @Nullable @RequestHeader Integer access_level,
-                                           @Nullable @RequestHeader String lang) {
+                                          @Nullable @RequestHeader String facility_id,
+                                          // @Nullable @RequestHeader String access_token,
+                                          @Nullable @RequestHeader Integer access_level,
+                                          @Nullable @RequestHeader String lang) {
         try {
 
             ParentResponse<List<ApEncounter>> response = new ParentResponse<>();
@@ -3629,7 +3700,7 @@ public class EncounterController {
 
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
-            String whereForTotal = listRequest.buildWhereStatement(true, false, false,false);
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApEncounter> encounters = apEncounterService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_encounter where " + whereForTotal);
             for (ApEncounter encounter : encounters) {
@@ -3638,16 +3709,17 @@ public class EncounterController {
                     encounter.setEmergencyTriage(triageList.get(0));
                     apEmergencyTriageService.populateLovFields(encounter.getEmergencyTriage(), lang);
                 }
-                if(encounter.getResourceKey() != null){
-                    if(encounter.getResourceTypeLkey().equals("2039534205961578")){
+                if (encounter.getResourceKey() != null) {
+                    if (encounter.getResourceTypeLkey().equals("2039534205961578")) {
                         ApDepartment department = apDepartmentService.getRecord(encounter.getDepartmentKey());
-                        if(department != null){
-                            encounter.setDepartmentName(department.getName());}
+                        if (department != null) {
+                            encounter.setDepartmentName(department.getName());
+                        }
                     }
-                    encounter.setResourceObject(apEncounterService.getResource(encounter.getResourceTypeLkey(),encounter.getResourceKey(),lang));
+                    encounter.setResourceObject(apEncounterService.getResource(encounter.getResourceTypeLkey(), encounter.getResourceKey(), lang));
                 }
                 if (encounter.getPractitionerObject() != null) {
-                    apPractitionerService.populateLovFields(encounter.getPractitionerObject(),lang);
+                    apPractitionerService.populateLovFields(encounter.getPractitionerObject(), lang);
                 }
 
 
@@ -3678,6 +3750,7 @@ public class EncounterController {
 
         }
     }
+
     @GetMapping(value = "/emergency-encounter-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> emergencyEncounterList(@RequestParam Map<String, String> queryParams,
                                                     @RequestHeader("department-key") String depKey,
@@ -3761,12 +3834,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/save-progress-notes", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveProgressNotes(@RequestBody ApProgressNotes progressNotes ,
-                                                @jakarta.annotation.Nullable @RequestHeader String facility_id,
+    public ResponseEntity<?> saveProgressNotes(@RequestBody ApProgressNotes progressNotes,
+                                               @jakarta.annotation.Nullable @RequestHeader String facility_id,
 //                                                @jakarta.annotation.Nullable @RequestHeader String access_token,
-                                                 @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                @jakarta.annotation.Nullable @RequestHeader String lang
+                                               @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                               @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
@@ -3780,12 +3854,13 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @GetMapping(value = "/progress-notes-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProgressNotesList(@RequestParam Map<String, String> queryParams,
-                                                   @Nullable @RequestHeader String facility_id,
-                                                   // @Nullable @RequestHeader String access_token,
-                                                   @Nullable @RequestHeader Integer access_level,
-                                                   @Nullable @RequestHeader String lang) {
+                                                  @Nullable @RequestHeader String facility_id,
+                                                  // @Nullable @RequestHeader String access_token,
+                                                  @Nullable @RequestHeader Integer access_level,
+                                                  @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApProgressNotes>> response = new ParentResponse<>();
 
@@ -3801,7 +3876,7 @@ public class EncounterController {
             List<ApProgressNotes> progressNotes = apProgressNotesService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_progress_notes where " + whereForTotal);
 
-            for (ApProgressNotes  progressNote : progressNotes) {
+            for (ApProgressNotes progressNote : progressNotes) {
                 if (progressNote.getCreatedBy() != null) {
                     progressNote.setCreatedByUser(apUserService.getRecord(progressNote.getCreatedBy()));
                 }
@@ -3811,7 +3886,7 @@ public class EncounterController {
                 if (progressNote.getDeletedBy() != null) {
                     progressNote.setDeletedByUser(apUserService.getRecord(progressNote.getDeletedBy()));
                 }
-                apProgressNotesService.populateLovFields( progressNote, lang);
+                apProgressNotesService.populateLovFields(progressNote, lang);
             }
             response.setObject(progressNotes);
             response.setExtraNumeric(totalRecord);
@@ -3823,13 +3898,14 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
     @PostMapping(value = "/cancel-encounter", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> cancelEncounter(@RequestBody ApEncounter apEncounter,
-                                               @Nullable @RequestHeader String facility_id,
-                                               // @Nullable @RequestHeader String access_token,
-                                               @Nullable @RequestHeader Integer access_level,
-                                               @Nullable @RequestHeader String lang,
-                                               @Nullable @RequestHeader String screenKey
+                                             @Nullable @RequestHeader String facility_id,
+                                             // @Nullable @RequestHeader String access_token,
+                                             @Nullable @RequestHeader Integer access_level,
+                                             @Nullable @RequestHeader String lang,
+                                             @Nullable @RequestHeader String screenKey
     ) {
         try {
             ParentResponse<ApEncounter> response = new ParentResponse<>();
@@ -4011,7 +4087,7 @@ public class EncounterController {
             }
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
-            String whereForTotal = listRequest.buildWhereStatement(true, false, false,false);
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
 
             List<ApEncounter> encounters = apEncounterService.getList(where);
             List<ApEncounter> filteredEncounters = new ArrayList<>();
@@ -4022,10 +4098,10 @@ public class EncounterController {
             for (ApEncounter encounter : encounters) {
                 encounter.setPractitionerObject(apPractitionerService.getRecord(encounter.getPhysicianKey()));
 
-                if(encounter.getResourceKey() != null){
-                    if(encounter.getResourceTypeLkey().equals("2039534205961578")) {
+                if (encounter.getResourceKey() != null) {
+                    if (encounter.getResourceTypeLkey().equals("2039534205961578")) {
                         ApDepartment department = apDepartmentService.getRecord(encounter.getDepartmentKey());
-                        if(department != null){
+                        if (department != null) {
                             encounter.setDepartmentName(department.getName());
                             String departmentKey = department.getKey();
                             if (depKey != null && !depKey.isBlank() && !departmentKey.equals(depKey)) {
@@ -4033,10 +4109,10 @@ public class EncounterController {
                             }
                         }
                     }
-                    if(encounter.getResourceTypeLkey().equals("5433343011954425")) {
-                         ApResources resources = apResourcesService.getRecord(encounter.getResourceKey());
-                         ApDepartment department = apDepartmentService.getRecord(resources.getResourceKey());
-                        if(department != null){
+                    if (encounter.getResourceTypeLkey().equals("5433343011954425")) {
+                        ApResources resources = apResourcesService.getRecord(encounter.getResourceKey());
+                        ApDepartment department = apDepartmentService.getRecord(resources.getResourceKey());
+                        if (department != null) {
                             encounter.setDepartmentName(department.getName());
                             String departmentKey = department.getKey();
                             if (depKey != null && !depKey.isBlank() && !departmentKey.equals(depKey)) {
@@ -4045,11 +4121,11 @@ public class EncounterController {
                         }
                     }
                     encounter.setResourceObject(apEncounterService
-                            .getResource(encounter.getResourceTypeLkey(),encounter.getResourceKey(),lang));
+                            .getResource(encounter.getResourceTypeLkey(), encounter.getResourceKey(), lang));
                 }
 
                 if (encounter.getPractitionerObject() != null) {
-                    apPractitionerService.populateLovFields(encounter.getPractitionerObject(),lang);
+                    apPractitionerService.populateLovFields(encounter.getPractitionerObject(), lang);
                 }
 
                 if (encounter.getResourceTypeLkey().equals("5433343011954425") ||
@@ -4101,69 +4177,69 @@ public class EncounterController {
         }
     }
 
-   @GetMapping(value = "/tele-consultation-list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getTeleConsultationList(@RequestParam Map<String, String> queryParams,@Nullable @RequestHeader String lang) {
-       try {
-           ParentResponse<List<ApTeleConsultation>> response = new ParentResponse<>();
+    @GetMapping(value = "/tele-consultation-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getTeleConsultationList(@RequestParam Map<String, String> queryParams, @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApTeleConsultation>> response = new ParentResponse<>();
 
             if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
                 response.setObject(new ArrayList<>());
                 return ResponseEntity.ok(response);
             }
 
-           ListRequest listRequest = new ListRequest(queryParams);
-           String where = listRequest.buildWhereStatement();
-           String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
 
             List<ApTeleConsultation> tele = apTeleConsultationService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_tele_consultation where " + whereForTotal);
 
-            for (ApTeleConsultation  item : tele) {
+            for (ApTeleConsultation item : tele) {
                 item.setPatient(apPatientService.getRecord(item.getPatientId()));
-                apTeleConsultationService.populateLovFields( item, lang);
+                apTeleConsultationService.populateLovFields(item, lang);
                 apPatientService.populateLovFields(item.getPatient(), lang);
             }
             response.setObject(tele);
             response.setExtraNumeric(totalRecord);
             return ResponseEntity.ok(response);
 
-       } catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
             return ResponseEntity.status(500).body(e);
-       }
+        }
     }
 
 
     @GetMapping(value = "/tele-consultation-progress-notes-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getTeleConsultationProgressNotesList(@RequestParam Map<String, String> queryParams,
 
-                                                  @Nullable @RequestHeader String lang) {
+                                                                  @Nullable @RequestHeader String lang) {
         try {
-           ParentResponse<List<ApTeleConsultationProgressNote>> response = new ParentResponse<>();
+            ParentResponse<List<ApTeleConsultationProgressNote>> response = new ParentResponse<>();
 
             if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
-               response.setObject(new ArrayList<>());
-               return ResponseEntity.ok(response);
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
             }
 
-           ListRequest listRequest = new ListRequest(queryParams);
-           String where = listRequest.buildWhereStatement();
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
             String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
 
-           List<ApTeleConsultationProgressNote> progressNotes = apTeleConsultationProgressNoteService.getList(where);
+            List<ApTeleConsultationProgressNote> progressNotes = apTeleConsultationProgressNoteService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_tele_consultation_progress_note where " + whereForTotal);
 
-            for (ApTeleConsultationProgressNote  progressNote : progressNotes) {
-                apTeleConsultationProgressNoteService.populateLovFields( progressNote, lang);
-           }
-           response.setObject(progressNotes);
-           response.setExtraNumeric(totalRecord);
-           return ResponseEntity.ok(response);
+            for (ApTeleConsultationProgressNote progressNote : progressNotes) {
+                apTeleConsultationProgressNoteService.populateLovFields(progressNote, lang);
+            }
+            response.setObject(progressNotes);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             e.printStackTrace();
-           log.error(e.getMessage());
+            log.error(e.getMessage());
             return ResponseEntity.status(500).body(e);
         }
     }
@@ -4171,7 +4247,7 @@ public class EncounterController {
     @GetMapping(value = "/tele-consultation-call-log-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getTeleConsultationCallLogList(@RequestParam Map<String, String> queryParams,
 
-                                                                  @Nullable @RequestHeader String lang) {
+                                                            @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<List<ApTeleConsultationCallLog>> response = new ParentResponse<>();
 
@@ -4187,7 +4263,7 @@ public class EncounterController {
             List<ApTeleConsultationCallLog> logs = apTeleConsultationCallLogService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_tele_consultation_call_log where " + whereForTotal);
 
-            for (ApTeleConsultationCallLog  item : logs) {
+            for (ApTeleConsultationCallLog item : logs) {
                 apTeleConsultationCallLogService.populateLovFields(item, lang);
             }
             response.setObject(logs);
@@ -4202,38 +4278,38 @@ public class EncounterController {
     }
 
     @PostMapping(value = "/save-tele-consultation", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveTeleConsultation(@RequestBody ApTeleConsultation request ,
+    public ResponseEntity<?> saveTeleConsultation(@RequestBody ApTeleConsultation request,
 
-                                               @jakarta.annotation.Nullable @RequestHeader String lang
+                                                  @jakarta.annotation.Nullable @RequestHeader String lang
 
-   ) {
+    ) {
         try {
-           ParentResponse<ApTeleConsultation> response = new ParentResponse<>();
-           apTeleConsultationService.saveRecord(request);
-           response.setObject(request);
+            ParentResponse<ApTeleConsultation> response = new ParentResponse<>();
+            apTeleConsultationService.saveRecord(request);
+            response.setObject(request);
             return ResponseEntity.ok(response);
-       } catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-           log.error(e.getMessage());
+            log.error(e.getMessage());
             return ResponseEntity.status(500).body(e);
         }
     }
 
     @PostMapping(value = "/save-tele-consultation-progress-notes", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveTeleConsultationProgressNotes(@RequestBody ApTeleConsultationProgressNote request ,
+    public ResponseEntity<?> saveTeleConsultationProgressNotes(@RequestBody ApTeleConsultationProgressNote request,
 
-                                               @jakarta.annotation.Nullable @RequestHeader String lang
+                                                               @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
             ParentResponse<ApTeleConsultationProgressNote> response = new ParentResponse<>();
             apTeleConsultationProgressNoteService.saveRecord(request);
-           response.setObject(request);
+            response.setObject(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
-           return ResponseEntity.status(500).body(e);
+            return ResponseEntity.status(500).body(e);
         }
     }
 
@@ -4241,7 +4317,7 @@ public class EncounterController {
     @PostMapping(value = "/save-tele-consultation-call-log", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveTeleConsultationCallLog(@RequestBody ApTeleConsultationCallLog request,
 
-                                                  @jakarta.annotation.Nullable @RequestHeader String lang
+                                                         @jakarta.annotation.Nullable @RequestHeader String lang
 
     ) {
         try {
@@ -4256,6 +4332,54 @@ public class EncounterController {
         }
     }
 
+    @PostMapping(value = "/save-telephonic-consultation-order", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveTelephonicConsultationOrder(@RequestBody ApTelephonicConsultation request
+    ) {
+        try {
+            ParentResponse<ApTelephonicConsultation> response = new ParentResponse<>();
+            apTelephonicConsultationService.saveRecord(request);
+            response.setObject(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(value = "/telephonic-consultation-orders-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getTelephonicConsultationOrdersList(@RequestParam Map<String, String> queryParams,
+                                                                 @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApTelephonicConsultation>> response = new ParentResponse<>();
+
+            if (queryParams.containsKey("ignore") && queryParams.get("ignore").equals("true")) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApTelephonicConsultation> telephonicConsultations = apTelephonicConsultationService.getList(where);
+            BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from  ap_telephonic_consultation where " + whereForTotal);
+
+            for (ApTelephonicConsultation co : telephonicConsultations) {
+
+                apTelephonicConsultationService.populateLovFields(co, lang);
+            }
+
+            response.setObject(telephonicConsultations);
+            response.setExtraNumeric(totalRecord);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 
 
 }

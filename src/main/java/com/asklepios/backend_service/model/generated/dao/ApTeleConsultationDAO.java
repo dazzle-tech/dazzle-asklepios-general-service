@@ -39,8 +39,8 @@ ApTeleConsultation record = new ApTeleConsultation();
 if(rs.next()){
 record.setId(rs.getString("id"));
 record.setQuestionToConsultant(rs.getString("question_to_consultant"));
-record.setConsultantFacilityId(rs.getString("consultant_facility_id"));
-record.setConsultantDepartmentId(rs.getString("consultant_department_id"));
+record.setFromFacilityId(rs.getBigDecimal("from_facility_id"));
+record.setFromDepartmentId(rs.getBigDecimal("from_department_id"));
 record.setSpecialtyLkey(rs.getString("specialty_lkey"));
 record.setUrgencyLkey(rs.getString("urgency_lkey"));
 record.setExpectedResponse(rs.getString("expected_response"));
@@ -60,6 +60,8 @@ record.setCallStartedAt(rs.getBigDecimal("call_started_at"));
 record.setCallStartedBy(rs.getString("call_started_by"));
 record.setCallColsedAt(rs.getBigDecimal("call_colsed_at"));
 record.setCallColsedBy(rs.getString("call_colsed_by"));
+record.setToDepartmentId(rs.getBigDecimal("to_department_id"));
+record.setToFacilityId(rs.getBigDecimal("to_facility_id"));
 } else { record = null; }
 return record;
 }
@@ -67,13 +69,13 @@ return record;
 public void updateRecord(ApTeleConsultation record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_tele_consultation set id = ?, question_to_consultant = ?, consultant_facility_id = ?, consultant_department_id = ?, specialty_lkey = ?, urgency_lkey = ?, expected_response = ?, notes = ?, expected_response_time = ?, started_at = ?, rejected_at = ?, status_lkey = ?, rejected_reason = ?, patient_id = ?, encounter_id = ?, rejected_by = ?, started_by = ?, requested_at = ?, requested_by = ?, call_started_at = ?, call_started_by = ?, call_colsed_at = ?, call_colsed_by = ? where id = ?");
+PreparedStatement ps = con.prepareStatement("update ap_tele_consultation set id = ?, question_to_consultant = ?, from_facility_id = ?, from_department_id = ?, specialty_lkey = ?, urgency_lkey = ?, expected_response = ?, notes = ?, expected_response_time = ?, started_at = ?, rejected_at = ?, status_lkey = ?, rejected_reason = ?, patient_id = ?, encounter_id = ?, rejected_by = ?, started_by = ?, requested_at = ?, requested_by = ?, call_started_at = ?, call_started_by = ?, call_colsed_at = ?, call_colsed_by = ?, to_department_id = ?, to_facility_id = ? where id = ?");
 ) {
-
+record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getId());
 ps.setString(2, record.getQuestionToConsultant());
-ps.setString(3, record.getConsultantFacilityId());
-ps.setString(4, record.getConsultantDepartmentId());
+ps.setBigDecimal(3, record.getFromFacilityId());
+ps.setBigDecimal(4, record.getFromDepartmentId());
 ps.setString(5, record.getSpecialtyLkey());
 ps.setString(6, record.getUrgencyLkey());
 ps.setString(7, record.getExpectedResponse());
@@ -93,7 +95,9 @@ ps.setBigDecimal(20, record.getCallStartedAt());
 ps.setString(21, record.getCallStartedBy());
 ps.setBigDecimal(22, record.getCallColsedAt());
 ps.setString(23, record.getCallColsedBy());
-ps.setString(24, record.getId());
+ps.setBigDecimal(24, record.getToDepartmentId());
+ps.setBigDecimal(25, record.getToFacilityId());
+ps.setString(26, record.getId());
 ps.executeUpdate();
 }
 }
@@ -117,8 +121,8 @@ while(rs.next()){
 ApTeleConsultation record = new ApTeleConsultation();
 record.setId(rs.getString("id"));
 record.setQuestionToConsultant(rs.getString("question_to_consultant"));
-record.setConsultantFacilityId(rs.getString("consultant_facility_id"));
-record.setConsultantDepartmentId(rs.getString("consultant_department_id"));
+record.setFromFacilityId(rs.getBigDecimal("from_facility_id"));
+record.setFromDepartmentId(rs.getBigDecimal("from_department_id"));
 record.setSpecialtyLkey(rs.getString("specialty_lkey"));
 record.setUrgencyLkey(rs.getString("urgency_lkey"));
 record.setExpectedResponse(rs.getString("expected_response"));
@@ -138,6 +142,8 @@ record.setCallStartedAt(rs.getBigDecimal("call_started_at"));
 record.setCallStartedBy(rs.getString("call_started_by"));
 record.setCallColsedAt(rs.getBigDecimal("call_colsed_at"));
 record.setCallColsedBy(rs.getString("call_colsed_by"));
+record.setToDepartmentId(rs.getBigDecimal("to_department_id"));
+record.setToFacilityId(rs.getBigDecimal("to_facility_id"));
 list.add(record);
 }
 return list;
@@ -146,16 +152,17 @@ return list;
 public String saveRecord(ApTeleConsultation record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("insert into ap_tele_consultation values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+PreparedStatement ps = con.prepareStatement("insert into ap_tele_consultation values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
-if(record.getId() != null && !record.getId().isEmpty()) {updateRecord(record); return record.getId();}
+if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
+if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
 String key = "" + System.nanoTime();
-record.setId(key);
+record.setKey(key);
 
 ps.setString(1, key);
 ps.setString(2, record.getQuestionToConsultant());
-ps.setString(3, record.getConsultantFacilityId());
-ps.setString(4, record.getConsultantDepartmentId());
+ps.setBigDecimal(3, record.getFromFacilityId());
+ps.setBigDecimal(4, record.getFromDepartmentId());
 ps.setString(5, record.getSpecialtyLkey());
 ps.setString(6, record.getUrgencyLkey());
 ps.setString(7, record.getExpectedResponse());
@@ -175,6 +182,8 @@ ps.setBigDecimal(20, record.getCallStartedAt());
 ps.setString(21, record.getCallStartedBy());
 ps.setBigDecimal(22, record.getCallColsedAt());
 ps.setString(23, record.getCallColsedBy());
+ps.setBigDecimal(24, record.getToDepartmentId());
+ps.setBigDecimal(25, record.getToFacilityId());
 ps.executeUpdate();
 return key;
 }
@@ -204,7 +213,7 @@ public void populateLovFields(ApTeleConsultationEntity entity, String lang) {
         }
     }
 public void translateObject(ApTeleConsultationEntity entity, String lang) {
-        ApTeleConsultationEntity translated = (ApTeleConsultationEntity) publicServices.getObjectTranslation(entity.getId(), entity, lang);
+        ApTeleConsultationEntity translated = (ApTeleConsultationEntity) publicServices.getObjectTranslation(entity.getKey(), entity, lang);
         entity.setTranslatedObject(translated);
     }
 

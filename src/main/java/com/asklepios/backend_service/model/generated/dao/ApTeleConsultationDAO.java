@@ -71,7 +71,6 @@ try (
 Connection con = DS.getConnection();
 PreparedStatement ps = con.prepareStatement("update ap_tele_consultation set id = ?, question_to_consultant = ?, from_facility_id = ?, from_department_id = ?, specialty_lkey = ?, urgency_lkey = ?, expected_response = ?, notes = ?, expected_response_time = ?, started_at = ?, rejected_at = ?, status_lkey = ?, rejected_reason = ?, patient_id = ?, encounter_id = ?, rejected_by = ?, started_by = ?, requested_at = ?, requested_by = ?, call_started_at = ?, call_started_by = ?, call_colsed_at = ?, call_colsed_by = ?, to_department_id = ?, to_facility_id = ? where id = ?");
 ) {
-record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getId());
 ps.setString(2, record.getQuestionToConsultant());
 ps.setBigDecimal(3, record.getFromFacilityId());
@@ -154,10 +153,9 @@ try (
 Connection con = DS.getConnection();
 PreparedStatement ps = con.prepareStatement("insert into ap_tele_consultation values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 ) {
-if(record.getKey() != null && !record.getKey().isEmpty()) {updateRecord(record); return record.getKey();}
-if (record.getCreatedAt() == null) record.setCreatedAt(new BigDecimal(System.currentTimeMillis()));
+if(record.getId() != null && !record.getId().isEmpty()) {updateRecord(record); return record.getId();}
 String key = "" + System.nanoTime();
-record.setKey(key);
+record.setId(key);
 
 ps.setString(1, key);
 ps.setString(2, record.getQuestionToConsultant());
@@ -213,7 +211,7 @@ public void populateLovFields(ApTeleConsultationEntity entity, String lang) {
         }
     }
 public void translateObject(ApTeleConsultationEntity entity, String lang) {
-        ApTeleConsultationEntity translated = (ApTeleConsultationEntity) publicServices.getObjectTranslation(entity.getKey(), entity, lang);
+        ApTeleConsultationEntity translated = (ApTeleConsultationEntity) publicServices.getObjectTranslation(entity.getId(), entity, lang);
         entity.setTranslatedObject(translated);
     }
 

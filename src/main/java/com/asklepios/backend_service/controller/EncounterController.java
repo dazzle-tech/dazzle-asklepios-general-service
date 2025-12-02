@@ -97,10 +97,12 @@ public class EncounterController {
     private final ApTeleConsultationService apTeleConsultationService;
     private final ApTeleConsultationProgressNoteService apTeleConsultationProgressNoteService;
     private final ApTeleConsultationCallLogService apTeleConsultationCallLogService;
+    private final ApNurseServiceProductService apNurseServiceProductService;
     private final ApTelephonicConsultationService apTelephonicConsultationService;
     private final ApUserDashboardComponentService apUserDashboardComponentService;
 
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService, ApDoctorRoundStaffService apDoctorRoundStaffService, ApDoctorRoundService apDoctorRoundService, ApNurseNotesService apNurseNotesService, ApRepositioningService apRepositioningService, ApDayCaseEncountersService apDayCaseEncountersService, ApPreOperationAdministeredMedicationsService apPreOperationAdministeredMedicationsService, ApEmergencyTriageService apEmergencyTriageService, ApEncounterAssignToBedService apEncounterAssignToBedService, ApProgressNotesService apProgressNotesService, ApPatientTemporaryDischargeService apPatientTemporaryDischargeService, ApTeleConsultationService apTeleConsultationService, ApTeleConsultationProgressNoteService apTeleConsultationProgressNoteService, ApTeleConsultationCallLogService apTeleConsultationCallLogService, ApUserDashboardComponentService apUserDashboardComponentService,ApTelephonicConsultationService apTelephonicConsultationService) {
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService, ApDoctorRoundStaffService apDoctorRoundStaffService, ApDoctorRoundService apDoctorRoundService, ApNurseNotesService apNurseNotesService, ApRepositioningService apRepositioningService, ApDayCaseEncountersService apDayCaseEncountersService, ApPreOperationAdministeredMedicationsService apPreOperationAdministeredMedicationsService, ApEmergencyTriageService apEmergencyTriageService, ApEncounterAssignToBedService apEncounterAssignToBedService, ApProgressNotesService apProgressNotesService, ApPatientTemporaryDischargeService apPatientTemporaryDischargeService, ApTeleConsultationService apTeleConsultationService, ApTeleConsultationProgressNoteService apTeleConsultationProgressNoteService, ApTeleConsultationCallLogService apTeleConsultationCallLogService, ApUserDashboardComponentService apUserDashboardComponentService,ApTelephonicConsultationService apTelephonicConsultationService, ApNurseServiceProductService apNurseServiceProductService) {
+
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
         this.validationService = validationService;
@@ -169,6 +171,7 @@ public class EncounterController {
         this.apTeleConsultationService = apTeleConsultationService;
         this.apTeleConsultationProgressNoteService = apTeleConsultationProgressNoteService;
         this.apTeleConsultationCallLogService = apTeleConsultationCallLogService;
+        this.apNurseServiceProductService = apNurseServiceProductService;
         this.apTelephonicConsultationService = apTelephonicConsultationService;
         this.apUserDashboardComponentService = apUserDashboardComponentService;
     }
@@ -3292,7 +3295,121 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @GetMapping(value = "/nurse-service-product-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> nurseServiceProductList(@RequestParam Map<String, String> queryParams,
+                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                     @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<ApNurseServiceProduct>> response = new ParentResponse<>();
 
+            if ("true".equalsIgnoreCase(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
+
+            List<ApNurseServiceProduct> list = apNurseServiceProductService.getList(where);
+
+            for (ApNurseServiceProduct row : list) {
+                apNurseServiceProductService.populateLovFields(row, lang);
+            }
+
+            BigDecimal totalRecord = DS.executeDecimalResultQuery(
+                    "select count(0) from ap_nurse_service_product where " + whereForTotal);
+
+            response.setObject(list);
+            response.setExtraNumeric(totalRecord);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    // -------------------------------------------------------
+    // SAVE (CREATE / UPDATE)
+    // Calculates unit_price & total_price
+    // -------------------------------------------------------
+    @PostMapping(value = "/save-nurse-service-product", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveNurseServiceProduct(@RequestBody ApNurseServiceProduct record,
+                                                     @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                     @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                     @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApNurseServiceProduct> response = new ParentResponse<>();
+
+            // Default quantity = 1 if null
+            BigDecimal quantity = record.getQuantity() != null ? record.getQuantity() : BigDecimal.ONE;
+            record.setQuantity(quantity);
+
+
+//            if (CATEGORY_SERVICE_LKEY.equalsIgnoreCase(categoryLkey)) {
+//                // SERVICE: read price from diagnostic test (or procedure) table
+//                if (record.getServiceId() != null) {
+//                    ApDiagnosticTest test = apDiagnosticTestService.getRecord(record.getServiceId());
+//                    if (test != null && test.getPrice() != null) {
+//                        BigDecimal unitPrice = test.getPrice();
+//                        record.setUnitPrice(unitPrice);
+//                        record.setTotalPrice(unitPrice.multiply(quantity));
+//                    }
+//                }
+//            } else if (CATEGORY_PRODUCT_LKEY.equalsIgnoreCase(categoryLkey)) {
+//                // PRODUCT: read price & base UOM from warehouse product
+//                if (record.getWarehouseProductId() != null) {
+//                    WhWarehouseProduct product = whWarehouseProductService.getRecord(record.getWarehouseProductId());
+//                    if (product != null) {
+//                        // TODO: adjust getters to your actual fields
+//                        BigDecimal unitPrice = product.getUnitPrice();  // or product.getPrice()
+//                        if (unitPrice != null) {
+//                            record.setUnitPrice(unitPrice);
+//                            record.setTotalPrice(unitPrice.multiply(quantity));
+//                        }
+//                        if (record.getBaseUomId() == null && product.getBaseUomId() != null) {
+//                            record.setBaseUomId(product.getBaseUomId());
+//                        }
+//                    }
+//                }
+//            }
+
+            // save or update
+            apNurseServiceProductService.saveRecord(record);
+            apNurseServiceProductService.populateLovFields(record, lang);
+
+            response.setObject(record);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    // -------------------------------------------------------
+    // REMOVE (SOFT DELETE OR HARD DELETE – depends on service impl)
+    // -------------------------------------------------------
+    @PostMapping(value = "/remove-nurse-service-product", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeNurseServiceProduct(@RequestBody ApNurseServiceProduct record,
+                                                       @jakarta.annotation.Nullable @RequestHeader String facility_id,
+                                                       @jakarta.annotation.Nullable @RequestHeader Integer access_level,
+                                                       @jakarta.annotation.Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<ApNurseServiceProduct> response = new ParentResponse<>();
+            apNurseServiceProductService.deleteRecord(record);
+            response.setObject(record);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
     @PostMapping(value = "/save-nurse-notes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveNurseNotes(@RequestBody ApNurseNotes apNurseNotes,
                                             @jakarta.annotation.Nullable @RequestHeader String facility_id,

@@ -87,6 +87,7 @@ public class ApPatientObservationSummaryEntity implements Serializable {
 	private String platestFunctionalStatus;
 	private String latestCognitiveCheck;
 	private String platestCognitiveCheck;
+	private String reasonOfVisit;
 	private ApPatientObservationSummaryEntity translatedObject;
 
 }

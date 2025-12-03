@@ -370,7 +370,11 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
         return result;
     }
     public Object  getResource(String resourceTypeKey, String key ,String lang ) throws SQLException {
-        String resourcekey = apResourcesService.getRecord(key).getResourceKey();
+        String resourcekey=null;
+        if(apResourcesService.getRecord(key)!=null){
+          resourcekey   = apResourcesService.getRecord(key).getResourceKey();
+
+        }
         if(resourceTypeKey == null || resourceTypeKey.isEmpty()) {
             return null;
         }

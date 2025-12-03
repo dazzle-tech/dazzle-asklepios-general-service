@@ -18,7 +18,7 @@ public class ApPrescriptionMedicationsEntity implements Serializable {
 	private String patientKey;
 	private String visitKey;
 	private String prescriptionKey;
-	private String genericMedicationsKey;
+	private BigDecimal genericMedicationsId;
 	private BigDecimal numberOfRefills;
 	private String refillInterval;
 	private String instructionsTypeLkey;

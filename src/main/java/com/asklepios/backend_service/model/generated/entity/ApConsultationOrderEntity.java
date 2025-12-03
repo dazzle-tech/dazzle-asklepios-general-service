@@ -43,5 +43,8 @@ public class ApConsultationOrderEntity implements Serializable {
 	private Boolean isValid = true;
 	private String cancellationReason;
 	private ApConsultationOrderEntity translatedObject;
+	private String facilityKey;
+	private String departmentKey;
+	private String priorityLkey;
 
 }

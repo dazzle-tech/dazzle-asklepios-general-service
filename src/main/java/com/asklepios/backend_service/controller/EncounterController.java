@@ -1,6 +1,7 @@
 package com.asklepios.backend_service.controller;
 
 import com.asklepios.backend_service.database.DS;
+import com.asklepios.backend_service.model.DTO.PatientSummaryDto;
 import com.asklepios.backend_service.model.generated.entity.ApPatientEntity;
 import com.asklepios.backend_service.model.generated.entity.ApUserDashboardComponents;
 import com.asklepios.backend_service.model.generated.pojo.*;
@@ -100,8 +101,8 @@ public class EncounterController {
     private final ApNurseServiceProductService apNurseServiceProductService;
     private final ApTelephonicConsultationService apTelephonicConsultationService;
     private final ApUserDashboardComponentService apUserDashboardComponentService;
-
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService, ApDoctorRoundStaffService apDoctorRoundStaffService, ApDoctorRoundService apDoctorRoundService, ApNurseNotesService apNurseNotesService, ApRepositioningService apRepositioningService, ApDayCaseEncountersService apDayCaseEncountersService, ApPreOperationAdministeredMedicationsService apPreOperationAdministeredMedicationsService, ApEmergencyTriageService apEmergencyTriageService, ApEncounterAssignToBedService apEncounterAssignToBedService, ApProgressNotesService apProgressNotesService, ApPatientTemporaryDischargeService apPatientTemporaryDischargeService, ApTeleConsultationService apTeleConsultationService, ApTeleConsultationProgressNoteService apTeleConsultationProgressNoteService, ApTeleConsultationCallLogService apTeleConsultationCallLogService, ApUserDashboardComponentService apUserDashboardComponentService,ApTelephonicConsultationService apTelephonicConsultationService, ApNurseServiceProductService apNurseServiceProductService) {
+    private final PatientSummaryService patientSummaryService;
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService, ApDoctorRoundStaffService apDoctorRoundStaffService, ApDoctorRoundService apDoctorRoundService, ApNurseNotesService apNurseNotesService, ApRepositioningService apRepositioningService, ApDayCaseEncountersService apDayCaseEncountersService, ApPreOperationAdministeredMedicationsService apPreOperationAdministeredMedicationsService, ApEmergencyTriageService apEmergencyTriageService, ApEncounterAssignToBedService apEncounterAssignToBedService, ApProgressNotesService apProgressNotesService, ApPatientTemporaryDischargeService apPatientTemporaryDischargeService, ApTeleConsultationService apTeleConsultationService, ApTeleConsultationProgressNoteService apTeleConsultationProgressNoteService, ApTeleConsultationCallLogService apTeleConsultationCallLogService, ApUserDashboardComponentService apUserDashboardComponentService, ApTelephonicConsultationService apTelephonicConsultationService, ApNurseServiceProductService apNurseServiceProductService, PatientSummaryService patientSummaryService) {
 
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
@@ -174,6 +175,7 @@ public class EncounterController {
         this.apNurseServiceProductService = apNurseServiceProductService;
         this.apTelephonicConsultationService = apTelephonicConsultationService;
         this.apUserDashboardComponentService = apUserDashboardComponentService;
+        this.patientSummaryService = patientSummaryService;
     }
 
     @GetMapping(value = "/user-dashboard-components-list/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -4493,6 +4495,51 @@ public class EncounterController {
             e.printStackTrace();
             log.error(e.getMessage());
             return ResponseEntity.status(500).body(e);
+        }
+    }
+    // ======================================================================
+// GET PATIENT CLINICAL SUMMARY (WITH AI SUMMARY)
+// ======================================================================
+    @GetMapping(value = "/clinical-summary", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getClinicalSummary(
+            @RequestParam String patientKey,
+            @RequestParam String encounterKey,
+            @Nullable @RequestHeader String lang
+    ) {
+        try {
+            ParentResponse<Map<String, Object>> response = new ParentResponse<>();
+
+            // 1. Build the summary DTO (Java summary + AI summary)
+            PatientSummaryDto dto = patientSummaryService.buildPatientSummary(
+                    patientKey,
+                    encounterKey,
+                    lang,
+                    null   // you can pass medications list if needed
+            );
+
+            // 2. Package the data in JSON for frontend
+            Map<String, Object> result = new LinkedHashMap<>();
+            result.put("age", dto.getAge());
+            result.put("gender", dto.getGender());
+            result.put("diagnosis", dto.getDiagnosis());
+            result.put("symptoms", dto.getSymptoms());
+            result.put("vitals", dto.getVitals());
+            result.put("allergies", dto.getAllergies());
+            result.put("surgeries", dto.getSurgeries());
+            result.put("problems", dto.getProblems());
+            result.put("warnings", dto.getMedicalWarnings());
+            result.put("medications", dto.getMedications());
+            result.put("clinicalSummary", dto.getClinicalSummary()); // AI OUTPUT
+
+            response.setObject(result);
+            response.setMsg("Clinical Summary Loaded Successfully");
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }
     }
 

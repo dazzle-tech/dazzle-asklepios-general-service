@@ -32,3 +32,15 @@ build/
 ### VS Code ###
 .vscode/
 src/main/resources/datasource.properties
+
+
+.venv
+venv
+__pycache__
+*.pyc
+node_modules
+.git
+ai-models/ollama/*
+ai-models/easyocr/*
+.idea
+.vscode

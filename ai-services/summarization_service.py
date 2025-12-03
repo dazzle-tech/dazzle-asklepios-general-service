@@ -17,10 +17,10 @@ logger = logging.getLogger("ClinicalSummaryService")
 # -----------------------------
 app = FastAPI(title="Clinical Summary API", version="1.2.0")
 
-# Enable CORS (optional, but useful if frontend calls this directly)
+# Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # change to your frontend URL in production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -29,19 +29,20 @@ app.add_middleware(
 # -----------------------------
 # Ollama config
 # -----------------------------
-# You can override this with: $env:OLLAMA_PATH="C:\Users\user\AppData\Local\Programs\Ollama\ollama.exe"
 OLLAMA_PATH = os.getenv(
     "OLLAMA_PATH",
-    r"C:\Users\user\AppData\Local\Programs\Ollama\ollama.exe"  # adjust if needed
+    r"C:\Users\user\AppData\Local\Programs\Ollama\ollama.exe"
 )
-MODEL_NAME = "llama2:13b"  # make sure you've run: ollama pull llama2:13b
+
+MODEL_NAME = "llama2:13b"
+
 
 # -----------------------------
 # Input schema
 # -----------------------------
 class PatientData(BaseModel):
-    Age: float                      # Can be whole or decimal number
-    Age_Unit: str = "years"         # "years" or "months"
+    # Age is now a single string field (e.g. "5 years", "3 months", "2 days", "35")
+    Age: str
     Gender: str
     Diagnosis: str
     Symptoms: list[str] = []
@@ -54,31 +55,18 @@ class PatientData(BaseModel):
 
 
 def generate_summary(patient_data: dict) -> str:
-    # --- Handle age formatting ---
-    age = patient_data.get("Age", "N/A")
-    unit = patient_data.get("Age_Unit", "years")
+    # --- Use age exactly as provided (no calculation / conversion) ---
+    raw_age = patient_data.get("Age", "N/A")
 
-    # Convert based on unit
-    try:
-        age_val = float(age)
-    except (ValueError, TypeError):
-        age_val = None
+    # Turn into a string but don't change its content
+    age_text = str(raw_age) if raw_age is not None else "N/A"
 
-    if isinstance(unit, str) and unit.lower().startswith("month"):
-        age_text = f"{int(age_val) if age_val is not None else 'N/A'}-month-old"
-    elif age_val is not None and age_val < 1:
-        # Convert fractional years to months
-        months = max(1, int(round(age_val * 12)))
-        age_text = f"{months}-month-old"
-    elif age_val is not None:
-        age_text = f"{int(age_val)}-year-old"
-    else:
-        age_text = "Age-unknown"
+    gender = patient_data.get("Gender", "N/A")
+    diagnosis = patient_data.get("Diagnosis", "N/A")
 
-    # --- Build base description ---
-    parts = [f"A {age_text} {patient_data.get('Gender','N/A')} with {patient_data.get('Diagnosis','N/A')}"]
+    # First sentence uses the raw strings
+    parts = [f"A {age_text} {gender} with {diagnosis}"]
 
-    # --- Append additional data ---
     if patient_data.get("Symptoms"):
         parts.append("Symptoms: " + ", ".join(patient_data["Symptoms"]))
     if patient_data.get("Medications"):
@@ -98,12 +86,11 @@ def generate_summary(patient_data: dict) -> str:
 
     patient_text = ". ".join(parts)
 
-    # --- Model prompt ---
     prompt = f"""
 Rephrase the following patient data into ONE concise, coherent clinical summary paragraph.
 ONLY include the information provided below.
 DO NOT add any extra details, hallucinations, or assumptions.
-KEEP all abbreviations exactly as they appear.
+KEEP all abbreviations and text exactly as they appear. Do NOT change numbers, units, or wording.
 
 Patient data:
 {patient_text}
@@ -111,47 +98,39 @@ Patient data:
 Clinical Summary:
 """
 
-    # --- Run Ollama model ---
-    logger.info("Running Ollama model for clinical summary...")
+    # Log full input data
+    logger.info(f"Full PatientData input: {json.dumps(patient_data, ensure_ascii=False)}")
+
+    logger.info("Running Ollama model...")
 
     try:
         result = subprocess.run(
             [OLLAMA_PATH, "run", MODEL_NAME],
-            input=prompt,              # send prompt via stdin
+            input=prompt,
             capture_output=True,
             text=True,
             encoding="utf-8",
             errors="ignore"
         )
     except FileNotFoundError:
-        raise RuntimeError(
-            f"Ollama executable not found at '{OLLAMA_PATH}'. "
-            f"Set OLLAMA_PATH env var or update the path in the code."
-        )
+        raise RuntimeError(f"Ollama executable not found at {OLLAMA_PATH}")
 
     if result.returncode != 0:
-        logger.error(f"Ollama error: {result.stderr.strip()}")
-        raise RuntimeError(f"Ollama failed: {result.stderr.strip()}")
+        raise RuntimeError(result.stderr.strip())
 
-    clinical_summary = result.stdout.strip()
-    logger.info(f"Ollama raw output:\n{clinical_summary}")
+    raw_output = result.stdout.strip()
+    logger.info(f"Ollama output:\n{raw_output}")
 
-    # --- Clean output ---
-    lines = clinical_summary.splitlines()
-    cleaned_lines = []
-    skip_phrases = [
-        "clinical summary:",
-        "summary:",
-        "here is",
-        "okay!"
-    ]
+    lines = raw_output.splitlines()
+    cleaned = []
+    skip_words = ["clinical summary", "summary:", "here is", "okay"]
 
     for line in lines:
-        line_lower = line.lower().strip()
-        if line.strip() and not any(phrase in line_lower for phrase in skip_phrases):
-            cleaned_lines.append(line.strip())
+        low = line.lower().strip()
+        if line.strip() and not any(w in low for w in skip_words):
+            cleaned.append(line.strip())
 
-    return ' '.join(cleaned_lines).strip()
+    return " ".join(cleaned).strip()
 
 
 @app.post("/summarize")
@@ -160,7 +139,7 @@ def summarize(patient: PatientData):
         summary = generate_summary(patient.dict())
         return {"ClinicalSummary": summary}
     except Exception as e:
-        logger.exception("Error generating clinical summary")
+        logger.exception("Summary error")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -169,6 +148,14 @@ def home():
     return {"message": "Clinical Summary Service is running!"}
 
 
-if _name_ == "_main_":
+# -----------------------------
+# FIXED ENTRY POINT
+# -----------------------------
+if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("summarization_service:app", host="0.0.0.0", port=8003,reload=True)
+    uvicorn.run(
+        "summarization_service:app",
+        host="0.0.0.0",
+        port=8003,
+        reload=True
+    )

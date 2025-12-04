@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RestController
@@ -1298,6 +1299,115 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
+    @GetMapping(value = "/consultation-orders-by-department",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getConsultationOrdersByDepartment(
+            @RequestParam Map<String, String> queryParams,
+            @Nullable @RequestHeader String lang) {
+
+        try {
+            ParentResponse<List<ApConsultationOrder>> response = new ParentResponse<>();
+
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            // Extract special filters
+            String departmentKey = queryParams.get("department_key");
+            String preferredConsultantKey = queryParams.get("preferred_consultant_key");
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+
+            if (where == null) {
+                where = "";
+            }
+
+            // Split WHERE into conditions part and ORDER/LIMIT/OFFSET tail
+            String lower = where.toLowerCase();
+            int orderIdx = lower.indexOf(" order by ");
+            String conditionsPart = where;
+            String tailPart = "";
+
+            if (orderIdx != -1) {
+                conditionsPart = where.substring(0, orderIdx).trim();
+                tailPart = where.substring(orderIdx).trim();
+            }
+
+            if (conditionsPart.isBlank()) {
+                conditionsPart = "1=1";
+            }
+
+            // Build extra conditions (QUOTE ALL PARAM VALUES)
+            List<String> extraConditions = new ArrayList<>();
+
+            if (departmentKey != null && !departmentKey.isBlank()) {
+                String depVal = departmentKey.replace("'", "''"); // basic escaping
+                extraConditions.add("department_key = '" + depVal + "'");
+            }
+
+            if (preferredConsultantKey != null && !preferredConsultantKey.isBlank()) {
+                String prefVal = preferredConsultantKey.replace("'", "''");
+
+                if (departmentKey != null && !departmentKey.isBlank()) {
+                    // department + preferred consultant:
+                    // orders for this department where preferred is empty OR equals given consultant
+                    extraConditions.add(
+                            "(preferred_consultant_key IS NULL " +
+                                    " OR preferred_consultant_key = '' " +
+                                    " OR preferred_consultant_key = '" + prefVal + "')"
+                    );
+                } else {
+                    // only preferred consultant sent
+                    extraConditions.add("preferred_consultant_key = '" + prefVal + "'");
+                }
+            }
+
+            if (!extraConditions.isEmpty()) {
+                conditionsPart = conditionsPart + " AND " + String.join(" AND ", extraConditions);
+            }
+
+            // Rebuild final "where" string
+            String finalWhere = conditionsPart;
+            if (!tailPart.isEmpty()) {
+                finalWhere = finalWhere + " " + tailPart;
+            }
+
+            // Optional: log the finalWhere to verify it looks correct
+            // log.info("finalWhere = {}", finalWhere);
+
+            List<ApConsultationOrder> allVisibleConsultations =
+                    apConsultationOrderService.getList(finalWhere);
+
+            Map<String, ApConsultationOrder> uniqueById = allVisibleConsultations.stream()
+                    .collect(Collectors.toMap(
+                            ApConsultationOrder::getKey,
+                            Function.identity(),
+                            (existing, duplicate) -> existing,
+                            LinkedHashMap::new
+                    ));
+
+            List<ApConsultationOrder> distinctConsultations =
+                    new ArrayList<>(uniqueById.values());
+
+            for (ApConsultationOrder co : distinctConsultations) {
+                apConsultationOrderService.populateLovFields(co, lang);
+            }
+
+            response.setObject(distinctConsultations);
+            response.setExtraNumeric(BigDecimal.valueOf(distinctConsultations.size()));
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
 
 
     @PostMapping(value = "/save-prescription", produces = MediaType.APPLICATION_JSON_VALUE)

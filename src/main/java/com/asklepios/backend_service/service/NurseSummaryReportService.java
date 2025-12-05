@@ -181,26 +181,26 @@ public class NurseSummaryReportService implements Serializable {
 
                     apEncounterVaccinationService.populateLovFields(all, lang);
 
-                    if (all.getVaccineKey() != null) {
-                        all.setVaccine(apVaccineService.getRecord(all.getVaccineKey()));
-                        if (all.getVaccine() != null) {
-                            apVaccineService.populateLovFields(all.getVaccine(), lang);
-                        }
-                    }
-
-                    if (all.getVaccineDoseKey() != null) {
-                        all.setVaccineDose(apVaccineDoseService.getRecord(all.getVaccineDoseKey()));
-                        if (all.getVaccineDose() != null) {
-                            apVaccineDoseService.populateLovFields(all.getVaccineDose(), lang);
-                        }
-                    }
-
-                    if (all.getVaccineBrandKey() != null) {
-                        all.setVaccineBrands(apVaccineBrandsService.getRecord(all.getVaccineBrandKey()));
-                        if (all.getVaccineBrands() != null) {
-                            apVaccineBrandsService.populateLovFields(all.getVaccineBrands(), lang);
-                        }
-                    }
+//                    if (all.getVaccineKey() != null) {
+//                        all.setVaccine(apVaccineService.getRecord(all.getVaccineKey()));
+//                        if (all.getVaccine() != null) {
+//                            apVaccineService.populateLovFields(all.getVaccine(), lang);
+//                        }
+//                    }
+//
+//                    if (all.getVaccineDoseKey() != null) {
+//                        all.setVaccineDose(apVaccineDoseService.getRecord(all.getVaccineDoseKey()));
+//                        if (all.getVaccineDose() != null) {
+//                            apVaccineDoseService.populateLovFields(all.getVaccineDose(), lang);
+//                        }
+//                    }
+//
+//                    if (all.getVaccineBrandKey() != null) {
+//                        all.setVaccineBrands(apVaccineBrandsService.getRecord(all.getVaccineBrandKey()));
+//                        if (all.getVaccineBrands() != null) {
+//                            apVaccineBrandsService.populateLovFields(all.getVaccineBrands(), lang);
+//                        }
+//                    }
                 }
             }
             return list;

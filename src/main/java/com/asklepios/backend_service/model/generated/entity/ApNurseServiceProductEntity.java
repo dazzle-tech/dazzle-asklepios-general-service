@@ -34,6 +34,10 @@ public class ApNurseServiceProductEntity implements Serializable {
 	private BigDecimal deletedAt;
 	private Boolean isValid = true;
 	private BigDecimal brandId;
+	private BigDecimal priceListId;
+	private BigDecimal priceListItemId;
+	private BigDecimal priceListItemPrice;
+	private BigDecimal priceListItemTotalPrice;
 	private ApNurseServiceProductEntity translatedObject;
 
 }

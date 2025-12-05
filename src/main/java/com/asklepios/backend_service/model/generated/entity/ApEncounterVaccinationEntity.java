@@ -17,9 +17,9 @@ public class ApEncounterVaccinationEntity implements Serializable {
 	private String key;
 	private String patientKey;
 	private String encounterKey;
-	private String vaccineKey;
-	private String vaccineBrandKey;
-	private String vaccineDoseKey;
+	private BigDecimal vaccineId;
+	private BigDecimal vaccineBrandId;
+	private BigDecimal vaccineDoseId;
 	private String vaccineLotNumber;
 	private BigDecimal dateAdministered;
 	private String actualSide;

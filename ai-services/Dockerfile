@@ -1,18 +1,22 @@
-FROM python:3.11-slim
-
-# Optional: install system deps for Pillow/easyocr if needed
-RUN apt-get update && apt-get install -y \
-    libgl1 \
-    && rm -rf /var/lib/apt/lists/*
+FROM python:3.11-slim AS builder
 
 WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
-# Install Python deps
-COPY ai-services/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+FROM python:3.11-slim
 
-# Copy all ai-services code
-COPY ai-services/ .
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-# Default command (overridden per-service in docker-compose)
-CMD ["uvicorn", "ocr_service:app", "--host", "0.0.0.0", "--port", "8001"]
+RUN useradd -m appuser
+WORKDIR /app
+
+COPY --from=builder /install /usr/local
+COPY . .
+
+USER appuser
+
+#CMD ["uvicorn", "ocr_service:app", "--host", "0.0.0.0", "--port", "8001"]
+#CMD ["uvicorn", "parsing_service:app", "--host", "0.0.0.0", "--port", "8002"]
+CMD ["uvicorn", "summarization_service:app", "--host", "0.0.0.0", "--port", "8003"]

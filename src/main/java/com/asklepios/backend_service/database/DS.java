@@ -24,8 +24,8 @@ public class DS {
             config.setJdbcUrl(props.getProperty("db.jdbcUrl"));
             config.setUsername(props.getProperty("db.user"));
             config.setPassword(props.getProperty("db.password"));
-            config.setMaximumPoolSize(20); // Adjust pool size as needed
-            config.setMinimumIdle(10);
+            config.setMaximumPoolSize(5); // Adjust pool size as needed
+            config.setMinimumIdle(2);
             config.setIdleTimeout(30000);
             config.setMaxLifetime(1800000);
 

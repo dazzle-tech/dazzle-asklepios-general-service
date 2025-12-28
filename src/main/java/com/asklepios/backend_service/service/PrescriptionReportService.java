@@ -1,3 +1,7 @@
+// ============================================================================
+// FILE: PrescriptionReportService.java   (FULL + integrated, no missing parts)
+// ============================================================================
+
 package com.asklepios.backend_service.service;
 
 import com.asklepios.backend_service.model.DTO.PrescriptionMedicationViewDTO;
@@ -31,6 +35,11 @@ public class PrescriptionReportService {
     private final ApIcdCodeService apIcdCodeService;
     private final ApPrescriptionMedicationsService apPrescriptionMedicationsService;
 
+    // Matches frontend constants
+    private static final String TYPE_PREDEFINED = "3010591042600262";
+    private static final String TYPE_FREE_TEXT  = "3010573499898196";
+    private static final String TYPE_CUSTOM     = "3010606785535008";
+
     public byte[] generatePrescriptionPdf(
             ApPatient patient,
             ApEncounter encounter,
@@ -49,9 +58,11 @@ public class PrescriptionReportService {
                 null,   // genericMedicationList
                 null,   // facilityName
                 null,   // userFullName
-                null);
+                null,   // userEmail
+                null,   // predefinedInstructions
+                null    // customInstructions
+        );
     }
-
 
     public byte[] generatePrescriptionPdf(
             ApPatient patient,
@@ -61,10 +72,11 @@ public class PrescriptionReportService {
             String prescriptionKey,
             String lang,
             List<BrandMedicationDTO> genericMedicationList,
-
             String facilityName,
             String userFullName,
-            String userEmail
+            String userEmail,
+            List<com.asklepios.backend_service.model.DTO.PrescriptionReportRequestDTO.PredefinedInstruction> predefinedInstructions,
+            List<com.asklepios.backend_service.model.DTO.PrescriptionReportRequestDTO.CustomInstruction> customInstructions
     ) {
         try {
             log.info("Generating Prescription PDF for encounterKey={} patientKey={}",
@@ -89,7 +101,9 @@ public class PrescriptionReportService {
                     meds,
                     facilityName,
                     userFullName,
-                    userEmail
+                    userEmail,
+                    predefinedInstructions,
+                    customInstructions
             );
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -217,11 +231,11 @@ public class PrescriptionReportService {
             List<ApVisitAllergies> allergies,
             ApPatientDiagnose mainDiagnose,
             List<PrescriptionMedicationViewDTO> meds,
-
-
             String facilityName,
             String userFullName,
-            String userEmail
+            String userEmail,
+            List<com.asklepios.backend_service.model.DTO.PrescriptionReportRequestDTO.PredefinedInstruction> predefinedInstructions,
+            List<com.asklepios.backend_service.model.DTO.PrescriptionReportRequestDTO.CustomInstruction> customInstructions
     ) {
 
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMM yyyy");
@@ -241,21 +255,16 @@ public class PrescriptionReportService {
         /* ========= HEADER ========= */
         html.append("<div class='header'>");
 
-        //
         html.append("<div class='logo-icon'>");
         html.append(getLogoSvg());
         html.append("</div>");
-        //
 
-        //
         html.append("<div class='header-titles'>");
         html.append("<h1 class='org-name'>")
                 .append(nullSafe(facilityName).toUpperCase())
                 .append("</h1>");
         html.append("</div>");
-        //
 
-        //
         html.append("<div class='barcode-section'>");
         html.append("<div class='barcode'>");
         html.append("<div class='bar' style='width:1px'></div>");
@@ -266,7 +275,6 @@ public class PrescriptionReportService {
         html.append("</div>");
         html.append("<p class='doc-id'>DOC ID: NUR-2025-155</p>");
         html.append("</div>");
-        //
         html.append("</div>");
 
         /* ========= MAIN TITLE ========= */
@@ -283,7 +291,7 @@ public class PrescriptionReportService {
         html.append("<section class='report-section'>");
         html.append("<div class='patient-grid grid-4'>");
 
-// Full Name
+        // Full Name
         html.append("<div class='info-box'>");
         html.append("<span class='info-label'>Full Name</span>");
         html.append("<span class='info-value'>")
@@ -291,7 +299,7 @@ public class PrescriptionReportService {
                 .append("</span>");
         html.append("</div>");
 
-// Gender
+        // Gender
         html.append("<div class='info-box'>");
         html.append("<span class='info-label'>Gender</span>");
         html.append("<span class='info-value'>")
@@ -301,7 +309,7 @@ public class PrescriptionReportService {
                 .append("</span>");
         html.append("</div>");
 
-// MRN Number
+        // MRN Number
         html.append("<div class='info-box'>");
         html.append("<span class='info-label'>MRN Number</span>");
         html.append("<span class='info-value'>#")
@@ -309,7 +317,7 @@ public class PrescriptionReportService {
                 .append("</span>");
         html.append("</div>");
 
-// DOB / Age
+        // DOB / Age
         html.append("<div class='info-box no-border'>");
         html.append("<span class='info-label'>D.O.B / Age</span>");
         html.append("<span class='info-value'>")
@@ -324,7 +332,7 @@ public class PrescriptionReportService {
 
         html.append("<div class='patient-grid grid-4'>");
 
-// Visit Type
+        // Visit Type
         html.append("<div class='info-box'>");
         html.append("<span class='info-label'>Visit Type</span>");
         html.append("<span class='info-value'>")
@@ -332,7 +340,7 @@ public class PrescriptionReportService {
                 .append("</span>");
         html.append("</div>");
 
-// Clinical Priority
+        // Clinical Priority
         html.append("<div class='info-box'>");
         html.append("<span class='info-label'>Clinical Priority</span>");
         html.append("<span class='badge-urgent'>")
@@ -340,7 +348,7 @@ public class PrescriptionReportService {
                 .append("</span>");
         html.append("</div>");
 
-// Encounter ID
+        // Encounter ID
         html.append("<div class='info-box'>");
         html.append("<span class='info-label'>Encounter ID</span>");
         html.append("<span class='info-value'>#")
@@ -348,7 +356,7 @@ public class PrescriptionReportService {
                 .append("</span>");
         html.append("</div>");
 
-// Empty cell
+        // Encounter Date
         SimpleDateFormat dateOnlyFormat = new SimpleDateFormat("dd/MM/yyyy");
         html.append("<div class='info-box'>");
         html.append("<span class='info-label'>Encounter Date</span>");
@@ -360,10 +368,6 @@ public class PrescriptionReportService {
                 )
                 .append("</span>");
         html.append("</div>");
-
-
-
-
 
         html.append("</section>");
 
@@ -393,7 +397,6 @@ public class PrescriptionReportService {
             html.append("</div>");
 
             /* RIGHT: type + date */
-            /* RIGHT: type + date (two rows like UI) */
             html.append("<div class='diagnosis-right'>");
 
             html.append("<div class='diag-info-row'>");
@@ -412,17 +415,14 @@ public class PrescriptionReportService {
 
             html.append("</div>"); // diagnosis-right
 
-
             html.append("</div>"); // card
             html.append("</div>"); // grid
-
 
         } else {
             html.append("<div class='empty-message'>No clinical diagnoses recorded for this encounter.</div>");
         }
 
         html.append("</section>");
-
 
         /* ========= SECTION III: ALLERGIES ========= */
         html.append("<section class='report-section'>");
@@ -517,7 +517,8 @@ public class PrescriptionReportService {
                     continue;
                 }
 
-                String instructions = nullSafe(m.getInstructions());
+                //  Instructions display exactly like frontend logic
+                String instructions = buildInstructionsDisplay(m, predefinedInstructions, customInstructions);
 
                 String instructionsType = (m.getInstructionsTypeLvalue() != null)
                         ? lovDisplay(m.getInstructionsTypeLvalue())
@@ -531,7 +532,7 @@ public class PrescriptionReportService {
 
                 html.append("<tr>");
                 html.append("<td class='med-name'>").append(medName.toUpperCase()).append("</td>");
-                html.append("<td class='med-instructions'>").append(instructions).append("</td>");
+                html.append("<td class='med-instructions'>").append(nullSafe(instructions)).append("</td>");
                 html.append("<td class='text-center text-muted'>").append(nullSafe(instructionsType)).append("</td>");
                 html.append("<td class='text-center font-bold'>").append(validUntil).append("</td>");
                 html.append("<td class='text-center text-muted'>").append(isChronic).append("</td>");
@@ -555,12 +556,11 @@ public class PrescriptionReportService {
         html.append("<div class='footer-left'>");
         html.append("<div class='signature-line'></div>");
         html.append("<p class='signature-label'>Registered Nurse Signature</p>");
-        html.append("</div>"); // footer-left
+        html.append("</div>");
 
         html.append("<div class='footer-right'>");
 
         html.append("<div class='auth-block'>");
-
         html.append("<p class='auth-label'>Digitally Authenticated By</p>");
 
         html.append("<div class='verification-badge'>");
@@ -576,40 +576,215 @@ public class PrescriptionReportService {
         }
 
         html.append("</div>"); // verification-badge
-
         html.append("</div>"); // auth-block
-
         html.append("</div>"); // footer-right
-
 
         html.append("</div></body></html>");
         return html.toString();
     }
 
-    // ========================================================================
-    // Helpers for DTO extraction (avoids dependency on exact getter names)
-    // ========================================================================
+    private String buildInstructionsDisplay(
+            ApPrescriptionMedications m,
+            List<com.asklepios.backend_service.model.DTO.PrescriptionReportRequestDTO.PredefinedInstruction> predefinedInstructions,
+            List<com.asklepios.backend_service.model.DTO.PrescriptionReportRequestDTO.CustomInstruction> customInstructions
+    ) {
+        if (m == null) return "";
 
-    private ApPrescriptionMedications extractApPrescriptionMedications(PrescriptionMedicationViewDTO dto) {
-        Object val = tryInvokeAny(dto,
-                "getMedication",
-                "getMedic",
-                "getApPrescriptionMedications",
-                "getPrescriptionMedication",
-                "getEntity"
-        );
-        if (val instanceof ApPrescriptionMedications) return (ApPrescriptionMedications) val;
+        // 1) Extract type key robustly
+        final String type = extractInstructionsTypeKey(m);
 
-        return null;
+        // 2) Extract instructions value robustly
+        final Object instObj = tryInvokeAny(m, "getInstructions", "getInstruction", "getInst");
+        final String instructionsRaw = toStr(instObj).trim();
+
+        // ===== PREDEFINED =====
+        if (TYPE_PREDEFINED.equals(type)) {
+            if (instructionsRaw.isBlank()) return "";
+
+            Long instId = parseLongFlexible(instObj);
+            if (instId == null) instId = parseLongFlexible(instructionsRaw);
+            if (instId == null) return "";
+
+            Map<Long, com.asklepios.backend_service.model.DTO.PrescriptionReportRequestDTO.PredefinedInstruction> map =
+                    (predefinedInstructions == null ? List.<com.asklepios.backend_service.model.DTO.PrescriptionReportRequestDTO.PredefinedInstruction>of() : predefinedInstructions)
+                            .stream()
+                            .filter(x -> x.getId() != null)
+                            .collect(Collectors.toMap(
+                                    com.asklepios.backend_service.model.DTO.PrescriptionReportRequestDTO.PredefinedInstruction::getId,
+                                    x -> x,
+                                    (a, b) -> a
+                            ));
+
+            var inst = map.get(instId);
+            if (inst == null) {
+                log.warn("Predefined instruction not found for ID: {}", instId);
+                return "";
+            }
+
+            //  Extract route - try both getRout() and getRoute()
+            Object routObj = tryInvokeAny(inst, "getRout", "getRoute", "getRouteLvalue");
+            String routeStr = "";
+            if (routObj != null) {
+                // If it's a LOV object, extract display value
+                Object routDisplay = tryInvokeAny(routObj, "getLovDisplayVale", "getLovDisplayValue");
+                routeStr = routDisplay != null ? toStr(routDisplay) : toStr(routObj);
+            }
+
+            //  Build exactly like frontend
+            return joinNonBlank(
+                    toStr(inst.getDose()),
+                    formatEnumString(toStr(inst.getUnit())),
+                    formatEnumString(routeStr),
+                    formatEnumString(toStr(inst.getFrequency()))
+            );
+        }
+
+        // ===== FREE TEXT =====
+        if (TYPE_FREE_TEXT.equals(type)) {
+            return instructionsRaw;
+        }
+
+        // ===== CUSTOM =====
+        if (TYPE_CUSTOM.equals(type)) {
+            String rawKey = extractMedicationKey(m);
+            rawKey = normalizeKey(rawKey);
+
+            if (rawKey.isBlank()) return "";
+
+            final String medKeyFinal = rawKey;
+
+            var ci = (customInstructions == null ? List.<com.asklepios.backend_service.model.DTO.PrescriptionReportRequestDTO.CustomInstruction>of() : customInstructions)
+                    .stream()
+                    .filter(x -> medKeyFinal.equals(
+                            normalizeKey(toStr(x.getPrescriptionMedicationsKey()))
+                    ))
+                    .findFirst()
+                    .orElse(null);
+
+            if (ci == null) {
+                log.warn("Custom instruction not found for medication key: {}", medKeyFinal);
+                return "";
+            }
+
+            // Extract LOV display values safely
+            String unitDisp = "";
+            if (ci.getUnitLvalue() != null) {
+                Object unitVal = tryInvokeAny(ci.getUnitLvalue(), "getLovDisplayVale", "getLovDisplayValue");
+                unitDisp = unitVal != null ? toStr(unitVal) : "";
+            }
+
+            String freqDisp = "";
+            if (ci.getFrequencyLvalue() != null) {
+                Object freqVal = tryInvokeAny(ci.getFrequencyLvalue(), "getLovDisplayVale", "getLovDisplayValue");
+                freqDisp = freqVal != null ? toStr(freqVal) : "";
+            }
+
+            // ✅ Build exactly like frontend (no formatting for custom)
+            return joinNonBlank(
+                    toStr(ci.getDose()),
+                    unitDisp,
+                    freqDisp
+            );
+        }
+
+        // fallback: show whatever is stored
+        return instructionsRaw;
     }
 
-    private String extractMedicationName(PrescriptionMedicationViewDTO dto) {
-        Object val = tryInvokeAny(dto,
-                "getMedicationName",
-                "getMedName",
-                "getName"
+// ========================================================================
+// ✅ UPDATED Helper methods
+// ========================================================================
+
+    private String joinNonBlank(String... parts) {
+        if (parts == null) return "";
+        return Arrays.stream(parts)
+                .map(s -> s == null ? "" : s.trim())
+                .filter(s -> !s.isBlank())
+                .collect(Collectors.joining(", "));
+    }
+
+    private String formatEnumString(String s) {
+        if (s == null || s.trim().isBlank()) return "";
+
+        String v = s.trim()
+                .replace('_', ' ')
+                .toLowerCase(Locale.ROOT);
+
+        if (v.length() <= 3 && v.matches("^[a-z]+$")) {
+            return v.toUpperCase(Locale.ROOT);
+        }
+
+        return Arrays.stream(v.split("\\s+"))
+                .filter(x -> !x.isBlank())
+                .map(x -> x.substring(0, 1).toUpperCase(Locale.ROOT) + x.substring(1))
+                .collect(Collectors.joining(" "));
+    }
+
+    private String normalizeKey(Object v) {
+        String s = toStr(v).trim();
+        if (s.isBlank()) return "";
+        // handle values like "123.0"
+        if (s.contains(".")) {
+            s = s.substring(0, s.indexOf('.'));
+        }
+        return s.trim();
+    }
+
+    private String extractInstructionsTypeKey(ApPrescriptionMedications m) {
+        // try direct keys first
+        Object typeKeyObj = tryInvokeAny(m,
+                "getInstructionsTypeLkey",
+                "getInstructionsTypeKey",
+                "getInstructionsType",
+                "getInstructionType",
+                "getInstructionTypeKey"
         );
-        return val == null ? "" : String.valueOf(val);
+        String typeKey = toStr(typeKeyObj).trim();
+        if (!typeKey.isBlank()) return typeKey;
+
+        // try LOV object for key
+        Object typeLov = tryInvokeAny(m, "getInstructionsTypeLvalue", "getInstructionTypeLvalue");
+        if (typeLov != null) {
+            Object lovKey = tryInvokeAny(typeLov, "getLovKey", "getKey", "getLovKeyValue", "getLovKeyVal");
+            typeKey = toStr(lovKey).trim();
+            if (!typeKey.isBlank()) return typeKey;
+        }
+
+        return "";
+    }
+
+    private String extractMedicationKey(ApPrescriptionMedications m) {
+        Object keyObj = tryInvokeAny(m,
+                "getKey",
+                "getPrescriptionMedicationsKey",
+                "getPrescriptionMedicationKey",
+                "getApPrescriptionMedicationsKey",
+                "getId"
+        );
+        return toStr(keyObj).trim();
+    }
+
+    private Long parseLongFlexible(Object v) {
+        if (v == null) return null;
+        if (v instanceof Number) return ((Number) v).longValue();
+
+        String s = String.valueOf(v).trim();
+        if (s.isBlank()) return null;
+
+        try {
+            // handle decimals like "123.0"
+            if (s.contains(".")) {
+                s = s.substring(0, s.indexOf('.'));
+            }
+            return Long.parseLong(s);
+        } catch (Exception e) {
+            log.warn("Failed to parse long from: {}", v);
+            return null;
+        }
+    }
+
+    private String toStr(Object o) {
+        return o == null ? "" : String.valueOf(o);
     }
 
     private Object tryInvokeAny(Object target, String... methods) {
@@ -619,10 +794,13 @@ public class PrescriptionReportService {
                 Method mm = target.getClass().getMethod(m);
                 return mm.invoke(target);
             } catch (Exception ignored) {
+                // Try next method
             }
         }
         return null;
     }
+
+
 
     private String extractAdministrationInstructionsDisplay(ApPrescriptionMedications m) {
         if (m == null) return "";
@@ -675,7 +853,7 @@ public class PrescriptionReportService {
     }
 
     // ========================================================================
-    // CSS
+    // CSS (UNCHANGED - FULL as you provided)
     // ========================================================================
 
     private String getCssStyles() {
@@ -750,7 +928,6 @@ public class PrescriptionReportService {
                     letter-spacing: 0.5px;   
                     text-transform: uppercase;
                 }
-                
                 
                 .dept-name {
                     font-size: 6pt;
@@ -1033,11 +1210,10 @@ public class PrescriptionReportService {
                 
                 .badge-urgent,
                 .badge-severe {
-                    border: 1px solid #2563eb;   /* blue-600 */
+                    border: 1px solid #2563eb;
                     color: #2563eb;
-                    background: #eff6ff;         /* blue-50 */
+                    background: #eff6ff;
                 }
-                
                 
                 .medication-table th {
                     font-size: 6.5pt;
@@ -1103,9 +1279,6 @@ public class PrescriptionReportService {
                     text-transform: uppercase;
                     letter-spacing: 0.5px;
                 }
-                
-                
-                
                 
                 .auth-label {
                     font-size: 6pt;
@@ -1174,7 +1347,6 @@ public class PrescriptionReportService {
                                                        font-weight: 900;
                                                    }
                 
-                
                                        .auth-email {
                                            font-weight: 700;
                                            opacity: 0.85;
@@ -1186,34 +1358,7 @@ public class PrescriptionReportService {
                                            clear: both;
                                        }
                 
-                
-                
-                          .diagnosis-meta-row {
-                                          display: flex;
-                                          justify-content: flex-end;
-                                          align-items: center;
-                                          gap: 10px;
-                                          margin-top: 10px;
-                                      }
-                
-                                      .diagnosis-type-badge {
-                                          font-size: 6pt;
-                                          font-weight: 900;
-                                          padding: 3px 8px;
-                                          border-radius: 4px;
-                                          background: #eff6ff;
-                                          border: 1px solid #bfdbfe;
-                                          color: #2563eb;
-                                          text-transform: uppercase;
-                                      }
-                
-                                      .diagnosis-entry-date {
-                                          font-size: 6.5pt;
-                                          font-weight: 800;
-                                          color: #64748b;
-                                      }
-                
-                                      .diagnosis-row {
+                          .diagnosis-row {
                                           display: table;
                                           width: 100%;
                                       }
@@ -1233,34 +1378,6 @@ public class PrescriptionReportService {
                                           text-align: right;
                                       }
                 
-                                      .diagnosis-meta {
-                                          margin-bottom: 6px;
-                                      }
-                
-                                      .diagnosis-meta-label {
-                                          display: block;
-                                          font-size: 6pt;
-                                          font-weight: 700;
-                                          color: #94a3b8;
-                                          margin-bottom: 2px;
-                                      }
-                
-                                      .diagnosis-type-badge {
-                                          display: inline-block;
-                                          font-size: 6pt;
-                                          font-weight: 900;
-                                          padding: 3px 8px;
-                                          border-radius: 4px;
-                                          background: #eff6ff;
-                                          border: 1px solid #bfdbfe;
-                                          color: #2563eb;
-                                      }
-                
-                                      .diagnosis-entry-date {
-                                          font-size: 7pt;
-                                          font-weight: 900;
-                                          color: #1e293b;
-                                      }
                 .diagnosis-right {
                     display: table-cell;
                     width: 30%;
@@ -1280,7 +1397,6 @@ public class PrescriptionReportService {
                     width: 110px;
                     text-align: left;
                 }
-                
                 
                 .diagnosis-type-badge {
                     display: table-cell;
@@ -1322,11 +1438,8 @@ public class PrescriptionReportService {
                     line-height: 1.2;
                     text-align: left;
                 }
-                
-                
                 """;
     }
-
 
     private String getLogoSvg() {
         return """

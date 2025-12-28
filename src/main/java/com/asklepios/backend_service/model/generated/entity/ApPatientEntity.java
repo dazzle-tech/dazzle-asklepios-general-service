@@ -122,6 +122,10 @@ public class ApPatientEntity implements Serializable {
 	private ApLovValues bloodGroupLvalue;
 	private String genderLkey;
 	private ApLovValues genderLvalue;
+	private Boolean gdprNoticeOfPrivacyPractice = false;
+	private Date gdprNoticeOfPrivacyPracticeDate = new Date();
+	private Boolean gdprPrivacyAuthorization = false;
+	private Date gdprPrivacyAuthorizationDate = new Date();
 	private ApPatientEntity translatedObject;
 
 }

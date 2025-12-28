@@ -1,7 +1,8 @@
 package com.asklepios.backend_service.controller;
 
 import com.asklepios.backend_service.database.DS;
-import com.asklepios.backend_service.model.DTO.PatientSummaryDto;
+import com.asklepios.backend_service.model.DTO.PatientMiniSummaryDto;
+import com.asklepios.backend_service.model.DTO.PatientSummaryDTO;
 import com.asklepios.backend_service.model.generated.entity.ApPatientEntity;
 import com.asklepios.backend_service.model.generated.entity.ApUserDashboardComponents;
 import com.asklepios.backend_service.model.generated.pojo.*;
@@ -23,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RestController
@@ -101,8 +103,9 @@ public class EncounterController {
     private final ApNurseServiceProductService apNurseServiceProductService;
     private final ApTelephonicConsultationService apTelephonicConsultationService;
     private final ApUserDashboardComponentService apUserDashboardComponentService;
+    private final PatientMiniSummaryService patientMiniSummaryService;
     private final PatientSummaryService patientSummaryService;
-    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService, ApDoctorRoundStaffService apDoctorRoundStaffService, ApDoctorRoundService apDoctorRoundService, ApNurseNotesService apNurseNotesService, ApRepositioningService apRepositioningService, ApDayCaseEncountersService apDayCaseEncountersService, ApPreOperationAdministeredMedicationsService apPreOperationAdministeredMedicationsService, ApEmergencyTriageService apEmergencyTriageService, ApEncounterAssignToBedService apEncounterAssignToBedService, ApProgressNotesService apProgressNotesService, ApPatientTemporaryDischargeService apPatientTemporaryDischargeService, ApTeleConsultationService apTeleConsultationService, ApTeleConsultationProgressNoteService apTeleConsultationProgressNoteService, ApTeleConsultationCallLogService apTeleConsultationCallLogService, ApUserDashboardComponentService apUserDashboardComponentService, ApTelephonicConsultationService apTelephonicConsultationService, ApNurseServiceProductService apNurseServiceProductService, PatientSummaryService patientSummaryService) {
+    public EncounterController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices, ValidationService validationService, ApEncounterService apEncounterService, ApEncounterAppliedServiceService apEncounterAppliedServiceService, ApServiceService apServiceService, ApReviewOfSystemService apReviewOfSystemService, ApPhysicalExamAreaService apPhysicalExamAreaService, ApIcdCodeService apIcdCodeService, ApPatientDiagnoseService apPatientDiagnoseService, ApPatientPlanService apPatientPlanService, ApPatientEncounterOrderService apPatientEncounterOrderService, ApPrescriptionService apPrescriptionService, ApPrescriptionInstructionService apPrescriptionInstructionService, ApCustomeInstructionsService apCustomeInstructionsService, ApPrescriptionMedicationsService apPrescriptionMedicationsService, ApConsultationOrderService apConsultationOrderService, ApVisitAllergiesService apVisitAllergiesService, ApDrugOrderService apDrugOrderService, ApDrugOrderMedicationsService apDrugOrderMedicationsService, ApProcedureService apProcedureService, ApDiagnosticOrdersService apDiagnosticOrdersService, ApDiagnosticOrderTestsService apDiagnosticOrderTestsService, ApDiagnosticTestService apDiagnosticTestService, ApPractitionerService apPractitionerService, ApDiagnosticOrderTestsNotesService apDiagnosticOrderTestsNotesService, ApDiagnosticOrderTestsSamplesService apDiagnosticOrderTestsSamplesService, ApDiagnosticOrderTestsResultService apDiagnosticOrderTestsResultService, ApDiagnosticOrderTestsResultNotesService apDiagnosticOrderTestsResultNotesService, ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService, ApPsychologicalExamService apPsychologicalExamService, ApUserService apUserService, ApAudiometryPuretoneService apAudiometryPuretoneService, ApOptometricExamService apOptometricExamService, ApIcdCodeService icondCodeService, ApDiagnosticTestProfileService apDiagnosticTestProfileService, ApTreadmillStressService apTreadmillStressService, ApComplaintSymptomsService apComplaintSymptomsService, ApElectrocardiogramEcgService apElectrocardiogramEcgService, ApDiagnosticOrderTestsResultService apDiagnosticTestResultsService, ApLovValuesService apLovValuesService, ApFacilityService apFacilityService, ApDepartmentService apDepartmentService, ApAdmitOutpatientInpatientService apAdmitOutpatientInpatientService, ApResourcesService apResourcesService, ApBedService apBedService, ApRoomService apRoomService, ApBedTransactionsService apBedTransactionsService, ApPainAssessmentService apPainAssessmentService, ApInpatientChiefComplainService apInpatientChiefComplainService, ApGeneralAssessmentService apGeneralAssessmentService, ApFunctionalAssessmentService apFunctionalAssessmentService, ApMedicationReconciliationService apMedicationReconciliationService, ApActiveIngredientService apActiveIngredientService, ApTransferPatientService apTransferPatientService, ApDoctorRoundStaffService apDoctorRoundStaffService, ApDoctorRoundService apDoctorRoundService, ApNurseNotesService apNurseNotesService, ApRepositioningService apRepositioningService, ApDayCaseEncountersService apDayCaseEncountersService, ApPreOperationAdministeredMedicationsService apPreOperationAdministeredMedicationsService, ApEmergencyTriageService apEmergencyTriageService, ApEncounterAssignToBedService apEncounterAssignToBedService, ApProgressNotesService apProgressNotesService, ApPatientTemporaryDischargeService apPatientTemporaryDischargeService, ApTeleConsultationService apTeleConsultationService, ApTeleConsultationProgressNoteService apTeleConsultationProgressNoteService, ApTeleConsultationCallLogService apTeleConsultationCallLogService, ApUserDashboardComponentService apUserDashboardComponentService, ApTelephonicConsultationService apTelephonicConsultationService, ApNurseServiceProductService apNurseServiceProductService, PatientMiniSummaryService patientMiniSummaryService, PatientSummaryService patientSummaryService) {
 
         this.apPatientService = apPatientService;
         this.publicServices = publicServices;
@@ -175,6 +178,7 @@ public class EncounterController {
         this.apNurseServiceProductService = apNurseServiceProductService;
         this.apTelephonicConsultationService = apTelephonicConsultationService;
         this.apUserDashboardComponentService = apUserDashboardComponentService;
+        this.patientMiniSummaryService = patientMiniSummaryService;
         this.patientSummaryService = patientSummaryService;
     }
 
@@ -1300,6 +1304,115 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
+
+    @GetMapping(value = "/consultation-orders-by-department",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getConsultationOrdersByDepartment(
+            @RequestParam Map<String, String> queryParams,
+            @Nullable @RequestHeader String lang) {
+
+        try {
+            ParentResponse<List<ApConsultationOrder>> response = new ParentResponse<>();
+
+            if ("true".equals(queryParams.get("ignore"))) {
+                response.setObject(new ArrayList<>());
+                return ResponseEntity.ok(response);
+            }
+
+            // Extract special filters
+            String departmentKey = queryParams.get("department_key");
+            String preferredConsultantKey = queryParams.get("preferred_consultant_key");
+
+            ListRequest listRequest = new ListRequest(queryParams);
+            String where = listRequest.buildWhereStatement();
+
+            if (where == null) {
+                where = "";
+            }
+
+            // Split WHERE into conditions part and ORDER/LIMIT/OFFSET tail
+            String lower = where.toLowerCase();
+            int orderIdx = lower.indexOf(" order by ");
+            String conditionsPart = where;
+            String tailPart = "";
+
+            if (orderIdx != -1) {
+                conditionsPart = where.substring(0, orderIdx).trim();
+                tailPart = where.substring(orderIdx).trim();
+            }
+
+            if (conditionsPart.isBlank()) {
+                conditionsPart = "1=1";
+            }
+
+            // Build extra conditions (QUOTE ALL PARAM VALUES)
+            List<String> extraConditions = new ArrayList<>();
+
+            if (departmentKey != null && !departmentKey.isBlank()) {
+                String depVal = departmentKey.replace("'", "''"); // basic escaping
+                extraConditions.add("department_key = '" + depVal + "'");
+            }
+
+            if (preferredConsultantKey != null && !preferredConsultantKey.isBlank()) {
+                String prefVal = preferredConsultantKey.replace("'", "''");
+
+                if (departmentKey != null && !departmentKey.isBlank()) {
+                    // department + preferred consultant:
+                    // orders for this department where preferred is empty OR equals given consultant
+                    extraConditions.add(
+                            "(preferred_consultant_key IS NULL " +
+                                    " OR preferred_consultant_key = '' " +
+                                    " OR preferred_consultant_key = '" + prefVal + "')"
+                    );
+                } else {
+                    // only preferred consultant sent
+                    extraConditions.add("preferred_consultant_key = '" + prefVal + "'");
+                }
+            }
+
+            if (!extraConditions.isEmpty()) {
+                conditionsPart = conditionsPart + " AND " + String.join(" AND ", extraConditions);
+            }
+
+            // Rebuild final "where" string
+            String finalWhere = conditionsPart;
+            if (!tailPart.isEmpty()) {
+                finalWhere = finalWhere + " " + tailPart;
+            }
+
+            // Optional: log the finalWhere to verify it looks correct
+            // log.info("finalWhere = {}", finalWhere);
+
+            List<ApConsultationOrder> allVisibleConsultations =
+                    apConsultationOrderService.getList(finalWhere);
+
+            Map<String, ApConsultationOrder> uniqueById = allVisibleConsultations.stream()
+                    .collect(Collectors.toMap(
+                            ApConsultationOrder::getKey,
+                            Function.identity(),
+                            (existing, duplicate) -> existing,
+                            LinkedHashMap::new
+                    ));
+
+            List<ApConsultationOrder> distinctConsultations =
+                    new ArrayList<>(uniqueById.values());
+
+            for (ApConsultationOrder co : distinctConsultations) {
+                apConsultationOrderService.populateLovFields(co, lang);
+            }
+
+            response.setObject(distinctConsultations);
+            response.setExtraNumeric(BigDecimal.valueOf(distinctConsultations.size()));
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
 
 
     @PostMapping(value = "/save-prescription", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -4497,11 +4610,9 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
-    // ======================================================================
-// GET PATIENT CLINICAL SUMMARY (WITH AI SUMMARY)
-// ======================================================================
-    @GetMapping(value = "/clinical-summary", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getClinicalSummary(
+
+    @GetMapping(value = "/mini-summary", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getMiniSummary(
             @RequestParam String patientKey,
             @RequestParam String encounterKey,
             @Nullable @RequestHeader String lang
@@ -4509,30 +4620,59 @@ public class EncounterController {
         try {
             ParentResponse<Map<String, Object>> response = new ParentResponse<>();
 
-            // 1. Build the summary DTO (Java summary + AI summary)
-            PatientSummaryDto dto = patientSummaryService.buildPatientSummary(
+            PatientMiniSummaryDto dto = patientMiniSummaryService.buildPatientMiniSummary(
+                    patientKey,
+                    encounterKey,
+                    lang
+            );
+
+            Map<String, Object> result = new LinkedHashMap<>();
+            result.put("diagnosis", dto.getDiagnosis());
+            result.put("allergies", dto.getAllergies() == null ? List.of() : dto.getAllergies());
+            result.put("medicalWarnings", dto.getMedicalWarnings());
+
+            response.setObject(result);
+            response.setMsg("Mini Summary Loaded Successfully");
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
+    }
+    @GetMapping(value = "/summary", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPatientSummary(
+            @RequestParam String patientKey,
+            @RequestParam String encounterKey,
+            @Nullable @RequestHeader(required = false) String lang,
+            @RequestParam(required = false) List<String> medications
+    ) {
+        try {
+            ParentResponse<Map<String, Object>> response = new ParentResponse<>();
+
+            PatientSummaryDTO dto = patientSummaryService.buildPatientSummary(
                     patientKey,
                     encounterKey,
                     lang,
-                    null   // you can pass medications list if needed
+                    medications
             );
 
-            // 2. Package the data in JSON for frontend
             Map<String, Object> result = new LinkedHashMap<>();
             result.put("age", dto.getAge());
             result.put("gender", dto.getGender());
-            result.put("diagnosis", dto.getDiagnosis());
             result.put("symptoms", dto.getSymptoms());
             result.put("vitals", dto.getVitals());
-            result.put("allergies", dto.getAllergies());
-            result.put("surgeries", dto.getSurgeries());
-            result.put("problems", dto.getProblems());
-            result.put("warnings", dto.getMedicalWarnings());
-            result.put("medications", dto.getMedications());
-            result.put("clinicalSummary", dto.getClinicalSummary()); // AI OUTPUT
+            result.put("diagnosis", dto.getDiagnosis());
+            result.put("allergies", dto.getAllergies() == null ? List.of() : dto.getAllergies());
+            result.put("medicalWarnings", dto.getMedicalWarnings());
+            result.put("surgeries", dto.getSurgeries() == null ? List.of() : dto.getSurgeries());
+            result.put("problems", dto.getProblems() == null ? List.of() : dto.getProblems());
+            result.put("medications", dto.getMedications() == null ? List.of() : dto.getMedications());
 
             response.setObject(result);
-            response.setMsg("Clinical Summary Loaded Successfully");
+            response.setMsg("Patient Summary Loaded Successfully");
 
             return ResponseEntity.ok(response);
 

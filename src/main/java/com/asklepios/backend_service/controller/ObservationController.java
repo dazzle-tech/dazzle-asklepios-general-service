@@ -275,15 +275,15 @@ public class ObservationController {
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_encounter_vaccination where " + whereForTotal);
             for (ApEncounterVaccination all : list) {
                 apEncounterVaccinationService.populateLovFields(all, lang);
-                if (all.getVaccineKey() != null) {
-                    all.setVaccine(apVaccineService.getRecord(all.getVaccineKey()));
-                }
-                if (all.getVaccineDoseKey() != null) {
-                    all.setVaccineDose(apVaccineDoseService.getRecord(all.getVaccineDoseKey()));
-                }
-                if (all.getVaccineBrandKey() != null) {
-                    all.setVaccineBrands(apVaccineBrandsService.getRecord(all.getVaccineBrandKey()));
-                }
+//                if (all.getVaccineKey() != null) {
+//                    all.setVaccine(apVaccineService.getRecord(all.getVaccineKey()));
+//                }
+//                if (all.getVaccineDoseKey() != null) {
+//                    all.setVaccineDose(apVaccineDoseService.getRecord(all.getVaccineDoseKey()));
+//                }
+//                if (all.getVaccineBrandKey() != null) {
+//                    all.setVaccineBrands(apVaccineBrandsService.getRecord(all.getVaccineBrandKey()));
+//                }
                 if (all.getCreatedBy() != null) {
                     all.setCreateByUser(apUserService.getRecord(all.getCreatedBy()));
                 }

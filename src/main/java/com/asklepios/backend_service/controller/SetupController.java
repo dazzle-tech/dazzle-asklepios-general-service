@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.Objects;
@@ -1766,7 +1767,22 @@ public class SetupController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @GetMapping("/icd-list-by-id")
+    public ResponseEntity<?> getPatientById(
+            @RequestParam String key,
+            @RequestHeader(name = "lang", required = false) String lang) throws SQLException {
 
+        ApIcdCode diagnosis = apIcdCodeService.getRecord(key);
+        ParentResponse<ApIcdCode> response = new ParentResponse<>();
+        apIcdCodeService.populateLovFields(diagnosis,lang);
+        if (diagnosis != null && diagnosis.getKey() != null && !diagnosis.getKey().isEmpty()) {
+            response.setObject(diagnosis);
+            return ResponseEntity.ok(response);
+        } else {
+            response.setObject(new ApIcdCode());
+            return ResponseEntity.ok(response);
+        }
+    }
     @PostMapping(value = "/save-diagnostic-test-genetics", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveDiagnosticTestGenetics(@RequestBody ApDiagnosticTestGenetics diagnosticTestGenetics,
                                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,

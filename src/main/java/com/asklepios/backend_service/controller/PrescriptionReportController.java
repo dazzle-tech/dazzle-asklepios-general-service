@@ -1,4 +1,5 @@
 package com.asklepios.backend_service.controller;
+
 import com.asklepios.backend_service.model.DTO.PrescriptionReportRequestDTO;
 import com.asklepios.backend_service.service.PrescriptionReportService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,8 @@ public class PrescriptionReportController {
             @RequestHeader(required = false, name = "access_level") Integer accessLevel,
             @RequestHeader(required = false, name = "lang") String lang
     ) {
+        if (lang == null || lang.isBlank()) lang = "en";
+
 
         byte[] pdfBytes = prescriptionReportService.generatePrescriptionPdf(
                 request.getPatient(),
@@ -30,13 +33,22 @@ public class PrescriptionReportController {
                 request.getGenericMedicationList(),
                 request.getFacilityName(),
                 request.getAuthenticatedUserName(),
-                request.getAuthenticatedUserEmail()
+                request.getAuthenticatedUserEmail(),
+                request.getPredefinedInstructions(),
+                request.getCustomInstructions()
         );
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
+
+        String encounterKey =
+                (request.getEncounter() != null && request.getEncounter().getKey() != null)
+                        ? request.getEncounter().getKey()
+                        : "unknown";
+
         headers.setContentDisposition(
                 ContentDisposition.inline()
-                        .filename("prescription-" + request.getEncounter().getKey() + ".pdf")
+                        .filename("prescription-" + encounterKey + ".pdf")
                         .build()
         );
 

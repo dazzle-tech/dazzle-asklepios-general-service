@@ -1139,18 +1139,39 @@ public class EncounterController {
     @PostMapping(value = "/save-prescription-medication", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> savePrescriptionMedication(@RequestBody ApPrescriptionMedications request,
                                                         @jakarta.annotation.Nullable @RequestHeader String facility_id,
-//                                                        @jakarta.annotation.Nullable @RequestHeader String access_token,
                                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
-                                                        @jakarta.annotation.Nullable @RequestHeader String lang
-
-    ) {
+                                                        @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
+            // treat as update if key exists
+            boolean isUpdate = request.getKey() != null && !request.getKey().trim().isEmpty();
+
+            // Prevent duplicate chronic per patient + genericMedicationId (brand)
+            if (Boolean.TRUE.equals(request.getChronicMedication())) {
+                boolean exists;
+                if (isUpdate) {
+                    exists = apPrescriptionMedicationsService.existsChronicByPatientAndBrandExceptKey(
+                            request.getPatientKey(),
+                            request.getGenericMedicationsId(),
+                            request.getKey()
+                    );
+                } else {
+                    exists = apPrescriptionMedicationsService.existsChronicByPatientAndBrand(
+                            request.getPatientKey(),
+                            request.getGenericMedicationsId()
+                    );
+                }
+
+                if (exists) {
+                    return ResponseEntity.status(409)
+                            .body("Chronic medication for this brand already exists for this patient");
+                }
+            }
+
             ParentResponse<ApPrescriptionMedications> response = new ParentResponse<>();
             apPrescriptionMedicationsService.saveRecord(request);
             response.setObject(request);
 
-            if (request.getInstructionsTypeLkey().equals("3010606785535008")) {
-
+            if ("3010606785535008".equals(request.getInstructionsTypeLkey())) {
                 ApCustomeInstructions customeInstructions = new ApCustomeInstructions();
                 customeInstructions.setPrescriptionMedicationsKey(response.getObject().getKey());
                 customeInstructions.setFrequencyLkey(request.getFrequencyLkey());
@@ -1159,16 +1180,16 @@ public class EncounterController {
                 customeInstructions.setRoaLkey(request.getRoaLkey());
                 saveCustomeInstructions(customeInstructions, facility_id, access_level, lang);
             }
+
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-
             e.printStackTrace();
             log.error(e.getMessage());
-
             return ResponseEntity.status(500).body(e);
         }
     }
+
 
     @GetMapping(value = "/custome-instructions-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getCustomeInstructionsList(@RequestParam Map<String, String> queryParams,

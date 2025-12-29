@@ -527,7 +527,7 @@ public class EncounterController {
                 int countOngoing = counts.getOrDefault("count_status_ongoing", 0);
                 if (countOngoing > 0) {
                     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                            .body(Map.of("message", "There Patient Has Encounter Ongoing."));
+                            .body(Map.of("message", "This Patient is currently treated by another Physician."));
                 }
 //                BigDecimal isExistingVisit = DS.executeDecimalResultQuery("select count(0) from ap_encounter where key ='" + apEncounter.getKey() + "'");
 

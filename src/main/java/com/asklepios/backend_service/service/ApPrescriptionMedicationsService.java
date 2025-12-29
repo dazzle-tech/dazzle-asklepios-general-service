@@ -1,6 +1,7 @@
 package com.asklepios.backend_service.service;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -142,6 +143,53 @@ public class ApPrescriptionMedicationsService extends ApPrescriptionMedicationsD
         }
 
         return list;
+    }
+    public boolean existsChronicByPatientAndBrandExceptKey(String patientKey, BigDecimal brandKey, String currentKey)
+            throws SQLException {
+
+        String sql =
+                "SELECT 1 " +
+                        "FROM ap_prescription_medications " +
+                        "WHERE patient_key = ? " +
+                        "  AND generic_medications_id = ? " +
+                        "  AND chronic_medication = true " +
+                        "  AND (is_valid = true OR is_valid IS NULL) " +
+                        "  AND key <> ? " +
+                        "LIMIT 1";
+
+        try (Connection con = DS.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, patientKey);
+            ps.setBigDecimal(2, brandKey);
+            ps.setString(3, currentKey);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
+
+    public boolean existsChronicByPatientAndBrand(String patientKey,BigDecimal brandKey) throws SQLException {
+        String sql =
+                "SELECT 1 " +
+                        "FROM ap_prescription_medications " +
+                        "WHERE patient_key = ? " +
+                        "  AND generic_medications_id = ? " +
+                        "  AND chronic_medication = true " +
+                        "  AND (is_valid = true OR is_valid IS NULL) " +
+                        "LIMIT 1";
+
+        try (Connection con = DS.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, patientKey);
+            ps.setBigDecimal(2, brandKey);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        }
     }
 
 }

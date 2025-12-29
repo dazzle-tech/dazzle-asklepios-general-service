@@ -60,5 +60,6 @@ public class ApAppointmentEntity implements Serializable {
 	private String noShowReasonValue;
 	private String noShowOtherReason;
 	private ApAppointmentEntity translatedObject;
+	private String departmentKey;
 
 }

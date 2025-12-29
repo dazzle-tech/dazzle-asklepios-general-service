@@ -40,4 +40,5 @@ public class AppointmentDTO {
     private String noShowOtherReason;
 
     private List<TimeSliceDTO> slices;
+    private String departmentKey;
 }

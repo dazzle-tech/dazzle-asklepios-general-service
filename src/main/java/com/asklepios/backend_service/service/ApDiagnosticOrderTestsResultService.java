@@ -30,33 +30,44 @@ public class ApDiagnosticOrderTestsResultService extends ApDiagnosticOrderTestsR
     ApLovValuesService apLovValuesService;
     public ApDiagnosticTestNormalRange getNormalRange(String patientKey, String testKey,boolean isProfile ,String testProfileKey) throws SQLException {
         ApDiagnosticTestNormalRange record = new ApDiagnosticTestNormalRange();
-        String query = "SELECT ap.* FROM ap_diagnostic_test_normal_range ap " +
-                "JOIN ap_patient p ON p.key = ? " +
-                "WHERE ( " +
-                "    ? = true AND ap.profile_test_key = ? " +
-                "    OR " +
-                "    ? = false AND ap.test_key = ? " +
-                ") " +
-                "AND (ap.gender_lkey = p.gender_lkey OR ap.gender_lkey IS NULL) " +
-                "AND ( " +
-                "    EXTRACT(DAY FROM AGE(CURRENT_DATE, p.dob)) + " +
-                "    EXTRACT(MONTH FROM AGE(CURRENT_DATE, p.dob)) * 30 + " +
-                "    EXTRACT(YEAR FROM AGE(CURRENT_DATE, p.dob)) * 365 " +
-                ") BETWEEN " +
-                "CASE " +
-                "    WHEN ap.age_from_unit_lkey = '5760975430600' THEN CAST(ap.age_from AS INTEGER) * 365 " +
-                "    WHEN ap.age_from_unit_lkey = '1463985087863256' THEN CAST(ap.age_from AS INTEGER) " +
-                "    WHEN ap.age_from_unit_lkey = '1464014707373477' THEN CAST(ap.age_from AS INTEGER) * 30 " +
-                "    WHEN ap.age_from_unit_lkey = '1375343788087292' THEN CAST(ap.age_from AS INTEGER) * 7 " +
-                "END " +
-                "AND " +
-                "CASE " +
-                "    WHEN ap.age_to_unit_lkey = '5760975430600' THEN CAST(ap.age_to AS INTEGER) * 365 " +
-                "    WHEN ap.age_to_unit_lkey = '1463985087863256' THEN CAST(ap.age_to AS INTEGER) " +
-                "    WHEN ap.age_to_unit_lkey = '1464014707373477' THEN CAST(ap.age_to AS INTEGER) * 30 " +
-                "    WHEN ap.age_to_unit_lkey = '1375343788087292' THEN CAST(ap.age_to AS INTEGER) * 7 " +
-                "END " +
-                "LIMIT 1;";
+        String query =
+                "SELECT ap.* FROM ap_diagnostic_test_normal_range ap " +
+                        "JOIN ap_patient p ON p.key = ? " +
+                        "WHERE ( " +
+                        "    (? = true  AND ap.profile_test_key = ?) " +
+                        " OR (? = false AND ap.test_key = ?) " +
+                        ") " +
+                        "AND (ap.gender_lkey = p.gender_lkey OR ap.gender_lkey IS NULL) " +
+                        "AND ( " +
+                        "    ap.age_from IS NULL OR ap.age_to IS NULL " +
+                        " OR ap.age_from_unit_lkey IS NULL OR ap.age_to_unit_lkey IS NULL " +
+                        " OR ( " +
+                        "      ( " +
+                        "        EXTRACT(DAY FROM AGE(CURRENT_DATE, p.dob)) + " +
+                        "        EXTRACT(MONTH FROM AGE(CURRENT_DATE, p.dob)) * 30 + " +
+                        "        EXTRACT(YEAR FROM AGE(CURRENT_DATE, p.dob)) * 365 " +
+                        "      ) BETWEEN " +
+                        "      CASE " +
+                        "        WHEN ap.age_from_unit_lkey = '5760975430600' THEN CAST(ap.age_from AS INTEGER) * 365 " +
+                        "        WHEN ap.age_from_unit_lkey = '1463985087863256' THEN CAST(ap.age_from AS INTEGER) " +
+                        "        WHEN ap.age_from_unit_lkey = '1464014707373477' THEN CAST(ap.age_from AS INTEGER) * 30 " +
+                        "        WHEN ap.age_from_unit_lkey = '1375343788087292' THEN CAST(ap.age_from AS INTEGER) * 7 " +
+                        "      END " +
+                        "      AND " +
+                        "      CASE " +
+                        "        WHEN ap.age_to_unit_lkey = '5760975430600' THEN CAST(ap.age_to AS INTEGER) * 365 " +
+                        "        WHEN ap.age_to_unit_lkey = '1463985087863256' THEN CAST(ap.age_to AS INTEGER) " +
+                        "        WHEN ap.age_to_unit_lkey = '1464014707373477' THEN CAST(ap.age_to AS INTEGER) * 30 " +
+                        "        WHEN ap.age_to_unit_lkey = '1375343788087292' THEN CAST(ap.age_to AS INTEGER) * 7 " +
+                        "      END " +
+                        "    ) " +
+                        ") " +
+                        "LIMIT 1;";
+
+
+
+
+
 
         try (Connection connection = DS.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -102,7 +113,6 @@ public class ApDiagnosticOrderTestsResultService extends ApDiagnosticOrderTestsR
             }
         }
     }
-
 
     public List<GroupedTestResult> getGroupedResultsByOrderTestKey(String where) throws SQLException {
         if (where == null || where.isEmpty()) where = "1=1";

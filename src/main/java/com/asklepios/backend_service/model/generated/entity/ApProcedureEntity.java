@@ -15,7 +15,7 @@ import com.asklepios.backend_service.model.generated.pojo.ApLovValues;
 public class ApProcedureEntity implements Serializable {
 
 	private String key;
-	private String procedureNameKey;
+	private BigDecimal procedureNameId;
 	private String procedureId;
 	private String procedureLevelLkey;
 	private ApLovValues procedureLevelLvalue;

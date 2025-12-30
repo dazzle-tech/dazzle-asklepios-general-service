@@ -1142,10 +1142,10 @@ public class EncounterController {
                                                         @jakarta.annotation.Nullable @RequestHeader Integer access_level,
                                                         @jakarta.annotation.Nullable @RequestHeader String lang) {
         try {
-            // treat as update if key exists
+
             boolean isUpdate = request.getKey() != null && !request.getKey().trim().isEmpty();
 
-            // Prevent duplicate chronic per patient + genericMedicationId (brand)
+
             if (Boolean.TRUE.equals(request.getChronicMedication())) {
                 boolean exists;
                 if (isUpdate) {
@@ -1167,17 +1167,31 @@ public class EncounterController {
                 }
             }
 
+
             ParentResponse<ApPrescriptionMedications> response = new ParentResponse<>();
             apPrescriptionMedicationsService.saveRecord(request);
             response.setObject(request);
 
+
             if ("3010606785535008".equals(request.getInstructionsTypeLkey())) {
-                ApCustomeInstructions customeInstructions = new ApCustomeInstructions();
-                customeInstructions.setPrescriptionMedicationsKey(response.getObject().getKey());
-                customeInstructions.setFrequencyLkey(request.getFrequencyLkey());
+
+
+                ApCustomeInstructions customeInstructions =
+                        apCustomeInstructionsService.findByPrescriptionMedicationsKey(response.getObject().getKey());
+
+                if (customeInstructions == null) {
+
+                    customeInstructions = new ApCustomeInstructions();
+                    customeInstructions.setPrescriptionMedicationsKey(response.getObject().getKey());
+                }
+
+            
                 customeInstructions.setDose(request.getDose());
                 customeInstructions.setUnitLkey(request.getUnitLkey());
+                customeInstructions.setFrequencyLkey(request.getFrequencyLkey());
                 customeInstructions.setRoaLkey(request.getRoaLkey());
+
+
                 saveCustomeInstructions(customeInstructions, facility_id, access_level, lang);
             }
 
@@ -1189,7 +1203,6 @@ public class EncounterController {
             return ResponseEntity.status(500).body(e);
         }
     }
-
 
     @GetMapping(value = "/custome-instructions-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getCustomeInstructionsList(@RequestParam Map<String, String> queryParams,

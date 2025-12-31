@@ -38,7 +38,7 @@ ResultSet rs = st.executeQuery("select * from ap_procedure where key = '"+key+"'
 ApProcedure record = new ApProcedure();
 if(rs.next()){
 record.setKey(rs.getString("key"));
-record.setProcedureNameKey(rs.getString("procedure_name_key"));
+record.setProcedureNameId(rs.getBigDecimal("procedure_name_id"));
 record.setProcedureId(rs.getString("procedure_id"));
 record.setProcedureLevelLkey(rs.getString("procedure_level_lkey"));
 record.setCategoryKey(rs.getString("category_key"));
@@ -68,11 +68,11 @@ return record;
 public void updateRecord(ApProcedure record) throws SQLException {
 try (
 Connection con = DS.getConnection();
-PreparedStatement ps = con.prepareStatement("update ap_procedure set key = ?, procedure_name_key = ?, procedure_id = ?, procedure_level_lkey = ?, category_key = ?, indications = ?, priority_lkey = ?, status_lkey = ?, scheduled_date_time = ?, notes = ?, department_key = ?, cancellation_reason = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, facility_key = ?, encounter_key = ?, body_part_lkey = ?, side_lkey = ?, current_department = ?, patient_key = ? where key = ?");
+PreparedStatement ps = con.prepareStatement("update ap_procedure set key = ?, procedure_name_id = ?, procedure_id = ?, procedure_level_lkey = ?, category_key = ?, indications = ?, priority_lkey = ?, status_lkey = ?, scheduled_date_time = ?, notes = ?, department_key = ?, cancellation_reason = ?, created_by = ?, updated_by = ?, deleted_by = ?, created_at = ?, updated_at = ?, deleted_at = ?, facility_key = ?, encounter_key = ?, body_part_lkey = ?, side_lkey = ?, current_department = ?, patient_key = ? where key = ?");
 ) {
 record.setUpdatedAt(new BigDecimal(System.currentTimeMillis()));
 ps.setString(1, record.getKey());
-ps.setString(2, record.getProcedureNameKey());
+ps.setBigDecimal(2, record.getProcedureNameId());
 ps.setString(3, record.getProcedureId());
 ps.setString(4, record.getProcedureLevelLkey());
 ps.setString(5, record.getCategoryKey());
@@ -118,7 +118,7 @@ List<ApProcedure> list = new ArrayList<ApProcedure>();
 while(rs.next()){
 ApProcedure record = new ApProcedure();
 record.setKey(rs.getString("key"));
-record.setProcedureNameKey(rs.getString("procedure_name_key"));
+record.setProcedureNameId(rs.getBigDecimal("procedure_name_id"));
 record.setProcedureId(rs.getString("procedure_id"));
 record.setProcedureLevelLkey(rs.getString("procedure_level_lkey"));
 record.setCategoryKey(rs.getString("category_key"));
@@ -157,7 +157,7 @@ String key = "" + System.nanoTime();
 record.setKey(key);
 
 ps.setString(1, key);
-ps.setString(2, record.getProcedureNameKey());
+ps.setBigDecimal(2, record.getProcedureNameId());
 ps.setString(3, record.getProcedureId());
 ps.setString(4, record.getProcedureLevelLkey());
 ps.setString(5, record.getCategoryKey());

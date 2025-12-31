@@ -1641,8 +1641,8 @@ public class EncounterController {
                             all.setDepartment(department);
                         }
                     }
-                    if (all.getProcedureNameKey() != null) {
-                        String procedureName = apProcedureService.getProcedureName(all.getProcedureNameKey());
+                    if (all.getProcedureNameId() != null) {
+                        String procedureName = apProcedureService.getProcedureName(all.getProcedureNameId());
                         if (procedureName != null && !procedureName.isEmpty()) {
                             all.setProcedureName(procedureName);
                         }

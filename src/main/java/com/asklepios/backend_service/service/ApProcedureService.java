@@ -1,6 +1,7 @@
 package com.asklepios.backend_service.service;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,15 +16,15 @@ import com.asklepios.backend_service.model.generated.dao.ApProcedureDAO;
 @Slf4j
 public class ApProcedureService extends ApProcedureDAO implements Serializable {
 
-    public String getProcedureName(String Key) throws SQLException {
+    public String getProcedureName(BigDecimal Key) throws SQLException {
         String result = "";
-        String query = "SELECT name FROM ap_procedure_setup WHERE key = ?";
+        String query = "SELECT name FROM procedure WHERE id = ?";
 
         try (
                 Connection con = DS.getConnection();
                 PreparedStatement ps = con.prepareStatement(query)
         ) {
-            ps.setString(1, Key);
+            ps.setBigDecimal(1, Key);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     String name= rs.getString("name");

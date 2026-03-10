@@ -3682,12 +3682,9 @@ public class EncounterController {
     ) {
         try {
             ParentResponse<ApEncounterAssignToBed> response = new ParentResponse<>();
-            ApEncounter apEncounter = apEncounterService.getRecord(apEncounterAssignToBed.getEncounterKey());
             ApBed bed = apBedService.getRecord(apEncounterAssignToBed.getBedKey());
             bed.setStatusLkey("5258252390107597");
             apBedService.saveRecord(bed);
-            apEncounter.setEncounterStatusLkey("91063195286200");
-            apEncounterService.saveRecord(apEncounter);
             apEncounterAssignToBedService.saveRecord(apEncounterAssignToBed);
             response.setObject(apEncounterAssignToBed);
             return ResponseEntity.ok(response);

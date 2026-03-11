@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.asklepios.backend_service.database.DS;
+import com.asklepios.backend_service.model.DTO.EncounterLocationResponse;
 import com.asklepios.backend_service.model.generated.pojo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,12 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
     private ApProcedureSetupService apProcedureSetupService;
      @Autowired
      private ApResourcesService apResourcesService;
+    @Autowired
+    private ApEncounterAssignToBedService apEncounterAssignToBedService;
+    @Autowired
+    private ApRoomService apRoomService;
+    @Autowired
+    private  ApBedService apBedService;
 
     public String getDiagnosis(String visitKey) throws SQLException {
         String result = "";
@@ -453,5 +460,49 @@ public class ApEncounterService extends ApEncounterDAO implements Serializable {
         return null ;
     }
 
+    public List<EncounterLocationResponse> getEncounterLocations(List<String> encounterIds, String lang) throws SQLException {
+        List<EncounterLocationResponse> result = new ArrayList<>();
 
-}
+        for (String encounterId : encounterIds) {
+            List<ApEncounterAssignToBed> assignList =
+                    apEncounterAssignToBedService.getList("encounter_key = '" + encounterId + "'");
+
+            if (assignList == null || assignList.isEmpty()) {
+                result.add(new EncounterLocationResponse(
+                        encounterId,
+                        null, null,
+                        null, null
+                ));
+                continue;
+            }
+
+            ApEncounterAssignToBed assignToBed = assignList.get(0);
+
+            ApBed bed = null;
+            ApRoom room = null;
+
+            if (assignToBed.getBedKey() != null) {
+                bed = apBedService.getRecord(assignToBed.getBedKey());
+                if (bed != null) {
+                    apBedService.populateLovFields(bed, lang);
+                }
+            }
+
+            if (assignToBed.getRoomKey() != null) {
+                room = apRoomService.getRecord(assignToBed.getRoomKey());
+                if (room != null) {
+                    apRoomService.populateLovFields(room, lang);
+                }
+            }
+
+            result.add(new EncounterLocationResponse(
+                    encounterId,
+                    bed != null ? bed.getKey() : null,
+                    bed != null ? bed.getName() : null,
+                    room != null ? room.getKey() : null,
+                    room != null ? room.getName() : null
+            ));
+        }
+
+        return result;
+    }}

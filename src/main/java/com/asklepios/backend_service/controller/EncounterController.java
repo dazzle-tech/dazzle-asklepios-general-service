@@ -1,6 +1,7 @@
 package com.asklepios.backend_service.controller;
 
 import com.asklepios.backend_service.database.DS;
+import com.asklepios.backend_service.model.DTO.EncounterLocationResponse;
 import com.asklepios.backend_service.model.DTO.PatientMiniSummaryDto;
 import com.asklepios.backend_service.model.DTO.PatientSummaryDTO;
 import com.asklepios.backend_service.model.generated.entity.ApPatientEntity;
@@ -3682,12 +3683,9 @@ public class EncounterController {
     ) {
         try {
             ParentResponse<ApEncounterAssignToBed> response = new ParentResponse<>();
-            ApEncounter apEncounter = apEncounterService.getRecord(apEncounterAssignToBed.getEncounterKey());
             ApBed bed = apBedService.getRecord(apEncounterAssignToBed.getBedKey());
             bed.setStatusLkey("5258252390107597");
             apBedService.saveRecord(bed);
-            apEncounter.setEncounterStatusLkey("91063195286200");
-            apEncounterService.saveRecord(apEncounter);
             apEncounterAssignToBedService.saveRecord(apEncounterAssignToBed);
             response.setObject(apEncounterAssignToBed);
             return ResponseEntity.ok(response);
@@ -4718,5 +4716,30 @@ public class EncounterController {
         }
     }
 
+    @GetMapping(value = "/encounter-locations", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getEncounterLocations(@RequestParam List<String> encounterIds,
+                                                   @Nullable @RequestHeader String lang) {
+        try {
+            ParentResponse<List<EncounterLocationResponse>> response = new ParentResponse<>();
 
+            if (encounterIds == null || encounterIds.isEmpty()) {
+                response.setObject(new ArrayList<>());
+                response.setExtraNumeric(BigDecimal.ZERO);
+                return ResponseEntity.ok(response);
+            }
+
+            List<EncounterLocationResponse> result =
+                    apEncounterService.getEncounterLocations(encounterIds, lang);
+
+            response.setObject(result);
+            response.setExtraNumeric(new BigDecimal(result.size()));
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
 }

@@ -42,7 +42,7 @@ public class AuthController implements Serializable {
 
 
     @PostMapping(value = "/logout", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity logout(@RequestHeader("access_token") String accessToken) {
+    public ResponseEntity logout(@RequestHeader("id_token") String accessToken) {
         try {
             authService.invalidateToken(accessToken);
             ParentResponse<String> response = new ParentResponse<>();

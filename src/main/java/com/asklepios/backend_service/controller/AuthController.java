@@ -42,7 +42,16 @@ public class AuthController implements Serializable {
 
 
     @PostMapping(value = "/logout", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity logout(@RequestHeader("id_token") String accessToken) {
+    public ResponseEntity logout(
+            @RequestHeader(value = "id-token", required = false) String tokenDash,
+            @RequestHeader(value = "id_token", required = false) String tokenUnderscore
+    ) {
+        String accessToken = tokenDash != null ? tokenDash : tokenUnderscore;
+
+        if (accessToken == null || accessToken.isBlank()) {
+            return ResponseEntity.badRequest().body("Missing token header");
+        }
+
         try {
             authService.invalidateToken(accessToken);
             ParentResponse<String> response = new ParentResponse<>();
@@ -50,7 +59,9 @@ public class AuthController implements Serializable {
             return ResponseEntity.ok(response);
         } catch (Exception ex) {
             ex.printStackTrace();
-            return ResponseEntity.internalServerError().body(ex.getMessage().isBlank() ? ex : ex.getMessage());
+            return ResponseEntity.internalServerError().body(
+                    ex.getMessage().isBlank() ? ex : ex.getMessage()
+            );
         }
     }
 }

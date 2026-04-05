@@ -1,19 +1,53 @@
 package com.asklepios.backend_service.controller;
 
 import com.asklepios.backend_service.database.DS;
-import com.asklepios.backend_service.model.generated.pojo.*;
+import com.asklepios.backend_service.model.generated.pojo.ApCdt;
+import com.asklepios.backend_service.model.generated.pojo.ApDentalAction;
+import com.asklepios.backend_service.model.generated.pojo.ApDentalChart;
+import com.asklepios.backend_service.model.generated.pojo.ApDentalChartProgressNote;
+import com.asklepios.backend_service.model.generated.pojo.ApDentalChartTooth;
+import com.asklepios.backend_service.model.generated.pojo.ApDentalPlannedTreatment;
+import com.asklepios.backend_service.model.generated.pojo.ApEncounterAppliedService;
+import com.asklepios.backend_service.model.generated.pojo.ApService;
+import com.asklepios.backend_service.model.generated.pojo.ApServiceCdt;
+import com.asklepios.backend_service.model.generated.pojo.ApToothAction;
+import com.asklepios.backend_service.model.generated.pojo.ApToothActionLog;
+import com.asklepios.backend_service.model.generated.pojo.ApToothCdt;
+import com.asklepios.backend_service.model.generated.pojo.ApToothService;
+import com.asklepios.backend_service.model.newEntity.PatientEncounter;
+import com.asklepios.backend_service.model.newEntity.PatientEncounterService;
+import com.asklepios.backend_service.model.newEntity.ServiceSetupRecord;
+import com.asklepios.backend_service.model.newEntity.ServiceSetupService;
 import com.asklepios.backend_service.model.pojo.request.ListRequest;
 import com.asklepios.backend_service.model.pojo.request.ToothActionRequest;
 import com.asklepios.backend_service.model.pojo.request.ToothServiceRequest;
 import com.asklepios.backend_service.model.pojo.response.DentalChartResponse;
 import com.asklepios.backend_service.model.pojo.response.DentalTreatmentPlanResponse;
 import com.asklepios.backend_service.model.pojo.response.ParentResponse;
-import com.asklepios.backend_service.service.*;
+import com.asklepios.backend_service.service.ApCdtService;
+import com.asklepios.backend_service.service.ApDentalActionService;
+import com.asklepios.backend_service.service.ApDentalChartProgressNoteService;
+import com.asklepios.backend_service.service.ApDentalChartService;
+import com.asklepios.backend_service.service.ApDentalChartToothService;
+import com.asklepios.backend_service.service.ApDentalPlannedTreatmentService;
+import com.asklepios.backend_service.service.ApEncounterAppliedServiceService;
+import com.asklepios.backend_service.service.ApServiceCdtService;
+import com.asklepios.backend_service.service.ApServiceService;
+import com.asklepios.backend_service.service.ApToothActionLogService;
+import com.asklepios.backend_service.service.ApToothActionService;
+import com.asklepios.backend_service.service.ApToothCdtService;
+import com.asklepios.backend_service.service.ApToothServiceService;
 import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -32,10 +66,6 @@ import java.util.Map;
 @Slf4j
 public class DentalController {
 
-    private final ApPatientService apPatientService;
-    private final PublicServices publicServices;
-    private final ValidationService validationService;
-    private final ApEncounterService apEncounterService;
     private final ApDentalActionService apDentalActionService;
     private final ApDentalChartService apDentalChartService;
     private final ApDentalChartToothService apDentalChartToothService;
@@ -49,17 +79,9 @@ public class DentalController {
     private final ApDentalPlannedTreatmentService plannedTreatmentService;
     private final ApServiceCdtService apServiceCdtService;
     private final ApEncounterAppliedServiceService encounterAppliedServiceService;
-
-    public DentalController(ApPatientService apPatientService, RestTemplate restTemplate, PublicServices publicServices,
-                            ValidationService validationService, ApEncounterService apEncounterService,
-                            ApDentalActionService apDentalActionService, ApDentalChartService apDentalChartService,
-                            ApDentalChartToothService apDentalChartToothService, ApToothActionService apToothActionService,
-                            ApToothActionLogService apToothActionLogService, ApDentalChartProgressNoteService apDentalChartProgressNoteService,
-                            ApToothCdtService apToothCdtService, ApToothServiceService apToothServiceService, ApServiceService apServiceService, ApCdtService apCdtService, ApDentalPlannedTreatmentService plannedTreatmentService, ApServiceCdtService apServiceCdtService, ApEncounterAppliedServiceService encounterAppliedServiceService) {
-        this.apPatientService = apPatientService;
-        this.publicServices = publicServices;
-        this.validationService = validationService;
-        this.apEncounterService = apEncounterService;
+    private final PatientEncounterService patientEncounterService;
+    private final ServiceSetupService serviceSetupService;
+    public DentalController(ApDentalActionService apDentalActionService, ApDentalChartService apDentalChartService, ApDentalChartToothService apDentalChartToothService, ApToothActionService apToothActionService, ApToothActionLogService apToothActionLogService, ApDentalChartProgressNoteService apDentalChartProgressNoteService, ApToothCdtService apToothCdtService, ApToothServiceService apToothServiceService, ApServiceService apServiceService, ApCdtService apCdtService, ApDentalPlannedTreatmentService plannedTreatmentService, ApServiceCdtService apServiceCdtService, ApEncounterAppliedServiceService encounterAppliedServiceService, PatientEncounterService patientEncounterService, ServiceSetupService serviceSetupService) {
         this.apDentalActionService = apDentalActionService;
         this.apDentalChartService = apDentalChartService;
         this.apDentalChartToothService = apDentalChartToothService;
@@ -73,7 +95,10 @@ public class DentalController {
         this.plannedTreatmentService = plannedTreatmentService;
         this.apServiceCdtService = apServiceCdtService;
         this.encounterAppliedServiceService = encounterAppliedServiceService;
+        this.patientEncounterService = patientEncounterService;
+        this.serviceSetupService = serviceSetupService;
     }
+
 
     @GetMapping(value = "/dental-action-list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> dentalActionList(@RequestParam Map<String, String> queryParams,
@@ -90,7 +115,7 @@ public class DentalController {
             }
             ListRequest listRequest = new ListRequest(queryParams);
             String where = listRequest.buildWhereStatement();
-            String whereForTotal = listRequest.buildWhereStatement(true, false, false,false);
+            String whereForTotal = listRequest.buildWhereStatement(true, false, false, false);
             List<ApDentalAction> actions = apDentalActionService.getList(where);
             BigDecimal totalRecord = DS.executeDecimalResultQuery("select count(0) from ap_dental_action where " + whereForTotal);
             response.setObject(actions);
@@ -105,17 +130,19 @@ public class DentalController {
     }
 
     @GetMapping(value = "/dental-charts-by-encounter", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> fetchDentalCharts(@RequestHeader ("encounter-key") String encounterKey,
-                                               @Nullable @RequestHeader String facility_id,
-                                               // @Nullable @RequestHeader String access_token,
-                                               @Nullable @RequestHeader Integer access_level,
+    public ResponseEntity<?> fetchDentalCharts(@RequestHeader("encounter-key") Long encounterKey,
+
                                                @Nullable @RequestHeader String lang) {
         try {
             ParentResponse<DentalChartResponse> response = new ParentResponse<>();
 
-            ApEncounter encounter = apEncounterService.getRecord(encounterKey);
+            PatientEncounter encounter = patientEncounterService.getRecord(encounterKey);
             if (encounter == null) {
                 response.addGeneralError("invalid encounter");
+                return ResponseEntity.status(400).body(response);
+            }
+            if (encounter.getPatientKey() == null) {
+                response.addGeneralError("invalid patient");
                 return ResponseEntity.status(400).body(response);
             }
 
@@ -128,10 +155,10 @@ public class DentalController {
             if (existingDentalChartForEncounterList == null || existingDentalChartForEncounterList.isEmpty()) {
                 // create a new dental chart for this encounter
                 currentChart = new ApDentalChart();
-                currentChart.setEncounterKey(encounterKey);
+                currentChart.setEncounterKey(String.valueOf(encounterKey));
                 currentChart.setChartDate(new Date());
                 currentChart.setCreatedAt(BigDecimal.valueOf(System.currentTimeMillis()));
-                currentChart.setPatientKey(encounter.getPatientKey());
+                currentChart.setPatientKey(encounter.getPatientKey().toString());
                 currentChart.setType("ADULT");
                 // TODO handle the chart type (adult/child/mix)
                 currentChart.setIsValid(true);
@@ -304,7 +331,7 @@ public class DentalController {
     }
 
     @GetMapping(value = "/fetch-chart-data", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> fetchChartData(@RequestHeader ("chart-key") String chartKey,
+    public ResponseEntity<?> fetchChartData(@RequestHeader("chart-key") String chartKey,
                                             @Nullable @RequestHeader String facility_id,
                                             // @Nullable @RequestHeader String access_token,
                                             @Nullable @RequestHeader Integer access_level,
@@ -572,7 +599,7 @@ public class DentalController {
     }
 
     @GetMapping(value = "/fetch-treatment-plan", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> fetchTreatmentPlan(@RequestHeader ("encounter-key") String encounterKey,
+    public ResponseEntity<?> fetchTreatmentPlan(@RequestHeader("encounter-key") Long encounterKey,
                                                 @Nullable @RequestHeader String facility_id,
                                                 // @Nullable @RequestHeader String access_token,
                                                 @Nullable @RequestHeader Integer access_level,
@@ -582,7 +609,7 @@ public class DentalController {
             ParentResponse<DentalTreatmentPlanResponse> response = new ParentResponse<>();
             DentalTreatmentPlanResponse planResponse = new DentalTreatmentPlanResponse();
 
-            ApEncounter encounter = apEncounterService.getRecord(encounterKey);
+            PatientEncounter encounter = patientEncounterService.getRecord(encounterKey);
             log.info("ENC ID : " + encounterKey);
 
             if (encounter == null) {
@@ -624,7 +651,8 @@ public class DentalController {
             ParentResponse<DentalTreatmentPlanResponse> response = new ParentResponse<>();
             DentalTreatmentPlanResponse planResponse = new DentalTreatmentPlanResponse();
 
-            ApEncounter encounter = apEncounterService.getRecord(request.getEncounterKey());
+            PatientEncounter encounter = patientEncounterService.getRecord( Long.valueOf(request.getEncounterKey()));
+
             if (encounter == null) {
                 response.addGeneralError("invalid visit");
                 return ResponseEntity.status(400).body(response);
@@ -698,7 +726,7 @@ public class DentalController {
             ApDentalChart currentChart = apDentalChartService.getRecord(tooth.getChartKey());
 
 
-            ApService serviceObject = apServiceService.getRecord(request.getServiceKey());
+            ServiceSetupRecord serviceObject = serviceSetupService.getRecord(Long.valueOf(request.getServiceKey()));
             if (serviceObject == null) {
                 response.addGeneralError("invalid service");
                 return ResponseEntity.status(400).body(response);
@@ -707,7 +735,7 @@ public class DentalController {
             if (request.getOperation().equals("SAVE")) {
                 apToothService = new ApToothService();
                 apToothService.setKey(request.getKey());
-                apToothService.setServiceKey(request.getServiceKey());
+                apToothService.setServiceKey(String.valueOf(request.getServiceKey()));
                 apToothService.setToothKey(request.getToothKey());
                 apToothService.setSource("MANUAL");
                 apToothService.setPrice(serviceObject.getPrice());
@@ -715,8 +743,8 @@ public class DentalController {
 
                 ApEncounterAppliedService encounterAppliedService = new ApEncounterAppliedService();
                 encounterAppliedService.setEncounterKey(currentChart.getEncounterKey());
-                encounterAppliedService.setServiceKey(request.getServiceKey());
-                encounterAppliedService.setCategoryLkey(serviceObject.getCategoryLkey());
+                encounterAppliedService.setServiceKey(String.valueOf(request.getServiceKey()));
+                encounterAppliedService.setCategoryLkey(serviceObject.getCategory());
                 encounterAppliedService.setPrice(serviceObject.getPrice());
                 encounterAppliedService.setSource("MANUAL_TOOTH_SERVICE");
                 encounterAppliedService.setSourceKey(apToothService.getKey());

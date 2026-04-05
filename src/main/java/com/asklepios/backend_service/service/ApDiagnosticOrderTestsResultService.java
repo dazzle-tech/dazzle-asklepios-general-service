@@ -28,7 +28,8 @@ public class ApDiagnosticOrderTestsResultService extends ApDiagnosticOrderTestsR
     ApDiagnosticTestNormalRangeService apDiagnosticTestNormalRangeService;
     @Autowired
     ApLovValuesService apLovValuesService;
-    public ApDiagnosticTestNormalRange getNormalRange(String patientKey, String testKey,boolean isProfile ,String testProfileKey) throws SQLException {
+    public ApDiagnosticTestNormalRange
+    getNormalRange(String patientKey, String testKey,boolean isProfile ,String testProfileKey) throws SQLException {
         ApDiagnosticTestNormalRange record = new ApDiagnosticTestNormalRange();
         String query =
                 "SELECT ap.* FROM ap_diagnostic_test_normal_range ap " +
@@ -64,11 +65,6 @@ public class ApDiagnosticOrderTestsResultService extends ApDiagnosticOrderTestsR
                         ") " +
                         "LIMIT 1;";
 
-
-
-
-
-
         try (Connection connection = DS.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
@@ -78,7 +74,6 @@ public class ApDiagnosticOrderTestsResultService extends ApDiagnosticOrderTestsR
             statement.setString(3, testProfileKey);
             statement.setBoolean(4,isProfile);
             statement.setString(5, testKey);
-            System.out.println("query "+query);
             try (ResultSet rs = statement.executeQuery()) {
                 if (rs.next()) {
                     // Extract and return the result

@@ -423,6 +423,7 @@ public class SetupController implements Serializable {
         }
     }
 
+
     @PostMapping(value = "/save-lov-value", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveLovValue(@RequestBody ApLovValues lovValue,
                                           @jakarta.annotation.Nullable @RequestHeader String facility_id,
@@ -434,6 +435,51 @@ public class SetupController implements Serializable {
             apLovValuesService.saveRecord(lovValue);
             response.setObject(lovValue);
             return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+    @GetMapping(value = "/lov-value-list/by-key", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getByKey(@RequestParam String key) {
+        try {
+            ParentResponse<ApLovValues> response = new ParentResponse<>();
+
+            ApLovValues apLovValues = apLovValuesService.getRecord(key);
+
+            response.setObject(apLovValues);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(value = "/lov-value-list/bulk-by-keys", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getBulkByKeys(@RequestParam List<String> lov_keys) {
+        try {
+            ParentResponse<List<ApLovValues>> response = new ParentResponse<>();
+
+            if (lov_keys == null || lov_keys.isEmpty()) {
+                response.setObject(new ArrayList<>());
+                response.setExtraNumeric(BigDecimal.ZERO);
+                return ResponseEntity.ok(response);
+            }
+
+            String keys = lov_keys.stream()
+                    .map(key -> "'" + key + "'")
+                    .collect(Collectors.joining(","));
+
+            String where = "key in (" + keys + ")";
+            List<ApLovValues> list = apLovValuesService.getList(where);
+
+            response.setObject(list);
+            response.setExtraNumeric(BigDecimal.valueOf(list.size()));
+            return ResponseEntity.ok(response);
+
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());

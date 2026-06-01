@@ -301,6 +301,29 @@ public class ReferenceDataController implements Serializable {
             return ResponseEntity.status(500).body(e);
         }
     }
+    @PostMapping("/lov-values-toggle-active")
+    public ResponseEntity<?> toggleActive(@RequestParam String key) {
+        try {
+            ParentResponse<ApLovValues> response = new ParentResponse<>();
 
+            ApLovValues record = apLovValuesService.getRecord(key);
 
+            if (record == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            record.setIsValid(!Boolean.TRUE.equals(record.getIsValid()));
+
+            apLovValuesService.updateRecord(record);
+
+            response.setObject(record);
+            response.setMsg("Status updated successfully");
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
 }

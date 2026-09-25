@@ -19,12 +19,11 @@ public class DS {
             Properties props = new Properties();
             props.load(new Utilities().loadResource("datasource.properties"));
 
-            // HikariCP configuration
             HikariConfig config = new HikariConfig();
-            config.setJdbcUrl(props.getProperty("db.jdbcUrl"));
-            config.setUsername(props.getProperty("db.user"));
-            config.setPassword(props.getProperty("db.password"));
-            config.setMaximumPoolSize(20); // Adjust pool size as needed
+            config.setJdbcUrl(System.getenv().getOrDefault("DB_JDBCURL", props.getProperty("db.jdbcUrl")));
+            config.setUsername(System.getenv().getOrDefault("DB_USER", props.getProperty("db.user")));
+            config.setPassword(System.getenv().getOrDefault("DB_PASSWORD", props.getProperty("db.password")));
+            config.setMaximumPoolSize(20);
             config.setMinimumIdle(10);
             config.setIdleTimeout(30000);
             config.setMaxLifetime(1800000);
